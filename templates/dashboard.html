@@ -1,0 +1,32 @@
+{% extends 'static.html' %}
+
+{% block title %} Kokpit | AklındaKimVar.com {% endblock %}
+
+{% block staticcontent %}
+    <h3>Aktivite</h3>
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>Metric</th>
+            <th>Acquisition</th>
+            <th>Active Users</th>
+            <th>Distinct Requesters</th>
+            <th>Requests</th>
+            <th>Matches</th>
+        </tr>
+
+        {% for tuple in data %}
+            <tr>
+            {% for metric in tuple %}
+                <td>{{ metric }}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Yok mu bize yürüyen?</h3>
+    <table class="table table-bordered table-hover">
+        {% for tuple in bize_yuruyen %}
+            <tr><td><a href="http://www.facebook.com/{{ tuple }}">{{ tuple }}</a></td></tr>
+        {% endfor %}
+    </table>
+{% endblock %}

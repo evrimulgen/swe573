@@ -1,0 +1,65 @@
+{% extends "matchbase.html" %}
+
+{% block title %}Maç Merkezi | istatistik.ligtv.com.tr{% endblock %}
+
+{% block head-addition %}
+
+{% endblock %}
+
+
+{% block menu-header %}
+        <div id="navbar">
+                <div id="nav">
+
+                    <div id="first">
+                        <a href="../before">MAÇ ÖNCESİ</a>
+                    </div>
+
+                    <div id="active">
+                            <a href="../center">MAÇ MERKEZİ</a>
+                    </div>
+
+                    <a href="../summary">MAÇ ÖZETİ</a>
+
+                    <a href="../player">OYUNCU İSTATİSTİKLERİ</a>
+
+                    <div id="last">
+                        <a href="../table">MAÇ TAHTASI</a>
+                    </div>
+
+                </div>
+        </div>
+
+{% endblock %}
+
+{% block scoreboard %}
+
+    <div style = "width: 60%; height: 120px; margin-right: auto; margin-left: auto; background: #f2f2f2">
+            <div style = "width: 60%; height: 30px; margin-right: auto; margin-left: auto; background: #f2f2f2">
+                <p style="color: #c51718; font-family: AvalonB; text-align: center; margin-top: 15px">{{ stadiumName }}</p>
+            </div>
+            <div style = "width: 500px; height: 40px; background: #f2f2f2;margin-right: auto; margin-left: auto">
+                <div style = "width: 100px; height: 90px; background: #f2f2f2;float: left">
+                    <div align="center"><img style="background-size: cover; height: 60px; margin-left: 20px " src={{ STATIC_URL }}{{ homeLogo }}></div>
+                    <p style="color: #000000; font-family: AvalonB; text-align: center">{{ homeTeam }}</p>
+                </div>
+                <div style = "width: 250px; height: 90px; background: #336699; float: left; margin-left: 20px; margin-right: 20px">
+                    <p style="height: 90px; line-height: 90px; text-align: center; color:#ffffff">Score and Game Time</p>
+                </div>
+                <div style = "width: 100px; height: 90px; background: #f2f2f2; float: left">
+                    <div align="center"><img style="background-size: cover; height: 60px;" src={{ STATIC_URL }}{{ awayLogo }}></div>
+                    <p style="color: #000000; font-family: AvalonB; text-align: center">{{ awayTeam }}</p>
+                </div>
+            </div>
+    </div>
+{% endblock %}
+
+{% block timebar %}
+    <div style = "width: 90%; height: 50px; background: #a3a3a3;-webkit-border-radius: 10px 10px 10px 10px;
+            -moz-border-radius: 10px 10px 10px 10px;
+            border-radius: 10px 10px 10px 10px; margin-right: auto; margin-left: auto">
+            <p style="height: 50px; line-height: 50px; text-align: center; color:#000000;">
+            TimeBar</p>
+    </div>
+{% endblock %}
+

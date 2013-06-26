@@ -27,11 +27,8 @@
 
     <div id="container">
 
-        <div id="header">
-            <img src={{ STATIC_URL }}images/header.png class="img-rounded" width="100%">
-        </div>
-
         <div id="menu">
+            <div align="center"><img style="background-size: cover; height: 37px; margin-right: 10px; margin-left: 10px; margin-top: 5px; float:left " src={{ STATIC_URL }}images/ligtvlogo.png></div>
             {% block menu-header %}
 
             {% endblock %}
@@ -40,29 +37,31 @@
 
         <div id="content">
 
-            <div id="scoreboard" style="height: 140px">
+            <div id="scoreboard" style="height: 40px;margin-top: 4px;margin-bottom: 4px ">
                     {% block scoreboard %}
 
                     {% endblock %}
             </div>
 
-            <div id="timebar" style="height: 60px">
-                    {% block timebar %}
-
-                    {% endblock %}
-            </div>
-
             <div id="radarcontainer">
-                    <div id="menu">
+                    <div id="radar-menu" style="height: 37px;width: 408px;margin-left: auto;margin-right: auto">
                         {% block radar-menu %}
 
                         {% endblock %}
                     </div>
-                    <div id="radar">
-                        {% block radar %}
 
-                        {% endblock %}
-                    </div>
+                        <div id="timebar" style="height: 40px ;width: 750px;margin-left: auto;margin-right: auto">
+                            {% block timebar %}
+
+                            {% endblock %}
+                         </div>
+                        <div id="radar" style="height: 40px ;width: 1100px;float: left">
+                            {% block radar %}
+
+                            {% endblock %}
+                        </div>
+
+
             </div>
             <div id="commentary">
                 {% block commentary%}

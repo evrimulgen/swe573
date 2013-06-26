@@ -11,43 +11,39 @@
 
     <div id="menubar" style="background-color:#454541; Margin-left:auto;Margin-right:auto;">
     <!--<img src="{{ STATIC_URL }}images/buttonbg.png" height="150px" width="240px" onmouseover="this.src='{{ STATIC_URL }}images/buttonbgclicked.png'" onmouseout="this.src='{{ STATIC_URL }}images/buttonbg.png'">-->
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
-                <ul class="nav">
-                    <li class="active" style="width:200px"><a href="#">Ana Sayfa</a></li>
-                    <li class="divider-vertical"></li>
-                    <li style="width:200px"><a href="team">Takım Sayfaları</a></li>
-                    <li class="divider-vertical"></li>
-                    <li style="width:200px"><a href="#">Lig İstatistikleri</a></li>
-                </ul>
+        <div id="navbar">
+            <div id="nav">
+                <div id="active"><a href="../"><p>Ana Sayfa</p></a></div>
+                <a href="team/1"><p>Takım Sayfaları</p></a>
+                <a href="#"><p>Lig İstatistikleri</p></a>
             </div>
         </div>
-
     </div>
 
 {% endblock %}
 
 {% block week-menu %}
 
-    <div id="week-item">
-    {% for i in weeklist %}
-        {% if i < 23 %}
-                 <div id="enabled" style="float:left">
-                 <button>{{ i }}</button>
-                 </div>
-        {% elif i == 24 %}
-                 <div id="active" style="float:left">
-                 <button>{{ i }}</button>
-                 </div>
-        {% else %}
-                 <div id="disabled" style="float:left">
-                 <button>{{ i }}</button>
-                 </div>
-        {% endif %}
+    <div id="week-menu">
 
-    {% endfor %}
+        <div id="week-item">
+            {% for i in weeklist %}
+                {% if i < 23 %}
+                         <div id="enabled" style="float:left">
+                         <button>{{ i }}</button>
+                         </div>
+                {% elif i == 24 %}
+                         <div id="active" style="float:left">
+                         <button>{{ i }}</button>
+                         </div>
+                {% else %}
+                         <div id="disabled" style="float:left">
+                         <button>{{ i }}</button>
+                         </div>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
-
 {%  endblock %}
 
 {% block content %}

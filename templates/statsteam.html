@@ -3,31 +3,143 @@
 {% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}
 
 {% block head-addition %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("select").change(function () {
+                var str = "";
+                $("select option:selected").each(function () {
+                    str = $(this).text();
+                });
+                var htmltoSet = "";
+                if ($.trim(str) == "Maç Sayısı")
+                {
+                    {% for i in player_list|dictsortreversed:"match" %}
+                        htmltoSet += "<a> <p style='float: left;margin-left: 10px;line-height: 30px;font-size: 12px'>{{ i.jersey }} - {{ i.name }}</p> <p style='font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center'>{{ i.match }}</p></a>";
+                    {% endfor %}
+                }
+                else if ($.trim(str)  == "Dakika")
+                {
+                    {% for i in player_list|dictsortreversed:"min" %}
+                        htmltoSet += "<a> <p style='float: left;margin-left: 10px;line-height: 30px;font-size: 12px'>{{ i.jersey }} - {{ i.name }}</p> <p style='font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center'>{{ i.min }}</p></a>";
+                    {% endfor %}
+                }
+                else if ($.trim(str) == "Gol")
+                {
+                    {% for i in player_list|dictsortreversed:"goal" %}
+                        htmltoSet += "<a> <p style='float: left;margin-left: 10px;line-height: 30px;font-size: 12px'>{{ i.jersey }} - {{ i.name }}</p> <p style='font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center'>{{ i.goal }}</p></a>";
+                    {% endfor %}
+                }
+                else if ($.trim(str) == "Asist")
+                {
+                    {% for i in player_list|dictsortreversed:"assist" %}
+                        htmltoSet += "<a> <p style='float: left;margin-left: 10px;line-height: 30px;font-size: 12px'>{{ i.jersey }} - {{ i.name }}</p> <p style='font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center'>{{ i.assist }}</p></a>";
+                    {% endfor %}
+                }
+                else if ($.trim(str) == "Sarı Kart")
+                {
+                    {% for i in player_list|dictsortreversed:"yellow" %}
+                        htmltoSet += "<a> <p style='float: left;margin-left: 10px;line-height: 30px;font-size: 12px'>{{ i.jersey }} - {{ i.name }}</p> <p style='font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center'>{{ i.yellow }}</p></a>";
+                    {% endfor %}x="Good day";
+                }
+                else if ($.trim(str) == "Kırmızı Kart")
+                {
+                    {% for i in player_list|dictsortreversed:"red" %}
+                        htmltoSet += "<a> <p style='float: left;margin-left: 10px;line-height: 30px;font-size: 12px'>{{ i.jersey }} - {{ i.name }}</p> <p style='font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center'>{{ i.red }}</p></a>";
+                    {% endfor %}
+                }
+                else if ($.trim(str) == "Koşu")
+                {
+                    {% for i in player_list|dictsortreversed:"run" %}
+                        htmltoSet += "<a> <p style='float: left;margin-left: 10px;line-height: 30px;font-size: 12px'>{{ i.jersey }} - {{ i.name }}</p> <p style='font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center'>{{ i.run }}</p></a>";
+                    {% endfor %}
+                }
+                else{
+                    htmltoSet=str;
+                }
+                $("#player").html(htmltoSet);
+            })
+        });
+    </script>
+    <script>
+
+    </script>
 
 {% endblock %}
 
 
 {% block menu-header %}
 
-    <div id="menubar" style="background-color:#454541; Margin-left:auto;Margin-right:auto;">
-    <!--<img src="{{ STATIC_URL }}images/buttonbg.png" height="150px" width="240px" onmouseover="this.src='{{ STATIC_URL }}images/buttonbgclicked.png'" onmouseout="this.src='{{ STATIC_URL }}images/buttonbg.png'">-->
-        <div class="navbar navbar-inverse">
-            <div class="navbar-inner">
-                <ul class="nav">
-                    <li style="width:200px"><a href="../">Ana Sayfa</a></li>
-                    <li class="divider-vertical"></li>
-                    <li class="active" style="width:200px"><a href="">Takım Sayfaları</a></li>
-                    <li class="divider-vertical"></li>
-                    <li style="width:200px"><a href="#">Lig İstatistikleri</a></li>
-                </ul>
+    <div id="navbar">
+        <div id="nav">
+
+            <a href="../../"><p>Ana Sayfa</p></a>
+
+            <div id="active">
+                <a href=""><p>Takım Sayfaları</p></a>
             </div>
+
+            <a href="#"><p>Lig İstatistikleri</p></a>
+
         </div>
+    </div>
+
+
+{% endblock %}
+
+{% block team-menu %}
+    <div id="team-menu">
+        <p style="width: 1.4%;float: left"></p>
+        {% for i in team_list %}
+            {% if i == team_selected %}
+                <div id="active">
+                    <a  href="../{{ i }}"> <img src="{{ STATIC_URL }}images/logo{{ i }}.png"></a>
+                </div>
+
+            {% else %}
+                <a  href="../{{ i }}"> <img src="{{ STATIC_URL }}images/logo{{ i }}.png"></a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="header">
+        <img src="{{ STATIC_URL }}images/logo{{ team_selected }}.png"><h1>{{ team }}</h1>
+    </div>
+    <div id="menu">
+        <p style="width: 1.4%;float: left"></p>
+        <div id="active">
+            <a> <p> Fikstür </p> </a>
+        </div>
+        <a> <p> Kadro Analizi </p> </a>
+        <a> <p> Takım Özeti </p> </a>
+
+
     </div>
 
 {% endblock %}
 
-{% block content %}
+{% block sidebar-header %}
+    <div id="header">
+        <h1>Takım Kadrosu</h1>
+        <select class="player-filter">
+            <option class="item" style="float: right"> <a>Maç Sayısı</a> </option>
+            <option class="item"> <a>Dakika</a> </option>
+            <option class="item"> <a>Gol</a> </option>
+            <option class="item"> <a>Asist</a> </option>
+            <option class="item"> <a>Sarı Kart</a> </option>
+            <option class="item"> <a>Kırmızı Kart</a> </option>
+            <option class="item"> <a>Koşu</a> </option>
+        </select>
+    </div>
 
-    <div id="includedContent">{% include 'sub.html' with pname=player_name %}</div>
 
+{% endblock %}
+
+{% block sidebar-list %}
+    <div id="player">
+        {% for i in player_list|dictsortreversed:"match" %}
+            <a  href="../{{ i }}"> <p style="float: left;margin-left: 10px;line-height: 30px;font-size: 12px">{{ i.jersey }} - {{ i.name }}</p> <p style="font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center">{{ i.match }}</p></a>
+        {% endfor %}
+    </div>
 {% endblock %}

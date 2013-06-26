@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/application.css" charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css" charset="utf-8" />
 
+
     <script language="javascript">var STATIC_URL = "{{ STATIC_URL }}";</script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
@@ -21,36 +22,50 @@
     <script src="{{ STATIC_URL }}js/jquery.masonry.min.js"></script>
     {% block head-addition %}{% endblock %}
 
+
 </head>
 
 <body>
 
 <div id="container">
 
-        <div id="header">
-            <img src={{ STATIC_URL }}images/header.png class="img-rounded" width="100%">
+    <div id="global-header">
+
+        <div id="header-logo"align="center">
+            <img style="background-size: cover; float:left " src={{ STATIC_URL }}images/ligtvlogo.png>
         </div>
 
-        <div id="menu">
-            {% block menu-header %}{% endblock %}
+        <div id="header-menu"align="center">
+            {% block menu-header %}
+
+            {% endblock %}
         </div>
 
-        <div id="week-menu">
-            {% block week-menu %}{% endblock %}
+    </div>
+
+    {% block team-menu %}
+
+    {% endblock %}
+
+    {% block week-menu %}
+
+    {% endblock %}
+
+    <div id="content">
+        <div id="sidebar">
+            {% block sidebar-header %}
+
+            {% endblock %}
+            {% block sidebar-list %}
+
+            {% endblock %}
         </div>
+        <div id="main">
+            {% block content %}
 
-        <div id="content">
-            <div id="sidebar">
-                    {% block sidebar %}
-
-                    {% endblock %}
-            </div>
-            <div id="main">
-                    {% block content %}
-
-                    {% endblock %}
-            </div>
+            {% endblock %}
         </div>
     </div>
+</div>
 </body>
 </html>

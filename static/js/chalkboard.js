@@ -319,7 +319,7 @@ function Chalkboard(div_id, match_id){
             $(divSelector + " #spinner").show();
 
             // actually fetch the data from the backend
-            $.post("/api/" + method, postData).done(function (data) {
+            $.post("http://localhost:8080/api/" + method, postData).done(function (data) {
                 var res = JSON.parse(data);
                 if(res.code==0){
                     cache[method][postData] = res.data;

@@ -138,7 +138,7 @@ def table(request):
 
 @ensure_csrf_cookie
 def chalkboard(request):
-    return render_to_response('index.html')
+    return render_to_response('chalkboard.html')
 
 def router(request, path):
     target_url = "http://sentio.cloudapp.net:8080/api/"

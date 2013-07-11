@@ -229,6 +229,11 @@ function Chalkboard(div_id, match_id){
                 return;
             }
 
+            // a pass with (0,0) start or end coordinates is null, filter that out as well
+            if(pass[3]===0&&pass[4]===0||pass[5]===0&&pass[6]===null){
+                return;
+            }
+
             // filter by time
             if(pass[1]<timeBounds[0] || pass[1]>timeBounds[1]){
                 return;
@@ -256,6 +261,11 @@ function Chalkboard(div_id, match_id){
         _.each(shotData, function (shot) {
             // the shot data can also contain null coordinates just like the pass data
             if (shot[3] === null || shot[4] === null) {
+                return;
+            }
+
+            // a shot with (0,0) coordinates is invalid as well
+            if (shot[3]===0&&shot[4]===0){
                 return;
             }
 

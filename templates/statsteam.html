@@ -164,7 +164,7 @@
 
         <div id="player">
             {% for i in player_list|dictsortreversed:"match" %}
-                <a  href="../{{ i }}"> <p style="float: left;margin-left: 10px;line-height: 30px;font-size: 12px">{{ i.jersey }} - {{ i.name }}</p> <p style="font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center">{{ i.match }}</p></a>
+                <a  href="#"> <p style="float: left;margin-left: 10px;line-height: 30px;font-size: 12px">{{ i.jersey }} - {{ i.name }}</p> <p style="font-size: 12px;float: right;line-height:30px;width: 30px; padding-right: 10px; text-align: center">{{ i.match }}</p></a>
             {% endfor %}
         </div>
     </div>

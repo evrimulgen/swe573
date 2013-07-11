@@ -1,10 +1,6 @@
 /*jslint nomen: true, plusplus: true, todo: true, vars: true */
 /*global $: true, _: true, paper: true, h337: true */
 
-// TODO: make the chalkboard somewhat more modular
-// the layer controls are decoupled from the chalkboard component
-// but matchId/playerId is still bound to specific elements
-// this.matchId, this.playerId currently affects nothing
 function Chalkboard(div_id, match_id){
     "use strict";
 
@@ -12,7 +8,7 @@ function Chalkboard(div_id, match_id){
 
     // setting up the canvas and the loading animation
     // and setting up the slider for time range
-    $(divSelector).append('<div class="alerts"></div><div class="chalkboard"><canvas id="bgCanvas"></canvas><canvas id="fgCanvas"></canvas><img id="spinner" src="spinner.gif" /></div>');
+    $(divSelector).append('<div class="alerts"></div><div class="chalkboard"><canvas id="bgCanvas"></canvas><canvas id="fgCanvas"></canvas><img id="spinner" src="/static/images/spinner.gif" /></div>');
 
     // setting up two scopes for two canvases
     // bgCanvas contains the football field and fgCanvas has everything else

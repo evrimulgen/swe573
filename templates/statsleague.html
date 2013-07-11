@@ -14,9 +14,9 @@
         <div id="navbar" style="float: left">
             <p style="width: 34%; float: left"></p>
             <div id="nav">
-                <div id="active" ><a href="../ " style="height: 20px; width: 18%"><p style="line-height: 20px; width: 100%">Oyuncu İstistikleri</p></a></div>
-                <a href="../team/1" style="height: 20px; width: 18%"><p style="line-height: 20px; width: 100%">Takım İstatiskleri</p></a>
-                <a href="" style="height: 20px; width: 18%"><p style="line-height: 20px; width: 100%">Hakem İstatistikleri</p></a>
+                <div id="active" ><a href="#" style="height: 20px; width: 18%"><p style="line-height: 20px; width: 100%">Oyuncu İstatistikleri</p></a></div>
+                <a href="#" style="height: 20px; width: 18%"><p style="line-height: 20px; width: 100%">Takım İstatistikleri</p></a>
+                <a href="#" style="height: 20px; width: 18%"><p style="line-height: 20px; width: 100%">Hakem İstatistikleri</p></a>
             </div>
         </div>
     </div>
@@ -64,22 +64,22 @@
         {% for i in team_list %}
             {% if i == team_selected %}
                 <div id="active">
-                    <a  href="../{{ i }}"> <img src="{{ STATIC_URL }}images/logo{{ i }}.png"></a>
+                    <a  href="#"> <img src="{{ STATIC_URL }}images/logo{{ i }}.png"></a>
                 </div>
 
             {% else %}
-                <a  href="../{{ i }}"> <img src="{{ STATIC_URL }}images/logo{{ i }}.png"></a>
+                <a  href="#"> <img src="{{ STATIC_URL }}images/logo{{ i }}.png"></a>
             {% endif %}
         {% endfor %}
     </div>
 {% endblock %}
 
 {% block sidebar %}
-    <div id="content">
-        <div id="header"> <h1>Sidebar</h1> </div>
-        <div id="list" style="min-height: 400px"> </div>
-    </div>
 
+    <div id="content">
+        <div id="header"><h1>Ads</h1> </div>
+        <div style="min-height: 400px"></div>
+    </div>
 
 {% endblock %}
 

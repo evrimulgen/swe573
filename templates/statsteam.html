@@ -99,6 +99,17 @@
 
 {% endblock %}
 
+{% block info %}
+    <p style="width: 1%;float: left"></p>
+    <img style="float:left;height: 90%; margin: 3px;" src="{{ STATIC_URL }}images/logo{{ team_selected }}.png">
+    {% for i in standing_list %}
+        {% if i.teamId == team_selected %}
+            <h1 style="margin:0px;float: left; color: #ffffff;line-height: 50px; margin-left: 5px;font-family: CenturyGothic;font-size: 20px">{{ i.teamName }}</h1>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
+
 {% block team-menu %}
     <div id="team-menu">
         <p style="width: 1.4%;float: left"></p>
@@ -117,7 +128,12 @@
 
 {% block content %}
     <div id="header">
-        <img src="{{ STATIC_URL }}images/logo{{ team_selected }}.png"><h1>{{ team }}</h1>
+        <img src="{{ STATIC_URL }}images/logo{{ team_selected }}.png">
+        {% for i in standing_list %}
+            {% if i.teamId == team_selected %}
+                <h1>{{ i.teamName }}</h1>
+            {% endif %}
+        {% endfor %}
     </div>
     <div id="menu">
         <p style="width: 1.4%;float: left"></p>
@@ -127,9 +143,7 @@
         <a> <button onclick="changeContent(2)">Kadro Analizi</button> </a>
         <a> <button onclick="changeContent(3)">Takım Özeti</button> </a>
     </div>
-    <div class="standings">
-        <h1>Puan Tablosu</h1>
-    </div>
+
 
 {% endblock %}
 

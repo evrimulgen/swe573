@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from random import randint
 from django.http import HttpRequest, HttpResponse
 import urllib2, urllib
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 def home(request):
     a = []
@@ -135,7 +136,7 @@ def player(request):
 def table(request):
     return render_to_response('matchtable.html')
 
-
+@ensure_csrf_cookie
 def chalkboard(request):
     return render_to_response('index.html')
 

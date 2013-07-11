@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import mimetypes
 
 from django.shortcuts import render_to_response
 from random import randint
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 import urllib2, urllib
 
 def home(request):
@@ -137,3 +138,21 @@ def table(request):
 
 def chalkboard(request):
     return render_to_response('index.html')
+
+def router(request, path):
+    target_url = "http://sentio.cloudapp.net:8080/api/"
+    url = '%s%s' % (target_url, path)
+    if request.META.has_key('QUERY_STRING'):
+        url += '?' + request.META['QUERY_STRING']
+    try:
+        if request.body:
+            proxied_request = urllib2.urlopen(url, request.body)
+        else:
+            proxied_request = urllib2.urlopen(url)
+        status_code = proxied_request.code
+        mimetype = proxied_request.headers.typeheader or mimetypes.guess_type(url)
+        content = proxied_request.read()
+    except urllib2.HTTPError as e:
+        return HttpResponse(e.msg, status=e.code, mimetype='text/plain')
+    else:
+        return HttpResponse(content, status=status_code, mimetype=mimetype)

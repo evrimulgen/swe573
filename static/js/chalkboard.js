@@ -22,6 +22,16 @@ function Chalkboard(div_id, match_id){
     bgScope.setup("bgCanvas");
     fgScope.setup("fgCanvas");
 
+    // setting up the django CSRF cookie
+    var csrftoken = $.cookie('csrftoken');
+    $.ajaxSetup({
+        crossDomain: false,
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
+
+
     // setting up layers for different displays
     paper = fgScope;
     var layers = { passes: new paper.Layer(), shots: new paper.Layer(), runpaths: new paper.Layer() };
@@ -319,8 +329,8 @@ function Chalkboard(div_id, match_id){
             $(divSelector + " #spinner").show();
 
             // actually fetch the data from the backend
-            $.post("http://sentio.cloudapp.net:8080/api/" + method, postData).done(function (data) {
-                var res = JSON.parse(data);
+            $.post("/api/" + method, postData).done(function (data) {
+                var res = data;
                 if(res.code==0){
                     cache[method][postData] = res.data;
                     currentData[method] = res.data;

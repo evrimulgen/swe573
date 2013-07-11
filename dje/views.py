@@ -133,3 +133,7 @@ def player(request):
     return render_to_response('playerstats.html')
 def table(request):
     return render_to_response('matchtable.html')
+
+
+def chalkboard(request):
+    return render_to_response('index.html')

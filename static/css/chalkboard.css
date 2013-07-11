@@ -1,0 +1,27 @@
+.chalkboard{
+	position: relative;
+	width: 557px;
+	height: 372px;
+	margin-top: 4px;
+	margin-left: 2px;
+}
+
+.chalkboard canvas{
+	position: absolute;
+	width: 557px;
+	height: 372px;
+	left: 0;
+	top: 0;
+}
+
+.chalkboard #spinner{
+	display: none; 
+	position: absolute;
+	top: 162px;
+	left: 254.5px;
+	z-index: 300;
+}
+
+.chalkboard #fgCanvas{
+	z-index: 200;
+}

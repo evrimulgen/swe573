@@ -6,9 +6,19 @@ function Chalkboard(div_id, match_id){
 
     var divSelector = "#" + div_id;
 
+    // scaling stuff
+    var pitchScale = 5;
+    var pitchOffset = 16;
+
+    var canvasWidth = 105*pitchScale + 2*pitchOffset;
+    var canvasHeight = 68*pitchScale + 2*pitchOffset;
+
     // setting up the canvas and the loading animation
     // and setting up the slider for time range
-    $(divSelector).append('<div class="alerts"></div><div class="chalkboard"><canvas id="bgCanvas"></canvas><canvas id="fgCanvas"></canvas><img id="spinner" src="/static/images/spinner.gif" /></div>');
+    $(divSelector).append('<div class="alerts"></div><div class="chalkboard"></div>');
+    $('<canvas id="bgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .chalkboard");
+    $('<canvas id="fgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .chalkboard");
+    $(divSelector+" .chalkboard").append('<img id="spinner" src="/static/images/spinner.gif" />');
 
     // setting up two scopes for two canvases
     // bgCanvas contains the football field and fgCanvas has everything else
@@ -21,6 +31,10 @@ function Chalkboard(div_id, match_id){
     var fgScope = new paper.PaperScope();
     bgScope.setup("bgCanvas");
     fgScope.setup("fgCanvas");
+
+    var viewSize = [$("#bgCanvas").width(), $("#bgCanvas").height()];
+    bgScope.view.viewSize = viewSize;
+    fgScope.view.viewSize = viewSize;
 
     // setting up the django CSRF cookie
     var csrftoken = $.cookie('csrftoken');
@@ -52,10 +66,6 @@ function Chalkboard(div_id, match_id){
     var currentPlayer = {};
     
     var timeBounds = [0, 90];
-
-    // scaling stuff
-    var pitchScale = 5;
-    var pitchOffset = 16;
 
     // meter -> pixel conversion with offset (for points on screen)
     // change the scale and offset as needed

@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^player/$', 'dje.views.player'),
     url(r'^table/$', 'dje.views.table'),
     url(r'^board/$', 'dje.views.chalkboard'),
+    url(r'^radar/$', 'dje.views.radar'),
     url(r'^api/(?P<path>\w+)$', 'dje.views.router'),
 
     # url(r'^dje2/', include('dje2.foo.urls')),

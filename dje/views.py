@@ -140,6 +140,10 @@ def table(request):
 def chalkboard(request):
     return render_to_response('chalkboard.html')
 
+@ensure_csrf_cookie
+def radar(request):
+    return render_to_response('radar.html')
+
 def router(request, path):
     target_url = "http://sentio.cloudapp.net:8080/api/"
     url = '%s%s' % (target_url, path)

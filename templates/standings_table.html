@@ -1,58 +1,34 @@
-{% load url from future %}
-{% load static %}
-{% load templateextras %}
-{% get_static_prefix as STATIC_URL %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <title>{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}</title>
-
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css" charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/application.css" charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/style.css" charset="utf-8" />
-
-
-    <script language="javascript">var STATIC_URL = "{{ STATIC_URL }}";</script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-
-    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-    <script src="{{ STATIC_URL }}js/main.js"></script>
-    <script src="{{ STATIC_URL }}js/jquery.masonry.min.js"></script>
-    {% block head-addition %}{% endblock %}
-
-
-</head>
-
-<body>
-
-<div class="standings">
+<div>
     <table class="hovertable">
         <tr>
             <th class="first" style="width: 3%"></th> <th style="width: 3%"></th><th></th><th style="width: 3%">O</th><th style="width: 3%">G</th><th style="width: 3%">B</th><th style="width: 3%">M</th><th style="width: 3%">A</th><th style="width: 3%">Y</th><th style="width: 3%">AV</th><th class="last" style="width: 3%">P</th>
         </tr>
 
         {% for i in standing_list|dictsortreversed:"average"|dictsortreversed:"points"%}
-            <tr>
-                {% if i.change > 0 %}
-                    <td style="background-color: #62c462;">{{ i.change }}</td>
-                {% elif i.change < 0 %}
+            {% if forloop.counter < 3 %}
+                <tr style="background-color: rgba(20,60,20,1)">
+                    {% elif forloop.counter < 5 %}
+                <tr style="background-color: rgba(60,60,20,1)">
+                    {% elif forloop.counter > 15 %}
+                <tr style="background-color: rgba(60,20,20,1)">
+                    {% else %}
+                <tr>
+            {% endif %}
 
-                    <td style="background-color: #c4494c">{{ i.change }}</td>
+        {% if i.change > 0 %}
+            <td style="background-color: rgb(45,136,45)">{{ i.change }}</td>
+        {% elif i.change < 0 %}
 
-                {% else %}
-                    <td style="background-color: #c2c0c4">{{ i.change }}</td>
-                {% endif %}
+            <td style="background-color: rgb(142,47,47)">{{ i.change }}</td>
 
-                <td>{{ forloop.counter }}</td><td style="text-align: left" >{{ i.teamName }}</td><td>{{ i.played }}</td><td>{{ i.win }}</td><td>{{ i.draw }}</td><td>{{ i.lose }}</td><td>{{ i.score }}</td><td>{{ i.conceded }}</td><td>{{ i.average }}</td><td>{{ i.points }}</td>
-            </tr>
+        {% else %}
+            <td style="background-color: #929194">{{ i.change }}</td>
+        {% endif %}
+
+        <td>{{ forloop.counter }}</td><td style="text-align: left" >{{ i.teamName }}</td><td>{{ i.played }}</td><td>{{ i.win }}</td><td>{{ i.draw }}</td><td>{{ i.lose }}</td><td>{{ i.score }}</td><td>{{ i.conceded }}</td><td>{{ i.average }}</td><td>{{ i.points }}</td>
+        </tr>
 
         {% endfor %}
     </table>
 </div>
-
-
-
-</body>
-</html>

@@ -178,14 +178,31 @@ $(function(){
 	var modifyPlayerLocation = function(team_id, jersey_no, xpos, ypos){
 		if(teams[team_id]===undefined) teams[team_id] = {};
 		if(teams[team_id][jersey_no]===undefined){
-			teams[team_id][jersey_no] = new pitch.paper.Path.Circle(new pitch.paper.Point(mt2px(xpos), mt2px(ypos)), 6);
-			if(team_id==5){
-				teams[team_id][jersey_no].fillColor = "red";
-			} else {
-				teams[team_id][jersey_no].fillColor = "blue";
-			}
+            var fillColor;
+            if(team_id==5){
+                fillColor = "red";
+            } else {
+                fillColor = "blue";
+            }
+
+			teams[team_id][jersey_no] = new pitch.paper.Group([
+                new pitch.paper.Path.Circle({
+                    center: [mt2px(xpos), mt2px(ypos)],
+                    radius: 8,
+                    strokeColor: 'yellow',
+                    strokeWidth: 2,
+                    fillColor: fillColor
+                }),
+                new pitch.paper.PointText({
+                    point: [mt2px(xpos), mt2px(ypos)+4],
+                    content: jersey_no,
+                    justification: 'center',
+                    fillColor: 'white'
+                })
+            ]);
 		}
 		else{
+            //var delta =
 			teams[team_id][jersey_no].position = new pitch.paper.Point(mt2px(xpos), mt2px(ypos));
 		}
 		//$("#playerPositions").text(JSON.stringify(teams));

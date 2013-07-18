@@ -1,0 +1,154 @@
+{% load url from future %}
+{% load static %}
+{% load templateextras %}
+{% get_static_prefix as STATIC_URL %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css" charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/application.css" charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/virtual_style.css" charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <script language="javascript">var STATIC_URL = "{{ STATIC_URL }}";</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+
+
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}js/main.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.masonry.min.js"></script>
+
+    <script src="{{ STATIC_URL }}js/jquery.timelinr-0.9.53.js"></script>
+
+    <script>
+        $(function(){
+            $().timelinr({
+                issuesSpeed: 	300,
+                datesSpeed: 	100,
+                arrowKeys: 		'true',
+                startAt:		23
+            })
+        });
+    </script>
+
+
+    {% block head-addition %}{% endblock %}
+
+
+</head>
+
+<body>
+
+<div id="global-header">
+    <div id="cnt">
+        <div id="logo">
+            <p style="width: 100%;height: 40px;line-height: 50px;text-align: center">Logo</p>
+        </div>
+        <div id="scoreboard">
+            {% block scoreboard %}
+                <p style="width: 100%;height: 45px;line-height: 50px;text-align: center">ScoreBoard</p>
+            {% endblock %}
+        </div>
+    </div>
+
+</div>
+
+<div id="content">
+    <div id="sidebar">
+
+        <div class="fixture">
+            <select class="weeks">
+                {% for i in weeklist %}
+                    <option> <a href="#{{ i }}">{{ i }}. Hafta</a> </option>
+                {% endfor %}
+            </select>
+            <div id="timeline">
+                <ul id="dates">
+                    {% for i in weeklist %}
+                        {% if i < 23 %}
+                            <li><a href="#{{ i }}">{{ i }}. Hafta</a></li>
+                        {% elif i == 23 %}
+
+                            <li><a href="#{{ i }}" class="selected">{{ i }}. Hafta</a></li>
+
+                        {% else %}
+
+                            <li><a href="#{{ i }}">{{ i }}. Hafta</a></li>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <ul id="issues">
+                    {% for i in weeklist %}
+                        {% if i < 23 %}
+                            <li id="{{ i }}">
+                                {% include 'fixture.html' with week=i%}
+                            </li>
+                        {% elif i == 23 %}
+                            <li id="{{ i }}" class="selected">
+                                {% include 'fixture.html' with week=i %}
+                            </li>
+                        {% else %}
+                            <li id="{{ i }}">
+                                {% include 'fixture.html' with week=i %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <a href="#" id="next">+</a>
+                    <a href="#" id="prev">-</a>
+            </div>
+        </div>
+
+        <div class="sidebox">
+            <div id="head">
+                <p> Gol Videoları </p>
+            </div>
+        </div>
+        <div class="sidebox">
+            <div id="head">
+                <p> Mesafe </p>
+            </div>
+        </div>
+        <div class="sidebox">
+            <div id="head">
+                <p> Pas </p>
+            </div>
+        </div>
+        <div class="sidebox">
+            <div id="head">
+                <p> Şut </p>
+            </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="menu">
+            {% block menu %}
+
+            {% endblock %}
+        </div>
+        <div class="container">
+            {% block content %}
+
+            {% endblock %}
+        </div>
+
+    </div>
+    <div id="footer">
+
+    </div>
+
+</div>
+
+
+
+
+</body>
+
+</html>

@@ -177,6 +177,11 @@ function Chalkboard(div_id, match_id){
     };
 
     var drawArrow = function (pts, info) {
+        var length = pts.length;
+        if(length<2){
+            return;
+        }
+
         // drawing the line itself
         var line = new paper.Path();
         
@@ -196,7 +201,6 @@ function Chalkboard(div_id, match_id){
         // on https://github.com/kuzux/kuzux.github.com/blob/master/line-segment-intersection.js (the drawArrow function)
         // there might be an easier/clearer way to do that with paperjs, 
         // i think it can modify the angles of vector objects and stuff
-        var length = pts.length;
 
         var fromx = pts[length - 2].x;
         var fromy = pts[length - 2].y;

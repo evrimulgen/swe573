@@ -4,8 +4,8 @@
 }
 
 body{
-    background-image: url(../images/bodybg.png);
-    background-repeat: repeat;
+    /*background-image: url(../images/bodybg.png);*/
+    background-color: #dadada;
     color: #ffffff;
     font-family: Georgia, serif;
 }

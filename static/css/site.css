@@ -108,16 +108,16 @@ img.thumbnail-40{
 }
 
 .teamlist li:nth-child(2n+1) {
-	background-color: #ddd4c7;
+	background-color: rgba(255,255,255,0.1);
 }
 
 .teamlist li:hover {
-	background-color: #bbb;
+	background-color: rgba(0,255,255,0.1);
 	cursor: pointer;
 }
 
 .teamlist li.active {
-	background-color: #ccddff;
+	background-color: rgba(0,0,255,0.1);
 }
 
 .slider-horizontal {
@@ -172,4 +172,12 @@ img.thumbnail-40{
 
 .game-info p {
 	font-size: 12px;
+}
+
+.pitch {
+	margin-top: 10px;
+	margin-left: 50px;
+	margin-bottom: 10px;
+	width: 662px;
+	height: 440px;
 }

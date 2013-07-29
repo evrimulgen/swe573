@@ -7,7 +7,7 @@ function Chalkboard(div_id, match_id){
     var divSelector = "#" + div_id;
 
     // scaling stuff
-    var pitchScale = 5;
+    var pitchScale = 6;
     var pitchOffset = 16;
 
     var canvasWidth = 105*pitchScale + 2*pitchOffset;
@@ -15,7 +15,7 @@ function Chalkboard(div_id, match_id){
 
     // setting up the canvas and the loading animation
     // and setting up the slider for time range
-    $(divSelector).append('<div class="alerts"></div><div class="chalkboard"></div>');
+    $(divSelector).append('<div class="alerts"></div><div class="chalkboard pitch"></div>');
     $('<canvas id="bgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .chalkboard");
     $('<canvas id="fgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .chalkboard");
     $(divSelector+" .chalkboard").append('<img id="spinner" src="/static/images/spinner.gif" />');

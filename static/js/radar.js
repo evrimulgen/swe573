@@ -16,7 +16,7 @@ function FootballPitch(div_id){
     var divSelector = "#" + div_id;
 
     // scaling stuff
-    var pitchScale = 5;
+    var pitchScale = 6;
     var pitchOffset = 16;
 
     var canvasWidth = 105*pitchScale + 2*pitchOffset;
@@ -142,7 +142,7 @@ $(function(){
     var pitch = new FootballPitch("radarContainer");
 
     // scaling stuff
-    var pitchScale = 5;
+    var pitchScale = 6;
     var pitchOffset = 16;
 
     var mt2px = function (mt) {

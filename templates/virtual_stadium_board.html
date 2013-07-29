@@ -1,15 +1,23 @@
 {% extends "virtual_stadium_base.html" %}
+
+{% block head-addition %}
+    <script src="{{ STATIC_URL }}js/bootstrap-slider.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/heatmap.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/chalkboard.js" type="text/javascript"></script>
+
+    <!--<script src="{{ STATIC_URL }}js/ui.js" type="text/javascript"></script>-->
+{% endblock %}
 {% block menu %}
     <div id="navbar">
         <div id="nav">
 
 
-            <a href="../before">MAÇ ÖNCESİ</a>
+            <a href="/before">MAÇ ÖNCESİ</a>
 
 
-            <a href="../center">STADYUM</a>
+            <a href="/center">STADYUM</a>
             <div id="active">
-                <a href="../table">MAÇ TAHTASI</a>
+                <a href="/table">MAÇ TAHTASI</a>
             </div>
         </div>
     </div>

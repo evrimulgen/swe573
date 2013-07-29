@@ -4,9 +4,7 @@
 }
 
 body{
-    background-image: url(../images/bodybg.png);
-    background-repeat: repeat;
-    color: #ffffff;
+    background-color: #dadada;
     font-family: Georgia, serif;
 }
 
@@ -46,7 +44,10 @@ body{
 }
 #footer{
     margin-top: 5px;
-    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    float: left;
+    width: 100%;
     min-height: 100px;
     background-color: rgba(100,100,100,0.5);
     -webkit-border-radius: 10px;
@@ -58,8 +59,7 @@ body{
 #content #sidebar{
     width: 24%;
     float: left;
-    background-image: url(../images/bg3.png);
-    background-repeat: repeat;
+    background-color: #2a2a28;
 }
 
 .fixture{
@@ -88,8 +88,7 @@ body{
     margin-left: 1%;
     width: 75%;
     min-height: 600px;
-    background-image: url(../images/bg3.png);
-    background-repeat: repeat;
+    background-color: #2a2a28;
 }
 #content #main #menu{
     background-color: rgba(20,20,20,0.85);
@@ -349,12 +348,7 @@ h2 {
     margin-top: 2px;
     margin-left: 1%;
     height: 40px;
-    color: #fff;
     text-decoration: none;
-
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
 
     -webkit-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
     -moz-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
@@ -362,6 +356,8 @@ h2 {
 
     background: rgba(0,0,0,0.5); /* #191919 */
     border: 1px solid #141414;
+    background-image: url(../images/bg5.png);
+    background-repeat: repeat;
     text-decoration: none;
     color: #ffffff;
     float: left;

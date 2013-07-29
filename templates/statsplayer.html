@@ -1,0 +1,227 @@
+{% extends "statsbase.html" %}
+
+{% block head-addition %}
+
+    <script>
+        function changeContent(num){
+            htmltoSet = "";
+            if(num == 1){
+                htmltoSet = "<p style='width: 1.4%;float: left'></p><div class='active'><a> <button onclick='changeContent(1)'>Oyuncu Bilgisi</button> </a></div><a> <button onclick='changeContent(2)'>Oyuncu Özeti</button> </a>"
+            }
+            else if(num==2){
+                htmltoSet = "<p style='width: 1.4%;float: left'></p><a> <button onclick='changeContent(1)'>Oyuncu Bilgisi</button> </a><div class='active'><a> <button onclick='changeContent(2)'>Oyuncu Özeti</button> </a></div>"
+            }
+
+            $("#menu").html(htmltoSet);
+        }
+    </script>
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script>
+        $(function() {
+            var availableTags = [
+                {% for i in best_eleven_list %}
+                    "{{ i.playerName }}",
+                {% endfor %}
+            ];
+            $( "#tags" ).autocomplete({
+                source: availableTags
+            });
+
+        });
+    </script>
+
+{% endblock %}
+
+{% block info %}
+    <div id="info">
+        <p style="margin-left:10px; color:#ffffff;line-height: 50px;float: left">Oyuncu Ara:</p>
+        <div class="ui-widget" style="float: left;margin: 12px">
+            <input id="tags" />
+        </div>
+
+        <select style="width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px">
+            {% for i in standing_list %}
+                {% if i.teamId == team_selected %}
+                    <option class="item" value="../{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
+                {% endif %}
+            {% endfor %}
+            {% for i in standing_list %}
+                {% if i.teamId != team_selected %}
+                    <option class="item" value="../{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <select style="width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px ">
+            {% for i in best_eleven_list %}
+                {% if i.playerId == p_id %}
+                    <option class="item" value="{{ i.playerId }}"> <a>{{ i.playerName }}</a> </option>
+                {% endif %}
+            {% endfor %}
+            {% for i in best_eleven_list %}
+                {% if i.playerId != p_id %}
+                    <option class="item" value="{{ i.playerId }}"> <a>{{ i.playerName }}</a> </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <button style="float: left;margin-left: 0.5%;margin-top: 12px;font-size: 14px">Oyuncu Sayfası</button>
+        <button style="float: left;margin-left: 0.5%;margin-top: 12px;font-size: 14px">Karşılaştır</button>
+    </div>
+{% endblock %}
+
+
+{% block menu-header %}
+
+    <ul id="nav">
+        <li>
+            <a href="../../../">Ana Sayfa</a>
+        </li>
+        <li><a href="../../../team">Takımlar</a>
+
+        </li>
+        <li>
+            <a class="active" href="">Oyuncular</a>
+        </li>
+        <li>
+            <a href="">Karşılaştır!</a>
+            <ul>
+                <li><a href="#">Takım</a></li>
+                <li><a href="#">Oyuncu</a></li>
+            </ul>
+        </li>
+    </ul>
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="line-menu" id="menu" style="margin-bottom: 5px">
+        <p style="width: 1.4%;float: left"></p>
+        <div class="active">
+            <a href="#"> <button onclick="changeContent(1)">Oyuncu Bilgisi</button> </a>
+        </div>
+        <a href="#"> <button onclick="changeContent(2)">Oyuncu Özeti</button> </a>
+    </div>
+    <div class="insideleft">
+        {% for x in player_list %}
+            {% if x.id == p_id %}
+
+                <div class="infobox">
+                    <h1>{{ x.name }}</h1>
+                    <img src="{{ STATIC_URL }}images/player{{ x.id }}.png">
+                    <p class="first">Takım</p>
+                    {% for a in standing_list %}
+                        {% if a.teamId == team_selected %}
+                            <p class="second">{{ a.teamName }}</p>
+                        {% endif %}
+                    {% endfor %}
+                    <p class="first">Doğum Tarihi</p>
+                    <p class="second">18.06.1989</p>
+                    <p class="first">Ülke</p>
+                    <p class="second">Brezilya</p>
+                    <p class="first">Boy</p>
+                    <p class="second">1.83 m</p>
+                    <p class="first">Milli Olma Sayısı</p>
+                    <p class="second">87</p>
+                    <p class="first">Milli Gol</p>
+                    <p class="second">11</p>
+                </div>
+
+                <div class="box-container" style="width: 98%;margin-left: 1%">
+
+
+                    <a class="content" href="#" style="width: 96%">
+                        <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Son Maçlar</p>
+                        <div id="image" style="width: 10%;margin-top: -2px">
+
+                        </div>
+                        <ul style="width: 70%; margin-top: -2px">
+                            {% for x in "xxxxx" %}
+                                <li><p class="first">{{ team_selected }}spor - {{ forloop.counter }}spor</p></li>
+                            {% endfor %}
+                        </ul>
+                    </a>
+                    <a class="content" href="#" style="width: 96%">
+                        <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Goller</p>
+                        <div id="image" style="width: 10%;margin-top: -2px">
+
+                        </div>
+                        <ul style="width: 70%; margin-top: -2px">
+                            {% for x in "xxxxx" %}
+                                <li><p class="first">{{ team_selected }}spor - {{ forloop.counter }}spor</li>
+                            {% endfor %}
+                        </ul>
+                    </a>
+
+                </div>
+
+
+
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="insideright">
+
+        {% for x in player_list %}
+            {% if x.id == p_id %}
+                <div class="box-container" style="width: 96%;margin-top: 0px">
+
+                    <a class="content">
+                        <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">İstatistikler</p>
+                        <div id="image" style="width: 10%;margin-top: -2px">
+
+                        </div>
+                        <ul style="width: 70%; margin-top: -2px">
+                            {% for x in "xxxxxxxxxxxxxxxxxxxxxxxxxxx" %}
+                                <li><p class="first">İstatistik {{ forloop.counter }}</li>
+                            {% endfor %}
+                        </ul>
+                    </a>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+
+
+{% endblock %}
+
+
+{% block sidebar %}
+    <div id="content">
+        <div style="width: 100%;height: 35px">
+            <select class="topmenuoption">
+                {% for i in weeklist %}
+                    <option class="item"> <a>{{ i }}. Hafta</a> </option>
+                {% endfor %}
+            </select>
+            <select class="topmenuoption">
+                <option class="item" style="float: right"> <a>Gol</a> </option>
+                <option class="item"> <a>Asist</a> </option>
+                <option class="item"> <a>Koşu Mesafesi</a> </option>
+                <option class="item"> <a>Pas Yüzdesi</a> </option>
+                <option class="item"> <a>Şut Yüzdesi</a> </option>
+                <option class="item"> <a>Orta Yüzdesi</a> </option>
+                <option class="item"> <a>Faul</a> </option>
+                <option class="item"> <a>Yapılan Faul</a> </option>
+                <option class="item"> <a>Sarı Kart</a> </option>
+                <option class="item"> <a>Kırmızı Kart</a> </option>
+            </select>
+        </div>
+
+        <div class="teamcomparison">
+            {% for i in best_eleven_list|dictsortreversed:"goalLeague" %}
+                <div class="teamitem">
+                    <img alt="{{ i.playerName }}" title="{{ i.playerName }}" src="{{ STATIC_URL }}images/player{{ i.playerId }}.png">
+                    {% for x in i.goalList %}
+                        <a href="#" title="Golü izle"></a>
+                    {% endfor %}
+                    <div style="float: left;margin-left: 2px;line-height: 26px">{{ i.goalLeague }}</div>
+                    <div class="placeholder"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

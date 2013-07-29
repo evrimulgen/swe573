@@ -20,12 +20,17 @@
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script src="{{ STATIC_URL }}js/main.js"></script>
     <script src="{{ STATIC_URL }}js/jquery.masonry.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/modernizr.custom.79639.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.baraja.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/paper.js"></script>
+
     {% block head-addition %}{% endblock %}
 
 
 </head>
 
 <body>
+
 
 <div id="container">
 
@@ -56,25 +61,29 @@
 
     {% endblock %}
 
-    <div id="info">
+
     {% block info %}
 
     {% endblock %}
-    </div>
 
 
     <div id="content">
-        <div id="sidebar">
-            {% block sidebar %}
+        {% block allcontent %}
+            <div id="main">
+                {% block content %}
 
-            {% endblock %}
-        </div>
-        <div id="main">
-            {% block content %}
+                {% endblock %}
+            </div>
 
-            {% endblock %}
-        </div>
+            <div id="sidebar">
+                {% block sidebar %}
+
+                {% endblock %}
+            </div>
+
+        {% endblock %}
     </div>
+
 </div>
 </body>
 </html>

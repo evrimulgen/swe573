@@ -20,7 +20,7 @@
 <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 <script src="{{ STATIC_URL }}js/main.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.masonry.min.js"></script>
-<script type="text/javascript" src="../static/js/paper.js"></script>
+
 
 <script type="text/javascript">
 paper.install(window);
@@ -31,7 +31,7 @@ window.onload = function() {
     paper.setup(canvas);
     // Create a Paper.js Path to draw a line into it:
 
-    var pitch = new paper.Raster('../static/images/pitch.png');
+    var pitch = new paper.Raster('{{ STATIC_URL }}images/pitch.png');
 
     var width = paper.view.size.width;
     var height = paper.view.size.height;
@@ -91,10 +91,10 @@ window.onload = function() {
 
 
         if (play_ == 0) {
-            var jersey = new paper.Raster('../static/images/jerseygk' + teamId_ + '.png');
+            var jersey = new paper.Raster('{{ STATIC_URL }}images/jerseygk' + teamId_ + '.png');
         }
         else {
-            var jersey = new paper.Raster('../static/images/jersey' + teamId_ + '.png');
+            var jersey = new paper.Raster('{{ STATIC_URL }}images/jersey' + teamId_ + '.png');
         }
 
         jersey.position = screenPos;

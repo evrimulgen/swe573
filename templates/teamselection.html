@@ -1,0 +1,78 @@
+{% extends "statsbase.html" %}
+
+{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}
+
+{% block info %}
+    <div id="info">
+        <h1 style="margin:0px;width:100%;text-align:center;float: left; color: #ffffff;line-height: 50px; margin-left: 5px;font-family: CenturyGothic;font-size: 20px">Takım Seçiniz</h1>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% for i in standing_list|dictsort:"teamName" %}
+        <div class = "teamselect">
+            <a href="{{ i.teamId }}" class="wraptocenter"><span></span><img src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png"></a>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block menu-header %}
+
+    <ul id="nav">
+        <li>
+            <a href="../">Ana Sayfa</a>
+        </li>
+        <li><a class="active" href="">Takımlar</a>
+
+        </li>
+        <li>
+            <a href="../player">Oyuncular</a>
+        </li>
+        <li>
+            <a href="">Karşılaştır!</a>
+            <ul>
+                <li><a href="#">Takım</a></li>
+                <li><a href="#">Oyuncu</a></li>
+            </ul>
+        </li>
+    </ul>
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+    <div id="content" style="min-height: 600px">
+        <div style="width: 100%;height: 35px">
+            <select class="topmenuoption">
+                {% for i in weeklist %}
+                    <option class="item"> <a>{{ i }}. Hafta</a> </option>
+                {% endfor %}
+            </select>
+            <select class="topmenuoption">
+                <option class="item" style="float: right"> <a>Gol</a> </option>
+                <option class="item"> <a>Yenilen Gol</a> </option>
+                <option class="item"> <a>Averaj</a> </option>
+                <option class="item"> <a>Koşu Mesafesi</a> </option>
+                <option class="item"> <a>Pas Yüzdesi</a> </option>
+                <option class="item"> <a>Şut Yüzdesi</a> </option>
+                <option class="item"> <a>Orta Yüzdesi</a> </option>
+                <option class="item"> <a>Korner</a> </option>
+                <option class="item"> <a>Faul</a> </option>
+                <option class="item"> <a>Yapılan Faul</a> </option>
+                <option class="item"> <a>Sarı Kart</a> </option>
+                <option class="item"> <a>Kırmızı Kart</a> </option>
+            </select>
+        </div>
+
+        <div class="teamcomparison">
+            {% for i in standing_list|dictsortreversed:"score" %}
+                <div class="teamitem">
+                    <img alt="{{ i.teamName }}" title="{{ i.teamName }}" src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png">
+                    <p style="width: {{ i.score}}%">{{ i.score }}</p>
+                    <div class="placeholder"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

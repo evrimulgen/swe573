@@ -1,15 +1,9 @@
 .chalkboard{
 	position: relative;
-	width: 557px;
-	height: 372px;
-	margin-top: 4px;
-	margin-left: 2px;
 }
 
 .chalkboard canvas{
 	position: absolute;
-	width: 557px;
-	height: 372px;
 	left: 0;
 	top: 0;
 }
@@ -24,4 +18,8 @@
 
 .chalkboard #fgCanvas{
 	z-index: 200;
+}
+
+.chalkboard-controls {
+	text-align: center;
 }

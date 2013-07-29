@@ -1,4 +1,16 @@
 {% extends "virtual_stadium_base.html" %}
+
+{% block head-addition %}
+    <script src="{{ STATIC_URL }}/js/radar.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js"></script>
+
+    <style type="text/css">
+        #radarContainer > * {
+            margin-left: 50px;
+        }    
+    </style>
+{% endblock %}
+
 {% block menu %}
     <div id="navbar">
         <div id="nav">
@@ -17,9 +29,12 @@
 {% endblock %}
 
 {% block content %}
-    <p style="background-color: rgba(100,100,100,0.7); width: 96%; height: 50px;float: left;margin-left: 2%;line-height: 50px;text-align: center;margin-top: 5px">Momentum</p>
-    <p style="background-color: rgba(100,100,100,0.7); width: 96%; height: 400px;float: left;margin-left: 2%;line-height: 50px;text-align: center;margin-top: 2px">Radar</p>
-    <p style="background-color: rgba(100,100,100,0.7); width: 96%; height: 200px;float: left;margin-left: 2%;line-height: 50px;text-align: center;margin-top: 2px">Oyuncu Kartları</p>
+    <div class="row">
+        <div id="radarContainer">
+            <p><button class="btn" id="startMatch">Maci Baslat</button></p>
+            <div id="timeDisplay"></div>
+        </div>
+    </div>
     <div style="background-color: rgba(100,100,100,0.7); width: 96%; height: 600px;float: left;margin-left: 2%;line-height: 50px;text-align: center;margin-top: 2px">
         <div id="navbar">
             <div id="nav">

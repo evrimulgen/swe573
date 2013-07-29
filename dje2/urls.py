@@ -5,21 +5,22 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-                       # Examples:
-                       url(r'^$', 'dje.views.home', name='home'),
-                       url(r'^team/(\d*)/$', 'dje.views.team'),
-                       url(r'^team/$', 'dje.views.team2'),
-                       url(r'^player/(\d*)/$', 'dje.views.player3'),
-                       url(r'^player/(?P<num>\d*)/(?P<player_id>\d*)/$', 'dje.views.playerx'),
-                       url(r'^league/$', 'dje.views.league'),
-                       url(r'^before/$', 'dje.views.before'),
-                       url(r'^center/$', 'dje.views.center'),
-                       url(r'^compare/$', 'dje.views.compare'),
-                       url(r'^summary/$', 'dje.views.summary'),
-                       url(r'^player/$', 'dje.views.player'),
-                       url(r'^table/$', 'dje.views.table'),
-                       url(r'^board/$', 'dje.views.chalkboard'),
-                       url(r'^api/(?P<path>\w+)$', 'dje.views.router'),
+       # Examples:
+       url(r'^$', 'dje.views.home', name='home'),
+       url(r'^team/(\d*)/$', 'dje.views.team'),
+       url(r'^team/$', 'dje.views.team2'),
+       url(r'^player/(\d*)/$', 'dje.views.player3'),
+       url(r'^player/(?P<num>\d*)/(?P<player_id>\d*)/$', 'dje.views.playerx'),
+       url(r'^league/$', 'dje.views.league'),
+       url(r'^before/$', 'dje.views.before'),
+       url(r'^center/$', 'dje.views.center'),
+       url(r'^compare/$', 'dje.views.compare'),
+       url(r'^summary/$', 'dje.views.summary'),
+       url(r'^player/$', 'dje.views.player'),
+       url(r'^table/$', 'dje.views.table'),
+       url(r'^board/$', 'dje.views.chalkboard'),
+       url(r'^api/(?P<path>\w+)$', 'dje.views.router'),
+    url(r'^radar/$', 'dje.views.radar'),
 
                        # url(r'^dje2/', include('dje2.foo.urls')),
 

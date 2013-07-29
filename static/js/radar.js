@@ -159,7 +159,7 @@ $(function(){
         if(teams[team_id]===undefined) teams[team_id] = {};
         if(teams[team_id][jersey_no]===undefined){
             var fillColor;
-            if(team_id==5){
+            if(team_id==1){
                 fillColor = "red";
             } else {
                 fillColor = "blue";
@@ -182,22 +182,53 @@ $(function(){
             ]);
         }
         else{
-            //var delta =
             teams[team_id][jersey_no].position = new pitch.paper.Point(mt2px(xpos), mt2px(ypos));
         }
         //$("#playerPositions").text(JSON.stringify(teams));
     };
 
+    var modifyPlayerLocations = function(coordString){
+        var coords = coordString.split("+");
+        _.each(coords, function(coord){
+            // coordinate format:
+            // [Type, ??, JerseyNo, X, Y]
+            // Types:
+            // 0 => Home
+            // 1 => Away
+            // 2 => Ball?
+            // 3 => Home GK
+            // 4 => Away GK
+            if(coord.length > 1){
+                var data = coord.split(",");
+                if(data[0]==3 || data[0]==4) data[0] -= 2;
+                modifyPlayerLocation(data[0], data[2], data[3], data[4]);
+            }
+        });
+    }
+
+    var minute = 0;
+    var second = 0;
 
     var events = [];
+    var animations = [];
     var currTime = -1;
-
+    
+    pitch.paper.view.onFrame = function(event){
+        
+    };
+    
     var processEvent = function processEvent(){
         var data = events.shift();
         currTime = data['MATCH_TIMESTAMP'];
 
-        modifyPlayerLocation(data['TEAM_ID'], data['JERSEY_NUMBER'], data['X_POS'], data['Y_POS']);
+        modifyPlayerLocations(data['COORDINATE_STRING']);
         pitch.paper.view.draw();
+
+        if(data['MATCH_MINUTE']!=minute || data['MATCH_SECOND']!=second){
+            minute = data['MATCH_MINUTE'];
+            second = data['MATCH_SECOND'];
+            $("#timeDisplay").html((minute-1)+":"+second);
+        }
 
         if(events[0]!==undefined)
             setTimeout(processEvent, events[0]['MATCH_TIMESTAMP']-currTime);

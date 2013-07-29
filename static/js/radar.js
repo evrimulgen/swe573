@@ -6,34 +6,14 @@ $.ajaxSetup({
         xhr.setRequestHeader("X-CSRFToken", csrftoken);
     }
 });
-/*
-$.get("/api/GetAttributeLookup").done(function(data){
-    $("#ajaxResult").append("<div>"+JSON.stringify(data)+"</div>")
-});
-
-/*var postData = JSON.stringify({"player_ids":["1000"],"attribute_ids":["11","21"],"number_of_matches":2});
-$.post("/api/GetPlayersLastNAttributeValue", postData).done(function(data){
-    $("#ajaxResult").append("<div>"+JSON.stringify(data)+"</div>");
-});
-
-postData = JSON.stringify({"player_ids":["1000"]});
-$.post("/api/GetPlayersInformation", postData).done(function(data){
-    $("#ajaxResult").append("<div>"+JSON.stringify(data)+"</div>");
-});
-
-postData = JSON.stringify({"player_ids":["1000"],"attribute_ids":["11", "21", "30", "28", "29"],"number_of_matches":10});
-$.post("/api/GetPlayersLastNAttributeValue", postData).done(function(data){
-    $("#ajaxResult").append("<div>"+JSON.stringify(data)+"</div>");
-});
-*/
 
 /*
-	The timestamps in the radar data is in form of milliseconds
+    The timestamps in the radar data is in form of milliseconds
 
 */
 
 function FootballPitch(div_id){
-	var divSelector = "#" + div_id;
+    var divSelector = "#" + div_id;
 
     // scaling stuff
     var pitchScale = 5;
@@ -43,7 +23,7 @@ function FootballPitch(div_id){
     var canvasHeight = 68*pitchScale + 2*pitchOffset;
 
 
-	// setting up the canvas and the loading animation
+    // setting up the canvas and the loading animation
     // and setting up the slider for time range
     $(divSelector).append('<div class="alerts"></div><div class="pitch"></div>');
     $('<canvas id="bgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .pitch");
@@ -155,17 +135,17 @@ function FootballPitch(div_id){
 };
 
 $(function(){
-	var socket = io.connect('http://localhost:8080');
+    var socket = io.connect('http://localhost:8080');
 
-	var teams = {};
+    var teams = {};
 
-	var pitch = new FootballPitch("radarContainer");
+    var pitch = new FootballPitch("radarContainer");
 
-	// scaling stuff
+    // scaling stuff
     var pitchScale = 5;
     var pitchOffset = 16;
 
-	var mt2px = function (mt) {
+    var mt2px = function (mt) {
         return mt * pitchScale + pitchOffset;
     };
 
@@ -175,9 +155,9 @@ $(function(){
         return mt * pitchScale;
     }
 
-	var modifyPlayerLocation = function(team_id, jersey_no, xpos, ypos){
-		if(teams[team_id]===undefined) teams[team_id] = {};
-		if(teams[team_id][jersey_no]===undefined){
+    var modifyPlayerLocation = function(team_id, jersey_no, xpos, ypos){
+        if(teams[team_id]===undefined) teams[team_id] = {};
+        if(teams[team_id][jersey_no]===undefined){
             var fillColor;
             if(team_id==5){
                 fillColor = "red";
@@ -185,7 +165,7 @@ $(function(){
                 fillColor = "blue";
             }
 
-			teams[team_id][jersey_no] = new pitch.paper.Group([
+            teams[team_id][jersey_no] = new pitch.paper.Group([
                 new pitch.paper.Path.Circle({
                     center: [mt2px(xpos), mt2px(ypos)],
                     radius: 8,
@@ -200,42 +180,42 @@ $(function(){
                     fillColor: 'white'
                 })
             ]);
-		}
-		else{
+        }
+        else{
             //var delta =
-			teams[team_id][jersey_no].position = new pitch.paper.Point(mt2px(xpos), mt2px(ypos));
-		}
-		//$("#playerPositions").text(JSON.stringify(teams));
-	};
+            teams[team_id][jersey_no].position = new pitch.paper.Point(mt2px(xpos), mt2px(ypos));
+        }
+        //$("#playerPositions").text(JSON.stringify(teams));
+    };
 
 
-	var events = [];
-	var currTime = -1;
+    var events = [];
+    var currTime = -1;
 
-	var processEvent = function processEvent(){
-		var data = events.shift();
-		currTime = data['MATCH_TIMESTAMP'];
+    var processEvent = function processEvent(){
+        var data = events.shift();
+        currTime = data['MATCH_TIMESTAMP'];
 
-		modifyPlayerLocation(data['TEAM_ID'], data['JERSEY_NUMBER'], data['X_POS'], data['Y_POS']);
-		pitch.paper.view.draw();
+        modifyPlayerLocation(data['TEAM_ID'], data['JERSEY_NUMBER'], data['X_POS'], data['Y_POS']);
+        pitch.paper.view.draw();
 
-		if(events[0]!==undefined)
-			setTimeout(processEvent, events[0]['MATCH_TIMESTAMP']-currTime);
-	};
+        if(events[0]!==undefined)
+            setTimeout(processEvent, events[0]['MATCH_TIMESTAMP']-currTime);
+    };
 
-	socket.on("welcome", function(){
-		console.log("connected");
-	});
+    socket.on("welcome", function(){
+        console.log("connected");
+    });
 
-	$("#startMatch").click(function(){
-		socket.emit('getmatch', 85);
-	});
+    $("#startMatch").click(function(){
+        socket.emit('getmatch', 85);
+    });
 
-	socket.on("match", function(data){
-		events.push(data);
-		if(events.length===1){
-			processEvent();
-		}
-	});
+    socket.on("match", function(data){
+        events.push(data);
+        if(events.length===1){
+            processEvent();
+        }
+    });
 
 });

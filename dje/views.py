@@ -139,6 +139,7 @@ def player(request):
 
     return render_to_response('playerteamselection.html',{'standing_list':standlist, 'best_eleven_list':bestList, 'weeklist': weekList} )
 
+@ensure_csrf_cookie
 def table(request):
     c = []
     for x in range(1, 35):

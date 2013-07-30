@@ -135,7 +135,7 @@ function FootballPitch(div_id){
 };
 
 $(function(){
-    var socket = io.connect('http://localhost:8080');
+    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
 
     var teams = {};
 

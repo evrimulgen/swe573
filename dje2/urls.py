@@ -20,6 +20,8 @@ urlpatterns = patterns('',
        url(r'^table/$', 'dje.views.table'),
        url(r'^board/$', 'dje.views.chalkboard'),
        url(r'^api/(?P<path>\w+)$', 'dje.views.router'),
+       (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '../static/images/favicon.ico'}),
+
     url(r'^radar/$', 'dje.views.radar'),
 
                        # url(r'^dje2/', include('dje2.foo.urls')),

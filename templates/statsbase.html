@@ -23,6 +23,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/modernizr.custom.79639.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.baraja.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/paper.js"></script>
+    <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico" />
 
     {% block head-addition %}{% endblock %}
 
@@ -34,13 +35,13 @@
 
 <div id="container">
 
-    <div id="global-header">
+    <div class="global-header">
 
-        <div id="header-logo"align="center">
+        <div class="header-logo">
             <img style="background-size: cover; float:left " src={{ STATIC_URL }}images/ligtvlogo.png>
         </div>
 
-        <div id="header-menu"align="center">
+        <div class="header-menu">
             {% block menu-header %}
 
             {% endblock %}

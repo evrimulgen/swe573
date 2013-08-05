@@ -226,6 +226,7 @@ def before(request,reqid):
             awaySquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
 
     return render_to_response('virtual_stadium_before_match.html', {'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+
 def center(request,reqid):
     data = {"leagueId": 1, "seasonId": 8918}
     matches = service_request("GetFixture", data)
@@ -262,10 +263,13 @@ def center(request,reqid):
         goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
 
     return render_to_response('virtual_stadium.html', {'goals':goalDict,'weeklist': weekList,'weeks':weekDict,'matchInfo':infoDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+
 def summary(request):
     return render_to_response('matchsummary.html')
+
 def compare(request):
     return render_to_response('statscompare.html')
+
 def player(request):
     data = {"leagueId": 1, "seasonId": 8918}
     teams = service_request("GetTeams", data)
@@ -332,7 +336,6 @@ def table(request,reqid):
             awaySquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
 
     return render_to_response('virtual_stadium_board.html', {'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
-
 
 @ensure_csrf_cookie
 def chalkboard(request):

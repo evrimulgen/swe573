@@ -135,8 +135,6 @@ function FootballPitch(div_id){
 };
 
 $(function(){
-    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
-
     var teams = {};
 
     var pitch = new FootballPitch("radarContainer");
@@ -156,6 +154,7 @@ $(function(){
     }
 
     var modifyPlayerLocation = function(team_id, jersey_no, xpos, ypos){
+        // create the players representation in the first frame
         if(teams[team_id]===undefined) teams[team_id] = {};
         if(teams[team_id][jersey_no]===undefined){
             var fillColor;
@@ -165,6 +164,7 @@ $(function(){
                 fillColor = "blue";
             }
 
+            // Creating a group so that the circle + text objects can be moved together
             teams[team_id][jersey_no] = new pitch.paper.Group([
                 new pitch.paper.Path.Circle({
                     center: [mt2px(xpos), mt2px(ypos)],
@@ -182,9 +182,9 @@ $(function(){
             ]);
         }
         else{
+            // 
             teams[team_id][jersey_no].position = new pitch.paper.Point(mt2px(xpos), mt2px(ypos));
         }
-        //$("#playerPositions").text(JSON.stringify(teams));
     };
 
     var modifyBallLocation = function(x, y){
@@ -192,7 +192,7 @@ $(function(){
             teams.ball = new pitch.paper.Path.Circle({
                 center: [mt2px(x), mt2px(y)],
                 radius: 4,
-                fillColor: "white",
+                fillColor: "magenta",
                 strokeColor: "black",
                 strokeWidth: 1
             });
@@ -201,25 +201,25 @@ $(function(){
         }
     };
 
-    var modifyPlayerLocations = function(coordString){
-        var coords = coordString.split("+");
-
+    var modifyPlayerLocations = function(coords){
         _.each(coords, function(coord){
             // coordinate format:
-            // [Type, ??, JerseyNo, X, Y]
+            // [Type, JerseyNo, X, Y]
             // Types:
             // 0 => Home
             // 1 => Away
-            // 2 => Ball?
+            // 2 => Referee
             // 3 => Away GK
             // 4 => Home GK
-            if(coord.length > 1){
-                var data = coord.split(",");
-                if(data[0]==3 || data[0]==4) data[0] -= 3;
-                
-                if(data[0]==5) modifyBallLocation(data[3],data[4]);
-                else modifyPlayerLocation(data[0], data[2], data[3], data[4]);
-            }
+            // 5 => Ball
+            if(coord[1]==-1) return; // ignore unidentified players
+            
+            if(coord[0]==3 || coord[0]==4) coord[0] -= 3;
+            
+            if(coord[0]==5){
+                modifyBallLocation(coord[2],coord[3]);
+            } 
+            else modifyPlayerLocation(coord[0], coord[1], coord[2], coord[3]);
         });
     }
 
@@ -228,35 +228,32 @@ $(function(){
 
     var started = false;
     var events = [];
-    var animations = [];
     var currTime = -1;
 
     var processEvent = function processEvent(){
         var data = events.shift();
-        currTime = data['MATCH_TIMESTAMP'];
+        currTime = data.gametime;
 
-        modifyPlayerLocations(data['COORDINATE_STRING']);
+        modifyPlayerLocations(data.coor);
         pitch.paper.view.draw();
 
-        if(data['MATCH_MINUTE']!=minute || data['MATCH_SECOND']!=second){
-            minute = data['MATCH_MINUTE'];
-            second = data['MATCH_SECOND'];
-            $("#timeDisplay").html((minute-1)+":"+second);
+        // updating the time display
+        if(data.minute!=minute || data.second!=second){
+            minute = data.minute;
+            second = data.second;
+            $("#timeDisplay").html(minute+":"+second);
         }
 
-        if(events[0]!==undefined)
-            setTimeout(processEvent, events[0]['MATCH_TIMESTAMP']-currTime);
+        if(events[0]!==undefined){
+            // wait until the next event's time
+            setTimeout(processEvent, events[0].gametime-currTime);
+        }
     };
+
+    var socket = io.connect('http://localhost:8080/');
 
     socket.on("welcome", function(){
         console.log("connected");
-    });
-
-    $("#startMatch").click(function(){
-        if(!started){
-            started = true;
-            socket.emit('getmatch', 85);
-        }
     });
 
     socket.on("match", function(data){
@@ -266,4 +263,10 @@ $(function(){
         }
     });
 
+    $("#startMatch").click(function(){
+        if(!started){
+            started = true;
+            socket.emit('getmatch', 85);
+        }
+    });
 });

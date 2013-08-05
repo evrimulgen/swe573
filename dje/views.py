@@ -199,6 +199,7 @@ def before(request,reqid):
     for x in list:
         infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':x[7],'awayTeamScore':x[8],'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
     return render_to_response('virtual_stadium_before_match.html', {'weeklist': weekList,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+
 def center(request,reqid):
     data = {"leagueId": 1, "seasonId": 8918}
     matches = service_request("GetFixture", data)
@@ -226,10 +227,13 @@ def center(request,reqid):
     for x in list:
         infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':x[7],'awayTeamScore':x[8],'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
     return render_to_response('virtual_stadium.html', {'weeklist': weekList,'weeks':weekDict,'matchInfo':infoDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+
 def summary(request):
     return render_to_response('matchsummary.html')
+
 def compare(request):
     return render_to_response('statscompare.html')
+
 def player(request):
     data = {"leagueId": 1, "seasonId": 8918}
     teams = service_request("GetTeams", data)
@@ -241,7 +245,7 @@ def player(request):
     return render_to_response('playerteamselection.html',{'standing_list':standlist, 'best_eleven_list':bestList, 'weeklist': weekList, 'try_list':teamDict} )
 
 @ensure_csrf_cookie
-def table(request):
+def table(request, reqid):
     c = []
     for x in range(1, 35):
         c.append(x)

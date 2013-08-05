@@ -187,8 +187,23 @@ $(function(){
         //$("#playerPositions").text(JSON.stringify(teams));
     };
 
+    var modifyBallLocation = function(x, y){
+        if(teams.ball===undefined){
+            teams.ball = new pitch.paper.Path.Circle({
+                center: [mt2px(x), mt2px(y)],
+                radius: 4,
+                fillColor: "white",
+                strokeColor: "black",
+                strokeWidth: 1
+            });
+        } else {
+            teams.ball.position = new pitch.paper.Point(mt2px(x), mt2px(y));
+        }
+    };
+
     var modifyPlayerLocations = function(coordString){
         var coords = coordString.split("+");
+
         _.each(coords, function(coord){
             // coordinate format:
             // [Type, ??, JerseyNo, X, Y]
@@ -196,12 +211,14 @@ $(function(){
             // 0 => Home
             // 1 => Away
             // 2 => Ball?
-            // 3 => Home GK
-            // 4 => Away GK
+            // 3 => Away GK
+            // 4 => Home GK
             if(coord.length > 1){
                 var data = coord.split(",");
-                if(data[0]==3 || data[0]==4) data[0] -= 2;
-                modifyPlayerLocation(data[0], data[2], data[3], data[4]);
+                if(data[0]==3 || data[0]==4) data[0] -= 3;
+                
+                if(data[0]==5) modifyBallLocation(data[3],data[4]);
+                else modifyPlayerLocation(data[0], data[2], data[3], data[4]);
             }
         });
     }
@@ -209,14 +226,11 @@ $(function(){
     var minute = 0;
     var second = 0;
 
+    var started = false;
     var events = [];
     var animations = [];
     var currTime = -1;
-    
-    pitch.paper.view.onFrame = function(event){
-        
-    };
-    
+
     var processEvent = function processEvent(){
         var data = events.shift();
         currTime = data['MATCH_TIMESTAMP'];
@@ -239,7 +253,10 @@ $(function(){
     });
 
     $("#startMatch").click(function(){
-        socket.emit('getmatch', 85);
+        if(!started){
+            started = true;
+            socket.emit('getmatch', 85);
+        }
     });
 
     socket.on("match", function(data){

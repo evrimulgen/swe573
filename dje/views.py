@@ -194,11 +194,38 @@ def before(request,reqid):
     data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
     teams = service_request("GetMatchInfo", data)
     j_obj = json.loads(teams)
-    list = j_obj["data"]
+    datalist = j_obj["data"]
     infoDict = []
-    for x in list:
+    homeTeamId = 0
+    awayTeamId = 0
+    for x in datalist:
+        homeTeamId = x[5]
+        awayTeamId = x[6]
         infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':x[7],'awayTeamScore':x[8],'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
-    return render_to_response('virtual_stadium_before_match.html', {'weeklist': weekList,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+
+    data = {"matchId":reqid}
+    teams = service_request("GetGoalVideos", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    goalDict = []
+    for x in datalist:
+        goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    teams = service_request("GetMatchSquad", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    homeSquadDict = []
+    awaySquadDict = []
+
+    for playerId in datalist:
+        playerData = datalist[playerId]["data"]
+        if(playerData[3] == homeTeamId):
+            homeSquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
+        elif(playerData[3] == awayTeamId):
+            awaySquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
+
+    return render_to_response('virtual_stadium_before_match.html', {'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 def center(request,reqid):
     data = {"leagueId": 1, "seasonId": 8918}
     matches = service_request("GetFixture", data)
@@ -225,7 +252,16 @@ def center(request,reqid):
     infoDict = []
     for x in list:
         infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':x[7],'awayTeamScore':x[8],'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
-    return render_to_response('virtual_stadium.html', {'weeklist': weekList,'weeks':weekDict,'matchInfo':infoDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+
+    data = {"matchId":reqid}
+    teams = service_request("GetGoalVideos", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    goalDict = []
+    for x in datalist:
+        goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
+
+    return render_to_response('virtual_stadium.html', {'goals':goalDict,'weeklist': weekList,'weeks':weekDict,'matchInfo':infoDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 def summary(request):
     return render_to_response('matchsummary.html')
 def compare(request):
@@ -241,11 +277,62 @@ def player(request):
     return render_to_response('playerteamselection.html',{'standing_list':standlist, 'best_eleven_list':bestList, 'weeklist': weekList, 'try_list':teamDict} )
 
 @ensure_csrf_cookie
-def table(request):
-    c = []
-    for x in range(1, 35):
-        c.append(x)
-    return render_to_response('virtual_stadium_board.html', {'weeklist': c})
+def table(request,reqid):
+    data = {"leagueId": 1, "seasonId": 8918}
+    matches = service_request("GetFixture", data)
+    j_obj = json.loads(matches)
+    weeklist = j_obj["data"]
+    weekDict = []
+    currentWeek = 34
+    for weekId in weeklist:
+        week = weeklist[weekId]
+        matches = []
+        for matchId in week:
+            if matchId == "weekStatus":
+                status = week[matchId]
+            else:
+                print(matchId)
+                if(matchId==str(reqid)):
+                    currentWeek = weekId
+                matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
+        weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    teams = service_request("GetMatchInfo", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    infoDict = []
+    homeTeamId = 0
+    awayTeamId = 0
+    for x in datalist:
+        homeTeamId = x[5]
+        awayTeamId = x[6]
+        infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':x[7],'awayTeamScore':x[8],'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
+
+    data = {"matchId":reqid}
+    teams = service_request("GetGoalVideos", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    goalDict = []
+    for x in datalist:
+        goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    teams = service_request("GetMatchSquad", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    homeSquadDict = []
+    awaySquadDict = []
+
+    for playerId in datalist:
+        playerData = datalist[playerId]["data"]
+        if(playerData[3] == homeTeamId):
+            homeSquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
+        elif(playerData[3] == awayTeamId):
+            awaySquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
+
+    return render_to_response('virtual_stadium_board.html', {'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+
 
 @ensure_csrf_cookie
 def chalkboard(request):

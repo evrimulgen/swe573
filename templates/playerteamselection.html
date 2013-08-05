@@ -35,7 +35,7 @@
         </div>
         <select style="color:#000000;width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px" onchange="javascript:handleSelect(this)">
             <option class="item"> <a>Takım Seçiniz</a> </option>
-            {% for i in standing_list %}
+            {% for i in try_list %}
                 <option class="item" value="{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
             {% endfor %}
         </select>
@@ -49,7 +49,7 @@
 {% endblock %}
 
 {% block content %}
-    {% for i in standing_list|dictsort:"teamName" %}
+    {% for i in try_list %}
         <div class = "teamselect">
             <a href="{{ i.teamId }}" class="wraptocenter"><span></span><img src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png"></a>
         </div>

@@ -177,7 +177,7 @@ h2 {
 
 }
 #dates a {
-    font-family: 'PT Serif', serif;
+    font-family: 'Source Sans Pro', sans-serif;
     font-weight: bold;
     height: 30px;
     line-height:25px;
@@ -222,6 +222,9 @@ h2 {
     width: 100%;
     overflow: hidden;
 }
+#issues ul{
+    margin: 0px;
+}
 #issues li {
     width: 238px;
     list-style: none;
@@ -249,8 +252,8 @@ h2 {
     position: absolute;
     font-size: 70px;
     top: 250px;
-    width: 22px;
-    height: 38px;
+    width: 10px;
+    height: 50px;
     background-position: 0 0;
     background-repeat: no-repeat;
     text-indent: -9999px;
@@ -260,11 +263,11 @@ h2 {
 #prev:hover {
 }
 #next {
-    right: 0;
+    right: 4px;
     background-image: url('../images/next_n.png');
 }
 #prev {
-    left: 0;
+    left: 4px;
     background-image: url('../images/back_n.png');
 }
 #next.disabled,
@@ -359,10 +362,7 @@ h2 {
 
 /**/
 .match {
-    font-family: 'Source Sans Pro', sans-serif;
     width: 98%;
-    padding-top: 2px;
-    padding-bottom: 2px;
     margin-top: 2px;
     margin-left: 1%;
     height: 40px;
@@ -386,10 +386,33 @@ h2 {
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
-.match .selected{
+.match-selected{
+    width: 98%;
+    margin-top: 2px;
+    margin-left: 1%;
+    height: 40px;
+    text-decoration: none;
+    background-image: -moz-linear-gradient(top, #c1ddbc 0%, #a6dda6 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dda6a6), color-stop(100%,#bc5257)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top,  #c1ddbc 0%, #a6dda6 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, #c1ddbc 0%, #a6dda6 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top,  #c1ddbc 0%, #a6dda6 100%); /* IE10+ */
+    background-image: linear-gradient(to bottom, #c1ddbc 0%, #a6dda6 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dda6a6', endColorstr='#bc5257',GradientType=0 ); /* IE6-9 */
 
+    -webkit-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    border: 1px solid #a3a3a3;
+    text-decoration: none;
+    color: #000000;
+    float: left;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
-.match:hover {
+
+.match:hover,.match-selected:hover {
     background-image: -moz-linear-gradient(top, #f4edf3 0%, #d8d5d9 100%); /* FF3.6+ */
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f4edf3), color-stop(100%,#d8d5d9)); /* Chrome,Safari4+ */
     background-image: -webkit-linear-gradient(top,  #f4edf3 0%,  #d8d5d9 100%); /* Chrome10+,Safari5.1+ */
@@ -402,10 +425,9 @@ h2 {
     /* background-color: rgba(80,80,80,0.9);*/
     float: left;
 }
-.match #scorearea{
-    margin-left: 5%;
-    width: 50%;
-    height: 38px;
+.match #scorearea,.match-selected #scorearea{
+    width: 60%;
+    height: 40px;
     padding-top: 1px;
     padding-bottom: 1px;
     float: left;
@@ -414,39 +436,44 @@ h2 {
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
-.match #scorearea #home, .match #scorearea #away{
+.match #scorearea #home, .match #scorearea #away,.match-selected #scorearea #home, .match-selected #scorearea #away{
     width: 100%;
+    height: 20px;
 }
 
-.match #scorearea #home #name, .match #scorearea #away #name{
+.match #scorearea #home #name, .match #scorearea #away #name,.match-selected #scorearea #home #name, .match-selected #scorearea #away #name{
     float: left;
+    height: 20px;
     padding-left: 5%;
-    width: 80;
+    width: 80%;
     text-align: left;
 }
-.match #scorearea #home #score, .match #scorearea #away #score{
+.match #scorearea #home #score, .match #scorearea #away #score,.match-selected #scorearea #home #score, .match-selected #scorearea #away #score{
     float: right;
     width: 10%;
+    height: 20px;
     padding-right: 5%;
     text-align: right;
 }
 
-.match #scorearea p {
-
-    height: 0px;
+.match #scorearea p,.match-selected #scorearea p {
+    height: 20px;
     font-size: 14px;
-    margin-top: 7px;
-    line-height: 12px;
+    margin-left: 4px;
+    line-height: 20px;
     float: left;
     text-align: left;
 }
-.match #datearea{
-    margin-right: 5%;
+.match #scorearea img,.match-selected #scorearea img {
+    height: 18px;
+    margin-top: 1px;
+    display: block;
+    float: left;
+}
+.match #datearea, .match-selected #datearea{
+    font-family: 'Source Sans Pro', sans-serif;
     width: 35%;
-    height: 38px;
-    margin-left: 5%;
-    padding-top: 1px;
-    padding-bottom: 1px;
+    height: 40px;
     float: left;
     /*background-color: #dadada;*/
     background-size: cover;
@@ -454,7 +481,7 @@ h2 {
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
-.match #datearea p{
+.match #datearea p, .match-selected #datearea p{
     height: 0px;
     margin-top: 5px;
     font-size: 12px;
@@ -462,7 +489,7 @@ h2 {
     float: left;
     text-align: center;
 }
-.match #live{
+.match #live, .match-selected #live{
     margin-right: 8%;
     width: 20%;
     height: 25px;
@@ -480,7 +507,7 @@ h2 {
     border-radius: 3px;
 }
 
-.match #live p.live-time{
+.match #live p.live-time, .match-selected #live p.live-time{
     font-family: 'digi';
     width: 100%;
     height: 25px;

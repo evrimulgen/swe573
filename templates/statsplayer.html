@@ -15,6 +15,26 @@
             $("#menu").html(htmltoSet);
         }
     </script>
+    <script type="text/javascript">
+        function handleSelect(elm)
+        {
+            console.log(elm.value);
+            $.ajax({
+                url: "http://sentio.cloudapp.net:8080/api/GetTeamPlayers",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    "leagueId": 1,
+                    "seasonId": 8918,
+                    "teamId": elm.value
+                },
+                success: function( data ) {
+                    console.log(data);
+                    var players = data["data"];
+                }
+            });
+        }
+    </script>
 
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -41,31 +61,32 @@
         <div class="ui-widget" style="float: left;margin: 12px">
             <input id="tags" />
         </div>
-
-        <select style="color:#000000;width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px">
-            {% for i in standing_list %}
+        <select style="color:#000000;width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px" onchange="javascript:handleSelect(this)">
+            {% for i in try_list %}
                 {% if i.teamId == team_selected %}
-                    <option class="item" value="../{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
+                    <option class="item" value="{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
                 {% endif %}
             {% endfor %}
-            {% for i in standing_list %}
+            {% for i in try_list %}
                 {% if i.teamId != team_selected %}
-                    <option class="item" value="../{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
+                    <option class="item" value="{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
                 {% endif %}
             {% endfor %}
         </select>
-        <select style="color:#000000;width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px ">
-            {% for i in best_eleven_list %}
-                {% if i.playerId == p_id %}
-                    <option class="item" value="{{ i.playerId }}"> <a>{{ i.playerName }}</a> </option>
-                {% endif %}
-            {% endfor %}
-            {% for i in best_eleven_list %}
-                {% if i.playerId != p_id %}
-                    <option class="item" value="{{ i.playerId }}"> <a>{{ i.playerName }}</a> </option>
-                {% endif %}
-            {% endfor %}
-        </select>
+        <div id="player-list">
+            <select style="color:#000000;width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px ">
+                {% for i in players %}
+                    {% if i.playerId == p_id %}
+                        <option class="item" value="{{ i.playerId }}"> <a>{{ i.playerName }}</a> </option>
+                    {% endif %}
+                {% endfor %}
+                {% for i in players %}
+                    {% if i.playerId != p_id %}
+                        <option class="item" value="{{ i.playerId }}"> <a>{{ i.playerName }}</a> </option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
         <button style="float: left;margin-left: 0.5%;margin-top: 12px;font-size: 14px">Oyuncu Sayfası</button>
         <button style="float: left;margin-left: 0.5%;margin-top: 12px;font-size: 14px">Karşılaştır</button>
     </div>
@@ -101,83 +122,88 @@
         <a href="#"> <button onclick="changeContent(2)">Oyuncu Özeti</button> </a>
     </div>
     <div class="insideleft">
-        {% for x in player_list %}
-            {% if x.id == p_id %}
-
-                <div class="infobox">
-                    <h1>{{ x.name }}</h1>
-                    <img src="{{ STATIC_URL }}images/player{{ x.id }}.png">
+        {% for x in details %}
+            <div class="infobox">
+                <h1>{{ x.playerName }}</h1>
+                <img src="{{ STATIC_URL }}images/players/{{ p_id }}.jpg">
+                <div class="line-holder">
                     <p class="first">Takım</p>
-                    {% for a in standing_list %}
-                        {% if a.teamId == team_selected %}
-                            <p class="second">{{ a.teamName }}</p>
-                        {% endif %}
-                    {% endfor %}
+                    <p class="second">{{ x.teamName }}</p>
+
+                </div>
+                <div class="line-holder">
                     <p class="first">Doğum Tarihi</p>
-                    <p class="second">18.06.1989</p>
+                    <p class="second">{{ x.date }}</p>
+                </div>
+                <div class="line-holder">
                     <p class="first">Ülke</p>
-                    <p class="second">Brezilya</p>
+                    <p class="second">{{ x.nation }}</p>
+                </div>
+                <div class="line-holder">
                     <p class="first">Boy</p>
-                    <p class="second">1.83 m</p>
+                    <p class="second">{{ x.height }}</p>
+                </div>
+                <div class="line-holder">
                     <p class="first">Milli Olma Sayısı</p>
-                    <p class="second">87</p>
+                    <p class="second">{{ x.cap }}</p>
+                </div>
+                <div class="line-holder">
                     <p class="first">Milli Gol</p>
-                    <p class="second">11</p>
+                    <p class="second">{{ x.goal }}</p>
                 </div>
+            </div>
 
-                <div class="box-container" style="width: 98%;margin-left: 1%">
-
-
-                    <a class="content" href="#" style="width: 96%">
-                        <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Son Maçlar</p>
-                        <div id="image" style="width: 10%;margin-top: -2px">
-
-                        </div>
-                        <ul style="width: 70%; margin-top: -2px">
-                            {% for x in "xxxxx" %}
-                                <li><p class="first">{{ team_selected }}spor - {{ forloop.counter }}spor</p></li>
-                            {% endfor %}
-                        </ul>
-                    </a>
-                    <a class="content" href="#" style="width: 96%">
-                        <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Goller</p>
-                        <div id="image" style="width: 10%;margin-top: -2px">
-
-                        </div>
-                        <ul style="width: 70%; margin-top: -2px">
-                            {% for x in "xxxxx" %}
-                                <li><p class="first">{{ team_selected }}spor - {{ forloop.counter }}spor</li>
-                            {% endfor %}
-                        </ul>
-                    </a>
-
-                </div>
+            <div class="box-container" style="width: 98%;margin-left: 1%">
 
 
+                <a class="content" href="#" style="width: 96%">
+                    <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Son Maçlar</p>
+                    <div id="image" style="width: 10%;margin-top: -2px">
 
-            {% endif %}
+                    </div>
+                    <ul style="width: 70%; margin-top: -2px">
+                        {% for x in "xxxxx" %}
+                            <li><p class="first">{{ team_selected }}spor - {{ forloop.counter }}spor</p></li>
+                        {% endfor %}
+                    </ul>
+                </a>
+                <a class="content" href="#" style="width: 96%">
+                    <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Goller</p>
+                    <div id="image" style="width: 10%;margin-top: -2px">
+
+                    </div>
+                    <ul style="width: 70%; margin-top: -2px">
+                        {% for x in "xxxxx" %}
+                            <li><p class="first">{{ team_selected }}spor - {{ forloop.counter }}spor</li>
+                        {% endfor %}
+                    </ul>
+                </a>
+
+            </div>
+
+
+
+
         {% endfor %}
     </div>
     <div class="insideright">
 
-        {% for x in player_list %}
-            {% if x.id == p_id %}
-                <div class="box-container" style="width: 96%;margin-top: 0px">
 
-                    <a class="content">
-                        <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">İstatistikler</p>
-                        <div id="image" style="width: 10%;margin-top: -2px">
+        <div class="box-container" style="width: 96%;margin-top: 0px">
 
-                        </div>
-                        <ul style="width: 70%; margin-top: -2px">
-                            {% for x in "xxxxxxxxxxxxxxxxxxxxxxxxxxx" %}
-                                <li><p class="first">İstatistik {{ forloop.counter }}</li>
-                            {% endfor %}
-                        </ul>
-                    </a>
+            <a class="content">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">İstatistikler</p>
+                <div id="image" style="width: 10%;margin-top: -2px">
+
                 </div>
-            {% endif %}
-        {% endfor %}
+                <ul style="width: 70%; margin-top: -2px">
+                    {% for x in "xxxxxxxxxxxxxxxxxxxxxxxxxxx" %}
+                        <li><p class="first">İstatistik {{ forloop.counter }}</li>
+                    {% endfor %}
+                </ul>
+            </a>
+        </div>
+
     </div>
 
 

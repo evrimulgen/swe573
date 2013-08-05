@@ -3,10 +3,10 @@
 {% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}
 
 {% block info %}
-    <div id="info">
+    <div class="info">
         <img style="float:left;height: 90%; margin: 3px;" src={{ STATIC_URL }}images/league1.png>
-        <h1 style="margin:0px;float: left; color: #ffffff;line-height: 50px; margin-left: 5px;font-family: CenturyGothic;font-size: 20px">Spor-Toto Süper Lig</h1>
-        <h1 style="margin:0px;float: right; color: #ffffff;line-height: 50px; margin-right: 20px;font-family: CenturyGothic;font-size: 20px">23. Hafta</h1>
+        <h1>Spor-Toto Süper Lig</h1>
+        <h1 style="float: right;margin-right: 10px">23. Hafta</h1>
     </div>
 {% endblock %}
 
@@ -15,20 +15,16 @@
 
     <ul id="nav">
         <li>
-            <a class="active" href="#">Ana Sayfa</a>
+            <a class="active" href="#"> <img src="{{ STATIC_URL }}images/home.png">Ana Sayfa</a>
         </li>
-        <li><a href="team">Takımlar</a>
+        <li><a href="team"><img src="{{ STATIC_URL }}images/clubs_disabled.png">Takımlar</a>
 
         </li>
         <li>
-            <a href="player">Oyuncular</a>
+            <a href="player"><img src="{{ STATIC_URL }}images/players_disabled.png">Oyuncular</a>
         </li>
         <li>
-            <a href="compare">Karşılaştır!</a>
-            <ul>
-                <li><a href="#">Takım</a></li>
-                <li><a href="#">Oyuncu</a></li>
-            </ul>
+            <a href="compare"><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
         </li>
     </ul>
 
@@ -55,7 +51,6 @@
 
 {% block sidebar %}
     {% include 'standings_table.html' %}
-
 {% endblock %}
 
 {% block content %}
@@ -64,16 +59,16 @@
             <img src="{{ STATIC_URL }}images/besteleven.png" style="height: 90%;margin-top:2px;float: left">
             <h1>Haftanın 11'i</h1>
         </div>
-        <div style="width: 100%; height: 300px; float: left"> {% include 'besteleven.html' %}</div>
+        <div style="width: 100%; height: 340px; float: left"> {% include 'besteleven.html' %}</div>
 
     </div>
 
-    <div class="box-container" style="width: 96%;height: 400px">
+    <div class="box-container" style="width: 100%;height: 400px">
 
         <div class="header">
             <img src="{{ STATIC_URL }}images/bestplayer.png">
 
-            <p style="line-height: 50px">Haftanın Kare Ası</p>
+            <p>Haftanın Kare Ası</p>
         </div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script type="text/javascript" src="../static/js/jquery.baraja.js"></script>
@@ -84,7 +79,7 @@
 
             });
         </script>
-        <div class="baraja-demo" style="width: 65%;float: left" onload="openCards()">
+        <div class="baraja-demo" style="float: left;">
             <ul id="baraja-el" class="baraja-container">
                 <li><img src="{{ STATIC_URL }}images/player13.png" alt="image1"/></li>
                 <li><img src="{{ STATIC_URL }}images/player14.png" alt="image2"/></li>
@@ -94,15 +89,15 @@
         </div>
     </div>
 
-    <div class="box-container">
+    <div class="box-container" style="margin-right: 2%">
 
         <div class="header">
             <img src="{{ STATIC_URL }}images/bestscorer.png">
-            <p style="line-height: 50px">Haftanın Golcüleri</p>
+            <p>Haftanın Golcüleri</p>
         </div>
-        <div style="width: 100%;height: 220px; overflow-y: scroll">
-            <a class="content" href="#">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Didier Drogba</p>
+        <div style="width: 100%;height: 325px; overflow-y: scroll">
+            <a class="content" href="player/5/23">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">1 - Didier Drogba</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player23.png">
                 </div>
@@ -112,8 +107,8 @@
                     <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:3</p></li>
                 </ul>
             </a>
-            <a class="content" href="#">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Kalu Uche</p>
+            <a class="content" href="player/15/22">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">2 - Kalu Uche</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player22.png">
                 </div>
@@ -123,8 +118,30 @@
                     <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:4</p></li>
                 </ul>
             </a>
-            <a class="content" href="#">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Filip Holosko</p>
+            <a class="content" href="player/1/21">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">3 - Filip Holosko</p>
+                <div id="image" style="width: 18%;margin-top: -2px">
+                    <img src="{{ STATIC_URL }}images/player21.png">
+                </div>
+                <ul style="width: 70%; margin-top: -2px">
+                    <li><p class="first">Gol</p><p class="last">:1</p></li>
+                    <li><p class="first">Toplam Şut</p><p class="last">:5</p></li>
+                    <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:1</p></li>
+                </ul>
+            </a>
+            <a class="content" href="player/1/21">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">4 - Filip Holosko</p>
+                <div id="image" style="width: 18%;margin-top: -2px">
+                    <img src="{{ STATIC_URL }}images/player21.png">
+                </div>
+                <ul style="width: 70%; margin-top: -2px">
+                    <li><p class="first">Gol</p><p class="last">:1</p></li>
+                    <li><p class="first">Toplam Şut</p><p class="last">:5</p></li>
+                    <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:1</p></li>
+                </ul>
+            </a>
+            <a class="content" href="player/1/21">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">5 - Filip Holosko</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player21.png">
                 </div>
@@ -136,24 +153,24 @@
             </a>
         </div>
 
-        <div class="footer">
+        <!--<div class="footer">
             <p>Hafta Detayı</p>
             <p>Sezon Detayı</p>
             <p style="font-size: 0px">.</p>
             <a href="#"><img src="{{ STATIC_URL }}images/weekdetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/weekdetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/weekdetailcomp.png'"></a>
             <a href="#"><img src="{{ STATIC_URL }}images/leaguedetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/leaguedetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/leaguedetailcomp.png'"></a>
-        </div>
+        </div>-->
     </div>
 
     <div class="box-container">
 
         <div class="header">
             <img src="{{ STATIC_URL }}images/bestpasser.png">
-            <p style="line-height: 50px">Haftanın Pasörleri</p>
+            <p>Haftanın Pasörleri</p>
         </div>
-        <div style="width: 100%;height: 220px; overflow-y: scroll">
-            <a class="content" href="#">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Emre Belözoğlu</p>
+        <div style="width: 100%;height: 325px; overflow-y: scroll">
+            <a class="content" href="player/4/19">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">1 - Emre Belözoğlu</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player19.png">
                 </div>
@@ -163,8 +180,8 @@
                     <li><p class="first">Pas Yüzdes</p><p class="last">:%87</p></li>
                 </ul>
             </a>
-            <a class="content" href="#">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Pablo Batalla</p>
+            <a class="content" href="player/2/20">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">2 - Pablo Batalla</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player20.png">
                 </div>
@@ -174,8 +191,30 @@
                     <li><p class="first">Pas Yüzdes</p><p class="last">:%80</p></li>
                 </ul>
             </a>
-            <a class="content" href="#">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Olcan Adın</p>
+            <a class="content" href="player/18/18">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">3 - Olcan Adın</p>
+                <div id="image" style="width: 18%;margin-top: -2px">
+                    <img src="{{ STATIC_URL }}images/player18.png">
+                </div>
+                <ul style="width: 70%; margin-top: -2px">
+                    <li><p class="first">Toplam Pas</p><p class="last">:38</p></li>
+                    <li><p class="first">Başarılı Pas</p><p class="last">:48</p></li>
+                    <li><p class="first">Pas Yüzdes</p><p class="last">:%79</p></li>
+                </ul>
+            </a>
+            <a class="content" href="player/18/18">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">4 - Olcan Adın</p>
+                <div id="image" style="width: 18%;margin-top: -2px">
+                    <img src="{{ STATIC_URL }}images/player18.png">
+                </div>
+                <ul style="width: 70%; margin-top: -2px">
+                    <li><p class="first">Toplam Pas</p><p class="last">:38</p></li>
+                    <li><p class="first">Başarılı Pas</p><p class="last">:48</p></li>
+                    <li><p class="first">Pas Yüzdes</p><p class="last">:%79</p></li>
+                </ul>
+            </a>
+            <a class="content" href="player/18/18">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">5 - Olcan Adın</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player18.png">
                 </div>
@@ -187,23 +226,23 @@
             </a>
         </div>
 
-        <div class="footer">
+        <!--<div class="footer">
             <p>Hafta Detayı</p>
             <p>Sezon Detayı</p>
             <p style="font-size: 0px">.</p>
             <a href="#"><img src="{{ STATIC_URL }}images/weekdetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/weekdetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/weekdetailcomp.png'"></a>
             <a href="#"><img src="{{ STATIC_URL }}images/leaguedetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/leaguedetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/leaguedetailcomp.png'"></a>
-        </div>
+        </div>-->
     </div>
-    <div class="box-container">
+    <div class="box-container" style="margin-right: 2%">
 
         <div class="header">
             <img src="{{ STATIC_URL }}images/bestrunner.png">
-            <p style="line-height: 50px">Haftanın En Çok Koşanları</p>
+            <p>Haftanın En Çok Koşanları</p>
         </div>
-        <div style="width: 100%;height: 220px; overflow-y: scroll">
-            <a class="content" href="#">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Albert Riera</p>
+        <div style="width: 100%;height: 325px; overflow-y: scroll">
+            <a class="content" href="player/5/15">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">1 - Albert Riera</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player15.png">
                 </div>
@@ -213,8 +252,8 @@
                     <li><p class="first">Sprint</p><p class="last">:90</p></li>
                 </ul>
             </a>
-            <a class="content" href="#">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Gökhan Gönül</p>
+            <a class="content" href="player/4/17">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">2 - Gökhan Gönül</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player17.png">
                 </div>
@@ -224,8 +263,30 @@
                     <li><p class="first">Sprint</p><p class="last">:77</p></li>
                 </ul>
             </a>
-            <a class="content" href="#">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Filip Holosko</p>
+            <a class="content" href="player/1/21">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">3 - Filip Holosko</p>
+                <div id="image" style="width: 18%;margin-top: -2px">
+                    <img src="{{ STATIC_URL }}images/player21.png">
+                </div>
+                <ul style="width: 70%; margin-top: -2px">
+                    <li><p class="first">Toplam Koşu</p><p class="last">:11847</p></li>
+                    <li><p class="first">Şiddetli Koşu</p><p class="last">:180</p></li>
+                    <li><p class="first">Sprint</p><p class="last">:67</p></li>
+                </ul>
+            </a>
+            <a class="content" href="player/1/21">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">4 - Filip Holosko</p>
+                <div id="image" style="width: 18%;margin-top: -2px">
+                    <img src="{{ STATIC_URL }}images/player21.png">
+                </div>
+                <ul style="width: 70%; margin-top: -2px">
+                    <li><p class="first">Toplam Koşu</p><p class="last">:11847</p></li>
+                    <li><p class="first">Şiddetli Koşu</p><p class="last">:180</p></li>
+                    <li><p class="first">Sprint</p><p class="last">:67</p></li>
+                </ul>
+            </a>
+            <a class="content" href="player/1/21">
+                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">5 - Filip Holosko</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player21.png">
                 </div>
@@ -237,13 +298,13 @@
             </a>
         </div>
 
-        <div class="footer">
+        <!--<div class="footer">
             <p>Hafta Detayı</p>
             <p>Sezon Detayı</p>
             <p style="font-size: 0px">.</p>
             <a href="#"><img src="{{ STATIC_URL }}images/weekdetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/weekdetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/weekdetailcomp.png'"></a>
             <a href="#"><img src="{{ STATIC_URL }}images/leaguedetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/leaguedetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/leaguedetailcomp.png'"></a>
-        </div>
+        </div>-->
     </div>
 
 {% endblock %}

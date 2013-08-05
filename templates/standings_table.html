@@ -1,17 +1,24 @@
 
-<div>
-    <table class="hovertable">
+<div style="background-color: #dadada">
+    <select class="topmenuoption" style="margin: 0px">
+        {% for i in weeklist %}
+            <option class="item"> <a>{{ i }}. Hafta</a> </option>
+        {% endfor %}
+    </select>
+    <table class="point-table">
         <tr>
-            <th class="first" style="width: 3%"></th> <th style="width: 3%"></th><th></th><th style="width: 3%">O</th><th style="width: 3%">G</th><th style="width: 3%">B</th><th style="width: 3%">M</th><th style="width: 3%">A</th><th style="width: 3%">Y</th><th style="width: 3%">AV</th><th class="last" style="width: 3%">P</th>
+            <th class="first"></th> <th></th><th class="name"></th><th>O</th><th>G</th><th>B</th><th>M</th><th>A</th><th>Y</th><th>AV</th><th class="last">P</th>
         </tr>
 
         {% for i in standing_list|dictsortreversed:"average"|dictsortreversed:"points"%}
-            {% if forloop.counter < 3 %}
-                <tr style="background-color: rgba(20,60,20,1)">
+            {% if forloop.counter == 1 %}
+                <tr class="winner">
+                    {% elif forloop.counter < 3 %}
+                <tr class="champions">
                     {% elif forloop.counter < 5 %}
-                <tr style="background-color: rgba(60,60,20,1)">
+                <tr class="uefa">
                     {% elif forloop.counter > 15 %}
-                <tr style="background-color: rgba(60,20,20,1)">
+                <tr class="relegate">
                     {% else %}
                 <tr>
             {% endif %}
@@ -26,9 +33,10 @@
             <td style="background-color: #929194">{{ i.change }}</td>
         {% endif %}
 
-        <td>{{ forloop.counter }}</td><td style="text-align: left" >{{ i.teamName }}</td><td>{{ i.played }}</td><td>{{ i.win }}</td><td>{{ i.draw }}</td><td>{{ i.lose }}</td><td>{{ i.score }}</td><td>{{ i.conceded }}</td><td>{{ i.average }}</td><td>{{ i.points }}</td>
+        <td>{{ forloop.counter }}</td><td class="name" style="text-align: left" >{{ i.teamName }}</td><td>{{ i.played }}</td><td>{{ i.win }}</td><td>{{ i.draw }}</td><td>{{ i.lose }}</td><td>{{ i.score }}</td><td>{{ i.conceded }}</td><td>{{ i.average }}</td><td>{{ i.points }}</td>
         </tr>
 
         {% endfor %}
     </table>
+
 </div>

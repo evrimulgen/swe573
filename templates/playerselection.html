@@ -28,26 +28,26 @@
 {%  endblock %}
 
 {% block info %}
-    <div id="info">
-        <p style="margin-left:10px; color:#ffffff;line-height: 50px;float: left">Oyuncu Ara:</p>
+    <div class="info">
+        <p style="color:#000000;margin-left:10px;line-height: 50px;float: left">Oyuncu Ara:</p>
         <div class="ui-widget" style="float: left;margin: 12px">
             <input id="tags" />
         </div>
-        <select style="width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px" onchange="javascript:handleSelect(this)">
-            {% for i in standing_list %}
+        <select style="color:#000000;width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px" onchange="javascript:handleSelect(this)">
+            {% for i in try_list %}
                 {% if i.teamId == team_selected %}
                     <option class="item" value="../{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
                 {% endif %}
             {% endfor %}
-            {% for i in standing_list %}
+            {% for i in try_list %}
                 {% if i.teamId != team_selected %}
                     <option class="item" value="../{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
                 {% endif %}
             {% endfor %}
         </select>
-        <select style="width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px " onchange="javascript:handleSelect(this)">
+        <select style="color:#000000;width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px " onchange="javascript:handleSelect(this)">
             <option class="item"> <a>Oyuncu Seçiniz</a> </option>
-            {% for i in best_eleven_list %}
+            {% for i in players %}
                 <option class="item" value="{{ i.playerId }}"> <a>{{ i.playerName }}</a> </option>
             {% endfor %}
         </select>
@@ -55,9 +55,9 @@
 {% endblock %}
 
 {% block content %}
-    {% for i in best_eleven_list %}
+    {% for i in players %}
         <div class = "teamselect">
-            <a href="{{ i.playerId }}" class="wraptocenter"><span></span><img src="{{ STATIC_URL }}images/player{{ i.playerId }}.png"></a>
+            <a href="{{ i.playerId }}" class="wraptocenter"><span></span><img src="{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg" title="{{ i.playerName }}" alt="{{ i.playerName }}" onerror="this.src='{{ STATIC_URL }}images/players/default.png';"></a>
         </div>
     {% endfor %}
 {% endblock %}
@@ -66,20 +66,16 @@
 
     <ul id="nav">
         <li>
-            <a href="../../../">Ana Sayfa</a>
+            <a href="../../../"><img src="{{ STATIC_URL }}images/home_disabled.png">Ana Sayfa</a>
         </li>
-        <li><a href="../../../team">Takımlar</a>
+        <li><a href="../../team"><img src="{{ STATIC_URL }}images/clubs_disabled.png">Takımlar</a>
 
         </li>
         <li>
-            <a class="active" href="">Oyuncular</a>
+            <a class="active" href=""><img src="{{ STATIC_URL }}images/players.png">Oyuncular</a>
         </li>
         <li>
-            <a href="">Karşılaştır!</a>
-            <ul>
-                <li><a href="#">Takım</a></li>
-                <li><a href="#">Oyuncu</a></li>
-            </ul>
+            <a href=""><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
         </li>
     </ul>
 

@@ -27,23 +27,25 @@ paper.install(window);
 window.onload = function() {
     // Get a reference to the canvas object
     var canvas = document.getElementById('canvas');
-    // Create an empty project and a view for the canvas:
     paper.setup(canvas);
-    // Create a Paper.js Path to draw a line into it:
 
     var pitch = new paper.Raster('{{ STATIC_URL }}images/pitch.png');
 
     var width = paper.view.size.width;
     var height = paper.view.size.height;
+    console.log("screen dimensions: " + width + " " + height);
     var midPoint = [width/2,height/2];
     var paddingLeft = width/40;
-    var scale = (height/pitch.height)*(90/100);
-    pitch.scale(scale);
-    pitch.position = [midPoint[0] + paddingLeft - (width-pitch.width*scale)/2 , midPoint[1]];
+    pitch.onLoad = function(){
+        var scale = (height/pitch.height)*(90/100);
+        console.log("scale: " + scale);
+        pitch.scale(scale);
+        console.log("pitch dimensions: " + pitch.height + " " + pitch.width);
+        pitch.position = [midPoint[0] + paddingLeft - (width-pitch.width*scale)/2 , midPoint[1]];
+        console.log("pitch position: " + pitch.position);
+    };
 
 
-    console.log('pitch',pitch.width);
-    console.log('width',width);
 
     var Player = function (teamId_, play_, selected_, name_, number_, id_) {
         this.teamId = teamId_;
@@ -51,7 +53,7 @@ window.onload = function() {
         this.name = name_;
         this.number = number_;
         this.id = id_;
-
+        var selection = selected_;
         this.position = [];
 
         if (play_ == 0) {
@@ -62,7 +64,7 @@ window.onload = function() {
         }
         var screenPos = this.position;
 
-        if(selected_){
+        if(selection){
             var bgBox = new Path.Rectangle({
                 rectangle: {
                     size: [92, 62],
@@ -71,7 +73,7 @@ window.onload = function() {
                 radius: 5,
                 fillColor : {
                     gradient: {
-                        stops: [[new Color(0.8,0.4,0.4,0.9), 0], [new Color(0.6,0.2,0.2,0.9), 0.08], [new Color(0.6,0.2,0.2,0.9), 0.92], [new Color(0.4,0.1,0.1,0.9), 1]]
+                        stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
                     },
                     origin: [screenPos[0],screenPos[1]-23],
                     destination: [screenPos[0],screenPos[1]+39]
@@ -96,10 +98,10 @@ window.onload = function() {
         else {
             var jersey = new paper.Raster('{{ STATIC_URL }}images/jersey' + teamId_ + '.png');
         }
-
-        jersey.position = screenPos;
-        jersey.scale((height / jersey.height) * (1 / 7));
-
+        jersey.onLoad =function(){
+            jersey.position = screenPos;
+            jersey.scale((height / jersey.height) * (1 / 7));
+        }
         var jerseyNum = new PointText(new Point(screenPos[0],screenPos[1]+6));
         jerseyNum.justification = 'center';
         if(teamId_ == 1){
@@ -122,10 +124,26 @@ window.onload = function() {
             jerseyNum.remove();
             playerName.remove();
         }
+        this.select = function (){
+            console.log("selected value" + this.selected);
+            bgBox.fillColor = {
+                gradient: {
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
+                },
+                origin: [screenPos[0],screenPos[1]-23],
+                destination: [screenPos[0],screenPos[1]+39]
+            }
+            selection = true;
+            console.log("selected value" + this.selected);
+        }
+        this.deselect = function (){
+            bgBox.fillColor = new Color(0,0,0,0);
+            selection = false;
+        }
         jersey.onMouseEnter = function () {
             bgBox.fillColor = {
                 gradient: {
-                    stops: [[new Color(0.6,0.4,0.4,0.9), 0], [new Color(0.4,0.2,0.2,0.9), 0.08], [new Color(0.4,0.2,0.2,0.9), 0.92], [new Color(0.2,0.1,0.1,0.9), 1]]
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
                 },
                 origin: [screenPos[0],screenPos[1]-23],
                 destination: [screenPos[0],screenPos[1]+39]
@@ -133,7 +151,7 @@ window.onload = function() {
         }
 
         jersey.onMouseLeave = function () {
-            if(selected_ == false){
+            if(!selection){
                 bgBox.fillColor = new Color(0,0,0,0);
             }
         }
@@ -141,7 +159,7 @@ window.onload = function() {
         bgBox.onMouseEnter = function () {
             bgBox.fillColor = {
                 gradient: {
-                    stops: [[new Color(0.6,0.4,0.4,0.9), 0], [new Color(0.4,0.2,0.2,0.9), 0.08], [new Color(0.4,0.2,0.2,0.9), 0.92], [new Color(0.2,0.1,0.1,0.9), 1]]
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
                 },
                 origin: [screenPos[0],screenPos[1]-23],
                 destination: [screenPos[0],screenPos[1]+39]
@@ -149,14 +167,14 @@ window.onload = function() {
         }
 
         bgBox.onMouseLeave = function () {
-            if(selected_ == false){
+            if(selection == false){
                 bgBox.fillColor = new Color(0,0,0,0);
             }
         }
         jerseyNum.onMouseEnter = function () {
             bgBox.fillColor = {
                 gradient: {
-                    stops: [[new Color(0.6,0.4,0.4,0.9), 0], [new Color(0.4,0.2,0.2,0.9), 0.08], [new Color(0.4,0.2,0.2,0.9), 0.92], [new Color(0.2,0.1,0.1,0.9), 1]]
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
                 },
                 origin: [screenPos[0],screenPos[1]-23],
                 destination: [screenPos[0],screenPos[1]+39]
@@ -164,14 +182,14 @@ window.onload = function() {
         }
 
         jerseyNum.onMouseLeave = function () {
-            if(selected_ == false){
+            if(selection == false){
                 bgBox.fillColor = new Color(0,0,0,0);
             }
         }
         playerName.onMouseEnter = function () {
             bgBox.fillColor = {
                 gradient: {
-                    stops: [[new Color(0.6,0.4,0.4,0.9), 0], [new Color(0.4,0.2,0.2,0.9), 0.08], [new Color(0.4,0.2,0.2,0.9), 0.92], [new Color(0.2,0.1,0.1,0.9), 1]]
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
                 },
                 origin: [screenPos[0],screenPos[1]-23],
                 destination: [screenPos[0],screenPos[1]+39]
@@ -179,7 +197,7 @@ window.onload = function() {
         }
 
         playerName.onMouseLeave = function () {
-            if(selected_ == false){
+            if(selection == false){
                 bgBox.fillColor = new Color(0,0,0,0);
             }
         }
@@ -199,14 +217,11 @@ window.onload = function() {
         for(var i=0; i<players.length; i++){
             if(event.point.getDistance(players[i].position)<35){
                 console.log(event.point.getDistance(players[i].position));
-                players[i] = new Player(players[i].teamId,players[i].play,true,players[i].name,players[i].number,players[i].id);
+                players[i].select();
                 setPlayer(players[i].id,players);
             }
             else{
-                console.log("else girdim kenk" +players[i].id);
-                players[i].remove();
-                players[i].remove();
-                players[i] = new Player(players[i].teamId,players[i].play,false,players[i].name,players[i].number,players[i].id);
+                players[i].deselect();
             }
         }
         paper.view.draw();
@@ -223,7 +238,7 @@ function setPlayer(id_,players)
             {% for i in best_eleven_list %}
                 if(id_ == {{ i.playerId }}){
                     console.log("oldu");
-                    $("#playerName").text("{{ i.playerName }}");
+                    $("#playerName").text("{{ i.jerseyNumber }} - {{ i.playerName }}");
                     $("#goalLeague").text("{{ i.goalLeague }}");
                     $("#goalMatch").text("{{ i.goalMatch}}");
                     $("#assistLeague").text("{{ i.assistLeague }}");
@@ -264,17 +279,17 @@ function setPlayer(id_,players)
 
 <canvas id="canvas" style="width: 63%; height: 100%; float:left"></canvas>
 <div style="width: 35%;height:100%;float: left;margin: 1%">
-    <div id="card-container" style="background-color:#8C221E;width: 98%;height: 265px;padding: 1%;margin-top: 8px;-webkit-border-radius: 4px 4px 0px 0px;
+    <div id="card-container" style="background-color:#940b14;width: 98%;height: 302px;padding: 1%;margin-top: 8px;-webkit-border-radius: 4px 4px 0px 0px;
     -moz-border-radius: 4px 4px 0px 0px;
     border-radius: 4px 4px 0px 0px;">
         <div id="card-content" style="width: 100%; height: 120px;float: left">
-            <div id="card" style="width: 100%; padding-top: 1px">
-                <img id="playerImage" src="" style=" height: 65px;margin-left: 16px;float:left">
-                <p id = "playerName" style="text-align: center;font-size:12px;color: #ffffff; height: 6px;margin-top: 15px"></p>
+            <div id="card" style="width: 100%; padding-top: 6px">
+                <img id="playerImage" src="" style=" height: 90px;margin-left: 16px;float:left">
+                <p id = "playerName" style="text-align: center;font-size:12px;color: #ffffff; height: 6px;margin-top: 15px">Saha Üzerinden Oyuncu Seçiniz</p>
                 <p id = "playerInfo" style="text-align: center;font-size:12px;color: #ffffff;"></p>
             </div>
-            <div id="data"style="float: left; width: 100%; height: 200px">
-                <div id="data-header" style="background-color:#661916;   height: 20px; width: 100%">
+            <div id="data"style="float: left; width: 100%; height: 200px;margin-top: 6px">
+                <div id="data-header" style="background-color:#c51015;   height: 20px; width: 100%">
                     <p style="float:right;font-size: 10px;    height: 0px;;text-align:center;color: #ffffff;width:45px;margin-right: 4px"> Sezon</p>
                     <p style="float:right;font-size: 10px;    height: 0px;;text-align:center;color: #ffffff;width:45px;margin-right: 4px"> Maç</p>
                 </div>

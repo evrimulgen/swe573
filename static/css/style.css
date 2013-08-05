@@ -1071,12 +1071,12 @@ ul.baraja-container li {
     width: 99%;
     float: left;
     background-image: -moz-linear-gradient(top, #dadada 0%, #cdcdcd 100%); /* FF3.6+ */
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ddd7dc), color-stop(100%,#bbb8bc)); /* Chrome,Safari4+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dadada), color-stop(100%,#cdcdcd)); /* Chrome,Safari4+ */
     background-image: -webkit-linear-gradient(top,  #dadada 0%, #cdcdcd 100%); /* Chrome10+,Safari5.1+ */
     background-image: -o-linear-gradient(top, #dadada 0%, #cdcdcd 100%); /* Opera 11.10+ */
     background-image: -ms-linear-gradient(top,  #dadada 0%, #cdcdcd 100%); /* IE10+ */
     background-image: linear-gradient(to bottom,  #dadada 0%, #cdcdcd 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ddd7dc', endColorstr='#bbb8bc',GradientType=0 ); /* IE6-9 */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dadada', endColorstr='#cdcdcd',GradientType=0 ); /* IE6-9 */
     -webkit-border-radius: 3px 3px 3px 3px;
     -moz-border-radius: 3px 3px 3px 3px;
     border-radius: 3px 3px 3px 3px;

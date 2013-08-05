@@ -32,6 +32,8 @@
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/site.css" />
     <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico" />
 
+
+
     {% block head-addition %}{% endblock %}
 
     <script>
@@ -144,9 +146,9 @@
                 {% for x in matchInfo %}
 
                     <div class="match-info">
-                        <div id="stadium" style="font-size: 10px;height: 12px">Stadyum {{ x.stadium }}</div>
-                        <div id="match-day" style="font-size: 10px;height: 12px">Tarih {{ x.date }}</div>
-                        <div id="referee" style="font-size: 10px;height: 12px"> Hakem{{ x.referee }}</div>
+                        <div id="stadium" style="font-size: 10px;height: 12px"></div>
+                        <div id="match-day" style="font-size: 10px;height: 12px"></div>
+                        <div id="referee" style="font-size: 10px;height: 12px"></div>
                     </div>
                     <div class="score-area">
                         <div id="hometeam">
@@ -275,24 +277,28 @@
         </div>
 
         <div class="sidebox">
-            <div id="head">
-                <p> Gol Videoları </p>
-            </div>
+            <h1> Gol Videoları </h1>
+
+            {% for x in goals %}
+                <div style="height: 42px">
+                    <a href="{{ x.goalLink }}" target="_blank">
+                        <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                        <p id="name">{{ x.playerName }}</p>
+                        <p id="min">{{ x.min }}'</p>
+                    </a>
+                </div>
+
+            {% endfor %}
+
         </div>
         <div class="sidebox">
-            <div id="head">
-                <p> Mesafe </p>
-            </div>
+            <h1> Mesafe </h1>
         </div>
         <div class="sidebox">
-            <div id="head">
-                <p> Pas </p>
-            </div>
+            <h1> Pas </h1>
         </div>
         <div class="sidebox">
-            <div id="head">
-                <p> Şut </p>
-            </div>
+            <h1> Şut </h1>
         </div>
     </div>
     <div id="main">

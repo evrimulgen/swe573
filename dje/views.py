@@ -198,6 +198,7 @@ def before(request,reqid):
     infoDict = []
     homeTeamId = 0
     awayTeamId = 0
+    weekId = 0
     for x in datalist:
         homeTeamId = x[5]
         awayTeamId = x[6]
@@ -219,13 +220,91 @@ def before(request,reqid):
     awaySquadDict = []
 
     for playerId in datalist:
-        playerData = datalist[playerId]["data"]
-        if(playerData[3] == homeTeamId):
-            homeSquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
-        elif(playerData[3] == awayTeamId):
-            awaySquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
+        playerEvents = []
+        playerData = []
+        for x in datalist[playerId]:
+            if x == "data":
+                playerData = datalist[playerId][x]
+            elif x == "events":
+                playerEvents = datalist[playerId][x]
 
-    return render_to_response('virtual_stadium_before_match.html', {'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+        eventDict = []
+        for event in playerEvents:
+            eventDict.append({'eventType':event[0],'matchTime':event[1],'teamId':event[2],'playerId':int(event[3]),'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+        if(playerData[3] == homeTeamId):
+            homeSquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+        elif(playerData[3] == awayTeamId):
+            awaySquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+
+    data = {"team1":homeTeamId,"team2":awayTeamId}
+    teams = service_request("GetHistoricData", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    pastMatches =[]
+    for match in datalist["pastMatches"]:
+        pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':match[4],'referee':match[5],'stadium':match[6]})
+    homeWin = 0
+    awayWin = 0
+    homeGoal = 0
+    awayGoal = 0
+    if datalist["homeWins"] == 0:
+        homeWin = 1
+    else:
+        homeWin = datalist["homeWins"]
+
+    if datalist["awayWins"] == 0:
+        awayWin = 1
+    else:
+        awayWin = datalist["awayWins"]
+
+    if datalist["homeGoals"] == 0:
+        homeGoal = 1
+    else:
+        homeGoal = datalist["homeGoals"]
+
+    if datalist["awayGoals"] == 0:
+        awayGoal = 1
+    else:
+        awayGoal = datalist["awayGoals"]
+
+    homeWinRatio = int(99*homeWin/(homeWin+awayWin+datalist["draws"]))
+    drawRatio = int(99*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
+    awayWinRatio = 99 -(homeWinRatio+drawRatio)
+    homeGoalRatio = int(99*homeGoal/(homeGoal+awayGoal))
+    awayGoalRatio = 99-homeGoalRatio
+    historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
+    teams = service_request("GetTeamForm", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    homeFormDict = []
+    for match in datalist:
+        win = 0
+        if (match[2] > match [3] and homeTeamId==match[4]) or (match[3] > match [2] and homeTeamId==match[5]):
+            win=1
+        elif match[2] == match [3]:
+            win=0
+        else:
+            win=2
+        homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
+    teams = service_request("GetTeamForm", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    awayFormDict = []
+    for match in datalist:
+        win = 0
+        if (match[2] > match [3] and awayTeamId==match[4]) or (match[3] > match [2] and awayTeamId==match[5]):
+            win=1
+        elif match[2] == match [3]:
+            win=0
+        else:
+            win=2
+        awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    return render_to_response('virtual_stadium_before_match.html', {'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 
 def center(request,reqid):
     data = {"leagueId": 1, "seasonId": 8918}

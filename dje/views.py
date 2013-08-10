@@ -9,6 +9,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .utils import service_request
 import django.utils.simplejson as json
 from django.http import HttpResponseRedirect
+from datetime import datetime
+
 
 standlist = [
     {'teamId': int(1), 'teamName': 'Beşiktaş','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(58), 'change': int(1)},
@@ -242,7 +244,7 @@ def before(request,reqid):
     datalist = j_obj["data"]
     pastMatches =[]
     for match in datalist["pastMatches"]:
-        pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':match[4],'referee':match[5],'stadium':match[6]})
+        pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':datetime.strptime(match[4],'%Y-%m-%d %H:%M:%S.0000000'),'referee':match[5],'stadium':match[6],'homeTeamId':match[8],'awayTeamId':match[9]})
     homeWin = 0
     awayWin = 0
     homeGoal = 0

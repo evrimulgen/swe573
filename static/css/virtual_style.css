@@ -1061,13 +1061,13 @@ body{
 .past-match-area{
     width: 100%;
     background-color: #dadada;
-    height: 313px;
+    height: 270px;
     overflow-y: scroll;
     margin-bottom: 5px;
 
 }
 h1.past-match-area{
-    margin-top: 5px;
+    margin-top: 15px;
     margin-bottom: 0px;
     width: 90%;
     margin-left: 5%;

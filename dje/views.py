@@ -67,8 +67,22 @@ for x in range(1, 24):
     playerList.append({'id': id, 'jersey': "%s"%x, 'name': 'Serhat Kurtulus', 'match': int(match), 'min': int(min), 'goal': int(goal), 'assist': int(assist), 'yellow': int(yellow), 'red': int(red), 'run': int(run)})
 
 
-def home(request):
-    return render_to_response('statshome.html', {'weeklist': weekList, 'standing_list':standlist, 'best_eleven_list':bestList})
+def home(request,weekId):
+    data = {"leagueId":1,"seasonId":8918}
+    teams = service_request("GetWeeks", data)
+    j_obj = json.loads(teams)
+    list = j_obj["data"]
+    weekNumber = 0
+    lastPlayed = 0
+    for x in list:
+        weekNumber = x[0]
+        lastPlayed = x[1]
+    i=1
+    weekDict = []
+    while(i<=weekNumber):
+        weekDict.append(int(i))
+        i = i+1
+    return render_to_response('statshome.html', {'weekList':weekDict,'weekSelected': int(weekId),'lastPlayedWeek':int(lastPlayed), 'standing_list':standlist, 'best_eleven_list':bestList})
 
 def team(request, num):
 
@@ -596,3 +610,11 @@ def matchcenter(request,match_id):
             return HttpResponseRedirect("before")
         else:
             return HttpResponseRedirect("before")
+
+def statscenter(request):
+    data = {"leagueId":1,"seasonId":8918}
+    teams = service_request("GetWeeks", data)
+    j_obj = json.loads(teams)
+    list = j_obj["data"]
+    for x in list:
+        return HttpResponseRedirect('week/%s' %x[1])

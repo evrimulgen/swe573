@@ -6,7 +6,7 @@
     <div class="info">
         <img style="float:left;height: 90%; margin: 3px;" src={{ STATIC_URL }}images/league1.png>
         <h1>Spor-Toto Süper Lig</h1>
-        <h1 style="float: right;margin-right: 10px">23. Hafta</h1>
+        <h1 style="float: right;margin-right: 10px">{{ weekSelected }}. Hafta</h1>
     </div>
 {% endblock %}
 
@@ -33,18 +33,21 @@
 {% block week-menu %}
     <div class="week-menu">
         <p style="width: 2%; float: left"></p>
-        {% for i in weeklist %}
-            {% if i < 23 %}
-                <a><p>{{ i }}</p></a>
-            {% elif i == 23 %}
+        {% for i in weekList %}
+            {% if i == weekSelected %}
                 <div class="active">
-                    <a><p>{{ i }}</p></a>
+                    <a href="../{{ i }}"><p>{{ i }}</p></a>
                 </div>
             {% else %}
-                <div class="disabled">
-                    <a><p>{{ i }}</p></a>
-                </div>
+                {% if i <= lastPlayedWeek %}
+                    <a href="../{{ i }}"><p>{{ i }}</p></a>
+                {% else %}
+                    <div class="disabled">
+                        <a href="../{{ i }}"><p>{{ i }}</p></a>
+                    </div>
+                {% endif %}
             {% endif %}
+
         {% endfor %}
     </div>
 {%  endblock %}
@@ -71,7 +74,7 @@
             <p>Haftanın Kare Ası</p>
         </div>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script type="text/javascript" src="../static/js/jquery.baraja.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.baraja.js"></script>
         <script type="text/javascript">
             $(function() {
                 var $el = $( '#baraja-el' ),

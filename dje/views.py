@@ -204,7 +204,7 @@ def before(request,reqid):
     for x in datalist:
         homeTeamId = x[5]
         awayTeamId = x[6]
-        infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':x[7],'awayTeamScore':x[8],'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
+        infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':int(x[7] or 0),'awayTeamScore':int(x[8] or 0),'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
 
     data = {"matchId":reqid}
     teams = service_request("GetGoalVideos", data)
@@ -314,7 +314,21 @@ def before(request,reqid):
     for event in datalist:
         eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
 
-    return render_to_response('virtual_stadium_before_match.html', {'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    teams = service_request("GetMatchData", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    matchDataDict = []
+    homeDataDict = []
+    awayDataDict  = []
+    for dat in datalist:
+        matchDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'faulCommitted':int(dat[13] or 0),'faulAgainst':int(dat[14] or 0)})
+        if(dat[0] ==  homeTeamId):
+            homeDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'faulCommitted':int(dat[13] or 0),'faulAgainst':int(dat[14] or 0)})
+        elif (dat[0] == awayTeamId):
+            awayDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'faulCommitted':int(dat[13] or 0),'faulAgainst':int(dat[14] or 0)})
+
+    return render_to_response('virtual_stadium_before_match.html', {'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 
 def center(request,reqid):
     data = {"leagueId": 1, "seasonId": 8918}

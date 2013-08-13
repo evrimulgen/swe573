@@ -15,8 +15,8 @@ def service_request(id, data):
 
 
 def try_service():
-    data = {"leagueId":1,"seasonId":8918,"matchId":11730066}
-    print service_request("GetMatchEvents", data)
+    data = {"league_id":1,"season_id":8918,"count":1}
+    print service_request("GetBestAssisters", data)
 
 
 try_service()

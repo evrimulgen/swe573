@@ -197,11 +197,19 @@ function Radar(matchId){
                 strokeWidth: 1
             });
         } else {
+            teams.ball.visible = true;
             teams.ball.position = new pitch.paper.Point(mt2px(x), mt2px(y));
         }
     };
 
+    var hideBall = function(){
+        if(teams.ball!==undefined){
+            teams.ball.visible = false;
+        }
+    }
+
     var modifyPlayerLocations = function(coords){
+        var ballVisible = false;
         _.each(coords, function(coord){
             // coordinate format:
             // [Type, JerseyNo, X, Y]
@@ -217,10 +225,12 @@ function Radar(matchId){
             if(coord[0]==3 || coord[0]==4) coord[0] -= 3;
             
             if(coord[0]==5){
+                ballVisible = true;
                 modifyBallLocation(coord[2],coord[3]);
             } 
             else modifyPlayerLocation(coord[0], coord[1], coord[2], coord[3]);
         });
+        if(!ballVisible) hideBall();
     }
 
     var minute = 0;

@@ -134,7 +134,7 @@ function FootballPitch(div_id){
     drawField();
 };
 
-$(function(){
+function Radar(matchId){
     var teams = {};
 
     var pitch = new FootballPitch("radarContainer");
@@ -263,10 +263,10 @@ $(function(){
         }
     });
 
-    $("#startMatch").click(function(){
+    this.startMatch = function(){
         if(!started){
             started = true;
-            socket.emit('getmatch', 11730074);
+            socket.emit('getmatch', matchId);
         }
-    });
-});
+    };
+}

@@ -9,6 +9,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .utils import service_request
 import django.utils.simplejson as json
 from django.http import HttpResponseRedirect
+from datetime import datetime
+
 
 standlist = [
     {'teamId': int(1), 'teamName': 'Beşiktaş','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(58), 'change': int(1)},
@@ -198,6 +200,7 @@ def before(request,reqid):
     infoDict = []
     homeTeamId = 0
     awayTeamId = 0
+    weekId = 0
     for x in datalist:
         homeTeamId = x[5]
         awayTeamId = x[6]
@@ -219,13 +222,99 @@ def before(request,reqid):
     awaySquadDict = []
 
     for playerId in datalist:
-        playerData = datalist[playerId]["data"]
-        if(playerData[3] == homeTeamId):
-            homeSquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
-        elif(playerData[3] == awayTeamId):
-            awaySquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
+        playerEvents = []
+        playerData = []
+        for x in datalist[playerId]:
+            if x == "data":
+                playerData = datalist[playerId][x]
+            elif x == "events":
+                playerEvents = datalist[playerId][x]
 
-    return render_to_response('virtual_stadium_before_match.html', {'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+        eventDict = []
+        for event in playerEvents:
+            eventDict.append({'eventType':event[0],'matchTime':event[1],'teamId':event[2],'playerId':int(event[3]),'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+        if(playerData[3] == homeTeamId):
+            homeSquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+        elif(playerData[3] == awayTeamId):
+            awaySquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+
+    data = {"team1":homeTeamId,"team2":awayTeamId}
+    teams = service_request("GetHistoricData", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    pastMatches =[]
+    for match in datalist["pastMatches"]:
+        pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':datetime.strptime(match[4],'%Y-%m-%d %H:%M:%S.0000000'),'referee':match[5],'stadium':match[6],'homeTeamId':match[8],'awayTeamId':match[9]})
+    homeWin = 0
+    awayWin = 0
+    homeGoal = 0
+    awayGoal = 0
+    if datalist["homeWins"] == 0:
+        homeWin = 1
+    else:
+        homeWin = datalist["homeWins"]
+
+    if datalist["awayWins"] == 0:
+        awayWin = 1
+    else:
+        awayWin = datalist["awayWins"]
+
+    if datalist["homeGoals"] == 0:
+        homeGoal = 1
+    else:
+        homeGoal = datalist["homeGoals"]
+
+    if datalist["awayGoals"] == 0:
+        awayGoal = 1
+    else:
+        awayGoal = datalist["awayGoals"]
+
+    homeWinRatio = int(99*homeWin/(homeWin+awayWin+datalist["draws"]))
+    drawRatio = int(99*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
+    awayWinRatio = 99 -(homeWinRatio+drawRatio)
+    homeGoalRatio = int(99*homeGoal/(homeGoal+awayGoal))
+    awayGoalRatio = 99-homeGoalRatio
+    historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
+    teams = service_request("GetTeamForm", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    homeFormDict = []
+    for match in datalist:
+        win = 0
+        if (match[2] > match [3] and homeTeamId==match[4]) or (match[3] > match [2] and homeTeamId==match[5]):
+            win=1
+        elif match[2] == match [3]:
+            win=0
+        else:
+            win=2
+        homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
+    teams = service_request("GetTeamForm", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    awayFormDict = []
+    for match in datalist:
+        win = 0
+        if (match[2] > match [3] and awayTeamId==match[4]) or (match[3] > match [2] and awayTeamId==match[5]):
+            win=1
+        elif match[2] == match [3]:
+            win=0
+        else:
+            win=2
+        awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    teams = service_request("GetMatchEvents", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    eventDict = []
+    for event in datalist:
+        eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+
+    return render_to_response('virtual_stadium_before_match.html', {'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 
 def center(request,reqid):
     data = {"leagueId": 1, "seasonId": 8918}
@@ -246,12 +335,18 @@ def center(request,reqid):
                     currentWeek = weekId
                 matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
         weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
+
     data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
     teams = service_request("GetMatchInfo", data)
     j_obj = json.loads(teams)
-    list = j_obj["data"]
+    datalist = j_obj["data"]
     infoDict = []
-    for x in list:
+    homeTeamId = 0
+    awayTeamId = 0
+    weekId = 0
+    for x in datalist:
+        homeTeamId = x[5]
+        awayTeamId = x[6]
         infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':x[7],'awayTeamScore':x[8],'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
 
     data = {"matchId":reqid}
@@ -262,7 +357,107 @@ def center(request,reqid):
     for x in datalist:
         goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
 
-    return render_to_response('virtual_stadium.html', {'goals':goalDict,'weeklist': weekList,'weeks':weekDict,'matchInfo':infoDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    teams = service_request("GetMatchSquad", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    homeSquadDict = []
+    awaySquadDict = []
+
+    for playerId in datalist:
+        playerEvents = []
+        playerData = []
+        for x in datalist[playerId]:
+            if x == "data":
+                playerData = datalist[playerId][x]
+            elif x == "events":
+                playerEvents = datalist[playerId][x]
+
+        eventDict = []
+        for event in playerEvents:
+            eventDict.append({'eventType':event[0],'matchTime':event[1],'teamId':event[2],'playerId':int(event[3]),'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+        if(playerData[3] == homeTeamId):
+            homeSquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+        elif(playerData[3] == awayTeamId):
+            awaySquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+
+    data = {"team1":homeTeamId,"team2":awayTeamId}
+    teams = service_request("GetHistoricData", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    pastMatches =[]
+    for match in datalist["pastMatches"]:
+        pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':datetime.strptime(match[4],'%Y-%m-%d %H:%M:%S.0000000'),'referee':match[5],'stadium':match[6],'homeTeamId':match[8],'awayTeamId':match[9]})
+    homeWin = 0
+    awayWin = 0
+    homeGoal = 0
+    awayGoal = 0
+    if datalist["homeWins"] == 0:
+        homeWin = 1
+    else:
+        homeWin = datalist["homeWins"]
+
+    if datalist["awayWins"] == 0:
+        awayWin = 1
+    else:
+        awayWin = datalist["awayWins"]
+
+    if datalist["homeGoals"] == 0:
+        homeGoal = 1
+    else:
+        homeGoal = datalist["homeGoals"]
+
+    if datalist["awayGoals"] == 0:
+        awayGoal = 1
+    else:
+        awayGoal = datalist["awayGoals"]
+
+    homeWinRatio = int(99*homeWin/(homeWin+awayWin+datalist["draws"]))
+    drawRatio = int(99*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
+    awayWinRatio = 99 -(homeWinRatio+drawRatio)
+    homeGoalRatio = int(99*homeGoal/(homeGoal+awayGoal))
+    awayGoalRatio = 99-homeGoalRatio
+    historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
+    teams = service_request("GetTeamForm", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    homeFormDict = []
+    for match in datalist:
+        win = 0
+        if (match[2] > match [3] and homeTeamId==match[4]) or (match[3] > match [2] and homeTeamId==match[5]):
+            win=1
+        elif match[2] == match [3]:
+            win=0
+        else:
+            win=2
+        homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
+    teams = service_request("GetTeamForm", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    awayFormDict = []
+    for match in datalist:
+        win = 0
+        if (match[2] > match [3] and awayTeamId==match[4]) or (match[3] > match [2] and awayTeamId==match[5]):
+            win=1
+        elif match[2] == match [3]:
+            win=0
+        else:
+            win=2
+        awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    teams = service_request("GetMatchEvents", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    eventDict = []
+    for event in datalist:
+        eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+
+    return render_to_response('virtual_stadium.html', {'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 
 def summary(request):
     return render_to_response('matchsummary.html')

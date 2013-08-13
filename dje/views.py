@@ -550,6 +550,9 @@ def table(request,reqid):
 def chalkboard(request):
     return render_to_response('chalkboard.html')
 
+@ensure_csrf_cookie
+def radar_vebview(request, matchId):
+    return render_to_response('radar_vebview.html')
 
 def team2(request):
     data = {"leagueId": 1, "seasonId": 8918}

@@ -8,6 +8,8 @@
 <head>
     <title>{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}</title>
 
+{% block head-addition %}{% endblock %}
+
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css" charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/application.css" charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/virtual_style.css" charset="utf-8" />
@@ -34,7 +36,7 @@
 
 
 
-    {% block head-addition %}{% endblock %}
+
 
     <script>
         var week = {{ currentWeek }}

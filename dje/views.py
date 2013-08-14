@@ -1372,9 +1372,7 @@ def router(request, path):
 
 def matchcenter(request,match_id):
     data = {"leagueId":1,"seasonId":8918,"matchId":match_id}
-    teams = service_request("GetMatchInfo", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    list = service_request("GetMatchInfo", data)
     for x in list:
         if(x[1]=="1"):
             return HttpResponseRedirect("before")
@@ -1383,8 +1381,7 @@ def matchcenter(request,match_id):
 
 def statscenter(request):
     data = {"leagueId":1,"seasonId":8918}
-    teams = service_request("GetWeeks", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    list = service_request("GetWeeks", data)
+
     for x in list:
         return HttpResponseRedirect('week/%s' %x[1])

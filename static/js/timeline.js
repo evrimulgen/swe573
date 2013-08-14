@@ -18,18 +18,24 @@ function Timeline(div_id, match_id){
     leftHandle.fillColor = "#9999ff";
     rightHandle.fillColor = "#9999ff";
 
-    $.post("/api/GetMatchEvents", JSON.stringify({"matchId": match_id})).done(function(data){
-        _.each(data.data, function(event){
-            console.log(event);
-        });
-    });
-
     scope.view.draw();
 
     var currentPoint = [0,0];
     var maxSecond = 90*60;
 
     var draggedHandle = null;
+
+    var timeToPixel = function(minute, second){
+        var totalSeconds = minute*60+second;
+        var xratio = totalSeconds/maxSecond;
+        return xratio*(width-handleWidth)+handleWidth/2;
+    }
+
+    var pixelToTime = function(pos){
+        var xratio = pos/(width-handleWidth);
+        var seconds = Math.round(maxSecond*xratio);
+        return [Math.floor(seconds/60), seconds%60]
+    }
 
     scope.tool.onMouseDown = function(event){
         if(leftHandle.hitTest(event.point)){
@@ -50,10 +56,7 @@ function Timeline(div_id, match_id){
             else{
                 draggedHandle.position.x = event.point.x;
             }
-            var xratio = (draggedHandle.position.x-(handleWidth/2))/(width-handleWidth);
-            var seconds = Math.round(maxSecond*xratio);
-            currentPoint = [Math.floor(seconds/60), seconds%60];
-            console.log(currentPoint);
+            currentPoint = pixelToTime(draggedHandle.position.x-(handleWidth/2));
         }
     }
 
@@ -62,6 +65,39 @@ function Timeline(div_id, match_id){
             draggedHandle = null;
         }
     }
+
+    var drawEvent = function(event){
+        // Event format:
+        // [Event Type, Minute, Team Id, ...]
+        // event types:
+        // 0 => Goal
+        // 1 => Own Goal
+        // 2 => Penalty
+        // 3 => Missed Penalty
+        // 4 => Yellow Card
+        // 5 => Second Yellow Card
+        // 6 => Red Card
+        // 7 => Substitution
+
+        // Todo: differentiate between events, or highlight the entry below on hover/click
+        console.log(scope);
+        var eventWidth = 4;
+        var offset = timeToPixel(event[1], 0)-eventWidth/2;
+
+        console.log(event);
+        var rect = new scope.Path.Rectangle(offset, 0, eventWidth, height);
+        rect.fillColor = "green";
+    }
+
+    var loadEvents = function(){
+        $.post("/api/GetMatchEvents", JSON.stringify({"matchId": match_id})).done(function(data){
+            _.each(data.data, function(event){
+                drawEvent(event);
+            });
+        });
+    };
+
+    loadEvents();
 }
 
 $(function(){

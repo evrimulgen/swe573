@@ -28,13 +28,13 @@ function FootballPitch(div_id){
     $(divSelector).append('<div class="alerts"></div><div class="pitch"></div>');
     $('<canvas id="bgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .pitch");
 
-    var scope = new paper.PaperScope();
-    scope.setup("bgCanvas");
+    var bgscope = new paper.PaperScope();
+    bgscope.setup("bgCanvas");
 
     var viewSize = [$("#bgCanvas").width(), $("#bgCanvas").height()];
-    scope.view.viewSize = viewSize;
+    bgscope.view.viewSize = viewSize;
 
-    this.paper = scope;
+    this.paper = bgscope;
 
     // meter -> pixel conversion with offset (for points on screen)
     // change the scale and offset as needed
@@ -50,7 +50,7 @@ function FootballPitch(div_id){
 
     // draws the football field
     var drawField = function () {
-        var paper = scope;
+        var paper = bgscope;
 
         var canvas = $(divSelector + " #bgCanvas")
         var greenBg = new paper.Path.Rectangle(0, 0, canvas.width(), canvas.height());

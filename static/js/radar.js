@@ -27,18 +27,14 @@ function FootballPitch(div_id){
     // and setting up the slider for time range
     $(divSelector).append('<div class="alerts"></div><div class="pitch"></div>');
     $('<canvas id="bgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .pitch");
-    $('<canvas id="fgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .pitch");
 
-    var bgScope = new paper.PaperScope();
-    var fgScope = new paper.PaperScope();
-    bgScope.setup("bgCanvas");
-    fgScope.setup("fgCanvas");
+    var scope = new paper.PaperScope();
+    scope.setup("bgCanvas");
 
     var viewSize = [$("#bgCanvas").width(), $("#bgCanvas").height()];
-    bgScope.view.viewSize = viewSize;
-    fgScope.view.viewSize = viewSize;
+    scope.view.viewSize = viewSize;
 
-    this.paper = bgScope;
+    this.paper = scope;
 
     // meter -> pixel conversion with offset (for points on screen)
     // change the scale and offset as needed
@@ -54,7 +50,7 @@ function FootballPitch(div_id){
 
     // draws the football field
     var drawField = function () {
-        paper = bgScope;
+        var paper = scope;
 
         var canvas = $(divSelector + " #bgCanvas")
         var greenBg = new paper.Path.Rectangle(0, 0, canvas.width(), canvas.height());

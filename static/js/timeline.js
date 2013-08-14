@@ -7,13 +7,13 @@ function Timeline(div_id, match_id){
     $("#"+div_id).width(width).height(height);
 
     var scope = new paper.PaperScope();
-    paper.setup(div_id);
+    scope.setup(div_id);
 
-    var bg = new paper.Path.Rectangle(0, 0, width, height);
+    var bg = new scope.Path.Rectangle(0, 0, width, height);
     bg.fillColor = "#ccccff";
 
-    var leftHandle = new paper.Path.Rectangle(0, 0, handleWidth, height);
-    var rightHandle = new paper.Path.Rectangle(width-handleWidth, 0, handleWidth, height);
+    var leftHandle = new scope.Path.Rectangle(0, 0, handleWidth, height);
+    var rightHandle = new scope.Path.Rectangle(width-handleWidth, 0, handleWidth, height);
 
     leftHandle.fillColor = "#9999ff";
     rightHandle.fillColor = "#9999ff";
@@ -24,14 +24,14 @@ function Timeline(div_id, match_id){
         });
     });
 
-    paper.view.draw();
+    scope.view.draw();
 
     var currentPoint = [0,0];
     var maxSecond = 90*60;
 
     var draggedHandle = null;
 
-    paper.tool.onMouseDown = function(event){
+    scope.tool.onMouseDown = function(event){
         if(leftHandle.hitTest(event.point)){
             draggedHandle = leftHandle;
         } else if(rightHandle.hitTest(event.point)){
@@ -39,7 +39,7 @@ function Timeline(div_id, match_id){
         }
     }
 
-    paper.tool.onMouseDrag = function(event){
+    scope.tool.onMouseDrag = function(event){
         if(draggedHandle){
             if(event.point.x < handleWidth/2){
                 draggedHandle.position.x = handleWidth/2;
@@ -57,7 +57,7 @@ function Timeline(div_id, match_id){
         }
     }
 
-    paper.tool.onMouseUp = function(event){
+    scope.tool.onMouseUp = function(event){
         if(draggedHandle){
             draggedHandle = null;
         }

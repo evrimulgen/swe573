@@ -15,8 +15,25 @@ def service_request(id, data):
 
 
 def try_service():
-    data = {"league_id":1,"season_id":8918,"count":1}
-    print service_request("GetBestAssisters", data)
+    data = {"leagueId":1,"seasonId":8918,"matchId":11730060}
+    teams = service_request("GetMatchNarration", data)
+    j_obj = json.loads(teams)
+    datalist = j_obj["data"]
+    narrationDict = []
+    for min in datalist:
+        if min == "_id":
+            print min
+        else:
+            x = "team"
+            team_id = datalist[min][x]
+            x = "typeInt"
+            type_ = datalist[min][x]
+            x = "text"
+            text_ = datalist[min][x]
+            print text_
+
+
+
 
 
 try_service()

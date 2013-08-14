@@ -550,21 +550,21 @@ def center(request,reqid):
     homeSpeed /= int(len(homeDataDict) or 1)
     awaySpeed /= int(len(awayDataDict) or 1)
 
-    homePassRatio = int(homeSuccessfulPass/int(homeTotalPass or 1) * 100)
-    awayPassRatio = int(awaySuccessfulPass/int(awayTotalPass or 1) * 100)
+    homePassRatio = int(homeSuccessfulPass/float(homeTotalPass or 1) * 100)
+    awayPassRatio = int(awaySuccessfulPass/float(awayTotalPass or 1) * 100)
 
-    homeShotRatio = int(homeSuccessfulShot/int(homeTotalShot or 1) * 100)
-    awayShotRatio = int(awaySuccessfulShot/int(awayTotalShot or 1) * 100)
+    homeShotRatio = int(homeSuccessfulShot/float(homeTotalShot or 1) * 100)
+    awayShotRatio = int(awaySuccessfulShot/float(awayTotalShot or 1) * 100)
 
-    homeCrossRatio = int(homeSuccessfulCross/int(homeTotalCross or 1) * 100)
-    awayCrossRatio = int(awaySuccessfulCross/int(awayTotalCross or 1) * 100)
+    homeCrossRatio = int(homeSuccessfulCross/float(homeTotalCross or 1) * 100)
+    awayCrossRatio = int(awaySuccessfulCross/float(awayTotalCross or 1) * 100)
 
     homeDistancePercent = 0
     awayDistancePercent = 0
     if homeDistance+awayDistance < 1:
         homeDistancePercent = 50
     else:
-        homeDistancePercent = int(homeDistance/(homeDistance+awayDistance)*100)
+        homeDistancePercent = int(homeDistance/float(homeDistance+awayDistance)*100)
     awayDistancePercent = 100 - homeDistancePercent
 
     homeSpeedPercent = 0
@@ -572,7 +572,7 @@ def center(request,reqid):
     if homeSpeed+awaySpeed < 1:
         homeSpeedPercent = 50
     else:
-        homeSpeedPercent = int(homeSpeed/(homeSpeed+awaySpeed)*100)
+        homeSpeedPercent = int(homeSpeed/float(homeSpeed+awaySpeed)*100)
     awaySpeedPercent = 100 - homeSpeedPercent
 
     homeHIRPercent = 0
@@ -580,7 +580,7 @@ def center(request,reqid):
     if homeHIR+awayHIR < 1:
         homeHIRPercent = 50
     else:
-        homeHIRPercent = int(homeHIR/(homeHIR+awayHIR)*100)
+        homeHIRPercent = int(homeHIR/float(homeHIR+awayHIR)*100)
     awayHIRPercent = 100 - homeHIRPercent
 
     homeTotalPassPercent = 0
@@ -588,7 +588,7 @@ def center(request,reqid):
     if homeTotalPass+awayTotalPass < 1:
         homeTotalPassPercent = 50
     else:
-        homeTotalPassPercent = int(homeTotalPass/(homeTotalPass+awayTotalPass)*100)
+        homeTotalPassPercent = int(homeTotalPass/float(homeTotalPass+awayTotalPass)*100)
     awayTotalPassPercent = 100 - homeTotalPassPercent
 
     homeSuccessfulPassPercent = 0
@@ -596,7 +596,7 @@ def center(request,reqid):
     if homeSuccessfulPass+awaySuccessfulPass < 1:
         homeSuccessfulPassPercent = 50
     else:
-        homeSuccessfulPassPercent = int(homeSuccessfulPass/(homeSuccessfulPass+awaySuccessfulPass)*100)
+        homeSuccessfulPassPercent = int(homeSuccessfulPass/float(homeSuccessfulPass+awaySuccessfulPass)*100)
     awaySuccessfulPassPercent = 100 - homeSuccessfulPassPercent
 
     homePassRatioPercent = 0
@@ -604,7 +604,7 @@ def center(request,reqid):
     if homePassRatio+awayPassRatio < 1:
         homePassRatioPercent = 50
     else:
-        homePassRatioPercent = int(homePassRatio/(homePassRatio+awayPassRatio)*100)
+        homePassRatioPercent = int(homePassRatio/float(homePassRatio+awayPassRatio)*100)
     awayPassRatioPercent = 100 - homePassRatioPercent
 
     homeTotalShotPercent = 0
@@ -612,7 +612,7 @@ def center(request,reqid):
     if homeTotalShot+awayTotalShot < 1:
         homeTotalShotPercent = 50
     else:
-        homeTotalShotPercent = int(homeTotalShot/(homeTotalShot+awayTotalShot)*100)
+        homeTotalShotPercent = int(homeTotalShot/float(homeTotalShot+awayTotalShot)*100)
     awayTotalShotPercent = 100 - homeTotalShotPercent
 
     homeSuccessfulShotPercent = 0
@@ -620,7 +620,7 @@ def center(request,reqid):
     if homeSuccessfulShot+awaySuccessfulShot < 1:
         homeSuccessfulShotPercent = 50
     else:
-        homeSuccessfulShotPercent = int(homeSuccessfulShot/(homeSuccessfulShot+awaySuccessfulShot)*100)
+        homeSuccessfulShotPercent = int((homeSuccessfulShot/float(homeSuccessfulShot+awaySuccessfulShot))*100)
     awaySuccessfulShotPercent = 100 - homeSuccessfulShotPercent
 
     homeShotRatioPercent = 0
@@ -628,7 +628,7 @@ def center(request,reqid):
     if homeShotRatio+awayShotRatio < 1:
         homeShotRatioPercent = 50
     else:
-        homeShotRatioPercent = int(homeShotRatio/(homeShotRatio+awayShotRatio)*100)
+        homeShotRatioPercent = int(homeShotRatio/float(homeShotRatio+awayShotRatio)*100)
     awayShotRatioPercent = 100 - homeShotRatioPercent
 
     homeTotalCrossPercent = 0
@@ -636,7 +636,7 @@ def center(request,reqid):
     if homeTotalCross+awayTotalCross < 1:
         homeTotalCrossPercent = 50
     else:
-        homeTotalCrossPercent = int(homeTotalCross/(homeTotalCross+awayTotalCross)*100)
+        homeTotalCrossPercent = int(homeTotalCross/float(homeTotalCross+awayTotalCross)*100)
     awayTotalCrossPercent = 100 - homeTotalCrossPercent
 
     homeSuccessfulCrossPercent = 0
@@ -644,7 +644,7 @@ def center(request,reqid):
     if homeSuccessfulCross+awaySuccessfulCross < 1:
         homeSuccessfulCrossPercent = 50
     else:
-        homeSuccessfulCrossPercent = int(homeSuccessfulCross/(homeSuccessfulCross+awaySuccessfulCross)*100)
+        homeSuccessfulCrossPercent = int(homeSuccessfulCross/float(homeSuccessfulCross+awaySuccessfulCross)*100)
     awaySuccessfulCrossPercent = 100 - homeSuccessfulCrossPercent
 
     homeCrossRatioPercent = 0
@@ -652,7 +652,7 @@ def center(request,reqid):
     if homeCrossRatio+awayCrossRatio < 1:
         homeCrossRatioPercent = 50
     else:
-        homeCrossRatioPercent = int(homeCrossRatio/(homeCrossRatio+awayCrossRatio)*100)
+        homeCrossRatioPercent = int(homeCrossRatio/float(homeCrossRatio+awayCrossRatio)*100)
     awayCrossRatioPercent = 100 - homeCrossRatioPercent
 
     homeFoulPercent = 0
@@ -660,11 +660,49 @@ def center(request,reqid):
     if homeFoul+awayFoul < 1:
         homeFoulPercent = 50
     else:
-        homeFoulPercent = int(homeFoul/(homeFoul+awayFoul)*100)
+        homeFoulPercent = int(homeFoul/float(homeFoul+awayFoul)*100)
     awayFoulPercent = 100 - homeFoulPercent
-
     teamStatsDict = []
-    teamStatsDict.append({'homeDistance':homeDistance,'homeDistancePercent':homeDistancePercent,'awayDistance':awayDistance,'awayDistancePercent':awayDistancePercent,'homeSpeed':homeSpeed,'homeSpeedPercent':homeSpeedPercent,'awaySpeed':awaySpeed,'awaySpeedPercent':awaySpeedPercent,'homeHIR':homeHIR,'homeHIRPercent':homeHIRPercent,'awayHIR':awayHIR,'awayHIRPercent':awayHIRPercent,'homeTotalPass':homeTotalPass,'homeTotalPassPercent':homeTotalPassPercent,'awayTotalPass':awayTotalPass,'awayTotalPassPercent':awayTotalPassPercent,'homeSuccessfulPass':homeSuccessfulPass,'homeSuccessfulPassPercent':homeSuccessfulPassPercent,'awaySuccessfulPass':awaySuccessfulPass,'awaySuccessfulPassPercent':awaySuccessfulPassPercent,'homePassRatio':homePassRatio,'homePassRatioPercent':homePassRatioPercent,'awayPassRatio':awayPassRatio,'awayPassRatioPercent':awayPassRatioPercent,'homeTotalShot':homeTotalShot,'homeTotalShotPercent':homeTotalShotPercent,'awayTotalShot':awayTotalShot,'awayTotalShotPercent':awayTotalShotPercent,'homeSuccessfulShot':homeSuccessfulShot,'homeSuccessfulShotPercent':homeSuccessfulShotPercent,'awaySuccessfulShot':awaySuccessfulShot,'awaySuccessfulShotPercent':awaySuccessfulShotPercent,'homeShotRatio':homeShotRatio,'homeShotRatioPercent':homeShotRatioPercent,'awayShotRatio':awayShotRatio,'awayShotRatioPercent':awayShotRatioPercent,'homeTotalCross':homeTotalCross,'homeTotalCrossPercent':homeTotalCrossPercent,'awayTotalCross':awayTotalCross,'awayTotalCrossPercent':awayTotalCrossPercent,'homeSuccessfulCross':homeSuccessfulCross,'homeSuccessfulCrossPercent':homeSuccessfulCrossPercent,'awaySuccessfulCross':awaySuccessfulCross,'awaySuccessfulCrossPercent':awaySuccessfulCrossPercent,'homeCrossRatio':homeCrossRatio,'homeCrossRatioPercent':homeCrossRatioPercent,'awayCrossRatio':awayCrossRatio,'awayCrossRatioPercent':awayCrossRatioPercent,'homeFoul':homeFoul,'homeFoulPercent':homeFoulPercent,'awayFoul':awayFoul,'awayFoulPercent':awayFoulPercent})
+    dist = {}
+
+    dist = {'name':"Toplam Mesafe",'homeValue':homeDistance,'awayValue':awayDistance,'homePercent':homeDistancePercent,'awayPercent':awayDistancePercent,'addition':" m"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Ortalama Hız",'homeValue':homeSpeed,'awayValue':awaySpeed,'homePercent':homeSpeedPercent,'awayPercent':awaySpeedPercent,'addition':" km/s"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Şiddetli Koşu",'homeValue':homeHIR,'awayValue':awayHIR,'homePercent':homeHIRPercent,'awayPercent':awayHIRPercent,'addition':" m"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Pas",'homeValue':homeTotalPass,'awayValue':awayTotalPass,'homePercent':homeTotalPassPercent,'awayPercent':awayTotalPassPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Pas",'homeValue':homeSuccessfulPass,'awayValue':awaySuccessfulPass,'homePercent':homeSuccessfulPassPercent,'awayPercent':awaySuccessfulPassPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Pas Yüzdesi",'homeValue':homePassRatio,'awayValue':awayPassRatio,'homePercent':homePassRatioPercent,'awayPercent':awayPassRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Şut",'homeValue':homeTotalShot,'awayValue':awayTotalShot,'homePercent':homeTotalShotPercent,'awayPercent':awayTotalShotPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Şut",'homeValue':homeSuccessfulShot,'awayValue':awaySuccessfulShot,'homePercent':homeSuccessfulShotPercent,'awayPercent':awaySuccessfulShotPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Şut Yüzdesi",'homeValue':homeShotRatio,'awayValue':awayShotRatio,'homePercent':homeShotRatioPercent,'awayPercent':awayShotRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Orta",'homeValue':homeTotalCross,'awayValue':awayTotalCross,'homePercent':homeTotalCrossPercent,'awayPercent':awayTotalCrossPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Orta",'homeValue':homeSuccessfulCross,'awayValue':awaySuccessfulCross,'homePercent':homeSuccessfulCrossPercent,'awayPercent':awaySuccessfulCrossPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Orta Yüzdesi",'homeValue':homeCrossRatio,'awayValue':awayCrossRatio,'homePercent':homeCrossRatioPercent,'awayPercent':awayCrossRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Faul",'homeValue':homeFoul,'awayValue':awayFoul,'homePercent':homeFoulPercent,'awayPercent':awayFoulPercent,'addition':" %"}
+    teamStatsDict.append(dist);
 
 
     data = {"leagueId": 1, "seasonId": 8918, "matchId": int(reqid)}

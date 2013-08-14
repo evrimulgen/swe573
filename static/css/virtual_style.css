@@ -1444,3 +1444,28 @@ h1.past-match-area{
     width: 34%;
     float: left;
 }
+.player-data{
+    width: 90%;
+    margin-left: 5%;
+    float: left;
+}
+.player-data #content #home-area,.player-data #content #away-area{
+    width: 44%;
+    float: left;
+    margin-left: 2%;
+}
+.player-data #title{
+    width: 100%;
+    margin: 0px;
+    line-height: 30px;
+    background-color: #940b14;
+    color: #ffffff;
+    text-align: center;
+}
+.player-data #content{
+    width: 100%;
+    padding-left: 5%;
+    height: 250px;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+}

@@ -69,6 +69,9 @@
         {
             htmltoSet += "<div id='navbar'><div id='nav'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button><div id='active'><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div></div>";
             $("#div-menu").html(htmltoSet);
+            var htmltoSet = "";
+            htmltoSet += "{% include "player_data.html" %}"
+            $("#data-area").html(htmltoSet);
         }
     }
     </script>

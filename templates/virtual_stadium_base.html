@@ -324,7 +324,7 @@
         </div>
         <div class="sidebox">
             <h1> Şut </h1>
-            {% for x in matchData|dictsortreversed:'totalShot'|dictsort:'shotRatio'|dictsortreversed:'successfulShot' %}
+            {% for x in matchData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
                 {% if forloop.counter < 6 %}
                     <div style="height: 40px">
                         <a href="">

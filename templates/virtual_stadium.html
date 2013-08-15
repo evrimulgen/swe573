@@ -3,6 +3,7 @@
 {% block head-addition %}
     <script src="{{ STATIC_URL }}/js/radar.js" type="text/javascript"></script>
     <script src="{{ STATIC_URL }}/js/timeline.js" type="text/javascript"></script>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js"></script>
 
     <script type="text/javascript">
@@ -22,190 +23,8 @@
         {
             htmltoSet += "<div id='navbar'><div id='nav'><div id='active'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button></div><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div>";
             $("#div-menu").html(htmltoSet);
-            htmltoSet = "";
-            {% for event in events|dictsortreversed:'min' %}
-
-                htmltoSet +="<div class='event-item'>";
-
-                    {% if event.type == 7 %}
-                        {% if event.teamId == homeTeamId %}
-                            {% for player in homeSquad %}
-                                {% if player.playerId == event.playerId%}
-                                    {% for playertwo in homeSquad %}
-                                        {% if playertwo.playerId == event.playerIdIn %}
-                                            htmltoSet += "<p id='home-name'><span style='color: #940b14'>{{ player.playerName }}</span> - <span style='color: #0b9819'>{{ playertwo.playerName }}</span></p>";
-                                            htmltoSet +="<img src='{{ STATIC_URL }}images/substitution.png'>";
-                                            htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% if event.teamId == awayTeamId %}
-                        {% for player in awaySquad %}
-                            {% if player.playerId == event.playerId%}
-                                {% for playertwo in awaySquad %}
-                                    {% if playertwo.playerId == event.playerIdIn %}
-                                        htmltoSet +="<p id='home-name'></p>";
-                                        htmltoSet +="<p id='holder'></p>";
-                                        htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                                        htmltoSet +="<img src='{{ STATIC_URL }}images/substitution.png'>";
-                                        htmltoSet +="<p id='away-name'><span style='color: #940b14'>{{ player.playerName }}</span> - <span style='color: #0b9819'>{{ playertwo.playerName }}</span></p>";
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% elif event.type == 0%}
-                    {% if event.teamId == homeTeamId %}
-                        {% for player in homeSquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'>{{ player.playerName }}</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/goal.png'>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if event.teamId == awayTeamId %}
-                        {% for player in awaySquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'></p>";
-                                htmltoSet +="<p id='holder'></p>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/goal.png'>";
-                                htmltoSet +="<p id='away-name'>{{ player.playerName }}</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% elif event.type == 1%}
-                    {% if event.teamId == homeTeamId %}
-                        {% for player in homeSquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'>{{ player.playerName }}</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/own-goal.png'>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if event.teamId == awayTeamId %}
-                        {% for player in awaySquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'></p>";
-                                htmltoSet +="<p id='holder'></p>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/own-goal.png'>";
-                                htmltoSet +="<p id='away-name'>{{ player.playerName }}</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% elif event.type == 2%}
-                    {% if event.teamId == homeTeamId %}
-                        {% for player in homeSquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'>{{ player.playerName }}</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/penalty.png'>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if event.teamId == awayTeamId %}
-                        {% for player in awaySquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'></p>";
-                                htmltoSet +="<p id='holder'></p>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/penalty.png'>";
-                                htmltoSet +="<p id='away-name'>{{ player.playerName }}</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% elif event.type == 3%}
-                    {% if event.teamId == homeTeamId %}
-                        {% for player in homeSquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'>{{ player.playerName }}</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/missed-pen.png'>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if event.teamId == awayTeamId %}
-                        {% for player in awaySquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'></p>";
-                                htmltoSet +="<p id='holder'></p>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/missed-pen.png'>";
-                                htmltoSet +="<p id='away-name'>{{ player.playerName }}</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% elif event.type == 4%}
-                    {% if event.teamId == homeTeamId %}
-                        {% for player in homeSquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'>{{ player.playerName }}</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/yellow.png'>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if event.teamId == awayTeamId %}
-                        {% for player in awaySquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'></p>";
-                                htmltoSet +="<p id='holder'></p>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/yellow.png'>";
-                                htmltoSet +="<p id='away-name'>{{ player.playerName }}</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% elif event.type == 5%}
-                    {% if event.teamId == homeTeamId %}
-                        {% for player in homeSquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'>{{ player.playerName }}</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/second-yellow.png'>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if event.teamId == awayTeamId %}
-                        {% for player in awaySquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'></p>";
-                                htmltoSet +="<p id='holder'></p>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/second-yellow.png'>";
-                                htmltoSet +="<p id='away-name'>{{ player.playerName }}</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% elif event.type == 6%}
-                    {% if event.teamId == homeTeamId %}
-                        {% for player in homeSquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'>{{ player.playerName }}</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/red.png'>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if event.teamId == awayTeamId %}
-                        {% for player in awaySquad %}
-                            {% if player.playerId == event.playerId%}
-                                htmltoSet +="<p id='home-name'></p>";
-                                htmltoSet +="<p id='holder'></p>";
-                                htmltoSet +="<p id='min'>{{ event.min }}'</p>";
-                                htmltoSet +="<img src='{{ STATIC_URL }}images/red.png'>";
-                                htmltoSet +="<p id='away-name'>{{ player.playerName }}</p>";
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% endif %}
-            htmltoSet +="</div>";
-            {% endfor %}
+            var htmltoSet = "";
+            htmltoSet += "{% include "try.html" %}"
             $("#data-area").html(htmltoSet);
         }
         else if (elm.value == 2)
@@ -242,12 +61,18 @@
         {
             htmltoSet += "<div id='navbar'><div id='nav'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button><div id='active'><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button></div><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div>";
             $("#div-menu").html(htmltoSet);
-            $("#data-area").html("{% include "try.html" %}");
+            var htmltoSet = "";
+            htmltoSet += "{% include "team_data.html" %}"
+            $("#data-area").html(htmltoSet);
+
         }
         else if (elm.value == 4)
         {
             htmltoSet += "<div id='navbar'><div id='nav'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button><div id='active'><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div></div>";
             $("#div-menu").html(htmltoSet);
+            var htmltoSet = "";
+            htmltoSet += "{% include "player_data.html" %}"
+            $("#data-area").html(htmltoSet);
         }
     }
     </script>

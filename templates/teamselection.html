@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="selection-area" style="height: {{ standing_list|length }}px">
+    <div class="selection-area" style="height: 400px">
         {% for i in try_list %}
             <div class = "teamselect">
                 <a href="{{ i.teamId }}" class="wraptocenter"><span></span><img src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png"></a>

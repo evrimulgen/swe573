@@ -69,9 +69,7 @@ for x in range(1, 24):
 
 def home(request,weekId):
     data = {"leagueId":1,"seasonId":8918}
-    teams = service_request("GetWeeks", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    list = service_request("GetWeeks", data)
     weekNumber = 0
     lastPlayed = 0
     for x in list:
@@ -82,7 +80,30 @@ def home(request,weekId):
     while(i<=weekNumber):
         weekDict.append(int(i))
         i = i+1
-    return render_to_response('statshome.html', {'weekList':weekDict,'weekSelected': int(weekId),'lastPlayedWeek':int(lastPlayed), 'standing_list':standlist, 'best_eleven_list':bestList})
+
+    standingDict = []
+    data = {"leagueId":1,"seasonId":8918,"type":0}
+    datalist =  service_request("GetStandings",data)
+    if len(datalist) > 0:
+        for item in datalist:
+            if int(item[0]) == int(weekId):
+                standingDict.append({'teamId': int(item[1]), 'teamName': item[2],'played':int(item[3]), 'win':int(item[4]), 'draw':int(item[5]), 'lose':int(item[6]), 'score':int(item[7]), 'conceded' : int(item[8]), 'average':int(item[9]), 'points':int(item[10]), 'change': int(item[11])})
+
+    data = {"leagueId": 1, "seasonId": 8918}
+    weeklist = service_request("GetFixture", data)
+    fixtureDict = []
+    if len(weeklist) > 0 :
+        for week_id in weeklist:
+            week = weeklist[week_id]
+            matches = []
+            for matchId in week:
+                if matchId == "weekStatus":
+                    status = week[matchId]
+                else:
+                    matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
+            fixtureDict.append({'weekId':int(week_id),'status':status,'matches':matches})
+
+    return render_to_response('statshome.html', {'fixture':fixtureDict,'weekList':weekDict,'weekSelected': int(weekId),'lastPlayedWeek':int(lastPlayed), 'standing_list':standingDict, 'best_eleven_list':bestList})
 
 def team(request, num):
 
@@ -111,30 +132,50 @@ def team(request, num):
         #    result = urllib2.urlopen('http://sentio.cloudapp.net:8080/api/GetTeamsInformation', post_data)
         #    content = result.read()
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeams", data)
     teamDict = []
-    for x in datalist:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
 
     data = {"teamId": num}
-    details = service_request("GetTeamDetails", data)
-    j_obj = json.loads(details)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamDetails", data)
+
     detailDict = []
-    for obj in datalist:
-        detailDict.append( {'teamName':obj[0],'stadium':obj[1],'foundation':obj[2],'president':obj[3],'capacity':obj[4],'manager':obj[5],'website':obj[6],'leaguechamp':obj[7],'cupchamp':obj[8]})
+    if len(datalist) > 0:
+        for obj in datalist:
+            detailDict.append( {'teamName':obj[0],'stadium':obj[1],'foundation':obj[2],'president':obj[3],'capacity':obj[4],'manager':obj[5],'website':obj[6],'leaguechamp':obj[7],'cupchamp':obj[8]})
+
+    standingDict = []
+    data = {"leagueId":1,"seasonId":8918,"type":0}
+    datalist =  service_request("GetStandings",data)
+    if len(datalist) > 0:
+        for item in datalist:
+            if int(item[0]) == 34:
+                standingDict.append({'teamId': int(item[1]), 'teamName': item[2],'played':int(item[3]), 'win':int(item[4]), 'draw':int(item[5]), 'lose':int(item[6]), 'score':int(item[7]), 'conceded' : int(item[8]), 'average':int(item[9]), 'points':int(item[10]), 'change': int(item[11])})
 
     data = {"leagueId": 1, "seasonId": 8918, "teamId": num}
-    players = service_request("GetTeamPlayers", data)
-    j_obj = json.loads(players)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamPlayers", data)
     playerDict =[]
-    for x in datalist:
-        playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
+    if len(datalist) > 0:
+        for x in datalist:
+            playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
 
-    return render_to_response('statsteam.html', {'s_list': s,'team_list': teamList, 'try_list':teamDict, 'details':detailDict,'players':playerDict, 'standing_list':standlist, 'team_selected': int(num), 'player_list':playerList, 'weeklist': weekList,'best_eleven_list':bestList})
+    data = {"leagueId": 1, "seasonId": 8918}
+    weeklist = service_request("GetFixture", data)
+    fixtureDict = []
+    if len(weeklist) > 0 :
+        for week_id in weeklist:
+            week = weeklist[week_id]
+            matches = []
+            for matchId in week:
+                if matchId == "weekStatus":
+                    status = week[matchId]
+                else:
+                    matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':int(week[matchId][7]),'awayTeamId':int(week[matchId][8]),'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
+            fixtureDict.append({'weekId':int(week_id),'status':status,'matches':matches})
+
+    return render_to_response('statsteam.html', {'fixture':fixtureDict,'s_list': s,'team_list': teamList, 'try_list':teamDict, 'details':detailDict,'players':playerDict, 'standing_list':standingDict, 'team_selected': int(num), 'player_list':playerList, 'weeklist': weekList,'best_eleven_list':bestList})
 
 
 def league(request):
@@ -144,351 +185,190 @@ def league(request):
 def playerx(request, num, player_id):
 
     data = {"leagueId": 1, "seasonId": 8918,"playerId": player_id}
-    details = service_request("GetPlayerDetails", data)
-    j_obj = json.loads(details)
-    datalist = j_obj["data"]
+    datalist = service_request("GetPlayerDetails", data)
+
     detailDict = []
-    for obj in datalist:
-        detailDict.append({'playerName':obj[0],'date':obj[1],'height':obj[2],'nation':obj[3],'cap':obj[4],'goal':obj[5],'teamId':obj[6],'teamName':obj[7]})
+    if len(datalist) > 0:
+        for obj in datalist:
+            detailDict.append({'playerName':obj[0],'date':obj[1],'height':obj[2],'nation':obj[3],'cap':obj[4],'goal':obj[5],'teamId':obj[6],'teamName':obj[7]})
 
     data = {"leagueId": 1, "seasonId": 8918, "teamId": num}
-    players = service_request("GetTeamPlayers", data)
-    j_obj = json.loads(players)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamPlayers", data)
+
     playerDict =[]
-    for x in datalist:
-        playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
+    if len(datalist) > 0:
+        for x in datalist:
+            playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
 
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeams", data)
+
     teamDict = []
-    for x in datalist:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
 
     return render_to_response('statsplayer.html', {'p_id': int(player_id), 'details':detailDict, 'try_list':teamDict,'players':playerDict, 'team_selected': int(num), 'team_list': teamList, 'standing_list': standlist, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
 
 def player3(request, num):
 
     data = {"leagueId": 1, "seasonId": 8918, "teamId": num}
-    players = service_request("GetTeamPlayers", data)
-    j_obj = json.loads(players)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamPlayers", data)
+
     playerDict =[]
-    for x in datalist:
-        playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
+    if len(datalist) > 0:
+        for x in datalist:
+            playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
+
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeams", data)
+
     teamDict = []
-    for x in datalist:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
+
     return render_to_response('playerselection.html', { 'team_selected': int(num), 'try_list':teamDict, 'team_list': teamList, 'standing_list': standlist,'players':playerDict, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
 
 def before(request,reqid):
     data = {"leagueId": 1, "seasonId": 8918}
-    matches = service_request("GetFixture", data)
-    j_obj = json.loads(matches)
-    weeklist = j_obj["data"]
+    weeklist = service_request("GetFixture", data)
     weekDict = []
     currentWeek = 34
-    for weekId in weeklist:
-        week = weeklist[weekId]
-        matches = []
-        for matchId in week:
-            if matchId == "weekStatus":
-                status = week[matchId]
-            else:
-                print(matchId)
-                if(matchId==str(reqid)):
-                    currentWeek = weekId
-                matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
-        weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
+    if len(weeklist) > 0 :
+        for weekId in weeklist:
+            week = weeklist[weekId]
+            matches = []
+            for matchId in week:
+                if matchId == "weekStatus":
+                    status = week[matchId]
+                else:
+                    print(matchId)
+                    if(matchId==str(reqid)):
+                        currentWeek = weekId
+                    matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
+            weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
+
 
     data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchInfo", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetMatchInfo", data)
     infoDict = []
     homeTeamId = 0
     awayTeamId = 0
-    weekId = 0
-    for x in datalist:
-        homeTeamId = x[5]
-        awayTeamId = x[6]
-        infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':int(x[7] or 0),'awayTeamScore':int(x[8] or 0),'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
+    if len(datalist) > 0 :
+        for x in datalist:
+            homeTeamId = x[5]
+            awayTeamId = x[6]
+            infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':int(x[7] or 0),'awayTeamScore':int(x[8] or 0),'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
 
     data = {"matchId":reqid}
-    teams = service_request("GetGoalVideos", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetGoalVideos", data)
     goalDict = []
-    for x in datalist:
-        goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
+    if len(datalist) > 0 :
+        for x in datalist:
+            goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
 
     data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchSquad", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetMatchSquad", data)
+
     homeSquadDict = []
     awaySquadDict = []
 
-    for playerId in datalist:
-        playerEvents = []
-        playerData = []
-        for x in datalist[playerId]:
-            if x == "data":
-                playerData = datalist[playerId][x]
-            elif x == "events":
-                playerEvents = datalist[playerId][x]
+    if len(datalist) > 0 :
+        for playerId in datalist:
+            playerEvents = []
+            playerData = []
+            for x in datalist[playerId]:
+                if x == "data":
+                    playerData = datalist[playerId][x]
+                elif x == "events":
+                    playerEvents = datalist[playerId][x]
 
-        eventDict = []
-        for event in playerEvents:
-            eventDict.append({'eventType':event[0],'matchTime':event[1],'teamId':event[2],'playerId':int(event[3]),'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
-        if(playerData[3] == homeTeamId):
-            homeSquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
-        elif(playerData[3] == awayTeamId):
-            awaySquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+            eventDict = []
+            for event in playerEvents:
+                eventDict.append({'eventType':event[0],'matchTime':event[1],'teamId':event[2],'playerId':int(event[3]),'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+            if(playerData[3] == homeTeamId):
+                homeSquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+            elif(playerData[3] == awayTeamId):
+                awaySquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
 
     data = {"team1":homeTeamId,"team2":awayTeamId}
-    teams = service_request("GetHistoricData", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetHistoricData", data)
+
     pastMatches =[]
-    for match in datalist["pastMatches"]:
-        pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':datetime.strptime(match[4],'%Y-%m-%d %H:%M:%S.0000000'),'referee':match[5],'stadium':match[6],'homeTeamId':match[8],'awayTeamId':match[9]})
-    homeWin = 0
-    awayWin = 0
-    homeGoal = 0
-    awayGoal = 0
-    if datalist["homeWins"] == 0:
-        homeWin = 1
-    else:
-        homeWin = datalist["homeWins"]
+    if len(datalist) > 0 :
+        for match in datalist["pastMatches"]:
+            pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':datetime.strptime(match[4],'%Y-%m-%d %H:%M:%S.0000000'),'referee':match[5],'stadium':match[6],'homeTeamId':match[8],'awayTeamId':match[9]})
+        homeWin = 0
+        awayWin = 0
+        homeGoal = 0
+        awayGoal = 0
+        if datalist["homeWins"] == 0:
+            homeWin = 1
+        else:
+            homeWin = datalist["homeWins"]
 
-    if datalist["awayWins"] == 0:
-        awayWin = 1
-    else:
-        awayWin = datalist["awayWins"]
+        if datalist["awayWins"] == 0:
+            awayWin = 1
+        else:
+            awayWin = datalist["awayWins"]
 
-    if datalist["homeGoals"] == 0:
-        homeGoal = 1
-    else:
-        homeGoal = datalist["homeGoals"]
+        if datalist["homeGoals"] == 0:
+            homeGoal = 1
+        else:
+            homeGoal = datalist["homeGoals"]
 
-    if datalist["awayGoals"] == 0:
-        awayGoal = 1
-    else:
-        awayGoal = datalist["awayGoals"]
+        if datalist["awayGoals"] == 0:
+            awayGoal = 1
+        else:
+            awayGoal = datalist["awayGoals"]
 
-    homeWinRatio = int(99*homeWin/(homeWin+awayWin+datalist["draws"]))
-    drawRatio = int(99*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
-    awayWinRatio = 99 -(homeWinRatio+drawRatio)
-    homeGoalRatio = int(99*homeGoal/(homeGoal+awayGoal))
-    awayGoalRatio = 99-homeGoalRatio
-    historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
+        homeWinRatio = int(99*homeWin/(homeWin+awayWin+datalist["draws"]))
+        drawRatio = int(99*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
+        awayWinRatio = 99 -(homeWinRatio+drawRatio)
+        homeGoalRatio = int(99*homeGoal/(homeGoal+awayGoal))
+        awayGoalRatio = 99-homeGoalRatio
+        historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
 
     data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
-    teams = service_request("GetTeamForm", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamForm", data)
+
     homeFormDict = []
-    for match in datalist:
-        win = 0
-        if (match[2] > match [3] and homeTeamId==match[4]) or (match[3] > match [2] and homeTeamId==match[5]):
-            win=1
-        elif match[2] == match [3]:
-            win=0
-        else:
-            win=2
-        homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
-
-    data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
-    teams = service_request("GetTeamForm", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
-    awayFormDict = []
-    for match in datalist:
-        win = 0
-        if (match[2] > match [3] and awayTeamId==match[4]) or (match[3] > match [2] and awayTeamId==match[5]):
-            win=1
-        elif match[2] == match [3]:
-            win=0
-        else:
-            win=2
-        awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
-
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchEvents", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
-    eventDict = []
-    for event in datalist:
-        eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
-
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchData", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
-    matchDataDict = []
-    homeDataDict = []
-    awayDataDict  = []
-    for dat in datalist:
-        matchDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageTotalPass':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'faulCommitted':int(dat[13] or 0),'faulAgainst':int(dat[14] or 0)})
-        if(dat[0] ==  homeTeamId):
-            homeDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'faulCommitted':int(dat[13] or 0),'faulAgainst':int(dat[14] or 0)})
-        elif (dat[0] == awayTeamId):
-            awayDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageTotalPass':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'faulCommitted':int(dat[13] or 0),'faulAgainst':int(dat[14] or 0)})
-
-    return render_to_response('virtual_stadium_before_match.html', {'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
-
-def center(request,reqid):
-    data = {"leagueId": 1, "seasonId": 8918}
-    matches = service_request("GetFixture", data)
-    j_obj = json.loads(matches)
-    weeklist = j_obj["data"]
-    weekDict = []
-    currentWeek = 34
-    for weekId in weeklist:
-        week = weeklist[weekId]
-        matches = []
-        for matchId in week:
-            if matchId == "weekStatus":
-                status = week[matchId]
+    if len(datalist) > 0 :
+        for match in datalist:
+            win = 0
+            if (match[2] > match [3] and homeTeamId==match[4]) or (match[3] > match [2] and homeTeamId==match[5]):
+                win=1
+            elif match[2] == match [3]:
+                win=0
             else:
-                print(matchId)
-                if(matchId==str(reqid)):
-                    currentWeek = weekId
-                matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
-        weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
-
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchInfo", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
-    infoDict = []
-    homeTeamId = 0
-    awayTeamId = 0
-    weekId = 0
-    for x in datalist:
-        homeTeamId = x[5]
-        awayTeamId = x[6]
-        infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':int(x[7] or 0),'awayTeamScore':int(x[8] or 0),'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
-
-    data = {"matchId":reqid}
-    teams = service_request("GetGoalVideos", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
-    goalDict = []
-    for x in datalist:
-        goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
-
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchSquad", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
-    homeSquadDict = []
-    awaySquadDict = []
-
-    for playerId in datalist:
-        playerEvents = []
-        playerData = []
-        for x in datalist[playerId]:
-            if x == "data":
-                playerData = datalist[playerId][x]
-            elif x == "events":
-                playerEvents = datalist[playerId][x]
-
-        eventDict = []
-        for event in playerEvents:
-            eventDict.append({'eventType':event[0],'matchTime':event[1],'teamId':event[2],'playerId':int(event[3]),'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
-        if(playerData[3] == homeTeamId):
-            homeSquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
-        elif(playerData[3] == awayTeamId):
-            awaySquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
-
-    data = {"team1":homeTeamId,"team2":awayTeamId}
-    teams = service_request("GetHistoricData", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
-    pastMatches =[]
-    for match in datalist["pastMatches"]:
-        pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':datetime.strptime(match[4],'%Y-%m-%d %H:%M:%S.0000000'),'referee':match[5],'stadium':match[6],'homeTeamId':match[8],'awayTeamId':match[9]})
-    homeWin = 0
-    awayWin = 0
-    homeGoal = 0
-    awayGoal = 0
-    if datalist["homeWins"] == 0:
-        homeWin = 1
-    else:
-        homeWin = datalist["homeWins"]
-
-    if datalist["awayWins"] == 0:
-        awayWin = 1
-    else:
-        awayWin = datalist["awayWins"]
-
-    if datalist["homeGoals"] == 0:
-        homeGoal = 1
-    else:
-        homeGoal = datalist["homeGoals"]
-
-    if datalist["awayGoals"] == 0:
-        awayGoal = 1
-    else:
-        awayGoal = datalist["awayGoals"]
-
-    homeWinRatio = int(99*homeWin/(homeWin+awayWin+datalist["draws"]))
-    drawRatio = int(99*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
-    awayWinRatio = 99 -(homeWinRatio+drawRatio)
-    homeGoalRatio = int(99*homeGoal/(homeGoal+awayGoal))
-    awayGoalRatio = 99-homeGoalRatio
-    historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
-
-    data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
-    teams = service_request("GetTeamForm", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
-    homeFormDict = []
-    for match in datalist:
-        win = 0
-        if (match[2] > match [3] and homeTeamId==match[4]) or (match[3] > match [2] and homeTeamId==match[5]):
-            win=1
-        elif match[2] == match [3]:
-            win=0
-        else:
-            win=2
-        homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+                win=2
+            homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
 
     data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
-    teams = service_request("GetTeamForm", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamForm", data)
     awayFormDict = []
-    for match in datalist:
-        win = 0
-        if (match[2] > match [3] and awayTeamId==match[4]) or (match[3] > match [2] and awayTeamId==match[5]):
-            win=1
-        elif match[2] == match [3]:
-            win=0
-        else:
-            win=2
-        awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+    if len(datalist) > 0 :
+        for match in datalist:
+            win = 0
+            if (match[2] > match [3] and awayTeamId==match[4]) or (match[3] > match [2] and awayTeamId==match[5]):
+                win=1
+            elif match[2] == match [3]:
+                win=0
+            else:
+                win=2
+            awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
 
     data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchEvents", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetMatchEvents", data)
     eventDict = []
-    for event in datalist:
-        eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+    if len(datalist) > 0 :
+        for event in datalist:
+            eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
 
     data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchData", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetMatchData", data)
+
     matchDataDict = []
     homeDataDict = []
     awayDataDict = []
@@ -517,54 +397,55 @@ def center(request,reqid):
     homeFoul = 0
     awayFoul = 0
 
-    for dat in datalist:
-        matchDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
-        if dat[0] == homeTeamId:
-            homeDistance += int(dat[4] or 0)
-            homeSpeed += int(dat[5] or 0)
-            homeHIR += int(dat[6] or 0)
-            homeTotalPass += int(dat[7] or 0)
-            homeSuccessfulPass += int(dat[8] or 0)
-            homeTotalShot += int(dat[9] or 0)
-            homeSuccessfulShot += int(dat[10] or 0)
-            homeTotalCross += int(dat[11] or 0)
-            homeSuccessfulCross += int(dat[12] or 0)
-            homeFoul += int(dat[13] or 0)
+    if len(datalist) > 0 :
+        for dat in datalist:
+            matchDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
+            if dat[0] == homeTeamId:
+                homeDistance += int(dat[4] or 0)
+                homeSpeed += int(dat[5] or 0)
+                homeHIR += int(dat[6] or 0)
+                homeTotalPass += int(dat[7] or 0)
+                homeSuccessfulPass += int(dat[8] or 0)
+                homeTotalShot += int(dat[9] or 0)
+                homeSuccessfulShot += int(dat[10] or 0)
+                homeTotalCross += int(dat[11] or 0)
+                homeSuccessfulCross += int(dat[12] or 0)
+                homeFoul += int(dat[13] or 0)
 
-            homeDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
-        elif dat[0] == awayTeamId:
+                homeDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
+            elif dat[0] == awayTeamId:
 
-            awayDistance += int(dat[4] or 0)
-            awaySpeed += int(dat[5] or 0)
-            awayHIR += int(dat[6] or 0)
-            awayTotalPass += int(dat[7] or 0)
-            awaySuccessfulPass += int(dat[8] or 0)
-            awayTotalShot += int(dat[9] or 0)
-            awaySuccessfulShot += int(dat[10] or 0)
-            awayTotalCross += int(dat[11] or 0)
-            awaySuccessfulCross += int(dat[12] or 0)
-            awayFoul += int(dat[13] or 0)
+                awayDistance += int(dat[4] or 0)
+                awaySpeed += int(dat[5] or 0)
+                awayHIR += int(dat[6] or 0)
+                awayTotalPass += int(dat[7] or 0)
+                awaySuccessfulPass += int(dat[8] or 0)
+                awayTotalShot += int(dat[9] or 0)
+                awaySuccessfulShot += int(dat[10] or 0)
+                awayTotalCross += int(dat[11] or 0)
+                awaySuccessfulCross += int(dat[12] or 0)
+                awayFoul += int(dat[13] or 0)
 
-            awayDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
+                awayDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
 
     homeSpeed /= int(len(homeDataDict) or 1)
     awaySpeed /= int(len(awayDataDict) or 1)
 
-    homePassRatio = int(homeSuccessfulPass/int(homeTotalPass or 1) * 100)
-    awayPassRatio = int(awaySuccessfulPass/int(awayTotalPass or 1) * 100)
+    homePassRatio = int(homeSuccessfulPass/float(homeTotalPass or 1) * 100)
+    awayPassRatio = int(awaySuccessfulPass/float(awayTotalPass or 1) * 100)
 
-    homeShotRatio = int(homeSuccessfulShot/int(homeTotalShot or 1) * 100)
-    awayShotRatio = int(awaySuccessfulShot/int(awayTotalShot or 1) * 100)
+    homeShotRatio = int(homeSuccessfulShot/float(homeTotalShot or 1) * 100)
+    awayShotRatio = int(awaySuccessfulShot/float(awayTotalShot or 1) * 100)
 
-    homeCrossRatio = int(homeSuccessfulCross/int(homeTotalCross or 1) * 100)
-    awayCrossRatio = int(awaySuccessfulCross/int(awayTotalCross or 1) * 100)
+    homeCrossRatio = int(homeSuccessfulCross/float(homeTotalCross or 1) * 100)
+    awayCrossRatio = int(awaySuccessfulCross/float(awayTotalCross or 1) * 100)
 
     homeDistancePercent = 0
     awayDistancePercent = 0
     if homeDistance+awayDistance < 1:
         homeDistancePercent = 50
     else:
-        homeDistancePercent = int(homeDistance/(homeDistance+awayDistance)*100)
+        homeDistancePercent = int(homeDistance/float(homeDistance+awayDistance)*100)
     awayDistancePercent = 100 - homeDistancePercent
 
     homeSpeedPercent = 0
@@ -572,7 +453,7 @@ def center(request,reqid):
     if homeSpeed+awaySpeed < 1:
         homeSpeedPercent = 50
     else:
-        homeSpeedPercent = int(homeSpeed/(homeSpeed+awaySpeed)*100)
+        homeSpeedPercent = int(homeSpeed/float(homeSpeed+awaySpeed)*100)
     awaySpeedPercent = 100 - homeSpeedPercent
 
     homeHIRPercent = 0
@@ -580,7 +461,7 @@ def center(request,reqid):
     if homeHIR+awayHIR < 1:
         homeHIRPercent = 50
     else:
-        homeHIRPercent = int(homeHIR/(homeHIR+awayHIR)*100)
+        homeHIRPercent = int(homeHIR/float(homeHIR+awayHIR)*100)
     awayHIRPercent = 100 - homeHIRPercent
 
     homeTotalPassPercent = 0
@@ -588,7 +469,7 @@ def center(request,reqid):
     if homeTotalPass+awayTotalPass < 1:
         homeTotalPassPercent = 50
     else:
-        homeTotalPassPercent = int(homeTotalPass/(homeTotalPass+awayTotalPass)*100)
+        homeTotalPassPercent = int(homeTotalPass/float(homeTotalPass+awayTotalPass)*100)
     awayTotalPassPercent = 100 - homeTotalPassPercent
 
     homeSuccessfulPassPercent = 0
@@ -596,7 +477,7 @@ def center(request,reqid):
     if homeSuccessfulPass+awaySuccessfulPass < 1:
         homeSuccessfulPassPercent = 50
     else:
-        homeSuccessfulPassPercent = int(homeSuccessfulPass/(homeSuccessfulPass+awaySuccessfulPass)*100)
+        homeSuccessfulPassPercent = int(homeSuccessfulPass/float(homeSuccessfulPass+awaySuccessfulPass)*100)
     awaySuccessfulPassPercent = 100 - homeSuccessfulPassPercent
 
     homePassRatioPercent = 0
@@ -604,7 +485,7 @@ def center(request,reqid):
     if homePassRatio+awayPassRatio < 1:
         homePassRatioPercent = 50
     else:
-        homePassRatioPercent = int(homePassRatio/(homePassRatio+awayPassRatio)*100)
+        homePassRatioPercent = int(homePassRatio/float(homePassRatio+awayPassRatio)*100)
     awayPassRatioPercent = 100 - homePassRatioPercent
 
     homeTotalShotPercent = 0
@@ -612,7 +493,7 @@ def center(request,reqid):
     if homeTotalShot+awayTotalShot < 1:
         homeTotalShotPercent = 50
     else:
-        homeTotalShotPercent = int(homeTotalShot/(homeTotalShot+awayTotalShot)*100)
+        homeTotalShotPercent = int(homeTotalShot/float(homeTotalShot+awayTotalShot)*100)
     awayTotalShotPercent = 100 - homeTotalShotPercent
 
     homeSuccessfulShotPercent = 0
@@ -620,7 +501,7 @@ def center(request,reqid):
     if homeSuccessfulShot+awaySuccessfulShot < 1:
         homeSuccessfulShotPercent = 50
     else:
-        homeSuccessfulShotPercent = int(homeSuccessfulShot/(homeSuccessfulShot+awaySuccessfulShot)*100)
+        homeSuccessfulShotPercent = int((homeSuccessfulShot/float(homeSuccessfulShot+awaySuccessfulShot))*100)
     awaySuccessfulShotPercent = 100 - homeSuccessfulShotPercent
 
     homeShotRatioPercent = 0
@@ -628,7 +509,7 @@ def center(request,reqid):
     if homeShotRatio+awayShotRatio < 1:
         homeShotRatioPercent = 50
     else:
-        homeShotRatioPercent = int(homeShotRatio/(homeShotRatio+awayShotRatio)*100)
+        homeShotRatioPercent = int(homeShotRatio/float(homeShotRatio+awayShotRatio)*100)
     awayShotRatioPercent = 100 - homeShotRatioPercent
 
     homeTotalCrossPercent = 0
@@ -636,7 +517,7 @@ def center(request,reqid):
     if homeTotalCross+awayTotalCross < 1:
         homeTotalCrossPercent = 50
     else:
-        homeTotalCrossPercent = int(homeTotalCross/(homeTotalCross+awayTotalCross)*100)
+        homeTotalCrossPercent = int(homeTotalCross/float(homeTotalCross+awayTotalCross)*100)
     awayTotalCrossPercent = 100 - homeTotalCrossPercent
 
     homeSuccessfulCrossPercent = 0
@@ -644,7 +525,7 @@ def center(request,reqid):
     if homeSuccessfulCross+awaySuccessfulCross < 1:
         homeSuccessfulCrossPercent = 50
     else:
-        homeSuccessfulCrossPercent = int(homeSuccessfulCross/(homeSuccessfulCross+awaySuccessfulCross)*100)
+        homeSuccessfulCrossPercent = int(homeSuccessfulCross/float(homeSuccessfulCross+awaySuccessfulCross)*100)
     awaySuccessfulCrossPercent = 100 - homeSuccessfulCrossPercent
 
     homeCrossRatioPercent = 0
@@ -652,7 +533,7 @@ def center(request,reqid):
     if homeCrossRatio+awayCrossRatio < 1:
         homeCrossRatioPercent = 50
     else:
-        homeCrossRatioPercent = int(homeCrossRatio/(homeCrossRatio+awayCrossRatio)*100)
+        homeCrossRatioPercent = int(homeCrossRatio/float(homeCrossRatio+awayCrossRatio)*100)
     awayCrossRatioPercent = 100 - homeCrossRatioPercent
 
     homeFoulPercent = 0
@@ -660,29 +541,443 @@ def center(request,reqid):
     if homeFoul+awayFoul < 1:
         homeFoulPercent = 50
     else:
-        homeFoulPercent = int(homeFoul/(homeFoul+awayFoul)*100)
+        homeFoulPercent = int(homeFoul/float(homeFoul+awayFoul)*100)
     awayFoulPercent = 100 - homeFoulPercent
-
     teamStatsDict = []
-    teamStatsDict.append({'homeDistance':homeDistance,'homeDistancePercent':homeDistancePercent,'awayDistance':awayDistance,'awayDistancePercent':awayDistancePercent,'homeSpeed':homeSpeed,'homeSpeedPercent':homeSpeedPercent,'awaySpeed':awaySpeed,'awaySpeedPercent':awaySpeedPercent,'homeHIR':homeHIR,'homeHIRPercent':homeHIRPercent,'awayHIR':awayHIR,'awayHIRPercent':awayHIRPercent,'homeTotalPass':homeTotalPass,'homeTotalPassPercent':homeTotalPassPercent,'awayTotalPass':awayTotalPass,'awayTotalPassPercent':awayTotalPassPercent,'homeSuccessfulPass':homeSuccessfulPass,'homeSuccessfulPassPercent':homeSuccessfulPassPercent,'awaySuccessfulPass':awaySuccessfulPass,'awaySuccessfulPassPercent':awaySuccessfulPassPercent,'homePassRatio':homePassRatio,'homePassRatioPercent':homePassRatioPercent,'awayPassRatio':awayPassRatio,'awayPassRatioPercent':awayPassRatioPercent,'homeTotalShot':homeTotalShot,'homeTotalShotPercent':homeTotalShotPercent,'awayTotalShot':awayTotalShot,'awayTotalShotPercent':awayTotalShotPercent,'homeSuccessfulShot':homeSuccessfulShot,'homeSuccessfulShotPercent':homeSuccessfulShotPercent,'awaySuccessfulShot':awaySuccessfulShot,'awaySuccessfulShotPercent':awaySuccessfulShotPercent,'homeShotRatio':homeShotRatio,'homeShotRatioPercent':homeShotRatioPercent,'awayShotRatio':awayShotRatio,'awayShotRatioPercent':awayShotRatioPercent,'homeTotalCross':homeTotalCross,'homeTotalCrossPercent':homeTotalCrossPercent,'awayTotalCross':awayTotalCross,'awayTotalCrossPercent':awayTotalCrossPercent,'homeSuccessfulCross':homeSuccessfulCross,'homeSuccessfulCrossPercent':homeSuccessfulCrossPercent,'awaySuccessfulCross':awaySuccessfulCross,'awaySuccessfulCrossPercent':awaySuccessfulCrossPercent,'homeCrossRatio':homeCrossRatio,'homeCrossRatioPercent':homeCrossRatioPercent,'awayCrossRatio':awayCrossRatio,'awayCrossRatioPercent':awayCrossRatioPercent,'homeFoul':homeFoul,'homeFoulPercent':homeFoulPercent,'awayFoul':awayFoul,'awayFoulPercent':awayFoulPercent})
+    dist = {}
+
+    dist = {'name':"Toplam Mesafe",'homeValue':homeDistance,'awayValue':awayDistance,'homePercent':homeDistancePercent,'awayPercent':awayDistancePercent,'addition':" m"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Ortalama Hız",'homeValue':homeSpeed,'awayValue':awaySpeed,'homePercent':homeSpeedPercent,'awayPercent':awaySpeedPercent,'addition':" km/s"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Şiddetli Koşu",'homeValue':homeHIR,'awayValue':awayHIR,'homePercent':homeHIRPercent,'awayPercent':awayHIRPercent,'addition':" m"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Pas",'homeValue':homeTotalPass,'awayValue':awayTotalPass,'homePercent':homeTotalPassPercent,'awayPercent':awayTotalPassPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Pas",'homeValue':homeSuccessfulPass,'awayValue':awaySuccessfulPass,'homePercent':homeSuccessfulPassPercent,'awayPercent':awaySuccessfulPassPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Pas Yüzdesi",'homeValue':homePassRatio,'awayValue':awayPassRatio,'homePercent':homePassRatioPercent,'awayPercent':awayPassRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Şut",'homeValue':homeTotalShot,'awayValue':awayTotalShot,'homePercent':homeTotalShotPercent,'awayPercent':awayTotalShotPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Şut",'homeValue':homeSuccessfulShot,'awayValue':awaySuccessfulShot,'homePercent':homeSuccessfulShotPercent,'awayPercent':awaySuccessfulShotPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Şut Yüzdesi",'homeValue':homeShotRatio,'awayValue':awayShotRatio,'homePercent':homeShotRatioPercent,'awayPercent':awayShotRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Orta",'homeValue':homeTotalCross,'awayValue':awayTotalCross,'homePercent':homeTotalCrossPercent,'awayPercent':awayTotalCrossPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Orta",'homeValue':homeSuccessfulCross,'awayValue':awaySuccessfulCross,'homePercent':homeSuccessfulCrossPercent,'awayPercent':awaySuccessfulCrossPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Orta Yüzdesi",'homeValue':homeCrossRatio,'awayValue':awayCrossRatio,'homePercent':homeCrossRatioPercent,'awayPercent':awayCrossRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Faul",'homeValue':homeFoul,'awayValue':awayFoul,'homePercent':homeFoulPercent,'awayPercent':awayFoulPercent,'addition':" %"}
+    teamStatsDict.append(dist);
 
 
     data = {"leagueId": 1, "seasonId": 8918, "matchId": int(reqid)}
-    teams = service_request("GetMatchNarration", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetMatchNarration", data)
+
     narrationDict = []
-    for min in datalist:
-        if min == "_id":
-            print min
+    if len(datalist) > 0 :
+        for min in datalist:
+            if min == "_id":
+                print min
+            else:
+                x = "team"
+                team_id = datalist[min][x]
+                x = "typeInt"
+                type_ = datalist[min][x]
+                x = "text"
+                text_ = datalist[min][x]
+                narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
+
+    return render_to_response('virtual_stadium_before_match.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+
+def center(request,reqid):
+
+    data = {"leagueId": 1, "seasonId": 8918}
+    weeklist = service_request("GetFixture", data)
+    weekDict = []
+    currentWeek = 34
+    if len(weeklist) > 0 :
+        for weekId in weeklist:
+            week = weeklist[weekId]
+            matches = []
+            for matchId in week:
+                if matchId == "weekStatus":
+                    status = week[matchId]
+                else:
+                    print(matchId)
+                    if(matchId==str(reqid)):
+                        currentWeek = weekId
+                    matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
+            weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
+
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    datalist = service_request("GetMatchInfo", data)
+    infoDict = []
+    homeTeamId = 0
+    awayTeamId = 0
+    if len(datalist) > 0 :
+        for x in datalist:
+            homeTeamId = x[5]
+            awayTeamId = x[6]
+            infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':int(x[7] or 0),'awayTeamScore':int(x[8] or 0),'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
+
+    data = {"matchId":reqid}
+    datalist = service_request("GetGoalVideos", data)
+    goalDict = []
+    if len(datalist) > 0 :
+        for x in datalist:
+            goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    datalist = service_request("GetMatchSquad", data)
+
+    homeSquadDict = []
+    awaySquadDict = []
+
+    if len(datalist) > 0 :
+        for playerId in datalist:
+            playerEvents = []
+            playerData = []
+            for x in datalist[playerId]:
+                if x == "data":
+                    playerData = datalist[playerId][x]
+                elif x == "events":
+                    playerEvents = datalist[playerId][x]
+
+            eventDict = []
+            for event in playerEvents:
+                eventDict.append({'eventType':event[0],'matchTime':event[1],'teamId':event[2],'playerId':int(event[3]),'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+            if(playerData[3] == homeTeamId):
+                homeSquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+            elif(playerData[3] == awayTeamId):
+                awaySquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+
+    data = {"team1":homeTeamId,"team2":awayTeamId}
+    datalist = service_request("GetHistoricData", data)
+
+    pastMatches =[]
+    if len(datalist) > 0 :
+        for match in datalist["pastMatches"]:
+            pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':datetime.strptime(match[4],'%Y-%m-%d %H:%M:%S.0000000'),'referee':match[5],'stadium':match[6],'homeTeamId':match[8],'awayTeamId':match[9]})
+        homeWin = 0
+        awayWin = 0
+        homeGoal = 0
+        awayGoal = 0
+        if datalist["homeWins"] == 0:
+            homeWin = 1
         else:
-            x = "team"
-            team_id = datalist[min][x]
-            x = "typeInt"
-            type_ = datalist[min][x]
-            x = "text"
-            text_ = datalist[min][x]
-            narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
+            homeWin = datalist["homeWins"]
+
+        if datalist["awayWins"] == 0:
+            awayWin = 1
+        else:
+            awayWin = datalist["awayWins"]
+
+        if datalist["homeGoals"] == 0:
+            homeGoal = 1
+        else:
+            homeGoal = datalist["homeGoals"]
+
+        if datalist["awayGoals"] == 0:
+            awayGoal = 1
+        else:
+            awayGoal = datalist["awayGoals"]
+
+        homeWinRatio = int(99*homeWin/(homeWin+awayWin+datalist["draws"]))
+        drawRatio = int(99*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
+        awayWinRatio = 99 -(homeWinRatio+drawRatio)
+        homeGoalRatio = int(99*homeGoal/(homeGoal+awayGoal))
+        awayGoalRatio = 99-homeGoalRatio
+        historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
+    datalist = service_request("GetTeamForm", data)
+
+    homeFormDict = []
+    if len(datalist) > 0 :
+        for match in datalist:
+            win = 0
+            if (match[2] > match [3] and homeTeamId==match[4]) or (match[3] > match [2] and homeTeamId==match[5]):
+                win=1
+            elif match[2] == match [3]:
+                win=0
+            else:
+                win=2
+            homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
+    datalist = service_request("GetTeamForm", data)
+    awayFormDict = []
+    if len(datalist) > 0 :
+        for match in datalist:
+            win = 0
+            if (match[2] > match [3] and awayTeamId==match[4]) or (match[3] > match [2] and awayTeamId==match[5]):
+                win=1
+            elif match[2] == match [3]:
+                win=0
+            else:
+                win=2
+            awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    datalist = service_request("GetMatchEvents", data)
+    eventDict = []
+    if len(datalist) > 0 :
+        for event in datalist:
+            eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    datalist = service_request("GetMatchData", data)
+
+    matchDataDict = []
+    homeDataDict = []
+    awayDataDict = []
+
+    homeDistance = 0
+    awayDistance = 0
+    homeSpeed = 0
+    awaySpeed = 0
+    homeHIR = 0
+    awayHIR = 0
+    homeTotalPass = 0
+    awayTotalPass = 0
+    homeSuccessfulPass = 0
+    awaySuccessfulPass = 0
+
+    homeTotalShot = 0
+    awayTotalShot = 0
+    homeSuccessfulShot = 0
+    awaySuccessfulShot = 0
+
+    homeTotalCross = 0
+    awayTotalCross = 0
+    homeSuccessfulCross = 0
+    awaySuccessfulCross = 0
+
+    homeFoul = 0
+    awayFoul = 0
+
+    if len(datalist) > 0 :
+        for dat in datalist:
+            matchDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
+            if dat[0] == homeTeamId:
+                homeDistance += int(dat[4] or 0)
+                homeSpeed += int(dat[5] or 0)
+                homeHIR += int(dat[6] or 0)
+                homeTotalPass += int(dat[7] or 0)
+                homeSuccessfulPass += int(dat[8] or 0)
+                homeTotalShot += int(dat[9] or 0)
+                homeSuccessfulShot += int(dat[10] or 0)
+                homeTotalCross += int(dat[11] or 0)
+                homeSuccessfulCross += int(dat[12] or 0)
+                homeFoul += int(dat[13] or 0)
+
+                homeDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
+            elif dat[0] == awayTeamId:
+
+                awayDistance += int(dat[4] or 0)
+                awaySpeed += int(dat[5] or 0)
+                awayHIR += int(dat[6] or 0)
+                awayTotalPass += int(dat[7] or 0)
+                awaySuccessfulPass += int(dat[8] or 0)
+                awayTotalShot += int(dat[9] or 0)
+                awaySuccessfulShot += int(dat[10] or 0)
+                awayTotalCross += int(dat[11] or 0)
+                awaySuccessfulCross += int(dat[12] or 0)
+                awayFoul += int(dat[13] or 0)
+
+                awayDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
+
+    homeSpeed /= int(len(homeDataDict) or 1)
+    awaySpeed /= int(len(awayDataDict) or 1)
+
+    homePassRatio = int(homeSuccessfulPass/float(homeTotalPass or 1) * 100)
+    awayPassRatio = int(awaySuccessfulPass/float(awayTotalPass or 1) * 100)
+
+    homeShotRatio = int(homeSuccessfulShot/float(homeTotalShot or 1) * 100)
+    awayShotRatio = int(awaySuccessfulShot/float(awayTotalShot or 1) * 100)
+
+    homeCrossRatio = int(homeSuccessfulCross/float(homeTotalCross or 1) * 100)
+    awayCrossRatio = int(awaySuccessfulCross/float(awayTotalCross or 1) * 100)
+
+    homeDistancePercent = 0
+    awayDistancePercent = 0
+    if homeDistance+awayDistance < 1:
+        homeDistancePercent = 50
+    else:
+        homeDistancePercent = int(homeDistance/float(homeDistance+awayDistance)*100)
+    awayDistancePercent = 100 - homeDistancePercent
+
+    homeSpeedPercent = 0
+    awaySpeedPercent = 0
+    if homeSpeed+awaySpeed < 1:
+        homeSpeedPercent = 50
+    else:
+        homeSpeedPercent = int(homeSpeed/float(homeSpeed+awaySpeed)*100)
+    awaySpeedPercent = 100 - homeSpeedPercent
+
+    homeHIRPercent = 0
+    awayHIRPercent = 0
+    if homeHIR+awayHIR < 1:
+        homeHIRPercent = 50
+    else:
+        homeHIRPercent = int(homeHIR/float(homeHIR+awayHIR)*100)
+    awayHIRPercent = 100 - homeHIRPercent
+
+    homeTotalPassPercent = 0
+    awayTotalPassPercent = 0
+    if homeTotalPass+awayTotalPass < 1:
+        homeTotalPassPercent = 50
+    else:
+        homeTotalPassPercent = int(homeTotalPass/float(homeTotalPass+awayTotalPass)*100)
+    awayTotalPassPercent = 100 - homeTotalPassPercent
+
+    homeSuccessfulPassPercent = 0
+    awaySuccessfulPassPercent = 0
+    if homeSuccessfulPass+awaySuccessfulPass < 1:
+        homeSuccessfulPassPercent = 50
+    else:
+        homeSuccessfulPassPercent = int(homeSuccessfulPass/float(homeSuccessfulPass+awaySuccessfulPass)*100)
+    awaySuccessfulPassPercent = 100 - homeSuccessfulPassPercent
+
+    homePassRatioPercent = 0
+    awayPassRatioPercent = 0
+    if homePassRatio+awayPassRatio < 1:
+        homePassRatioPercent = 50
+    else:
+        homePassRatioPercent = int(homePassRatio/float(homePassRatio+awayPassRatio)*100)
+    awayPassRatioPercent = 100 - homePassRatioPercent
+
+    homeTotalShotPercent = 0
+    awayTotalShotPercent = 0
+    if homeTotalShot+awayTotalShot < 1:
+        homeTotalShotPercent = 50
+    else:
+        homeTotalShotPercent = int(homeTotalShot/float(homeTotalShot+awayTotalShot)*100)
+    awayTotalShotPercent = 100 - homeTotalShotPercent
+
+    homeSuccessfulShotPercent = 0
+    awaySuccessfulShotPercent = 0
+    if homeSuccessfulShot+awaySuccessfulShot < 1:
+        homeSuccessfulShotPercent = 50
+    else:
+        homeSuccessfulShotPercent = int((homeSuccessfulShot/float(homeSuccessfulShot+awaySuccessfulShot))*100)
+    awaySuccessfulShotPercent = 100 - homeSuccessfulShotPercent
+
+    homeShotRatioPercent = 0
+    awayShotRatioPercent = 0
+    if homeShotRatio+awayShotRatio < 1:
+        homeShotRatioPercent = 50
+    else:
+        homeShotRatioPercent = int(homeShotRatio/float(homeShotRatio+awayShotRatio)*100)
+    awayShotRatioPercent = 100 - homeShotRatioPercent
+
+    homeTotalCrossPercent = 0
+    awayTotalCrossPercent = 0
+    if homeTotalCross+awayTotalCross < 1:
+        homeTotalCrossPercent = 50
+    else:
+        homeTotalCrossPercent = int(homeTotalCross/float(homeTotalCross+awayTotalCross)*100)
+    awayTotalCrossPercent = 100 - homeTotalCrossPercent
+
+    homeSuccessfulCrossPercent = 0
+    awaySuccessfulCrossPercent = 0
+    if homeSuccessfulCross+awaySuccessfulCross < 1:
+        homeSuccessfulCrossPercent = 50
+    else:
+        homeSuccessfulCrossPercent = int(homeSuccessfulCross/float(homeSuccessfulCross+awaySuccessfulCross)*100)
+    awaySuccessfulCrossPercent = 100 - homeSuccessfulCrossPercent
+
+    homeCrossRatioPercent = 0
+    awayCrossRatioPercent = 0
+    if homeCrossRatio+awayCrossRatio < 1:
+        homeCrossRatioPercent = 50
+    else:
+        homeCrossRatioPercent = int(homeCrossRatio/float(homeCrossRatio+awayCrossRatio)*100)
+    awayCrossRatioPercent = 100 - homeCrossRatioPercent
+
+    homeFoulPercent = 0
+    awayFoulPercent = 0
+    if homeFoul+awayFoul < 1:
+        homeFoulPercent = 50
+    else:
+        homeFoulPercent = int(homeFoul/float(homeFoul+awayFoul)*100)
+    awayFoulPercent = 100 - homeFoulPercent
+    teamStatsDict = []
+    dist = {}
+
+    dist = {'name':"Toplam Mesafe",'homeValue':homeDistance,'awayValue':awayDistance,'homePercent':homeDistancePercent,'awayPercent':awayDistancePercent,'addition':" m"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Ortalama Hız",'homeValue':homeSpeed,'awayValue':awaySpeed,'homePercent':homeSpeedPercent,'awayPercent':awaySpeedPercent,'addition':" km/s"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Şiddetli Koşu",'homeValue':homeHIR,'awayValue':awayHIR,'homePercent':homeHIRPercent,'awayPercent':awayHIRPercent,'addition':" m"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Pas",'homeValue':homeTotalPass,'awayValue':awayTotalPass,'homePercent':homeTotalPassPercent,'awayPercent':awayTotalPassPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Pas",'homeValue':homeSuccessfulPass,'awayValue':awaySuccessfulPass,'homePercent':homeSuccessfulPassPercent,'awayPercent':awaySuccessfulPassPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Pas Yüzdesi",'homeValue':homePassRatio,'awayValue':awayPassRatio,'homePercent':homePassRatioPercent,'awayPercent':awayPassRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Şut",'homeValue':homeTotalShot,'awayValue':awayTotalShot,'homePercent':homeTotalShotPercent,'awayPercent':awayTotalShotPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Şut",'homeValue':homeSuccessfulShot,'awayValue':awaySuccessfulShot,'homePercent':homeSuccessfulShotPercent,'awayPercent':awaySuccessfulShotPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Şut Yüzdesi",'homeValue':homeShotRatio,'awayValue':awayShotRatio,'homePercent':homeShotRatioPercent,'awayPercent':awayShotRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Orta",'homeValue':homeTotalCross,'awayValue':awayTotalCross,'homePercent':homeTotalCrossPercent,'awayPercent':awayTotalCrossPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Orta",'homeValue':homeSuccessfulCross,'awayValue':awaySuccessfulCross,'homePercent':homeSuccessfulCrossPercent,'awayPercent':awaySuccessfulCrossPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Orta Yüzdesi",'homeValue':homeCrossRatio,'awayValue':awayCrossRatio,'homePercent':homeCrossRatioPercent,'awayPercent':awayCrossRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Faul",'homeValue':homeFoul,'awayValue':awayFoul,'homePercent':homeFoulPercent,'awayPercent':awayFoulPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+
+    data = {"leagueId": 1, "seasonId": 8918, "matchId": int(reqid)}
+    datalist = service_request("GetMatchNarration", data)
+
+    narrationDict = []
+    if len(datalist) > 0 :
+        for min in datalist:
+            if min == "_id":
+                print min
+            else:
+                x = "team"
+                team_id = datalist[min][x]
+                x = "typeInt"
+                type_ = datalist[min][x]
+                x = "text"
+                text_ = datalist[min][x]
+                narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
 
     return render_to_response('virtual_stadium.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 
@@ -694,70 +989,390 @@ def compare(request):
 
 def player(request):
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    datalist = service_request("GetTeams", data)
+
     teamDict = []
-    for x in list:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
+
     return render_to_response('playerteamselection.html',{'standing_list':standlist, 'best_eleven_list':bestList, 'weeklist': weekList, 'try_list':teamDict} )
 
 @ensure_csrf_cookie
 def table(request,reqid):
     data = {"leagueId": 1, "seasonId": 8918}
-    matches = service_request("GetFixture", data)
-    j_obj = json.loads(matches)
-    weeklist = j_obj["data"]
+    weeklist = service_request("GetFixture", data)
     weekDict = []
     currentWeek = 34
-    for weekId in weeklist:
-        week = weeklist[weekId]
-        matches = []
-        for matchId in week:
-            if matchId == "weekStatus":
-                status = week[matchId]
-            else:
-                print(matchId)
-                if(matchId==str(reqid)):
-                    currentWeek = weekId
-                matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
-        weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
+    if len(weeklist) > 0 :
+        for weekId in weeklist:
+            week = weeklist[weekId]
+            matches = []
+            for matchId in week:
+                if matchId == "weekStatus":
+                    status = week[matchId]
+                else:
+                    print(matchId)
+                    if(matchId==str(reqid)):
+                        currentWeek = weekId
+                    matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
+            weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
+
 
     data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchInfo", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetMatchInfo", data)
     infoDict = []
     homeTeamId = 0
     awayTeamId = 0
-    for x in datalist:
-        homeTeamId = x[5]
-        awayTeamId = x[6]
-        infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':x[7],'awayTeamScore':x[8],'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
+    if len(datalist) > 0 :
+        for x in datalist:
+            homeTeamId = x[5]
+            awayTeamId = x[6]
+            infoDict.append({'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':int(x[7] or 0),'awayTeamScore':int(x[8] or 0),'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]})
 
     data = {"matchId":reqid}
-    teams = service_request("GetGoalVideos", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetGoalVideos", data)
     goalDict = []
-    for x in datalist:
-        goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
+    if len(datalist) > 0 :
+        for x in datalist:
+            goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
 
     data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
-    teams = service_request("GetMatchSquad", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetMatchSquad", data)
+
     homeSquadDict = []
     awaySquadDict = []
 
-    for playerId in datalist:
-        playerData = datalist[playerId]["data"]
-        if(playerData[3] == homeTeamId):
-            homeSquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
-        elif(playerData[3] == awayTeamId):
-            awaySquadDict.append({'playerId':playerId,'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4]})
+    if len(datalist) > 0 :
+        for playerId in datalist:
+            playerEvents = []
+            playerData = []
+            for x in datalist[playerId]:
+                if x == "data":
+                    playerData = datalist[playerId][x]
+                elif x == "events":
+                    playerEvents = datalist[playerId][x]
 
-    return render_to_response('virtual_stadium_board.html', {'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
+            eventDict = []
+            for event in playerEvents:
+                eventDict.append({'eventType':event[0],'matchTime':event[1],'teamId':event[2],'playerId':int(event[3]),'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+            if(playerData[3] == homeTeamId):
+                homeSquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+            elif(playerData[3] == awayTeamId):
+                awaySquadDict.append({'playerId':int(playerId),'playerName':playerData[0],'jerseyNumber':playerData[1],'eleven':playerData[2],'playPosition':playerData[4],'playerEvents':eventDict})
+
+    data = {"team1":homeTeamId,"team2":awayTeamId}
+    datalist = service_request("GetHistoricData", data)
+
+    pastMatches =[]
+    if len(datalist) > 0 :
+        for match in datalist["pastMatches"]:
+            pastMatches.append({'homeTeam':match[0],'awayTeam':match[1],'homeScore':match[2],'awayScore':match[3],'date':datetime.strptime(match[4],'%Y-%m-%d %H:%M:%S.0000000'),'referee':match[5],'stadium':match[6],'homeTeamId':match[8],'awayTeamId':match[9]})
+        homeWin = 0
+        awayWin = 0
+        homeGoal = 0
+        awayGoal = 0
+        if datalist["homeWins"] == 0:
+            homeWin = 1
+        else:
+            homeWin = datalist["homeWins"]
+
+        if datalist["awayWins"] == 0:
+            awayWin = 1
+        else:
+            awayWin = datalist["awayWins"]
+
+        if datalist["homeGoals"] == 0:
+            homeGoal = 1
+        else:
+            homeGoal = datalist["homeGoals"]
+
+        if datalist["awayGoals"] == 0:
+            awayGoal = 1
+        else:
+            awayGoal = datalist["awayGoals"]
+
+        homeWinRatio = int(99*homeWin/(homeWin+awayWin+datalist["draws"]))
+        drawRatio = int(99*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
+        awayWinRatio = 99 -(homeWinRatio+drawRatio)
+        homeGoalRatio = int(99*homeGoal/(homeGoal+awayGoal))
+        awayGoalRatio = 99-homeGoalRatio
+        historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
+    datalist = service_request("GetTeamForm", data)
+
+    homeFormDict = []
+    if len(datalist) > 0 :
+        for match in datalist:
+            win = 0
+            if (match[2] > match [3] and homeTeamId==match[4]) or (match[3] > match [2] and homeTeamId==match[5]):
+                win=1
+            elif match[2] == match [3]:
+                win=0
+            else:
+                win=2
+            homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
+    datalist = service_request("GetTeamForm", data)
+    awayFormDict = []
+    if len(datalist) > 0 :
+        for match in datalist:
+            win = 0
+            if (match[2] > match [3] and awayTeamId==match[4]) or (match[3] > match [2] and awayTeamId==match[5]):
+                win=1
+            elif match[2] == match [3]:
+                win=0
+            else:
+                win=2
+            awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    datalist = service_request("GetMatchEvents", data)
+    eventDict = []
+    if len(datalist) > 0 :
+        for event in datalist:
+            eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
+
+    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    datalist = service_request("GetMatchData", data)
+
+    matchDataDict = []
+    homeDataDict = []
+    awayDataDict = []
+
+    homeDistance = 0
+    awayDistance = 0
+    homeSpeed = 0
+    awaySpeed = 0
+    homeHIR = 0
+    awayHIR = 0
+    homeTotalPass = 0
+    awayTotalPass = 0
+    homeSuccessfulPass = 0
+    awaySuccessfulPass = 0
+
+    homeTotalShot = 0
+    awayTotalShot = 0
+    homeSuccessfulShot = 0
+    awaySuccessfulShot = 0
+
+    homeTotalCross = 0
+    awayTotalCross = 0
+    homeSuccessfulCross = 0
+    awaySuccessfulCross = 0
+
+    homeFoul = 0
+    awayFoul = 0
+
+    if len(datalist) > 0 :
+        for dat in datalist:
+            matchDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
+            if dat[0] == homeTeamId:
+                homeDistance += int(dat[4] or 0)
+                homeSpeed += int(dat[5] or 0)
+                homeHIR += int(dat[6] or 0)
+                homeTotalPass += int(dat[7] or 0)
+                homeSuccessfulPass += int(dat[8] or 0)
+                homeTotalShot += int(dat[9] or 0)
+                homeSuccessfulShot += int(dat[10] or 0)
+                homeTotalCross += int(dat[11] or 0)
+                homeSuccessfulCross += int(dat[12] or 0)
+                homeFoul += int(dat[13] or 0)
+
+                homeDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
+            elif dat[0] == awayTeamId:
+
+                awayDistance += int(dat[4] or 0)
+                awaySpeed += int(dat[5] or 0)
+                awayHIR += int(dat[6] or 0)
+                awayTotalPass += int(dat[7] or 0)
+                awaySuccessfulPass += int(dat[8] or 0)
+                awayTotalShot += int(dat[9] or 0)
+                awaySuccessfulShot += int(dat[10] or 0)
+                awayTotalCross += int(dat[11] or 0)
+                awaySuccessfulCross += int(dat[12] or 0)
+                awayFoul += int(dat[13] or 0)
+
+                awayDataDict.append({'teamId':dat[0],'playerName':dat[1],'playerId':dat[2],'jerseyNumber':dat[3],'totalDistance':int(dat[4] or 0),'averageSpeed':int(dat[5] or 0),'HIRDistance':int(dat[6] or 0),'totalPass':int(dat[7] or 0),'successfulPass':int(dat[8] or 0),'passRatio':int(int(dat[7] or 0)-int(dat[8] or 1)*100),'totalShot':int(dat[9] or 0),'successfulShot':int(dat[10] or 0),'shotRatio':int(int(dat[9] or 0)/int(dat[10] or 1)*100),'totalCross':int(dat[11] or 0),'successfulCross':int(dat[12] or 0),'crossRatio':int(int(dat[11] or 0)/int(dat[12] or 1)*100),'foulCommitted':int(dat[13] or 0),'foulAgainst':int(dat[14] or 0)})
+
+    homeSpeed /= int(len(homeDataDict) or 1)
+    awaySpeed /= int(len(awayDataDict) or 1)
+
+    homePassRatio = int(homeSuccessfulPass/float(homeTotalPass or 1) * 100)
+    awayPassRatio = int(awaySuccessfulPass/float(awayTotalPass or 1) * 100)
+
+    homeShotRatio = int(homeSuccessfulShot/float(homeTotalShot or 1) * 100)
+    awayShotRatio = int(awaySuccessfulShot/float(awayTotalShot or 1) * 100)
+
+    homeCrossRatio = int(homeSuccessfulCross/float(homeTotalCross or 1) * 100)
+    awayCrossRatio = int(awaySuccessfulCross/float(awayTotalCross or 1) * 100)
+
+    homeDistancePercent = 0
+    awayDistancePercent = 0
+    if homeDistance+awayDistance < 1:
+        homeDistancePercent = 50
+    else:
+        homeDistancePercent = int(homeDistance/float(homeDistance+awayDistance)*100)
+    awayDistancePercent = 100 - homeDistancePercent
+
+    homeSpeedPercent = 0
+    awaySpeedPercent = 0
+    if homeSpeed+awaySpeed < 1:
+        homeSpeedPercent = 50
+    else:
+        homeSpeedPercent = int(homeSpeed/float(homeSpeed+awaySpeed)*100)
+    awaySpeedPercent = 100 - homeSpeedPercent
+
+    homeHIRPercent = 0
+    awayHIRPercent = 0
+    if homeHIR+awayHIR < 1:
+        homeHIRPercent = 50
+    else:
+        homeHIRPercent = int(homeHIR/float(homeHIR+awayHIR)*100)
+    awayHIRPercent = 100 - homeHIRPercent
+
+    homeTotalPassPercent = 0
+    awayTotalPassPercent = 0
+    if homeTotalPass+awayTotalPass < 1:
+        homeTotalPassPercent = 50
+    else:
+        homeTotalPassPercent = int(homeTotalPass/float(homeTotalPass+awayTotalPass)*100)
+    awayTotalPassPercent = 100 - homeTotalPassPercent
+
+    homeSuccessfulPassPercent = 0
+    awaySuccessfulPassPercent = 0
+    if homeSuccessfulPass+awaySuccessfulPass < 1:
+        homeSuccessfulPassPercent = 50
+    else:
+        homeSuccessfulPassPercent = int(homeSuccessfulPass/float(homeSuccessfulPass+awaySuccessfulPass)*100)
+    awaySuccessfulPassPercent = 100 - homeSuccessfulPassPercent
+
+    homePassRatioPercent = 0
+    awayPassRatioPercent = 0
+    if homePassRatio+awayPassRatio < 1:
+        homePassRatioPercent = 50
+    else:
+        homePassRatioPercent = int(homePassRatio/float(homePassRatio+awayPassRatio)*100)
+    awayPassRatioPercent = 100 - homePassRatioPercent
+
+    homeTotalShotPercent = 0
+    awayTotalShotPercent = 0
+    if homeTotalShot+awayTotalShot < 1:
+        homeTotalShotPercent = 50
+    else:
+        homeTotalShotPercent = int(homeTotalShot/float(homeTotalShot+awayTotalShot)*100)
+    awayTotalShotPercent = 100 - homeTotalShotPercent
+
+    homeSuccessfulShotPercent = 0
+    awaySuccessfulShotPercent = 0
+    if homeSuccessfulShot+awaySuccessfulShot < 1:
+        homeSuccessfulShotPercent = 50
+    else:
+        homeSuccessfulShotPercent = int((homeSuccessfulShot/float(homeSuccessfulShot+awaySuccessfulShot))*100)
+    awaySuccessfulShotPercent = 100 - homeSuccessfulShotPercent
+
+    homeShotRatioPercent = 0
+    awayShotRatioPercent = 0
+    if homeShotRatio+awayShotRatio < 1:
+        homeShotRatioPercent = 50
+    else:
+        homeShotRatioPercent = int(homeShotRatio/float(homeShotRatio+awayShotRatio)*100)
+    awayShotRatioPercent = 100 - homeShotRatioPercent
+
+    homeTotalCrossPercent = 0
+    awayTotalCrossPercent = 0
+    if homeTotalCross+awayTotalCross < 1:
+        homeTotalCrossPercent = 50
+    else:
+        homeTotalCrossPercent = int(homeTotalCross/float(homeTotalCross+awayTotalCross)*100)
+    awayTotalCrossPercent = 100 - homeTotalCrossPercent
+
+    homeSuccessfulCrossPercent = 0
+    awaySuccessfulCrossPercent = 0
+    if homeSuccessfulCross+awaySuccessfulCross < 1:
+        homeSuccessfulCrossPercent = 50
+    else:
+        homeSuccessfulCrossPercent = int(homeSuccessfulCross/float(homeSuccessfulCross+awaySuccessfulCross)*100)
+    awaySuccessfulCrossPercent = 100 - homeSuccessfulCrossPercent
+
+    homeCrossRatioPercent = 0
+    awayCrossRatioPercent = 0
+    if homeCrossRatio+awayCrossRatio < 1:
+        homeCrossRatioPercent = 50
+    else:
+        homeCrossRatioPercent = int(homeCrossRatio/float(homeCrossRatio+awayCrossRatio)*100)
+    awayCrossRatioPercent = 100 - homeCrossRatioPercent
+
+    homeFoulPercent = 0
+    awayFoulPercent = 0
+    if homeFoul+awayFoul < 1:
+        homeFoulPercent = 50
+    else:
+        homeFoulPercent = int(homeFoul/float(homeFoul+awayFoul)*100)
+    awayFoulPercent = 100 - homeFoulPercent
+    teamStatsDict = []
+    dist = {}
+
+    dist = {'name':"Toplam Mesafe",'homeValue':homeDistance,'awayValue':awayDistance,'homePercent':homeDistancePercent,'awayPercent':awayDistancePercent,'addition':" m"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Ortalama Hız",'homeValue':homeSpeed,'awayValue':awaySpeed,'homePercent':homeSpeedPercent,'awayPercent':awaySpeedPercent,'addition':" km/s"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Şiddetli Koşu",'homeValue':homeHIR,'awayValue':awayHIR,'homePercent':homeHIRPercent,'awayPercent':awayHIRPercent,'addition':" m"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Pas",'homeValue':homeTotalPass,'awayValue':awayTotalPass,'homePercent':homeTotalPassPercent,'awayPercent':awayTotalPassPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Pas",'homeValue':homeSuccessfulPass,'awayValue':awaySuccessfulPass,'homePercent':homeSuccessfulPassPercent,'awayPercent':awaySuccessfulPassPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Pas Yüzdesi",'homeValue':homePassRatio,'awayValue':awayPassRatio,'homePercent':homePassRatioPercent,'awayPercent':awayPassRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Şut",'homeValue':homeTotalShot,'awayValue':awayTotalShot,'homePercent':homeTotalShotPercent,'awayPercent':awayTotalShotPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Şut",'homeValue':homeSuccessfulShot,'awayValue':awaySuccessfulShot,'homePercent':homeSuccessfulShotPercent,'awayPercent':awaySuccessfulShotPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Şut Yüzdesi",'homeValue':homeShotRatio,'awayValue':awayShotRatio,'homePercent':homeShotRatioPercent,'awayPercent':awayShotRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Toplam Orta",'homeValue':homeTotalCross,'awayValue':awayTotalCross,'homePercent':homeTotalCrossPercent,'awayPercent':awayTotalCrossPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Başarılı Orta",'homeValue':homeSuccessfulCross,'awayValue':awaySuccessfulCross,'homePercent':homeSuccessfulCrossPercent,'awayPercent':awaySuccessfulCrossPercent,'addition':""}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Orta Yüzdesi",'homeValue':homeCrossRatio,'awayValue':awayCrossRatio,'homePercent':homeCrossRatioPercent,'awayPercent':awayCrossRatioPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+    dist = {'name':"Faul",'homeValue':homeFoul,'awayValue':awayFoul,'homePercent':homeFoulPercent,'awayPercent':awayFoulPercent,'addition':" %"}
+    teamStatsDict.append(dist);
+
+
+    data = {"leagueId": 1, "seasonId": 8918, "matchId": int(reqid)}
+    datalist = service_request("GetMatchNarration", data)
+
+    narrationDict = []
+    if len(datalist) > 0 :
+        for min in datalist:
+            if min == "_id":
+                print min
+            else:
+                x = "team"
+                team_id = datalist[min][x]
+                x = "typeInt"
+                type_ = datalist[min][x]
+                x = "text"
+                text_ = datalist[min][x]
+                narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
+
+    return render_to_response('virtual_stadium_board.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 
 @ensure_csrf_cookie
 def chalkboard(request):
@@ -769,13 +1384,23 @@ def radar_vebview(request, matchId):
 
 def team2(request):
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    datalist = service_request("GetTeams", data)
+
     teamDict = []
-    for x in list:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
-    return render_to_response('teamselection.html',{'standing_list':standlist, 'weeklist':weekList,'try_list':teamDict} )
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
+
+    standingDict = []
+    data = {"leagueId":1,"seasonId":8918,"type":0}
+    datalist =  service_request("GetStandings",data)
+    if len(datalist) > 0:
+        for item in datalist:
+            if int(item[0]) == 34:
+                standingDict.append({'teamId': int(item[1]), 'teamName': item[2],'played':int(item[3]), 'win':int(item[4]), 'draw':int(item[5]), 'lose':int(item[6]), 'score':int(item[7]), 'conceded' : int(item[8]), 'average':int(item[9]), 'points':int(item[10]), 'change': int(item[11])})
+
+
+    return render_to_response('teamselection.html',{'standing_list':standingDict, 'weeklist':weekList,'try_list':teamDict} )
 
 @ensure_csrf_cookie
 def radar(request):
@@ -801,9 +1426,7 @@ def router(request, path):
 
 def matchcenter(request,match_id):
     data = {"leagueId":1,"seasonId":8918,"matchId":match_id}
-    teams = service_request("GetMatchInfo", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    list = service_request("GetMatchInfo", data)
     for x in list:
         if(x[1]=="1"):
             return HttpResponseRedirect("before")
@@ -812,8 +1435,7 @@ def matchcenter(request,match_id):
 
 def statscenter(request):
     data = {"leagueId":1,"seasonId":8918}
-    teams = service_request("GetWeeks", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    list = service_request("GetWeeks", data)
+
     for x in list:
         return HttpResponseRedirect('week/%s' %x[1])

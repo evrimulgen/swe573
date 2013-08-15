@@ -1,6 +1,57 @@
 {% extends "statsbase.html" %}
 
-{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}
+{% block head-addition %}
+    <script type="text/javascript">
+        var isSelected = 0;
+        function handleSelect(elm){
+            console.log("noproblem");
+            var id = parseInt(elm.value);
+            if(isSelected == 0){
+                isSelected = 1;
+                {% for i in best_eleven_list %}
+                    var player_id = {{ i.playerId }};
+                    if ( player_id == id){
+                        console.log(id);
+                        var htmltoSet = "";
+                        htmltoSet += "{%include "quad.html" %}"
+                        $("#info").html(htmltoSet);
+                        $("#playerName1").text("{{ i.jerseyNumber }} - {{ i.playerName }}");
+                        $("#goalLeague1").text("{{ i.goalLeague }}");
+                        $("#goalMatch1").text("{{ i.goalMatch}}");
+                        $("#assistLeague1").text("{{ i.assistLeague }}");
+                        $("#assistMatch1").text("{{ i.assistMatch }}");
+                        $("#shotLeague1").text("{{ i.shotSuccessfulLeague }}/{{ i.shotTotalLeague }}");
+                        $("#shotMatch1").text("{{ i.shotSuccessfulMatch }}/{{ i.shotTotalMatch }}");
+                        $("#passLeague1").text("{{ i.passSuccessfulLeague }}/{{ i.passTotalLeague }}");
+                        $("#passMatch1").text("{{ i.passSuccessfulMatch }}/{{ i.passTotalMatch }}");
+                        $("#crossLeague1").text("{{ i.crossSuccessfulLeague }}/{{ i.crossTotalLeague }}");
+                        $("#crossMatch1").text("{{ i.crossSuccessfulMatch }}/{{ i.crossTotalMatch }}");
+                        $("#totalLeague1").text("{{ i.distanceLeague }}");
+                        $("#totalMatch1").text("{{ i.distanceMatch }}");
+                        $("#HIRLeague1").text("{{ i.HIRLeague }}");
+                        $("#HIRMatch1").text("{{ i.HIRMatch }}");
+                        $("#sprintLeague1").text("{{ i.sprintLeague }}");
+                        $("#sprintMatch1").text("{{ i.sprintMatch }}");
+                        $("#faulAgainstLeague1").text("{{ i.faulAgainstLeague }}");
+                        $("#faulAgainstMatch1").text("{{ i.faulAgainstMatch }}");
+                        $("#faulCommittedLeague1").text("{{ i.faulCommittedLeague}}");
+                        $("#faulCommittedMatch1").text("{{ i.faulCommittedMatch }}");
+                        $("#stealLeague1").text("{{ i.stealLeague }}");
+                        $("#stealMatch1").text("{{ i.stealMatch }}");
+                        $("#turnoverLeague1").text("{{ i.turnoverLeague }}");
+                        $("#turnoverMatch1").text("{{ i.turnoverMatch }}");
+                        $("#playerImage1").attr("src","{{ STATIC_URL }}images/player{{ i.playerId }}.png");
+                    }
+                {% endfor %}
+            }
+            else{
+                $("#info").html("");
+                isSelected=0;
+            }
+
+        }
+    </script>
+{% endblock %}
 
 {% block info %}
     <div class="info">
@@ -47,13 +98,13 @@
                     </div>
                 {% endif %}
             {% endif %}
-
         {% endfor %}
     </div>
 {%  endblock %}
 
 {% block sidebar %}
     {% include 'standings_table.html' %}
+    {% include 'fixture.html' %}
 {% endblock %}
 
 {% block content %}
@@ -65,30 +116,54 @@
         <div style="width: 100%; height: 340px; float: left"> {% include 'besteleven.html' %}</div>
 
     </div>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.baraja.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var $el = $( '#baraja-el' ),
+                    baraja = $el.baraja();
 
-    <div class="box-container" style="width: 100%;height: 400px">
+        });
+
+    </script>
+    <div class="box-container" style="width: 100%;height: 390px">
 
         <div class="header">
             <img src="{{ STATIC_URL }}images/bestplayer.png">
 
             <p>Haftanın Kare Ası</p>
         </div>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.baraja.js"></script>
-        <script type="text/javascript">
-            $(function() {
-                var $el = $( '#baraja-el' ),
-                        baraja = $el.baraja();
 
-            });
-        </script>
-        <div class="baraja-demo" style="float: left;">
+        <div class="baraja-demo">
             <ul id="baraja-el" class="baraja-container">
-                <li><img src="{{ STATIC_URL }}images/player13.png" alt="image1"/></li>
-                <li><img src="{{ STATIC_URL }}images/player14.png" alt="image2"/></li>
-                <li><img src="{{ STATIC_URL }}images/player15.png" alt="image3"/></li>
-                <li><img src="{{ STATIC_URL }}images/player16.png" alt="image4"/></li>
+                <li value="20" onclick="handleSelect(this)">
+                    <img src="{{ STATIC_URL }}images/player20.png" alt="image1"/>
+                    <h3>10-Pablo Batalla</h3>
+                    <p> Orta Saha</p>
+                    <p> Bursaspor</p>
+                </li>
+                <li value="14" onclick="handleSelect(this)">
+                    <img src="{{ STATIC_URL }}images/player14.png" alt="image2"/>
+                    <h3>3 - Tomas Sivok</h3>
+                    <p> Defans</p>
+                    <p> Beşiktaş</p>
+                </li>
+                <li value="15" onclick="handleSelect(this)">
+                    <img src="{{ STATIC_URL }}images/player15.png" alt="image3"/>
+                    <h3>4 - Albert Riera</h3>
+                    <p> Orta Saha</p>
+                    <p> Galatasaray</p>
+                </li>
+                <li value="16" onclick="handleSelect(this)">
+                    <img src="{{ STATIC_URL }}images/player16.png" alt="image4"/>
+                    <h3>30 - Jerry Akaminko</h3>
+                    <p> Defans</p>
+                    <p> Eskişehirspor</p>
+                </li>
             </ul>
+            <div id="info">
+
+            </div>
         </div>
     </div>
 
@@ -99,7 +174,7 @@
             <p>Haftanın Golcüleri</p>
         </div>
         <div style="width: 100%;height: 325px; overflow-y: scroll">
-            <a class="content" href="player/5/23">
+            <a class="content" href="../../player/2/137">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">1 - Didier Drogba</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player23.png">
@@ -110,7 +185,7 @@
                     <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:3</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/15/22">
+            <a class="content" href="../../player/10/1318">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">2 - Kalu Uche</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player22.png">
@@ -121,7 +196,7 @@
                     <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:4</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/1/21">
+            <a class="content" href="../../player/3/22830">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">3 - Filip Holosko</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player21.png">
@@ -132,7 +207,7 @@
                     <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:1</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/1/21">
+            <a class="content" href="../../player/3/22830">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">4 - Filip Holosko</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player21.png">
@@ -143,7 +218,7 @@
                     <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:1</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/1/21">
+            <a class="content" href="../../player/3/22830">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">5 - Filip Holosko</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player21.png">
@@ -172,7 +247,7 @@
             <p>Haftanın Pasörleri</p>
         </div>
         <div style="width: 100%;height: 325px; overflow-y: scroll">
-            <a class="content" href="player/4/19">
+            <a class="content" href="../../player/2/15913">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">1 - Emre Belözoğlu</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player19.png">
@@ -183,7 +258,7 @@
                     <li><p class="first">Pas Yüzdes</p><p class="last">:%87</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/2/20">
+            <a class="content" href="../../player/42/17490">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">2 - Pablo Batalla</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player20.png">
@@ -194,7 +269,7 @@
                     <li><p class="first">Pas Yüzdes</p><p class="last">:%80</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/18/18">
+            <a class="content" href="../../player/139/23140">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">3 - Olcan Adın</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player18.png">
@@ -205,7 +280,7 @@
                     <li><p class="first">Pas Yüzdes</p><p class="last">:%79</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/18/18">
+            <a class="content" href="../../player/139/23140">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">4 - Olcan Adın</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player18.png">
@@ -216,7 +291,7 @@
                     <li><p class="first">Pas Yüzdes</p><p class="last">:%79</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/18/18">
+            <a class="content" href="../../player/139/23140">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">5 - Olcan Adın</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player18.png">
@@ -244,7 +319,7 @@
             <p>Haftanın En Çok Koşanları</p>
         </div>
         <div style="width: 100%;height: 325px; overflow-y: scroll">
-            <a class="content" href="player/5/15">
+            <a class="content" href="../../player/1/85">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">1 - Albert Riera</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player15.png">
@@ -255,7 +330,7 @@
                     <li><p class="first">Sprint</p><p class="last">:90</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/4/17">
+            <a class="content" href="../../player/2/22930">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">2 - Gökhan Gönül</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player17.png">
@@ -266,7 +341,7 @@
                     <li><p class="first">Sprint</p><p class="last">:77</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/1/21">
+            <a class="content" href="../../player/3/22830">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">3 - Filip Holosko</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player21.png">
@@ -277,7 +352,7 @@
                     <li><p class="first">Sprint</p><p class="last">:67</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/1/21">
+            <a class="content" href="../../player/3/22830">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">4 - Filip Holosko</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player21.png">
@@ -288,7 +363,7 @@
                     <li><p class="first">Sprint</p><p class="last">:67</p></li>
                 </ul>
             </a>
-            <a class="content" href="player/1/21">
+            <a class="content" href="../../player/3/22830">
                 <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">5 - Filip Holosko</p>
                 <div id="image" style="width: 18%;margin-top: -2px">
                     <img src="{{ STATIC_URL }}images/player21.png">

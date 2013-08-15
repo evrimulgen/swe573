@@ -19,6 +19,7 @@ function Timeline(div_id, match_id){
     rightHandle.fillColor = "#9999ff";
 
     scope.view.draw();
+    var scope_id = scope._id;
 
     var currentPoint = [0,0];
     var maxSecond = 90*60;
@@ -80,12 +81,12 @@ function Timeline(div_id, match_id){
         // 7 => Substitution
 
         // Todo: differentiate between events, or highlight the entry below on hover/click
-        console.log(scope);
+        var currScope = paper.PaperScope.get(scope_id);
         var eventWidth = 4;
         var offset = timeToPixel(event[1], 0)-eventWidth/2;
 
         console.log(event);
-        var rect = new scope.Path.Rectangle(offset, 0, eventWidth, height);
+        var rect = new currScope.Path.Rectangle(offset, 0, eventWidth, height);
         rect.fillColor = "green";
     }
 
@@ -98,6 +99,7 @@ function Timeline(div_id, match_id){
     };
 
     loadEvents();
+    scope.view.draw();
 }
 
 $(function(){

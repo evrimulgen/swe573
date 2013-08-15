@@ -69,9 +69,7 @@ for x in range(1, 24):
 
 def home(request,weekId):
     data = {"leagueId":1,"seasonId":8918}
-    teams = service_request("GetWeeks", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    list = service_request("GetWeeks", data)
     weekNumber = 0
     lastPlayed = 0
     for x in list:
@@ -82,7 +80,30 @@ def home(request,weekId):
     while(i<=weekNumber):
         weekDict.append(int(i))
         i = i+1
-    return render_to_response('statshome.html', {'weekList':weekDict,'weekSelected': int(weekId),'lastPlayedWeek':int(lastPlayed), 'standing_list':standlist, 'best_eleven_list':bestList})
+
+    standingDict = []
+    data = {"leagueId":1,"seasonId":8918,"type":0}
+    datalist =  service_request("GetStandings",data)
+    if len(datalist) > 0:
+        for item in datalist:
+            if int(item[0]) == int(weekId):
+                standingDict.append({'teamId': int(item[1]), 'teamName': item[2],'played':int(item[3]), 'win':int(item[4]), 'draw':int(item[5]), 'lose':int(item[6]), 'score':int(item[7]), 'conceded' : int(item[8]), 'average':int(item[9]), 'points':int(item[10]), 'change': int(item[11])})
+
+    data = {"leagueId": 1, "seasonId": 8918}
+    weeklist = service_request("GetFixture", data)
+    fixtureDict = []
+    if len(weeklist) > 0 :
+        for week_id in weeklist:
+            week = weeklist[week_id]
+            matches = []
+            for matchId in week:
+                if matchId == "weekStatus":
+                    status = week[matchId]
+                else:
+                    matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
+            fixtureDict.append({'weekId':int(week_id),'status':status,'matches':matches})
+
+    return render_to_response('statshome.html', {'fixture':fixtureDict,'weekList':weekDict,'weekSelected': int(weekId),'lastPlayedWeek':int(lastPlayed), 'standing_list':standingDict, 'best_eleven_list':bestList})
 
 def team(request, num):
 
@@ -111,30 +132,50 @@ def team(request, num):
         #    result = urllib2.urlopen('http://sentio.cloudapp.net:8080/api/GetTeamsInformation', post_data)
         #    content = result.read()
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeams", data)
     teamDict = []
-    for x in datalist:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
 
     data = {"teamId": num}
-    details = service_request("GetTeamDetails", data)
-    j_obj = json.loads(details)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamDetails", data)
+
     detailDict = []
-    for obj in datalist:
-        detailDict.append( {'teamName':obj[0],'stadium':obj[1],'foundation':obj[2],'president':obj[3],'capacity':obj[4],'manager':obj[5],'website':obj[6],'leaguechamp':obj[7],'cupchamp':obj[8]})
+    if len(datalist) > 0:
+        for obj in datalist:
+            detailDict.append( {'teamName':obj[0],'stadium':obj[1],'foundation':obj[2],'president':obj[3],'capacity':obj[4],'manager':obj[5],'website':obj[6],'leaguechamp':obj[7],'cupchamp':obj[8]})
+
+    standingDict = []
+    data = {"leagueId":1,"seasonId":8918,"type":0}
+    datalist =  service_request("GetStandings",data)
+    if len(datalist) > 0:
+        for item in datalist:
+            if int(item[0]) == 34:
+                standingDict.append({'teamId': int(item[1]), 'teamName': item[2],'played':int(item[3]), 'win':int(item[4]), 'draw':int(item[5]), 'lose':int(item[6]), 'score':int(item[7]), 'conceded' : int(item[8]), 'average':int(item[9]), 'points':int(item[10]), 'change': int(item[11])})
 
     data = {"leagueId": 1, "seasonId": 8918, "teamId": num}
-    players = service_request("GetTeamPlayers", data)
-    j_obj = json.loads(players)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamPlayers", data)
     playerDict =[]
-    for x in datalist:
-        playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
+    if len(datalist) > 0:
+        for x in datalist:
+            playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
 
-    return render_to_response('statsteam.html', {'s_list': s,'team_list': teamList, 'try_list':teamDict, 'details':detailDict,'players':playerDict, 'standing_list':standlist, 'team_selected': int(num), 'player_list':playerList, 'weeklist': weekList,'best_eleven_list':bestList})
+    data = {"leagueId": 1, "seasonId": 8918}
+    weeklist = service_request("GetFixture", data)
+    fixtureDict = []
+    if len(weeklist) > 0 :
+        for week_id in weeklist:
+            week = weeklist[week_id]
+            matches = []
+            for matchId in week:
+                if matchId == "weekStatus":
+                    status = week[matchId]
+                else:
+                    matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':int(week[matchId][7]),'awayTeamId':int(week[matchId][8]),'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
+            fixtureDict.append({'weekId':int(week_id),'status':status,'matches':matches})
+
+    return render_to_response('statsteam.html', {'fixture':fixtureDict,'s_list': s,'team_list': teamList, 'try_list':teamDict, 'details':detailDict,'players':playerDict, 'standing_list':standingDict, 'team_selected': int(num), 'player_list':playerList, 'weeklist': weekList,'best_eleven_list':bestList})
 
 
 def league(request):
@@ -144,47 +185,49 @@ def league(request):
 def playerx(request, num, player_id):
 
     data = {"leagueId": 1, "seasonId": 8918,"playerId": player_id}
-    details = service_request("GetPlayerDetails", data)
-    j_obj = json.loads(details)
-    datalist = j_obj["data"]
+    datalist = service_request("GetPlayerDetails", data)
+
     detailDict = []
-    for obj in datalist:
-        detailDict.append({'playerName':obj[0],'date':obj[1],'height':obj[2],'nation':obj[3],'cap':obj[4],'goal':obj[5],'teamId':obj[6],'teamName':obj[7]})
+    if len(datalist) > 0:
+        for obj in datalist:
+            detailDict.append({'playerName':obj[0],'date':obj[1],'height':obj[2],'nation':obj[3],'cap':obj[4],'goal':obj[5],'teamId':obj[6],'teamName':obj[7]})
 
     data = {"leagueId": 1, "seasonId": 8918, "teamId": num}
-    players = service_request("GetTeamPlayers", data)
-    j_obj = json.loads(players)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamPlayers", data)
+
     playerDict =[]
-    for x in datalist:
-        playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
+    if len(datalist) > 0:
+        for x in datalist:
+            playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
 
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeams", data)
+
     teamDict = []
-    for x in datalist:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
 
     return render_to_response('statsplayer.html', {'p_id': int(player_id), 'details':detailDict, 'try_list':teamDict,'players':playerDict, 'team_selected': int(num), 'team_list': teamList, 'standing_list': standlist, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
 
 def player3(request, num):
 
     data = {"leagueId": 1, "seasonId": 8918, "teamId": num}
-    players = service_request("GetTeamPlayers", data)
-    j_obj = json.loads(players)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeamPlayers", data)
+
     playerDict =[]
-    for x in datalist:
-        playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
+    if len(datalist) > 0:
+        for x in datalist:
+            playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
+
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    datalist = j_obj["data"]
+    datalist = service_request("GetTeams", data)
+
     teamDict = []
-    for x in datalist:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
+
     return render_to_response('playerselection.html', { 'team_selected': int(num), 'try_list':teamDict, 'team_list': teamList, 'standing_list': standlist,'players':playerDict, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
 
 def before(request,reqid):
@@ -946,12 +989,13 @@ def compare(request):
 
 def player(request):
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    datalist = service_request("GetTeams", data)
+
     teamDict = []
-    for x in list:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
+
     return render_to_response('playerteamselection.html',{'standing_list':standlist, 'best_eleven_list':bestList, 'weeklist': weekList, 'try_list':teamDict} )
 
 @ensure_csrf_cookie
@@ -1340,13 +1384,23 @@ def radar_vebview(request, matchId):
 
 def team2(request):
     data = {"leagueId": 1, "seasonId": 8918}
-    teams = service_request("GetTeams", data)
-    j_obj = json.loads(teams)
-    list = j_obj["data"]
+    datalist = service_request("GetTeams", data)
+
     teamDict = []
-    for x in list:
-        teamDict.append({'teamId':x[0],'teamName':x[1]})
-    return render_to_response('teamselection.html',{'standing_list':standlist, 'weeklist':weekList,'try_list':teamDict} )
+    if len(datalist) > 0:
+        for x in datalist:
+            teamDict.append({'teamId':x[0],'teamName':x[1]})
+
+    standingDict = []
+    data = {"leagueId":1,"seasonId":8918,"type":0}
+    datalist =  service_request("GetStandings",data)
+    if len(datalist) > 0:
+        for item in datalist:
+            if int(item[0]) == 34:
+                standingDict.append({'teamId': int(item[1]), 'teamName': item[2],'played':int(item[3]), 'win':int(item[4]), 'draw':int(item[5]), 'lose':int(item[6]), 'score':int(item[7]), 'conceded' : int(item[8]), 'average':int(item[9]), 'points':int(item[10]), 'change': int(item[11])})
+
+
+    return render_to_response('teamselection.html',{'standing_list':standingDict, 'weeklist':weekList,'try_list':teamDict} )
 
 @ensure_csrf_cookie
 def radar(request):

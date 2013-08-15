@@ -1,142 +1,70 @@
+<div class="sidebox" style="margin-top: 8px">
+    <p id=title>Haftanın Maçları</p>
+    {% for week in fixture %}
+        {% if week.weekId == weekSelected %}
+            {% if week.status == 0 %}
+                {% for match in week.matches %}
+                    {% if match.matchStatus != 1 and match.matchStatus != 6 and match.matchStatus != 11 and match.matchStatus != 13 and match.matchStatus != 5 and match.matchStatus != 17 %}
+                        <a class="match" href="../../{{ match.matchId }}" target="_blank">
+                            <div id="scorearea">
+                                <div id="home">
+                                    <div id="name"><p>{{ match.homeTeamCond }}</p></div>
+                                    <div id="score"><p>:{{ match.homeScore }}</p></div>
+                                </div>
+                                <div id="away">
+                                    <div id="name"><p>{{ match.awayTeamCond }}</p></div>
+                                    <div id="score"><p>:{{ match.awayScore }}</p></div>
+                                </div>
+                            </div>
+                            <div id="live">
+                                <p class="live-time">{{ match.liveTime }}</p>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if week.status == 0 or  week.status == 1 %}
+                {% for match in week.matches %}
+                    {% if match.matchStatus == 6 or match.matchStatus == 11 or match.matchStatus == 13%}
+                        <a class="match" href="../../{{ match.matchId }}" target="_blank">
+                            <div id="scorearea">
+                                <div id="home">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png"><p>{{ match.homeTeamCond}}</p></div>
+                                    <div id="score"><p>:{{ match.homeScore }}</p></div>
+                                </div>
+                                <div id="away">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png"><p>{{ match.awayTeamCond }}</p></div>
+                                    <div id="score"><p>:{{ match.awayScore }}</p></div>
+                                </div>
+                            </div>
+                            <div id="datearea" onload="javascript:formatDate(this,{{ match.date }})">
+                                <p>{{ match.date }}</p>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if week.status == 0 or  week.status == 2 %}
+                {% for match in week.matches %}
+                    {% if match.matchStatus == 1 %}
+                        <a class="match" href="../../{{ match.matchId }}" target="_blank">
+                            <div id="scorearea">
+                                <div id="home">
+                                    <div id="name"><p>{{ match.homeTeamCond }}</p></div>
 
-<a class="match" href="#">
-    <div id="scorearea">
-        <div id="home">
-            <div id="name"><p>Mersin&nbsp;IY</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-        <div id="away">
-            <div id="name"><p>Gaziantepspor</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-    </div>
-    <div id="live">
-        <p class="live-time">36'</p>
-    </div>
-</a>
-<p class="line-info"> Oynanmış Maçlar</p>
-<a class="match" href="#">
-    <div id="scorearea">
-        <div id="home">
-            <div id="name"><p>Mersin&nbsp;IY</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-        <div id="away">
-            <div id="name"><p>Gaziantepspor</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-    </div>
-    <div id="datearea">
-        <p>12 Haz. Pazar</p>
-    </div>
-</a>
-<a class="match" href="#">
-    <div id="scorearea">
-        <div id="home">
-            <div id="name"><p>Mersin&nbsp;IY</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-        <div id="away">
-            <div id="name"><p>Gaziantepspor</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-    </div>
-    <div id="datearea">
-        <p>12 Haz. Pazar</p>
-    </div>
-</a>
-<a class="match" href="#">
-    <div id="scorearea">
-        <div id="home">
-            <div id="name"><p>Mersin&nbsp;IY</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-        <div id="away">
-            <div id="name"><p>Gaziantepspor</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-    </div>
-    <div id="datearea">
-        <p>12 Haz. Pazar</p>
-    </div>
-</a>
-<a class="match" href="#">
-    <div id="scorearea">
-        <div id="home">
-            <div id="name"><p>Mersin&nbsp;IY</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-        <div id="away">
-            <div id="name"><p>Gaziantepspor</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-    </div>
-    <div id="datearea">
-        <p>12 Haz. Pazar</p>
-    </div>
-</a>
-<p class="line-info"> Oynanmamış Maçlar</p>
-<a class="match" href="#">
-    <div id="scorearea">
-        <div id="home">
-            <div id="name"><p>Mersin&nbsp;IY</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-        <div id="away">
-            <div id="name"><p>Gaziantepspor</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-    </div>
-    <div id="datearea">
-        <p>12 Haz. Pazar</p>
-        <p>19:00</p>
-    </div>
-</a>
-<a class="match" href="#">
-    <div id="scorearea">
-        <div id="home">
-            <div id="name"><p>Mersin&nbsp;IY</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-        <div id="away">
-            <div id="name"><p>Gaziantepspor</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-    </div>
-    <div id="datearea">
-        <p>12 Haz. Pazar</p>
-        <p>19:00</p>
-    </div>
-</a>
-<a class="match" href="#">
-    <div id="scorearea">
-        <div id="home">
-            <div id="name"><p>Mersin&nbsp;IY</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-        <div id="away">
-            <div id="name"><p>Gaziantepspor</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-    </div>
-    <div id="datearea">
-        <p>12 Haz. Pazar</p>
-        <p>19:00</p>
-    </div>
-</a>
-<a class="match" href="#">
-    <div id="scorearea">
-        <div id="home">
-            <div id="name"><p>Mersin&nbsp;IY</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-        <div id="away">
-            <div id="name"><p>Gaziantepspor</p></div>
-            <div id="score"><p>:2</p></div>
-        </div>
-    </div>
-    <div id="datearea">
-        <p>12 Haz. Pazar</p>
-        <p>19:00</p>
-    </div>
-</a>
+                                </div>
+                                <div id="away">
+                                    <div id="name"><p>{{ match.awayTeamCond }}</p></div>
+
+                                </div>
+                            </div>
+                            <div id="datearea">
+                                <p>{{ match.date }}</p>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>

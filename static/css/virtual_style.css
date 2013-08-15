@@ -367,7 +367,9 @@ h2 {
     border-right: 2px solid #940b14;
 }
 
-
+body{
+    font-family: "helvetica";
+}
 
 /**/
 .match {
@@ -458,9 +460,7 @@ h2 {
     float: left;
     text-align: left;
 }
-body{
-    font-family: "helvetica";
-}
+
 .match #scorearea img,.match-selected #scorearea img {
     height: 16px;
     margin-top: 1px;

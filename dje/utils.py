@@ -16,5 +16,12 @@ def service_request(id, data):
             list_data = j_obj["data"]
             return list_data
         except:
-            return []
+            empty = []
+            return empty
+
+def tryService():
+    data = {"leagueId":1,"seasonId":8918,"matchId":11730066}
+    print service_request("GetMatchNarration",data)
+
+tryService()
 

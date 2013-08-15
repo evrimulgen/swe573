@@ -1,37 +1,39 @@
+<div class="sidebox">
+    <p id=title>Puan Tablosu</p>
+    <div style="background-color: #dadada">
+        <table class="point-table">
+            <tr>
+                <th class="first"></th> <th></th><th class="name"></th><th>O</th><th>G</th><th>B</th><th>M</th><th>A</th><th>Y</th><th>AV</th><th class="last">P</th>
+            </tr>
 
-<div style="background-color: #dadada">
-    <table class="point-table">
-        <tr>
-            <th class="first"></th> <th></th><th class="name"></th><th>O</th><th>G</th><th>B</th><th>M</th><th>A</th><th>Y</th><th>AV</th><th class="last">P</th>
-        </tr>
+            {% for i in standing_list|dictsortreversed:"average"|dictsortreversed:"points"%}
+                {% if forloop.counter == 1 %}
+                    <tr class="winner">
+                        {% elif forloop.counter < 3 %}
+                    <tr class="champions">
+                        {% elif forloop.counter < 5 %}
+                    <tr class="uefa">
+                        {% elif forloop.counter > 15 %}
+                    <tr class="relegate">
+                        {% else %}
+                    <tr>
+                {% endif %}
 
-        {% for i in standing_list|dictsortreversed:"average"|dictsortreversed:"points"%}
-            {% if forloop.counter == 1 %}
-                <tr class="winner">
-                    {% elif forloop.counter < 3 %}
-                <tr class="champions">
-                    {% elif forloop.counter < 5 %}
-                <tr class="uefa">
-                    {% elif forloop.counter > 15 %}
-                <tr class="relegate">
-                    {% else %}
-                <tr>
+            {% if i.change > 0 %}
+                <td><img src="{{ STATIC_URL }}images/up.png"></td>
+            {% elif i.change < 0 %}
+
+                <td><img src="{{ STATIC_URL }}images/down.png"></td>
+
+            {% else %}
+                <td><img src="{{ STATIC_URL }}images/same.png"></td>
             {% endif %}
 
-        {% if i.change > 0 %}
-            <td style="background-color: rgb(45,136,45)">{{ i.change }}</td>
-        {% elif i.change < 0 %}
+            <td>{{ forloop.counter }}</td><td class="name" style="text-align: left" >{{ i.teamName }}</td><td>{{ i.played }}</td><td>{{ i.win }}</td><td>{{ i.draw }}</td><td>{{ i.lose }}</td><td>{{ i.score }}</td><td>{{ i.conceded }}</td><td>{{ i.average }}</td><td>{{ i.points }}</td>
+            </tr>
 
-            <td style="background-color: rgb(142,47,47)">{{ i.change }}</td>
+            {% endfor %}
+        </table>
 
-        {% else %}
-            <td style="background-color: #929194">{{ i.change }}</td>
-        {% endif %}
-
-        <td>{{ forloop.counter }}</td><td class="name" style="text-align: left" >{{ i.teamName }}</td><td>{{ i.played }}</td><td>{{ i.win }}</td><td>{{ i.draw }}</td><td>{{ i.lose }}</td><td>{{ i.score }}</td><td>{{ i.conceded }}</td><td>{{ i.average }}</td><td>{{ i.points }}</td>
-        </tr>
-
-        {% endfor %}
-    </table>
-
+    </div>
 </div>

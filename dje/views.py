@@ -607,7 +607,7 @@ def before(request,reqid):
 
 def center(request,reqid):
 
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": 1, "seasonId": 9064}
     weeklist = service_request("GetFixture", data)
     weekDict = []
     currentWeek = 34

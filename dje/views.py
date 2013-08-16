@@ -977,7 +977,7 @@ def center(request,reqid):
                 type_ = datalist[min][x]
                 x = "text"
                 text_ = datalist[min][x]
-                narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
+                narrationDict.append({'min':int(min),'teamId':team_id,'type':type_,'text':text_})
 
     return render_to_response('virtual_stadium.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 

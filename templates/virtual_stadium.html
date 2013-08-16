@@ -8,7 +8,7 @@
 
     <script type="text/javascript">
         $(function(){
-            var radar = new Radar(11730074);
+            var radar = new Radar({{selectedMatch}});
             $("#startMatch").click(function(){
                 radar.startMatch();
             });

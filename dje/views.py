@@ -231,7 +231,7 @@ def player3(request, num):
     return render_to_response('playerselection.html', { 'team_selected': int(num), 'try_list':teamDict, 'team_list': teamList, 'standing_list': standlist,'players':playerDict, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
 
 def before(request,reqid):
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": 1, "seasonId": 9064}
     weeklist = service_request("GetFixture", data)
     weekDict = []
     currentWeek = 34

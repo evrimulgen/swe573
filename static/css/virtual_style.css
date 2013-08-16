@@ -609,7 +609,7 @@ body{
 
 .score-area #hometeam p , .score-area #awayteam p {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 12px;
 }
 .score-area #homescore, .score-area #awayscore{
 

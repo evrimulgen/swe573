@@ -6,6 +6,7 @@ from random import randint
 from django.http import HttpRequest, HttpResponse
 import urllib2, urllib
 from django.views.decorators.csrf import ensure_csrf_cookie
+from dje.helpers import get_match_narration
 from .utils import service_request
 import django.utils.simplejson as json
 from django.http import HttpResponseRedirect
@@ -14,27 +15,6 @@ from datetime import datetime
 
 leagueId = 1
 seasonId = 9064
-
-standlist = [
-    {'teamId': int(1), 'teamName': 'Beşiktaş','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(58), 'change': int(1)},
-    {'teamId': int(2), 'teamName': 'Bursaspor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(55), 'change': int(-1)},
-    {'teamId': int(3), 'teamName': 'Eskişehirspor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(8), 'points':int(46), 'change': int(2)},
-    {'teamId': int(4), 'teamName': 'Fenerbahçe','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(61), 'change': int(3)},
-    {'teamId': int(5), 'teamName': 'Galatasaray','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(71), 'change': int(-4)},
-    {'teamId': int(6), 'teamName': 'Gaziantepspor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(-7), 'points':int(46), 'change': int(0)},
-    {'teamId': int(7), 'teamName': 'Gençlerbirliği','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(45), 'change': int(1)},
-    {'teamId': int(8), 'teamName': 'İstanbul BŞB','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(36), 'change': int(1)},
-    {'teamId': int(9), 'teamName': 'KDÇ Karabük','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(40), 'change': int(1)},
-    {'teamId': int(12), 'teamName': 'Antalyaspor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(47), 'change': int(1)},
-    {'teamId': int(11), 'teamName': 'Akhisar Bel.','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(42), 'change': int(1)},
-    {'teamId': int(17), 'teamName': 'Sivasspor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(44), 'change': int(1)},
-    {'teamId': int(14), 'teamName': 'S.B. Elazığspor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(43), 'change': int(1)},
-    {'teamId': int(15), 'teamName': 'Orduspor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(29), 'change': int(1)},
-    {'teamId': int(13), 'teamName': 'Mersin İY','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(22), 'change': int(1)},
-    {'teamId': int(18), 'teamName': 'Trabzonspor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(-1), 'points':int(46), 'change': int(1)},
-    {'teamId': int(16), 'teamName': 'Kasımpaşa','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(50), 'change': int(1)},
-    {'teamId': int(10), 'teamName': 'Kayserispor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(52), 'change': int(1)}]
-
 
 weekList = []
 for x in range(1, 35):
@@ -476,32 +456,7 @@ def before(request,reqid):
     teamStatsDict.append(dist);
 
     #data for match narrations, used in "center" and "table" views
-    data = {"leagueId": leagueId, "seasonId": seasonId, "matchId": int(reqid)}
-    datalist = service_request("GetMatchNarration", data)
-
-    narrationDict = [] #holds narrations
-
-    if len(datalist) > 0 :
-        for min in datalist:
-
-            if min == "_id":
-                #unnecessary data
-                print min #do nothing
-            else:
-                x = "team"
-                team_id = datalist[min][x]
-                x = "typeInt"
-                type_ = datalist[min][x]
-                x = "text"
-                text_ = datalist[min][x]
-                narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
-
-            team_id = min.get("team")
-            type_ = min.get("typeInt")
-            text_ = min.get("text")
-            minute_ = int(min.get("minute"))
-            if text_ is not None:
-                narrationDict.append({'min':minute_,'teamId':team_id,'type':type_,'text':text_})
+    narrationDict = get_match_narration(reqid)
 
 
     return render_to_response('virtual_stadium_before_match.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
@@ -911,32 +866,8 @@ def center(request,reqid):
     teamStatsDict.append(dist);
 
     #data for match narrations, used in "center" and "table" views
-    data = {"leagueId": leagueId, "seasonId": seasonId, "matchId": int(reqid)}
-    datalist = service_request("GetMatchNarration", data)
 
-    narrationDict = [] #holds narrations
-
-    if len(datalist) > 0 :
-        for min in datalist:
-
-            if min == "_id":
-                #unnecessary data
-                print min #do nothing
-            else:
-                x = "team"
-                team_id = datalist[min][x]
-                x = "typeInt"
-                type_ = datalist[min][x]
-                x = "text"
-                text_ = datalist[min][x]
-                narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
-
-            team_id = min.get("team")
-            type_ = min.get("typeInt")
-            text_ = min.get("text")
-            minute_ = int(min.get("minute"))
-            if text_ is not None:
-                narrationDict.append({'min':minute_,'teamId':team_id,'type':type_,'text':text_})
+    narrationDict = get_match_narration(reqid)
 
 
     return render_to_response('virtual_stadium.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
@@ -1348,24 +1279,7 @@ def table(request,reqid):
     teamStatsDict.append(dist);
 
     #data for match narrations, used in "center" and "table" views
-    data = {"leagueId": leagueId, "seasonId": seasonId, "matchId": int(reqid)}
-    datalist = service_request("GetMatchNarration", data)
-
-    narrationDict = [] #holds narrations
-
-    if len(datalist) > 0 :
-        for min in datalist:
-            if min == "_id":
-                #unnecessary data
-                print min #do nothing
-            else:
-                x = "team"
-                team_id = datalist[min][x]
-                x = "typeInt"
-                type_ = datalist[min][x]
-                x = "text"
-                text_ = datalist[min][x]
-                narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
+    narrationDict = get_match_narration(reqid)
 
     return render_to_response('virtual_stadium_board.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 

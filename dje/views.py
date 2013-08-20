@@ -483,6 +483,7 @@ def before(request,reqid):
 
     if len(datalist) > 0 :
         for min in datalist:
+
             if min == "_id":
                 #unnecessary data
                 print min #do nothing
@@ -494,6 +495,14 @@ def before(request,reqid):
                 x = "text"
                 text_ = datalist[min][x]
                 narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
+
+            team_id = min.get("team")
+            type_ = min.get("typeInt")
+            text_ = min.get("text")
+            minute_ = int(min.get("minute"))
+            if text_ is not None:
+                narrationDict.append({'min':minute_,'teamId':team_id,'type':type_,'text':text_})
+
 
     return render_to_response('virtual_stadium_before_match.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 
@@ -909,6 +918,7 @@ def center(request,reqid):
 
     if len(datalist) > 0 :
         for min in datalist:
+
             if min == "_id":
                 #unnecessary data
                 print min #do nothing
@@ -920,6 +930,14 @@ def center(request,reqid):
                 x = "text"
                 text_ = datalist[min][x]
                 narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
+
+            team_id = min.get("team")
+            type_ = min.get("typeInt")
+            text_ = min.get("text")
+            minute_ = int(min.get("minute"))
+            if text_ is not None:
+                narrationDict.append({'min':minute_,'teamId':team_id,'type':type_,'text':text_})
+
 
     return render_to_response('virtual_stadium.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 

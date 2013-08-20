@@ -2,13 +2,26 @@
 
 {% block head-addition %}
     <script src="{{ STATIC_URL }}js/radar.js" type="text/javascript"></script>
-    <!--<script src="{{ STATIC_URL }}/js/timeline.js" type="text/javascript"></script>-->
+    <script src="{{ STATIC_URL }}/js/timeline.js" type="text/javascript"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js"></script>
 
     <script type="text/javascript">
         $(function(){
-            var radar = new Radar({{selectedMatch}});
+            var timelineScope = new paper.PaperScope();
+            var radarScope = new paper.PaperScope;
+
+            var radar = new Radar({{selectedMatch}}, radarScope);
+            var timeline = new Timeline({divId: "slider", matchId: {{selectedMatch}} , sliderCount: 1, paperScope: timelineScope});
+
+            $(document).on("radarTimeChange", function(event){
+                timeline.moveSlider("left", event.minute, event.second);
+            });
+
+            $("#slider").on("timeChanged", function(event){
+
+            });
+
             $("#startMatch").click(function(){
                 radar.startMatch();
             });
@@ -112,7 +125,7 @@
         </div>
     </div>
     <div class="row">
-        <canvas id="slider" style=""></canvas>
+        <canvas id="slider"></canvas>
     </div>
 
     <div id="div-menu" style="background-color: #2a2a28; width: 100%;float: left;line-height: 50px;text-align: center;margin-top: 2px">

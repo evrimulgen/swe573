@@ -258,11 +258,11 @@
                                         {% endif %}
                                     <div id="scorearea">
                                         <div id="home">
-                                            <div id="name"><p>{{ match.homeTeamCond }}</p></div>
+                                            <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png"><p>{{ match.homeTeamCond }}</p></div>
 
                                         </div>
                                         <div id="away">
-                                            <div id="name"><p>{{ match.awayTeamCond }}</p></div>
+                                            <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png"><p>{{ match.awayTeamCond }}</p></div>
 
                                         </div>
                                     </div>

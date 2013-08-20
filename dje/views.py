@@ -12,6 +12,9 @@ from django.http import HttpResponseRedirect
 from datetime import datetime
 
 
+leagueId = 1
+seasonId = 9064
+
 standlist = [
     {'teamId': int(1), 'teamName': 'Beşiktaş','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(58), 'change': int(1)},
     {'teamId': int(2), 'teamName': 'Bursaspor','played':int(34), 'win':int(16), 'draw':int(10), 'lose':int(8), 'score':randint(18,71), 'conceded' : int(49), 'average':int(14), 'points':int(55), 'change': int(-1)},
@@ -68,7 +71,7 @@ for x in range(1, 24):
 
 
 def home(request,weekId):
-    data = {"leagueId":1,"seasonId":8918}
+    data = {"leagueId":leagueId,"seasonId":seasonId}
     list = service_request("GetWeeks", data)
     weekNumber = 0
     lastPlayed = 0
@@ -82,14 +85,14 @@ def home(request,weekId):
         i = i+1
 
     standingDict = []
-    data = {"leagueId":1,"seasonId":8918,"type":0}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"type":0}
     datalist =  service_request("GetStandings",data)
     if len(datalist) > 0:
         for item in datalist:
             if int(item[0]) == int(weekId):
                 standingDict.append({'teamId': int(item[1]), 'teamName': item[2],'played':int(item[3]), 'win':int(item[4]), 'draw':int(item[5]), 'lose':int(item[6]), 'score':int(item[7]), 'conceded' : int(item[8]), 'average':int(item[9]), 'points':int(item[10]), 'change': int(item[11])})
 
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId":seasonId}
     weeklist = service_request("GetFixture", data)
     fixtureDict = []
     if len(weeklist) > 0 :
@@ -131,7 +134,7 @@ def team(request, num):
         #    post_data = '{"team_ids":["1"]}'
         #    result = urllib2.urlopen('http://sentio.cloudapp.net:8080/api/GetTeamsInformation', post_data)
         #    content = result.read()
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId": seasonId}
     datalist = service_request("GetTeams", data)
     teamDict = []
     if len(datalist) > 0:
@@ -147,21 +150,21 @@ def team(request, num):
             detailDict.append( {'teamName':obj[0],'stadium':obj[1],'foundation':obj[2],'president':obj[3],'capacity':obj[4],'manager':obj[5],'website':obj[6],'leaguechamp':obj[7],'cupchamp':obj[8]})
 
     standingDict = []
-    data = {"leagueId":1,"seasonId":8918,"type":0}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"type":0}
     datalist =  service_request("GetStandings",data)
     if len(datalist) > 0:
         for item in datalist:
             if int(item[0]) == 34:
                 standingDict.append({'teamId': int(item[1]), 'teamName': item[2],'played':int(item[3]), 'win':int(item[4]), 'draw':int(item[5]), 'lose':int(item[6]), 'score':int(item[7]), 'conceded' : int(item[8]), 'average':int(item[9]), 'points':int(item[10]), 'change': int(item[11])})
 
-    data = {"leagueId": 1, "seasonId": 8918, "teamId": num}
+    data = {"leagueId": leagueId, "seasonId": seasonId, "teamId": num}
     datalist = service_request("GetTeamPlayers", data)
     playerDict =[]
     if len(datalist) > 0:
         for x in datalist:
             playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
 
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId": seasonId}
     weeklist = service_request("GetFixture", data)
     fixtureDict = []
     if len(weeklist) > 0 :
@@ -184,7 +187,7 @@ def league(request):
 @ensure_csrf_cookie
 def playerx(request, num, player_id):
 
-    data = {"leagueId": 1, "seasonId": 8918,"playerId": player_id}
+    data = {"leagueId": leagueId, "seasonId": seasonId,"playerId": player_id}
     datalist = service_request("GetPlayerDetails", data)
 
     detailDict = []
@@ -192,7 +195,7 @@ def playerx(request, num, player_id):
         for obj in datalist:
             detailDict.append({'playerName':obj[0],'date':obj[1],'height':obj[2],'nation':obj[3],'cap':obj[4],'goal':obj[5],'teamId':obj[6],'teamName':obj[7]})
 
-    data = {"leagueId": 1, "seasonId": 8918, "teamId": num}
+    data = {"leagueId": leagueId, "seasonId": seasonId, "teamId": num}
     datalist = service_request("GetTeamPlayers", data)
 
     playerDict =[]
@@ -200,7 +203,7 @@ def playerx(request, num, player_id):
         for x in datalist:
             playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
 
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId": seasonId}
     datalist = service_request("GetTeams", data)
 
     teamDict = []
@@ -212,7 +215,7 @@ def playerx(request, num, player_id):
 
 def player3(request, num):
 
-    data = {"leagueId": 1, "seasonId": 8918, "teamId": num}
+    data = {"leagueId": leagueId, "seasonId": seasonId, "teamId": num}
     datalist = service_request("GetTeamPlayers", data)
 
     playerDict =[]
@@ -220,7 +223,7 @@ def player3(request, num):
         for x in datalist:
             playerDict.append({'playerId':x[0],'playerName':x[1],'jerseyNumber':x[2],'position':x[3],'match':x[4],'minutes':x[5],'goals':x[6],'assists':x[7],'yellowCards':x[8],'redCards':x[9]})
 
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId": seasonId}
     datalist = service_request("GetTeams", data)
 
     teamDict = []
@@ -231,7 +234,7 @@ def player3(request, num):
     return render_to_response('playerselection.html', { 'team_selected': int(num), 'try_list':teamDict, 'team_list': teamList, 'standing_list': standlist,'players':playerDict, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
 
 def before(request,reqid):
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId": seasonId}
     weeklist = service_request("GetFixture", data)
     weekDict = []
     currentWeek = 34
@@ -250,7 +253,7 @@ def before(request,reqid):
             weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
 
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchInfo", data)
     infoDict = []
     homeTeamId = 0
@@ -268,7 +271,7 @@ def before(request,reqid):
         for x in datalist:
             goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchSquad", data)
 
     homeSquadDict = []
@@ -330,7 +333,7 @@ def before(request,reqid):
         awayGoalRatio = 99-homeGoalRatio
         historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
 
-    data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
     datalist = service_request("GetTeamForm", data)
 
     homeFormDict = []
@@ -345,7 +348,7 @@ def before(request,reqid):
                 win=2
             homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
 
-    data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
     datalist = service_request("GetTeamForm", data)
     awayFormDict = []
     if len(datalist) > 0 :
@@ -359,14 +362,14 @@ def before(request,reqid):
                 win=2
             awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchEvents", data)
     eventDict = []
     if len(datalist) > 0 :
         for event in datalist:
             eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchData", data)
 
     matchDataDict = []
@@ -586,7 +589,7 @@ def before(request,reqid):
     teamStatsDict.append(dist);
 
 
-    data = {"leagueId": 1, "seasonId": 8918, "matchId": int(reqid)}
+    data = {"leagueId": leagueId, "seasonId": seasonId, "matchId": int(reqid)}
     datalist = service_request("GetMatchNarration", data)
 
     narrationDict = []
@@ -607,7 +610,7 @@ def before(request,reqid):
 
 def center(request,reqid):
 
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId": seasonId}
     weeklist = service_request("GetFixture", data)
     weekDict = []
     currentWeek = 34
@@ -626,7 +629,7 @@ def center(request,reqid):
             weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
 
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchInfo", data)
     infoDict = []
     homeTeamId = 0
@@ -644,7 +647,7 @@ def center(request,reqid):
         for x in datalist:
             goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchSquad", data)
 
     homeSquadDict = []
@@ -706,7 +709,7 @@ def center(request,reqid):
         awayGoalRatio = 99-homeGoalRatio
         historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
 
-    data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
     datalist = service_request("GetTeamForm", data)
 
     homeFormDict = []
@@ -721,7 +724,7 @@ def center(request,reqid):
                 win=2
             homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
 
-    data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
     datalist = service_request("GetTeamForm", data)
     awayFormDict = []
     if len(datalist) > 0 :
@@ -735,14 +738,14 @@ def center(request,reqid):
                 win=2
             awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchEvents", data)
     eventDict = []
     if len(datalist) > 0 :
         for event in datalist:
             eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchData", data)
 
     matchDataDict = []
@@ -962,7 +965,7 @@ def center(request,reqid):
     teamStatsDict.append(dist);
 
 
-    data = {"leagueId": 1, "seasonId": 8918, "matchId": int(reqid)}
+    data = {"leagueId": leagueId, "seasonId": seasonId, "matchId": int(reqid)}
     datalist = service_request("GetMatchNarration", data)
 
     narrationDict = []
@@ -988,7 +991,7 @@ def compare(request):
     return render_to_response('statscompare.html')
 
 def player(request):
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId": seasonId}
     datalist = service_request("GetTeams", data)
 
     teamDict = []
@@ -1000,7 +1003,7 @@ def player(request):
 
 @ensure_csrf_cookie
 def table(request,reqid):
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId": seasonId}
     weeklist = service_request("GetFixture", data)
     weekDict = []
     currentWeek = 34
@@ -1019,7 +1022,7 @@ def table(request,reqid):
             weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
 
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchInfo", data)
     infoDict = []
     homeTeamId = 0
@@ -1037,7 +1040,7 @@ def table(request,reqid):
         for x in datalist:
             goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchSquad", data)
 
     homeSquadDict = []
@@ -1099,7 +1102,7 @@ def table(request,reqid):
         awayGoalRatio = 99-homeGoalRatio
         historicDict = [{'homeWins':datalist["homeWins"],'awayWins':datalist["awayWins"],'draws':datalist["draws"],'homeGoals':datalist["homeGoals"],'awayGoals':datalist["awayGoals"],'awayWinRatio':awayWinRatio,'homeWinRatio':homeWinRatio,'drawRatio':drawRatio,'homeGoalRatio':homeGoalRatio,'awayGoalRatio':awayGoalRatio,'pastMatches':pastMatches}]
 
-    data = {"leagueId":1,"seasonId":8918,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"teamId":homeTeamId,"type":0,"weekId":currentWeek}
     datalist = service_request("GetTeamForm", data)
 
     homeFormDict = []
@@ -1114,7 +1117,7 @@ def table(request,reqid):
                 win=2
             homeFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
 
-    data = {"leagueId":1,"seasonId":8918,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"teamId":awayTeamId,"type":0,"weekId":currentWeek}
     datalist = service_request("GetTeamForm", data)
     awayFormDict = []
     if len(datalist) > 0 :
@@ -1128,14 +1131,14 @@ def table(request,reqid):
                 win=2
             awayFormDict.append({'matchId':match[0],'matchName':match[1],'homeScore':match[2],'awayScore':match[3],'homeTeamId':match[4],'awayTeamId':match[5],'homeTeam':match[6],'awayTeam':match[7],'win':win})
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchEvents", data)
     eventDict = []
     if len(datalist) > 0 :
         for event in datalist:
             eventDict.append({'type':event[0],'min':event[1],'teamId':int(event[2]),'playerId':event[3],'playerIdIn':event[4],'jerseyNumber':event[5],'jerseyNumberIn':event[6]})
 
-    data = {"leagueId":1,"seasonId":8918,"matchId":reqid}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":reqid}
     datalist = service_request("GetMatchData", data)
 
     matchDataDict = []
@@ -1355,7 +1358,7 @@ def table(request,reqid):
     teamStatsDict.append(dist);
 
 
-    data = {"leagueId": 1, "seasonId": 8918, "matchId": int(reqid)}
+    data = {"leagueId": leagueId, "seasonId": seasonId, "matchId": int(reqid)}
     datalist = service_request("GetMatchNarration", data)
 
     narrationDict = []
@@ -1383,7 +1386,7 @@ def radar_vebview(request, matchId):
     return render_to_response('radar_vebview.html')
 
 def team2(request):
-    data = {"leagueId": 1, "seasonId": 8918}
+    data = {"leagueId": leagueId, "seasonId": seasonId}
     datalist = service_request("GetTeams", data)
 
     teamDict = []
@@ -1392,7 +1395,7 @@ def team2(request):
             teamDict.append({'teamId':x[0],'teamName':x[1]})
 
     standingDict = []
-    data = {"leagueId":1,"seasonId":8918,"type":0}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"type":0}
     datalist =  service_request("GetStandings",data)
     if len(datalist) > 0:
         for item in datalist:
@@ -1425,7 +1428,7 @@ def router(request, path):
         return HttpResponse(content, status=status_code, mimetype=mimetype)
 
 def matchcenter(request,match_id):
-    data = {"leagueId":1,"seasonId":8918,"matchId":match_id}
+    data = {"leagueId":leagueId,"seasonId":seasonId,"matchId":match_id}
     list = service_request("GetMatchInfo", data)
     for x in list:
         if(x[1]=="1"):
@@ -1434,7 +1437,7 @@ def matchcenter(request,match_id):
             return HttpResponseRedirect("before")
 
 def statscenter(request):
-    data = {"leagueId":1,"seasonId":8918}
+    data = {"leagueId":leagueId,"seasonId":seasonId}
     list = service_request("GetWeeks", data)
 
     for x in list:

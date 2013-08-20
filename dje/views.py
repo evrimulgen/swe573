@@ -234,7 +234,9 @@ def player3(request, num):
     return render_to_response('playerselection.html', { 'team_selected': int(num), 'try_list':teamDict, 'team_list': teamList, 'standing_list': standlist,'players':playerDict, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
 
 def before(request,reqid):
+
     data = {"leagueId": leagueId, "seasonId": seasonId}
+
     weeklist = service_request("GetFixture", data)
     weekDict = []
     currentWeek = 34
@@ -609,7 +611,6 @@ def before(request,reqid):
     return render_to_response('virtual_stadium_before_match.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 
 def center(request,reqid):
-
     data = {"leagueId": leagueId, "seasonId": seasonId}
     weeklist = service_request("GetFixture", data)
     weekDict = []
@@ -980,7 +981,7 @@ def center(request,reqid):
                 type_ = datalist[min][x]
                 x = "text"
                 text_ = datalist[min][x]
-                narrationDict.append({'min':min,'teamId':team_id,'type':type_,'text':text_})
+                narrationDict.append({'min':int(min),'teamId':team_id,'type':type_,'text':text_})
 
     return render_to_response('virtual_stadium.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 

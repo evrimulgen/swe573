@@ -1,6 +1,10 @@
 $(function () {
+    var timelineScope = new paper.PaperScope();
+    var tl = new Timeline({divId: "slider", "matchId": window.matchId, sliderCount: 2, paperScope: timelineScope});
+
     var cb = new Chalkboard("chalkboardContainer", 85);
-    $("#timeSlider").slider({min: 0, max: 90, value:[0,90], step: 5});
+
+    //$("#timeSlider").slider({min: 0, max: 90, value:[0,90], step: 5});
 
     var awayPlayers = [
         {id: 654, name: 'Hamit Altintop', team_id: 5, jersey_number: 4},

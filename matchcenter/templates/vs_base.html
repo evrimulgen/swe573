@@ -16,27 +16,20 @@
         var week = {{ currentWeek }}
                 console.log("{{ currentWeek }}")
         console.log("{{ selectedMatch }}")
-        $(function(){
+
+        var prepTimelinr = function(){
             $().timelinr({
                 issuesSpeed: 	300,
                 datesSpeed: 	100,
                 arrowKeys: 		'true',
                 startAt:		week
             })
-        });
+        }
+
+        $(prepTimelinr);
     </script>
 
-    <script>
-
-        $(document).ready(function(){
-
-            $("#fixture").load("/new/partial/asdasd/{{ selectedMatch }}", function(d) {
-                alert(d + "load performed");
-            });
-
-        })
-
-    </script>
+    {% block head-addition %}{% endblock %}
 
 </head>
 

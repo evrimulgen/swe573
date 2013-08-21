@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import template
+from django.http import HttpResponse
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -107,4 +108,7 @@ def table(request, reqid):
 
 def partial_renderer(request, partial, match_id):
     sl_fixture
+    return render_to_response('_vs_fixture.html', sl_fixture(match_id))
+
+def partial_fixture(request,match_id):
     return render_to_response('_vs_fixture.html', sl_fixture(match_id))

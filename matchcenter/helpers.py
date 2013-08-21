@@ -218,7 +218,9 @@ def get_match_events(match_id):
               'playerId':event[3],
               'playerIdIn':event[4],
               'jerseyNumber':event[5],
-              'jerseyNumberIn':event[6]} for event in datalist]
+              'jerseyNumberIn':event[6],
+              'playerName': event[7],
+              'playerNameIn': event[8]} for event in datalist]
 
 def calculate_percentage(x,y):
     xPercent = 0

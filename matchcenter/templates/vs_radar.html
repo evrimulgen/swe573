@@ -1,5 +1,7 @@
 {% extends "vs_base.html" %}
 
+{% load match_center_tags %}
+
 {% block head-addition %}
     <script src="{{ STATIC_URL }}js/radar.js" type="text/javascript"></script>
     <script src="{{ STATIC_URL }}/js/timeline.js" type="text/javascript"></script>
@@ -90,6 +92,28 @@
     }
     </script>
 
+    <!-- refresh try -->
+    <script type="text/javascript">
+    $(window).load(function(){
+
+        var refreshFixture = function(){
+            $(".fixture").load('/new/partial/fixture/{{ selectedMatch }}/', function(responseTxt,statusTxt,xhr){
+                if(statusTxt=="success")
+                    prepTimelinr();
+                if(statusTxt=="error")
+                    console.log("Error: "+xhr.status+": "+xhr.statusText + ": " + responseTxt);
+                    console.log("{{ selectedMatch }}")
+            });
+        }
+
+        $("#tryRefresh").click(refreshFixture);
+
+        setInterval(refreshFixture, 5000);
+    })
+
+    </script>
+    <!-- end refresh try -->
+
     <style type="text/css">
         #radarContainer > * {
             margin-left: 50px;
@@ -109,6 +133,7 @@
                 <a href="../center">STADYUM</a>
             </div>
             <a href="../table">MAÇ TAHTASI</a>
+            <button class="btn-primary" id="tryRefresh">Refresh!</button>
         </div>
     </div>
 {% endblock %}
@@ -118,6 +143,7 @@
         <div id="radarContainer">
             <p><button class="btn" id="startMatch">Maci Baslat</button></p>
             <div id="timeDisplay"></div>
+
         </div>
     </div>
     <div class="row">

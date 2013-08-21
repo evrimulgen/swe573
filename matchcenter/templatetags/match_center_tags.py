@@ -18,20 +18,26 @@ def sl_before_playerlistitem(player):
         "player": player
     }
 
-@register.inclusion_tag('_vs_center_eventitem.html')
-def sl_center_eventitem(event, homeSquad, awaySquad):
-    img_lookup = lambda x: {
-        0: "",
-        1: "",
-        2: "",
-        3: "",
-        4: "",
-        5: "",
-        6: "",
-    }
+@register.inclusion_tag('_vs_center_eventitem.html', takes_context=True)
+def sl_center_eventitem(context, event, homeSquad, awaySquad):
 
-    return {
+    img_lookup = lambda x: {
+        0: "images/goal.png",
+        1: "images/own-goal.png",
+        2: "images/penalty.png",
+        3: "images/missed-pen.png",
+        4: "images/yellow.png",
+        5: "images/second-yellow.png",
+        6: "images/red.png",
+    }.get(x)
+
+    ctx = {
         "event": event,
         "homeSquad": homeSquad,
-        "awaySquad": awaySquad
+        "awaySquad": awaySquad,
+        "eventImagePath": img_lookup(int(event["type"])),
+        "homeTeamId": context.get("homeTeamId"),
+        "awayTeamId": context.get("awayTeamId")
     }
+
+    return ctx

@@ -3,42 +3,15 @@
 {% load templateextras %}
 {% load match_center_tags %}
 {% get_static_prefix as STATIC_URL %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <title>{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}</title>
 
-
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/bootstrap.min.css" charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/application.css" charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/virtual_style.css" charset="utf-8" />
-
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-    <script language="javascript">var STATIC_URL = "{{ STATIC_URL }}";</script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-
-    <script src="{{ STATIC_URL }}js/paper.js" type="text/javascript"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-    <script src="{{ STATIC_URL }}js/main.js"></script>
-    <script src="{{ STATIC_URL }}js/jquery.masonry.min.js"></script>
-    <script src="{{ STATIC_URL }}js/jquery.cookie.js" type="text/javascript"></script>
-    <script src="{{ STATIC_URL }}js/underscore.js" type="text/javascript"></script>
-    <link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:600,700' rel='stylesheet' type='text/css'>
-
-    {% block head-addition %}
-
-    {% endblock %}
-
-    <script src="{{ STATIC_URL }}js/jquery.timelinr-0.9.53.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/site.css" />
-    <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.ico" />
-
-
+    {% include '_vs_headincludes.html' %}
     <script>
         var week = {{ currentWeek }}
                 console.log("{{ currentWeek }}")
@@ -52,214 +25,52 @@
             })
         });
     </script>
-    <!--<script>
-        formatDate = function(elm,rawDate){
-            var d = new Date(rawDate)
-            var weekDay = d.getDay()
-            var monthDay = d.getDate()
-            var month = d.getMonth()
-            var dayString
-            switch(weekDay)
-            {
-                case 0:
-                    dayString = "Pazar"
-                    break;
-                case 1:
-                    dayString = "Pazartesi"
-                    break;
-                case 2:
-                    dayString = "Salı"
-                    break;
-                case 3:
-                    dayString = "Çarşamba"
-                    break;
-                case 4:
-                    dayString = "Perşembe"
-                    break;
-                case 5:
-                    dayString = "Cuma"
-                    break;
-                case 6:
-                    dayString = "Cumartesi"
-                    break;
-            }
 
-            var monthString
-            switch(month)
-            {
-                case 0:
-                    monthString = "Oca"
-                    break;
-                case 1:
-                    monthString = "Şub"
-                    break;
-                case 2:
-                    monthString = "Mar"
-                    break;
-                case 3:
-                    monthString = "Nis"
-                    break;
-                case 4:
-                    monthString = "May"
-                    break;
-                case 5:
-                    monthString = "Haz"
-                    break;
-                case 6:
-                    monthString = "Tem"
-                    break;
-                case 7:
-                    monthString = "Ağu"
-                    break;
-                case 8:
-                    monthString = "Eyl"
-                    break;
-                case 9:
-                    monthString = "Eki"
-                    break;
-                case 10:
-                    monthString = "Kas"
-                    break;
-                case 11:
-                    monthString = "Ara"
-                    break;
-            }
+    <script>
 
-            var str = monthDay + " " + weekDay + " " + monthString
-            console.log(str)
-            elm.html("<p>" + str + "</p>")
+        $(document).ready(function(){
 
-        }
-    </script>-->
+            $("#fixture").load("/new/partial/asdasd/{{ selectedMatch }}", function(d) {
+                alert(d + "load performed");
+            });
 
+        })
 
-
+    </script>
 
 </head>
 
 <body>
 
 <div id="global-header">
-    <div id="cnt">
-        <div id="logo">
-            <p style="width: 100%;height: 40px;line-height: 50px;text-align: center">Logo</p>
-        </div>
-        <div id="scoreboard">
-            {% block scoreboard %}
-
-                    <div class="match-info">
-                        <div id="stadium" style="font-size: 10px;height: 12px"></div>
-                        <div id="match-day" style="font-size: 10px;height: 12px"></div>
-                        <div id="referee" style="font-size: 10px;height: 12px"></div>
-                    </div>
-                    <div class="score-area">
-                        <div id="hometeam">
-                            <p>{{ matchInfo.homeTeam|upper }}</p>
-                        </div>
-                        <div id="homescore">
-                            <p class="score">{{ matchInfo.homeTeamScore }}</p>
-                        </div>
-                        <div class="score-seperator">-</div>
-                        <div id="awayscore">
-                            <p class="score">{{ matchInfo.awayTeamScore }}</p>
-                        </div>
-                        <div id="awayteam">
-                            <p>{{ matchInfo.awayTeam|upper }}</p>
-                        </div>
-                    </div>
-                    <div class="match-time">
-                        <div></div>
-                    </div>
-            {% endblock %}
-        </div>
-    </div>
-
+    {% include '_vs_scoreboard.html' with matchInfo=matchInfo only %}
 </div>
 
 <div id="content">
     <div id="sidebar">
 
-        {% sl_fixture weeks %}
-
-        <div class="sidebox">
-            <h1> Gol Videoları </h1>
-
-            {% for x in goals %}
-                <div style="height: 40px">
-                    <a href="{{ x.goalLink }}" target="_blank">
-                        <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                        <p id="name">{{ x.playerName }}</p>
-                        <p id="min">{{ x.min }}'</p>
-                    </a>
-                </div>
-
-            {% endfor %}
-
+        <div class="fixture">
+            {% sl_fixture selectedMatch %}
         </div>
-        <div class="sidebox">
-            <h1> Mesafe </h1>
 
-            {% for x in matchData|dictsortreversed:'totalDistance' %}
-                {% if forloop.counter < 6 %}
-                    <div style="height: 40px">
-                        <a href="">
-                            <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                            <p id="name">{{ x.playerName }}</p>
-                            <p id="value">{{ x.totalDistance }} m</p>
-                        </a>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="sidebox">
-            <h1> Pas </h1>
-            {% for x in matchData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
-                {% if forloop.counter < 6 %}
-                    <div style="height: 40px">
-                        <a href="">
-                            <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                            <p id="name">{{ x.playerName }}</p>
-                            <p id="value">{{ x.successfulPass}} / {{ x.totalPass }}</p>
-                        </a>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div class="sidebox">
-            <h1> Şut </h1>
-            {% for x in matchData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
-                {% if forloop.counter < 6 %}
-                    <div style="height: 40px">
-                        <a href="">
-                            <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                            <p id="name">{{ x.playerName }}</p>
-                            <p id="value">{{ x.successfulShot}} / {{ x.totalShot }}</p>
-                        </a>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
+        {% include '_vs_goalvideo.html' with goals=goals only %}
+
+        {% include '_vs_sidestats.html' with matchData=matchData only %}
+
     </div>
     <div id="main">
         <div id="menu">
-            {% block menu %}
-
-            {% endblock %}
+            {% block menu %}{% endblock %}
         </div>
         <div class="container">
-            {% block content %}
-
-            {% endblock %}
+            {% block content %}{% endblock %}
         </div>
 
     </div>
 
 </div>
 
-<div id="footer">
-
-</div>
-
+<div id="footer"></div>
 
 </body>
 

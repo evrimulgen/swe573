@@ -1,0 +1,30 @@
+<div id="cnt">
+    <div id="logo">
+        <p style="width: 100%;height: 40px;line-height: 50px;text-align: center">Logo</p>
+    </div>
+    <div id="scoreboard">
+        <div class="match-info">
+            <div id="stadium" style="font-size: 10px;height: 12px"></div>
+            <div id="match-day" style="font-size: 10px;height: 12px"></div>
+            <div id="referee" style="font-size: 10px;height: 12px"></div>
+        </div>
+        <div class="score-area">
+            <div id="hometeam">
+                <p>{{ matchInfo.homeTeam|upper }}</p>
+            </div>
+            <div id="homescore">
+                <p class="score">{{ matchInfo.homeTeamScore }}</p>
+            </div>
+            <div class="score-seperator">-</div>
+            <div id="awayscore">
+                <p class="score">{{ matchInfo.awayTeamScore }}</p>
+            </div>
+            <div id="awayteam">
+                <p>{{ matchInfo.awayTeam|upper }}</p>
+            </div>
+        </div>
+        <div class="match-time">
+            <div></div>
+        </div>
+    </div>
+</div>

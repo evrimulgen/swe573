@@ -1,0 +1,18 @@
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
+
+<div class="sidebox">
+    <h1> Gol Videoları </h1>
+
+    {% for x in goals %}
+        <div style="height: 40px">
+            <a href="{{ x.goalLink }}" target="_blank">
+                <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                <p id="name">{{ x.playerName }}</p>
+                <p id="min">{{ x.min }}'</p>
+            </a>
+        </div>
+
+    {% endfor %}
+
+</div>

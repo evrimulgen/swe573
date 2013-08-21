@@ -1,4 +1,4 @@
-{% extends "virtual_stadium_base.html" %}
+{% extends "vs_base.html" %}
 
 {% block head-addition %}
     <script src="{{ STATIC_URL }}js/radar.js" type="text/javascript"></script>
@@ -19,15 +19,11 @@
             });
 
             $("#slider").on("timeChanged", function(event){
-                radar.changeTime(event.time);
+
             });
 
             $("#startMatch").click(function(){
                 radar.startMatch();
-            });
-
-            $("#pauseMatch").click(function(){
-                radar.togglePause();
             });
         });
     </script>
@@ -124,10 +120,7 @@
 {% block content %}
     <div class="row">
         <div id="radarContainer">
-            <p>
-                <button class="btn" id="startMatch">Maci Baslat</button>
-                <button class="btn" id="pauseMatch">Duraklat/Devam Et</button>
-            </p>
+            <p><button class="btn" id="startMatch">Maci Baslat</button></p>
             <div id="timeDisplay"></div>
         </div>
     </div>

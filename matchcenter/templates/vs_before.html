@@ -1,11 +1,11 @@
 {% extends "vs_base.html" %}
+{% load match_center_tags %}
+
 {% block menu %}
     <div id="navbar">
         <div id="nav">
             <div id="active">
-
                 <a href="../before">MAÇ ÖNCESİ</a>
-
             </div>
             <a href="../center">STADYUM</a>
 
@@ -37,50 +37,12 @@
                         <h3>Son 5 Maç</h3>
                         <div style="width: 50%;float: left;margin-top: 0px">
                             <div class="form">
-                                {% for f in homeForm reversed%}
-                                    {% if f.win == 1 %}
-                                        <p class="win"> G </p>
-                                        {% if forloop.counter < 5 %}
-                                            <p class="seperator">-</p>
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if f.win == 0 %}
-                                        <p class="draw"> B </p>
-                                        {% if forloop.counter < 5 %}
-                                            <p class="seperator">-</p>
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if f.win == 2 %}
-                                        <p class="lose"> M </p>
-                                        {% if forloop.counter < 5 %}
-                                            <p class="seperator">-</p>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
+                                {% include '_vs_before_form.html' with form=homeForm only %}
                             </div>
                         </div>
                         <div style="width: 50%;float: left;margin-top: 0px">
                             <div class="form">
-                                {% for f in awayForm reversed %}
-                                    {% if f.win == 1 %}
-                                        <p title = "{{ f.homeScore }} - {{ f.awayScore }}" class="win"> G </p>
-                                        {% if forloop.counter < 5 %}
-                                            <p class="seperator">-</p>
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if f.win == 0 %}
-                                        <p class="draw"> B </p>
-                                        {% if forloop.counter < 5 %}
-                                            <p class="seperator">-</p>
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if f.win == 2 %}
-                                        <p class="lose"> M </p>
-                                        {% if forloop.counter < 5 %}
-                                            <p class="seperator">-</p>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
+                                {% include '_vs_before_form.html' with form=awayForm only %}
                             </div>
                         </div>
                     </div>
@@ -91,162 +53,9 @@
             </div>
     </div>
     <div class="squad-area">
-        <h1>Maç Kadrosu</h1>
-        <div id="home-suspended">
-        </div>
-        <div id="homesquad">
-            {% for player in homeSquad|dictsort:"playPosition"|dictsortreversed:"eleven" %}
-                {% if player.eleven == 1 %}
-                    <div class="starting">
-                        <p id="no" class="pos{{ player.playPosition }}">{{ player.jerseyNumber }}</p>
-                        <p id="name">{{ player.playerName }}</p>
-                        {% for event in player.playerEvents|dictsortreversed:"matchTime" %}
-                            <div class="event">
-                                {% if event.eventType == 7 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-out.png">
-                                {% endif %}
-                                {% if event.eventType == 0 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/goal.png">
-                                {% endif %}
-                                {% if event.eventType == 1 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/own-goal.png">
-                                {% endif %}
-                                {% if event.eventType == 2 %}
-                                    <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/penalty.png">
-                                {% endif %}
-                                {% if event.eventType == 3 %}
-                                    <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/missed-pen.png">
-                                {% endif %}
-                                {% if event.eventType == 4 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/yellow.png">
-                                {% endif %}
-                                {% if event.eventType == 5 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/second-yellow.png">
-                                {% endif %}
-                                {% if event.eventType == 6 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/red.png">
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if player.eleven == 0 %}
-                    <div class="sub">
-                        <p id="no" class="pos{{  player.playPosition }}">{{ player.jerseyNumber }}</p>
-                        <p id="name">{{ player.playerName }}</p>
-                        {% for event in player.playerEvents|dictsortreversed:"matchTime" %}
-                            <div class="event">
-                                {% if event.eventType == 7 %}
-                                    {% if event.playerId == player.playerId %}
-                                        <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-out.png">
-                                    {% else %}
-
-                                        <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-in.png">
-                                    {% endif %}
-                                {% endif %}
-                                {% if event.eventType == 0 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/goal.png">
-                                {% endif %}
-                                {% if event.eventType == 1 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/own-goal.png">
-                                {% endif %}
-                                {% if event.eventType == 2 %}
-                                    <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/penalty.png">
-                                {% endif %}
-                                {% if event.eventType == 3 %}
-                                    <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/missed-pen.png">
-                                {% endif %}
-                                {% if event.eventType == 4 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/yellow.png">
-                                {% endif %}
-                                {% if event.eventType == 5 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/second-yellow.png">
-                                {% endif %}
-                                {% if event.eventType == 6 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/red.png">
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-        <div id="awaysquad">
-            {% for player in awaySquad|dictsort:"playPosition"|dictsortreversed:"eleven" %}
-                {% if player.eleven == 1 %}
-                    <div class="starting">
-                        <p id="no" class="pos{{  player.playPosition }}">{{ player.jerseyNumber }}</p>
-                        <p id="name">{{ player.playerName }}</p>
-                        {% for event in player.playerEvents|dictsortreversed:"matchTime" %}
-                            <div class="event">
-                                {% if event.eventType == 7 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-out.png">
-                                {% endif %}
-                                {% if event.eventType == 0 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/goal.png">
-                                {% endif %}
-                                {% if event.eventType == 1 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/own-goal.png">
-                                {% endif %}
-                                {% if event.eventType == 2 %}
-                                    <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/goal.png">
-                                {% endif %}
-                                {% if event.eventType == 3 %}
-                                    <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/missed-pen.png">
-                                {% endif %}
-                                {% if event.eventType == 4 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/yellow.png">
-                                {% endif %}
-                                {% if event.eventType == 5 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/second-yellow.png">
-                                {% endif %}
-                                {% if event.eventType == 6 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/red.png">
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% if player.eleven == 0 %}
-                    <div class="sub">
-                        <p id="no" class="pos{{  player.playPosition }}">{{ player.jerseyNumber }}</p>
-                        <p id="name">{{ player.playerName }}</p>
-                        {% for event in player.playerEvents|dictsortreversed:"matchTime" %}
-                            <div class="event">
-                                {% if event.eventType == 7 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-in.png">
-                                {% endif %}
-                                {% if event.eventType == 0 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/goal.png">
-                                {% endif %}
-                                {% if event.eventType == 1 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/own-goal.png">
-                                {% endif %}
-                                {% if event.eventType == 2 %}
-                                    <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/goal.png">
-                                {% endif %}
-                                {% if event.eventType == 3 %}
-                                    <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/missed-pen.png">
-                                {% endif %}
-                                {% if event.eventType == 4 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/yellow.png">
-                                {% endif %}
-                                {% if event.eventType == 5 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/second-yellow.png">
-                                {% endif %}
-                                {% if event.eventType == 6 %}
-                                    <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/red.png">
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-
-        </div>
-        <div id="away-suspended">
-        </div>
+        {% include '_vs_before_squads.html' with awaySquad=awaySquad homeSquad=homeSquad only %}
     </div>
+
     <h1 class="past-match-area">Son Karşılaşmalar</h1>
     <div class="past-match-area">
         {% for match in history.pastMatches %}

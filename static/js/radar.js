@@ -266,8 +266,8 @@ function Radar(matchId, scope){
         });
     }
 
-    //var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
-    var socket = io.connect('http://localhost:8080/');
+    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
+    //var socket = io.connect('http://localhost:8080/');
 
     socket.on("welcome", function(){
         console.log("connected");

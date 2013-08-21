@@ -218,7 +218,9 @@ def get_match_events(match_id):
               'playerId':event[3],
               'playerIdIn':event[4],
               'jerseyNumber':event[5],
-              'jerseyNumberIn':event[6]} for event in datalist]
+              'jerseyNumberIn':event[6],
+              'playerName': event[7],
+              'playerNameIn': event[8]} for event in datalist]
 
 def calculate_percentage(x,y):
     xPercent = 0
@@ -245,10 +247,10 @@ def get_match_stats(match_id, homeTeamId, awayTeamId):
     #self explanatory
     #corners, offsides, penalties and cards should be added
 
-    common_stats = {'distance': (4, 'Toplam Mesafe', ' m'),
-                    'hir': (6, 'Şiddetli Koşu', ' m'),
+    common_stats = {'distance': (4, 'Koşu Mesafesi', ' m'),
+                    'hir': (6, 'Sprint', ' m'),
                     'totalPass': (7, 'Toplam Pas', ''),
-                    'successPass': (8, 'Başarılı Pas', ''),
+                    'successPass': (8, 'İsabetli Pas', ''),
                     'shot': (9, 'Toplam Şut', ''),
                     'successfulShot': (10, 'İsabetli Şut', ''),
                     'totalCross': (11, 'Toplam Orta', ''),

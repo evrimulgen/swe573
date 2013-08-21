@@ -16,7 +16,7 @@
 {% endblock %}
 {% block content %}
     <div class="history-area">
-        <h1>Rekabet Geçmişi</h1>
+        <h1 class="main">Rekabet Geçmişi</h1>
         {% for x in matchInfo %}
             <div id="home">
                 <h2>{{ x.homeTeam }}</h2>
@@ -36,7 +36,7 @@
                         <p class="away-ratio" style="width:{{ hist.awayGoalRatio }}%">{{ hist.awayGoals }}</p>
                     </div>
                     <div class="holder">
-                        <h3>Son 5 Maç</h3>
+                        <h3>Son Maçlar</h3>
                         <div style="width: 50%;float: left;margin-top: 0px">
                             <div class="form">
                                 {% for f in homeForm reversed%}
@@ -95,7 +95,7 @@
         {% endfor %}
     </div>
     <div class="squad-area">
-        <h1>Maç Kadrosu</h1>
+        <h1 class="main">Maç Kadrosu</h1>
         <div id="home-suspended">
         </div>
         <div id="homesquad">
@@ -251,14 +251,14 @@
         <div id="away-suspended">
         </div>
     </div>
-    <h1 class="past-match-area">Son Karşılaşmalar</h1>
+    <h1 class="main">Son Karşılaşmalar</h1>
     <div class="past-match-area">
         {% for historic in history %}
             {% for match in historic.pastMatches %}
                 <a class="past-match">
-                    <p id="upper-info">{{ match.stadium }}</p>
-                    <p id="upper-info">{{ match.date }}</p>
-                    <p id="upper-info">{{ match.referee }}</p>
+                    <p class="upper-info">{{ match.stadium }}</p>
+                    <p class="upper-info">{{ match.date }}</p>
+                    <p class="upper-info">{{ match.referee }}</p>
                     <img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png" id="homelogo">
                     <p id="homename">{{ match.homeTeam }}</p>
                     <p id="homescore">{{ match.homeScore }}</p>

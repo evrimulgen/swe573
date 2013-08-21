@@ -1397,7 +1397,7 @@ def team(request, num):
 
 
 def league(request):
-    return render_to_response('statsleague.html', {'weeklist': weekList , 'standing_list':standlist, 'team_list': teamList, 'weeklist': weekList,'best_eleven_list':bestList})
+    return render_to_response('statsleague.html', {'weeklist': weekList , 'team_list': teamList, 'weeklist': weekList,'best_eleven_list':bestList})
 
 @ensure_csrf_cookie
 def playerx(request, num, player_id):
@@ -1426,7 +1426,7 @@ def playerx(request, num, player_id):
         for x in datalist:
             teamDict.append({'teamId':x[0],'teamName':x[1]})
 
-    return render_to_response('statsplayer.html', {'p_id': int(player_id), 'details':detailDict, 'try_list':teamDict,'players':playerDict, 'team_selected': int(num), 'team_list': teamList, 'standing_list': standlist, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
+    return render_to_response('statsplayer.html', {'p_id': int(player_id), 'details':detailDict, 'try_list':teamDict,'players':playerDict, 'team_selected': int(num), 'team_list': teamList, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
 
 def player3(request, num):
 
@@ -1446,7 +1446,7 @@ def player3(request, num):
         for x in datalist:
             teamDict.append({'teamId':x[0],'teamName':x[1]})
 
-    return render_to_response('playerselection.html', { 'team_selected': int(num), 'try_list':teamDict, 'team_list': teamList, 'standing_list': standlist,'players':playerDict, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
+    return render_to_response('playerselection.html', { 'team_selected': int(num), 'try_list':teamDict, 'team_list': teamList,'players':playerDict, 'player_list':playerList, "best_eleven_list":bestList, 'weeklist': weekList})
 
 def summary(request):
     return render_to_response('matchsummary.html')
@@ -1463,7 +1463,7 @@ def player(request):
         for x in datalist:
             teamDict.append({'teamId':x[0],'teamName':x[1]})
 
-    return render_to_response('playerteamselection.html',{'standing_list':standlist, 'best_eleven_list':bestList, 'weeklist': weekList, 'try_list':teamDict} )
+    return render_to_response('playerteamselection.html',{ 'best_eleven_list':bestList, 'weeklist': weekList, 'try_list':teamDict} )
 
 @ensure_csrf_cookie
 def chalkboard(request):

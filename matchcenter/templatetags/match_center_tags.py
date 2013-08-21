@@ -20,6 +20,16 @@ def sl_before_playerlistitem(player):
 
 @register.inclusion_tag('_vs_center_eventitem.html')
 def sl_center_eventitem(event, homeSquad, awaySquad):
+    img_lookup = lambda x: {
+        0: "",
+        1: "",
+        2: "",
+        3: "",
+        4: "",
+        5: "",
+        6: "",
+    }
+
     return {
         "event": event,
         "homeSquad": homeSquad,

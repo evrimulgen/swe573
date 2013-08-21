@@ -53,7 +53,7 @@ function Timeline(options){
     var pixelToTime = function(pos){
         var xratio = pos/(width-handleWidth);
         var seconds = Math.round(maxSecond*xratio);
-        return [Math.floor(seconds/60), seconds%60]
+        return [Math.floor(seconds/60), seconds%60];
     }
 
     scope.tool.onMouseDown = function(event){
@@ -82,6 +82,20 @@ function Timeline(options){
     scope.tool.onMouseUp = function(event){
         if(draggedHandle){
             draggedHandle = null;
+            var timeData = null;
+            if(sliderCount==1){
+                timeData = pixelToTime(leftHandle.position.x-(handleWidth/2));
+            } else if(sliderCount==2){
+                var leftData = pixelToTime(leftHandle.position.x-(handleWidth/2));
+                var rightData = pixelToTime(rightHandle.position.x-(handleWidth/2));
+
+                if(leftData[0]>rightData[0]){
+                    timeData = [rightData, leftData];
+                } else {
+                    timeData = [leftData, rightData];
+                }
+            }
+            $("#"+div_id).trigger({type:"timeChanged", time: timeData});
         }
     }
 
@@ -104,7 +118,6 @@ function Timeline(options){
         var eventWidth = 4;
         var offset = timeToPixel(event[1], 0);
 
-        console.log(event);
         var rect = new scope.Path.Rectangle(offset, 0, eventWidth, height);
         rect.fillColor = "green";
     }
@@ -120,11 +133,13 @@ function Timeline(options){
     };
 
     this.moveSlider = function(which, minute, second){
+        paper = scope;
         var sliderToMove = null;
         if(which=="left") sliderToMove = leftHandle;
         else if(which=="right") sliderToMove = rightHandle;
 
         sliderToMove.position.x = timeToPixel(minute, second);
+        scope.view.draw();
     }
 
     loadEvents();

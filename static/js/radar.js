@@ -274,4 +274,9 @@ function Radar(matchId, scope){
             socket.emit('getmatch', matchId);
         }
     };
+
+    this.changeTime = function(time){
+        console.log(time);
+        socket.emit('setmatchtime', time);
+    }
 }

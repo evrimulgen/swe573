@@ -114,9 +114,8 @@ $(function () {
         }
     });
 
-    $("#timeSlider").on("slideStop", function(){
-        var vals = this.value.split(",");
-        cb.applyTimeFilter(parseInt(vals[0]), parseInt(vals[1]));
+    $("#slider").on("timeChanged", function(event){
+        cb.applyTimeFilter(event.time[0][0], event.time[1][0]);
     });
 });
 

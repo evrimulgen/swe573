@@ -1,0 +1,98 @@
+
+<div class="fixture">
+
+    <div id="timeline">
+        <div class="timeline-correcter"></div>
+        <ul id="dates">
+            {% for i in weeks|dictsort:"weekId" %}
+                {% if i.weekId  == currentWeek %}
+                    <li><a href="#{{ i.weekId }}" class="selected">{{ i.weekId }}. Hafta</a></li>
+                {% else %}
+                    <li><a href="#{{ i.weekId }}">{{ i.weekId }}. Hafta</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <ul id="issues">
+            {% for week in weeks|dictsort:"weekId" %}
+                <li>
+                    {% if week.status == 0 %}
+                        {% for match in week.matches %}
+                            {% if match.matchStatus != 1 and match.matchStatus != 6 and match.matchStatus != 11 and match.matchStatus != 13 and match.matchStatus != 5 and match.matchStatus != 17 %}
+                                {% if selectedMatch == match.matchId %}
+                                    <a class="match-selected" href="../../{{ match.matchId }}">
+                                {% else %}
+                                    <a class="match" href="../../{{ match.matchId }}">
+                                {% endif %}
+                            <div id="scorearea">
+                                <div id="home">
+                                    <div id="name"><p>{{ match.homeTeamCond }}</p></div>
+                                    <div id="score"><p>:{{ match.homeScore }}</p></div>
+                                </div>
+                                <div id="away">
+                                    <div id="name"><p>{{ match.awayTeamCond }}</p></div>
+                                    <div id="score"><p>:{{ match.awayScore }}</p></div>
+                                </div>
+                            </div>
+                            <div id="live">
+                                <p class="live-time">{{ match.liveTime }}</p>
+                            </div>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if week.status == 0 or  week.status == 1 %}
+                        <p class="line-info"> Oynanmış Maçlar</p>
+                        {% for match in week.matches %}
+                            {% if match.matchStatus == 6 or match.matchStatus == 11 or match.matchStatus == 13%}
+                                {% if selectedMatch == match.matchId %}
+                                    <a class="match-selected" href="../../{{ match.matchId }}">
+                                {% else %}
+                                    <a class="match" href="../../{{ match.matchId }}">
+                                {% endif %}
+                            <div id="scorearea">
+                                <div id="home">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png"><p>{{ match.homeTeamCond}}</p></div>
+                                    <div id="score"><p>:{{ match.homeScore }}</p></div>
+                                </div>
+                                <div id="away">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png"><p>{{ match.awayTeamCond }}</p></div>
+                                    <div id="score"><p>:{{ match.awayScore }}</p></div>
+                                </div>
+                            </div>
+                            <div id="datearea" onload="javascript:formatDate(this,{{ match.date }})">
+                                <p>{{ match.date }}</p>
+                            </div>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if week.status == 0 or  week.status == 2 %}
+                        <p class="line-info"> Oynanmamış Maçlar</p>
+                        {% for match in week.matches %}
+                            {% if match.matchStatus == 1 %}
+                                {% if selectedMatch == match.matchId %}
+                                    <a class="match-selected" href="../../{{ match.matchId }}">
+                                {% else %}
+                                    <a class="match" href="../../{{ match.matchId }}">
+                                {% endif %}
+                            <div id="scorearea">
+                                <div id="home">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png"><p>{{ match.homeTeamCond }}</p></div>
+
+                                </div>
+                                <div id="away">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png"><p>{{ match.awayTeamCond }}</p></div>
+
+                                </div>
+                            </div>
+                            <div id="datearea">
+                                <p>{{ match.date }}</p>
+                            </div>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+    </div>
+</div>

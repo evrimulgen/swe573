@@ -25,7 +25,7 @@ $(function () {
             _.each(res, function(x){
                 var info = x.data;
 
-                var player = {id: info[5], name: info[0], jersey_number: info[1]};
+                var player = {id: info[5], name: info[0], jersey_number: info[1], team_id: info[3]};
                 if(info[3]==homeTeam.id){
                     homeTeam.players.push(player);
                 } else if(info[3]==awayTeam.id){
@@ -35,6 +35,9 @@ $(function () {
                     console.log(info);
                 } 
             });
+
+            homeTeam.players = _.sortBy(homeTeam.players, "jersey_number");
+            awayTeam.players = _.sortBy(awayTeam.players, "jersey_number");
 
             // for dynamically creating elements and binding events to them:
             // $("<p>xdxd</p>").click(function(){ alert("xd"); }).appendTo("#header");

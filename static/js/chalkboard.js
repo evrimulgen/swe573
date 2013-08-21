@@ -237,6 +237,7 @@ function Chalkboard(div_id, match_id){
         var passData = currentData["GetPassLocations"];
 
         _.each(passData, function (pass) {
+            console.log(pass);
 
             // sometimes, the data returned from api contains some elements with null location data. i just ignore them
             if (pass[3] === null || pass[4] === null || pass[5] === null || pass[6] === null) {
@@ -244,7 +245,7 @@ function Chalkboard(div_id, match_id){
             }
 
             // a pass with (0,0) start or end coordinates is null, filter that out as well
-            if(pass[3]===0&&pass[4]===0||pass[5]===0&&pass[6]===null){
+            if(pass[3]===0&&pass[4]===0||pass[5]===0&&pass[6]===0){
                 return;
             }
 

@@ -229,6 +229,7 @@ function Radar(matchId, scope){
     var second = 0;
 
     var started = false;
+    var paused = false;
     var events = [];
     var currTime = -1;
 
@@ -254,6 +255,17 @@ function Radar(matchId, scope){
         }
     };
 
+    scope.tool.onMouseDown = function(event){
+        _.each(teams, function(vals, team){
+            if(team==="ball") return;
+            _.each(vals, function(group, jersey_no){
+                if(group.hitTest(event.point)){
+                    console.log("clicked player - team id " + team + " - jersey number " + jersey_no);
+                }
+            });
+        });
+    }
+
     //var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
     var socket = io.connect('http://localhost:8080/');
 
@@ -277,6 +289,20 @@ function Radar(matchId, scope){
 
     this.changeTime = function(time){
         console.log(time);
+        events = [];
         socket.emit('setmatchtime', time);
+    };
+
+    this.togglePause = function(){
+        if(!started){
+            return;
+        } 
+        if(paused){
+            paused = false;
+            socket.emit('resume');
+        } else {
+            paused = true;
+            socket.emit('pause');
+        }
     }
 }

@@ -138,6 +138,8 @@ function Timeline(options){
         if(which=="left") sliderToMove = leftHandle;
         else if(which=="right") sliderToMove = rightHandle;
 
+        if(draggedHandle == sliderToMove) return;
+
         sliderToMove.position.x = timeToPixel(minute, second);
         scope.view.draw();
     }

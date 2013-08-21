@@ -1,0 +1,32 @@
+<div class="{{ class }}">
+    <p id="no" class="pos{{ player.playPosition }}">{{ player.jerseyNumber }}</p>
+    <p id="name">{{ player.playerName }}</p>
+    {% for event in player.playerEvents|dictsortreversed:"matchTime" %}
+        <div class="event">
+            {% if event.eventType == 7 %}
+                <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-out.png">
+            {% endif %}
+            {% if event.eventType == 0 %}
+                <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/goal.png">
+            {% endif %}
+            {% if event.eventType == 1 %}
+                <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/own-goal.png">
+            {% endif %}
+            {% if event.eventType == 2 %}
+                <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/penalty.png">
+            {% endif %}
+            {% if event.eventType == 3 %}
+                <img alt="Pen: {{ event.matchTime }}'" title="Pen: {{ event.matchTime }}'" src="{{ STATIC_URL }}images/missed-pen.png">
+            {% endif %}
+            {% if event.eventType == 4 %}
+                <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/yellow.png">
+            {% endif %}
+            {% if event.eventType == 5 %}
+                <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/second-yellow.png">
+            {% endif %}
+            {% if event.eventType == 6 %}
+                <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/red.png">
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>

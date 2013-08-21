@@ -10,3 +10,18 @@ SEASON_ID = 9064
 def sl_fixture(match_id):
     weeks, currentWeek = get_fixture(LEAGUE_ID, SEASON_ID, int(match_id))
     return {"weeks": weeks, "currentWeek": currentWeek}
+
+@register.inclusion_tag('_vs_before_playerlistitem.html')
+def sl_before_playerlistitem(player):
+    return {
+        "class": ('starting' if player.get('eleven')==1 else 'sub'),
+        "player": player
+    }
+
+@register.inclusion_tag('_vs_center_eventitem.html')
+def sl_center_eventitem(event, homeSquad, awaySquad):
+    return {
+        "event": event,
+        "homeSquad": homeSquad,
+        "awaySquad": awaySquad
+    }

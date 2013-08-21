@@ -1,0 +1,20 @@
+{% for f in form reversed%}
+    {% if f.win == 1 %}
+        <p class="win"> G </p>
+        {% if forloop.counter < 5 %}
+            <p class="seperator">-</p>
+        {% endif %}
+    {% endif %}
+    {% if f.win == 0 %}
+        <p class="draw"> B </p>
+        {% if forloop.counter < 5 %}
+            <p class="seperator">-</p>
+        {% endif %}
+    {% endif %}
+    {% if f.win == 2 %}
+        <p class="lose"> M </p>
+        {% if forloop.counter < 5 %}
+            <p class="seperator">-</p>
+        {% endif %}
+    {% endif %}
+{% endfor %}

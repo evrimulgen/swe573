@@ -94,6 +94,203 @@
         }
     </script>
 
+    <script type="text/javascript">
+        var passCollapse = 0;
+        var shotCollapse = 0;
+        var runCollapse = 0;
+        var htmltoset = "";
+        function collapse(elm)
+        {
+            if (elm.value == 1){
+                if(passCollapse == 0){
+                    passCollapse = 1;
+                    htmltoset = "";
+                    {% for x in homeData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
+                        {% if x.totalPass > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.successfulPass}} / {{ x.totalPass }}</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#pass-home").html(htmltoset);
+
+                    htmltoset = "";
+                    {% for x in awayData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
+                        {% if x.totalPass > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.successfulPass}} / {{ x.totalPass }}</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#pass-away").html(htmltoset);
+                }
+                else{
+                    passCollapse = 0;
+                    htmltoset = "";
+                    {% for x in homeData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
+                        {% if forloop.counter < 6 and x.totalPass > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.successfulPass}} / {{ x.totalPass }}</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#pass-home").html(htmltoset);
+
+                    htmltoset = "";
+                    {% for x in awayData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
+                        {% if forloop.counter < 6 and x.totalPass > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.successfulPass}} / {{ x.totalPass }}</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#pass-away").html(htmltoset);
+                }
+            }
+            else if (elm.value == 2){
+                if(runCollapse == 0){
+                    runCollapse = 1;
+                    htmltoset = "";
+                    {% for x in homeData|dictsortreversed:'totalDistance' %}
+                        {% if x.totalDistance > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.totalDistance }} m</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#run-home").html(htmltoset);
+
+                    htmltoset = "";
+                    {% for x in awayData|dictsortreversed:'totalDistance' %}
+                        {% if x.totalDistance > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.totalDistance }} m</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#run-away").html(htmltoset);
+                }
+                else{
+                    runCollapse = 0;
+                    htmltoset = "";
+                    {% for x in homeData|dictsortreversed:'totalDistance' %}
+                        {% if forloop.counter < 6 and x.totalDistance > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.totalDistance }} m</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#run-home").html(htmltoset);
+
+                    htmltoset = "";
+                    {% for x in awayData|dictsortreversed:'totalDistance' %}
+                        {% if forloop.counter < 6 and x.totalDistance > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.totalDistance }} m</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#run-away").html(htmltoset);
+                }
+            }
+            else if (elm.value == 3){
+                if(shotCollapse == 0){
+                    shotCollapse = 1;
+                    htmltoset = "";
+                    {% for x in homeData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
+                        {% if x.totalShot > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.successfulShot}} / {{ x.totalShot }}</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#shot-home").html(htmltoset);
+
+                    htmltoset = "";
+                    {% for x in awayData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
+                        {% if x.totalShot > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.successfulShot}} / {{ x.totalShot }}</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#shot-away").html(htmltoset);
+                }
+                else{
+                    shotCollapse = 0;
+                    htmltoset = "";
+                    {% for x in homeData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
+                        {% if forloop.counter < 6 and x.totalShot > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.successfulShot}} / {{ x.totalShot }}</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#shot-home").html(htmltoset);
+
+                    htmltoset = "";
+                    {% for x in awayData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
+                        {% if forloop.counter < 6 and x.totalShot > 0 %}
+                            htmltoset += "<div style='height: 40px'>";
+                            htmltoset += "<a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>";
+                            htmltoset += "<img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>";
+                            htmltoset += "<p id='name'>{{ x.playerName }}</p>";
+                            htmltoset += "<p id='value'>{{ x.successfulShot}} / {{ x.totalShot }}</p>";
+                            htmltoset += "</a>";
+                            htmltoset += "</div>";
+                        {% endif %}
+                    {% endfor %}
+                    $("#shot-away").html(htmltoset);
+                }
+            }
+        }
+
+    </script>
+
     <style type="text/css">
         #radarContainer > * {
             margin-left: 50px;

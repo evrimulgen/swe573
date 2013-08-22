@@ -48,77 +48,9 @@ function FootballPitch(div_id, scope){
 
     // draws the football field
     var drawField = function () {
-        var canvas = $(divSelector + " #bgCanvas")
-        var greenBg = new scope.Path.Rectangle(0, 0, canvas.width(), canvas.height());
-        greenBg.fillColor = "#618142";
+        var canvas = $(divSelector + " #bgCanvas");
 
-        // green lines in the pitch
-        var greenLineHeight = $(divSelector + " #bgCanvas").height();
-        var greenLineWidth = $(divSelector + " #bgCanvas").width()/15+1;
-        for (var i = 0; i < 15; i++) {
-            var bgPath = new scope.Path.Rectangle(new scope.Rectangle(i * greenLineWidth-1, 0, greenLineWidth, greenLineHeight));
-            if (i % 2) {
-                bgPath.fillColor = "#ffffff";
-                bgPath.opacity = 0.1;
-            }
-        }
-        
-
-        // pretty straightforward lines and stuff
-        // the dimensions of the football pitch are taken from http://en.wikipedia.org/wiki/Association_football_pitch
-
-        var lineWidth = 2;
-        
-        var outerLine = new scope.Path.Rectangle(new scope.Rectangle(mt2px(0), mt2px(0), len2px(105), len2px(68)));
-        outerLine.strokeColor = "white";
-        outerLine.strokeWidth = lineWidth;
-
-        var halfLine = new scope.Path();
-        halfLine.add(new scope.Point(mt2px(52.5), mt2px(0)), new scope.Point(mt2px(52.5), mt2px(68)));
-        halfLine.strokeColor = "white";
-        halfLine.strokeWidth = lineWidth;
-
-        var centerCircle = new scope.Path.Circle(new scope.Point(mt2px(52.5), mt2px(34)), len2px(9.15));
-        centerCircle.strokeColor = "white";
-        centerCircle.strokeWidth = lineWidth;
-
-        var centerSpot = new scope.Path.Circle(new scope.Point(mt2px(52.5), mt2px(34)), 3);
-        centerSpot.fillColor = "white";
-
-        var penaltyAreaTop = new scope.Path.Rectangle(new scope.Rectangle(mt2px(0), mt2px(13.85), len2px(16.5), len2px(40.3)));
-        penaltyAreaTop.strokeColor = "white";
-        penaltyAreaTop.strokeWidth = lineWidth;
-
-        var penaltySpotTop = new scope.Path.Circle(new scope.Point(mt2px(11), mt2px(34)), 3);
-        penaltySpotTop.fillColor = "white";
-
-        var goalAreaTop = new scope.Path.Rectangle(new scope.Rectangle(mt2px(0), mt2px(24.84), len2px(5.5), len2px(18.32)));
-        goalAreaTop.strokeColor = "white";
-        goalAreaTop.strokeWidth = lineWidth;
-
-        // needed for arcs:
-        // the radius of the arcs are 9.15m and they are centered on the penalty spot
-        // distance between penalty spot and the penalty area is 5.5m
-        // so, distance between the horizontally centered line of the pitch and an endpoint 
-        // of the specified arc is sqrt(9.15^2-5.5^2) = 7.31m
-        var penaltyCircleTop = new scope.Path.Arc(new scope.Point(mt2px(16.5), mt2px(26.69)), new scope.Point(mt2px(20.15), mt2px(34)), new scope.Point(mt2px(16.5), mt2px(41.31)));
-        penaltyCircleTop.strokeColor = "white";
-        penaltyCircleTop.strokeWidth = lineWidth;
-
-        var penaltyAreaBottom = new scope.Path.Rectangle(new scope.Rectangle(mt2px(88.5), mt2px(13.85), len2px(16.5), len2px(40.3)));
-        penaltyAreaBottom.strokeColor = "white";
-        penaltyAreaBottom.strokeWidth = lineWidth;
-
-        var penaltySpotBottom = new scope.Path.Circle(new scope.Point(mt2px(94), mt2px(34)), 3);
-        penaltySpotBottom.fillColor = "white";
-
-        var goalAreaBottom = new scope.Path.Rectangle(new scope.Rectangle(mt2px(99.5), mt2px(24.84), len2px(5.5), len2px(18.32)));
-        goalAreaBottom.strokeColor = "white";
-        goalAreaBottom.strokeWidth = lineWidth;
-
-        var penaltyCircleBottom = new scope.Path.Arc(new scope.Point(mt2px(88.5), mt2px(26.69)), new scope.Point(mt2px(84.85), mt2px(34)), new scope.Point(mt2px(88.5), mt2px(41.31)));
-        penaltyCircleBottom.strokeColor = "white";
-        penaltyCircleBottom.strokeWidth = lineWidth;
+        var img = new scope.Raster("/static/images/pitch_radar.png", scope.view.center);
 
         scope.view.draw();
     };

@@ -150,10 +150,17 @@ function Radar(matchId, scope){
         if(teams[team_id]===undefined) teams[team_id] = {};
         if(teams[team_id][jersey_no]===undefined){
             var fillColor;
-            if(team_id==1){
-                fillColor = "red";
-            } else {
+            var strokeColor = "yellow";
+            var text;
+            if(team_id===0){
                 fillColor = "blue";
+                text = jersey_no;
+            } else if(team_id===1){
+                fillColor = "red";
+                text = jersey_no;
+            } else {
+                fillColor = "black";
+                text = "R";
             }
 
             // Creating a group so that the circle + text objects can be moved together
@@ -167,7 +174,7 @@ function Radar(matchId, scope){
                 }),
                 new scope.PointText({
                     point: [mt2px(xpos), mt2px(ypos)+4],
-                    content: jersey_no,
+                    content: text,
                     justification: 'center',
                     fillColor: 'white'
                 })

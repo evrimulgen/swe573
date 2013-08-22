@@ -157,7 +157,7 @@
                     <p id="awayTeamName" class="header-team-name" style="text-align:left">{{ x.awayTeam }}</p>
                 </div>
                 <div class="match-time">
-
+                    <p>{{ x.liveTime }}</p>
                 </div>
             {% endfor %}
         {% endblock %}
@@ -285,7 +285,7 @@
             {% for x in matchData|dictsortreversed:'totalDistance' %}
                 {% if forloop.counter < 6 %}
                     <div style="height: 40px">
-                        <a href="">
+                        <a href="../../player/{{ x.teamId }}/{{ x.playerId }}" target="_blank">
                             <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
                             <p id="name">{{ x.playerName }}</p>
                             <p id="value">{{ x.totalDistance }} m</p>
@@ -299,7 +299,7 @@
             {% for x in matchData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
                 {% if forloop.counter < 6 %}
                     <div style="height: 40px">
-                        <a href="">
+                        <a href="../../player/{{ x.teamId }}/{{ x.playerId }}" target="_blank">
                             <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
                             <p id="name">{{ x.playerName }}</p>
                             <p id="value">{{ x.successfulPass}} / {{ x.totalPass }}</p>
@@ -313,7 +313,7 @@
             {% for x in matchData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
                 {% if forloop.counter < 6 %}
                     <div style="height: 40px">
-                        <a href="">
+                        <a href="../../player/{{ x.teamId }}/{{ x.playerId }}" target="_blank">
                             <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
                             <p id="name">{{ x.playerName }}</p>
                             <p id="value">{{ x.successfulShot}} / {{ x.totalShot }}</p>

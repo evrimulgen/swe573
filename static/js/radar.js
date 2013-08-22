@@ -273,12 +273,19 @@ function Radar(matchId, scope){
         console.log("connected");
     });
 
+    socket.on("matchinfo", function(data){
+        console.log("matchinfo");
+        console.log(data);
+        //$.event.trigger('matchinfo', ...);
+    });
+
     socket.on("match", function(data){
         events.push(data);
         if(events.length===1){
             processEvent();
         }
     });
+
 
     this.startMatch = function(){
         if(!started){

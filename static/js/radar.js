@@ -166,6 +166,7 @@ function Radar(matchId, scope){
     var minute = 0;
     var second = 0;
 
+    var matchStatus = false;
     var started = false;
     var paused = false;
     var events = [];
@@ -207,6 +208,10 @@ function Radar(matchId, scope){
         });
     }
 
+    $.post("/api/GetMatchInfo", JSON.stringify({"matchId": matchId})).done(function(data){
+        matchStatus = data.data[0][2]; // match status, see API docs
+    });
+
     var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
     //var socket = io.connect('http://localhost:8080/');
 
@@ -217,7 +222,7 @@ function Radar(matchId, scope){
     socket.on("matchinfo", function(data){
         console.log("matchinfo");
         console.log(data);
-        //$.event.trigger('matchinfo', ...);
+        //TODO: $.event.trigger('matchinfo', ...); for setting up the timeline
     });
 
     socket.on("match", function(data){
@@ -229,9 +234,20 @@ function Radar(matchId, scope){
 
 
     this.startMatch = function(){
+        // match status: 2 => First half is being played
+        //               3 => Second half is being played
+        //               6 => Played
+
         if(!started){
             started = true;
-            socket.emit('getmatch', matchId);
+
+            if(matchStatus === 2 || matchStatus === 3){
+                socket.emit('getlivematch', matchId);
+            } else if(matchStatus === 6){
+                socket.emit('getmatch', matchId);
+            } else {
+                // TODO: error message or something
+            }
         }
     };
 

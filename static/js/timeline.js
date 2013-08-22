@@ -9,6 +9,8 @@ function Timeline(options){
 
     var handleWidth = 20;
 
+    var eventImages = [];
+
     $("#"+div_id).width(width).height(height);
 
     scope.setup(div_id);
@@ -115,11 +117,15 @@ function Timeline(options){
         // Todo: differentiate between events, or highlight the entry below on hover/click
         paper = scope;
 
-        var eventWidth = 4;
+        imageNames = ["goal.png", "own-goal.png", "penalty.png", "missed-pen.png", 
+                      "yellow.png", "second-yellow.png", "red.png", "substitution.png"];
+
         var offset = timeToPixel(event[1], 0);
 
-        var rect = new scope.Path.Rectangle(offset, 0, eventWidth, height);
-        rect.fillColor = "green";
+        var point = new scope.Point(offset, height/2);
+
+        var img = new scope.Raster("/static/images/"+ imageNames[event[0]], point);
+        eventImages.push(img);
     }
 
     var loadEvents = function(){

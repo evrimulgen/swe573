@@ -120,22 +120,40 @@ function Timeline(options){
         imageNames = ["goal.png", "own-goal.png", "penalty.png", "missed-pen.png", 
                       "yellow.png", "second-yellow.png", "red.png", "substitution.png"];
 
-        var offset = timeToPixel(event[1], 0);
+        var xoffset = timeToPixel(event[1], 0);
+        var yoffset;
+        if(event[9]==="home"){
+            yoffset = 14;
+        } else {
+            yoffset = 36;
+        }
 
-        var point = new scope.Point(offset, height/2);
+        var point = new scope.Point(xoffset, yoffset);
 
         var img = new scope.Raster("/static/images/"+ imageNames[event[0]], point);
         eventImages.push(img);
     }
 
     var loadEvents = function(){
-        $.post("/api/GetMatchEvents", JSON.stringify({"matchId": match_id})).done(function(data){
-            _.each(data.data, function(event){
-                drawEvent(event);
-            });
-            scope.view.draw();
-        });
+        var homeId, awayId;
+        $.post("/api/GetMatchInfo", JSON.stringify({"matchId": match_id})).done(function(data){
+            homeId = data.data[0][5];
+            awayId = data.data[0][6];
 
+            $.post("/api/GetMatchEvents", JSON.stringify({"matchId": match_id})).done(function(data){
+                _.each(data.data, function(event){
+                    if(event[2]===homeId){
+                        event.push("home");
+                    } else if(event[2]===awayId){
+                        event.push("away");
+                    }
+                    drawEvent(event);
+                });
+                scope.view.draw();
+            });
+
+        });
+    
     };
 
     this.moveSlider = function(which, minute, second){

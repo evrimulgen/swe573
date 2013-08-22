@@ -9,7 +9,6 @@ $.ajaxSetup({
 
 /*
     The timestamps in the radar data is in form of milliseconds
-
 */
 
 function FootballPitch(div_id, scope){
@@ -199,7 +198,10 @@ function Radar(matchId, scope){
             if(team==="ball") return;
             _.each(vals, function(group, jersey_no){
                 if(group.hitTest(event.point)){
-                    console.log("clicked player - team id " + team + " - jersey number " + jersey_no);
+                    if(team_id === 0 || team_id === 1){
+                        $.event.trigger({type: "playerClick", team_id: team, jersey_no: jersey_no});
+                        console.log("clicked player - team id " + team + " - jersey number " + jersey_no);
+                    }
                 }
             });
         });

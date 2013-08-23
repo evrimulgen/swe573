@@ -461,6 +461,7 @@ def before(request,reqid):
 
     return render_to_response('virtual_stadium_before_match.html', {'teamStats':teamStatsDict,'narrations':narrationDict,'awayData':awayDataDict,'homeData':homeDataDict,'matchData':matchDataDict,'homeTeamId':homeTeamId,'awayTeamId':awayTeamId,'events':eventDict,'homeForm':homeFormDict,'awayForm':awayFormDict,'history':historicDict,'homeSquad':homeSquadDict,'awaySquad':awaySquadDict,'weeklist': weekList,'goals':goalDict,'matchInfo':infoDict,'weeks':weekDict,'currentWeek':currentWeek,'selectedMatch':str(reqid)})
 
+@ensure_csrf_cookie
 def center(request,reqid):
     #data for fixture, used for all views in match center
     data = {"leagueId": leagueId, "seasonId": seasonId}

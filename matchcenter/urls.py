@@ -15,7 +15,8 @@ urlpatterns = patterns('',
 
     # url(r'^partial/(?P<partial>.+)/(?P<match_id>\d*)/$', 'matchcenter.views.partial_renderer', name="partial" )
 
-    url(r'^partial/fixture/(\d*)/$', 'matchcenter.views.partial_fixture')
+    url(r'^partial/fixture/(\d*)/$', 'matchcenter.views.partial_fixture'),
+    url(r'^partial/events/(\d*)/$', 'matchcenter.views.partial_events'),
     # url(r'^api/(?P<path>\w+)$', 'matchcenter.views.router'),
 
     # url(r'^radar/$', 'dje.views.radar'),

@@ -19,7 +19,7 @@ def sl_before_playerlistitem(player):
     }
 
 @register.inclusion_tag('_vs_center_eventitem.html', takes_context=True)
-def sl_center_eventitem(context, event, homeSquad, awaySquad):
+def sl_center_eventitem(context, event, homeid, awayid):
 
     img_lookup = lambda x: {
         0: "images/goal.png",
@@ -28,16 +28,28 @@ def sl_center_eventitem(context, event, homeSquad, awaySquad):
         3: "images/missed-pen.png",
         4: "images/yellow.png",
         5: "images/second-yellow.png",
-        6: "images/red.png",
+        6: "images/red.png"
     }.get(x)
 
     ctx = {
         "event": event,
-        "homeSquad": homeSquad,
-        "awaySquad": awaySquad,
+        "homeTeamId": homeid,
+        "awayTeamId": awayid,
         "eventImagePath": img_lookup(int(event["type"])),
         "homeTeamId": context.get("homeTeamId"),
         "awayTeamId": context.get("awayTeamId")
     }
 
     return ctx
+
+@register.inclusion_tag('_vs_radar_tabs_narration.html')
+def sl_center_narration(narrations):
+    lambda x: {
+        0: "images/goal.png",
+        1: "images/own-goal.png",
+        2: "images/penalty.png",
+        3: "images/missed-pen.png",
+        4: "images/yellow.png",
+        5: "images/second-yellow.png",
+        6: "images/red.png",
+    }

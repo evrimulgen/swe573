@@ -1,3 +1,6 @@
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
+
 <div class="{{ class }}">
     <p id="no" class="pos{{ player.playPosition }}">{{ player.jerseyNumber }}</p>
     <p id="name">{{ player.playerName }}</p>

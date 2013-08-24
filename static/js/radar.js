@@ -170,6 +170,7 @@ function Radar(matchId){
 
     var matchInfo = {};
     var matchSquad = null;
+    var connected = false;
     var started = false;
     var paused = false;
     var events = [];
@@ -199,9 +200,8 @@ function Radar(matchId){
 
     scope.tool.onMouseDown = function(event){
         _.each(teams, function(vals, team){
-            if(team==="ball" || team===2) return;
+            if(team=="ball" || team==2) return;
             _.each(vals, function(group, jersey_no){
-
 
                 if(group.hitTest(event.point)){
                     var team_id = null, player_id=null;
@@ -215,7 +215,7 @@ function Radar(matchId){
                     });
 
                     $.event.trigger({type: "radarPlayerClick", team_id: team_id, 
-                                     player_id: player_id, week: matchInfo.week});
+                                     player_id: player_id, week: matchInfo.week, homeOrAway: team});
                 }
             });
         });
@@ -236,6 +236,7 @@ function Radar(matchId){
     //var socket = io.connect('http://localhost:8080/');
 
     socket.on("welcome", function(){
+        connected = true;
         console.log("connected");
     });
 
@@ -255,13 +256,17 @@ function Radar(matchId){
     socket.on("disconnect", function(){
         // TODO: error message on page instead of console.log
         console.log("disconnected");
+        connected = false;
     });
 
     this.startMatch = function(){
         // match status: 2 => First half is being played
         //               3 => Second half is being played
         //               6 => Played
-
+        if(!connected){
+            // TODO: error message
+            return;
+        }
         if(!started){
             started = true;
 

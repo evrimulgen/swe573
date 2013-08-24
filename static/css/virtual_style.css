@@ -128,7 +128,7 @@ h1.sidebox{
 
 
 body{
-    font-family: "helvetica";
+    font-family: "Helvetica Neue", Tahoma, sans-serif;
     cursor: default;
     color: #ffffff;
 }
@@ -144,14 +144,15 @@ body{
     border-radius: 3px;
     float: left;
     background-color: rgba(20,20,20,0.3);
+    font-family: "Helvetica Neue", Tahoma, Verdana, sans-serif;
 }
-.match-info p{
+.match-info > p{
     margin-top: 6px;
     font-size: 14px;
     line-height: 10px;
     text-align: center;
     font-weight: bold;
-    font-family: Verdana sans-serif;
+    font-family: "Helvetica Neue", Tahoma, Verdana, sans-serif;
 }
 /* holds team names and scores */
 .score-area{

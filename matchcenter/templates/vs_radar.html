@@ -8,6 +8,7 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js"></script>
 
+    <!-- radar script -->
     <script type="text/javascript">
         $(function(){
             var timelineScope = new paper.PaperScope();
@@ -30,26 +31,33 @@
         });
     </script>
 
+
     <script type="text/javascript">
+
+    var valueMap = {1: "events",
+        2: "narrations",
+        3: "teamstats",
+        4: "playerstats"}
+
+
     function handleSelect(elm)
     {
-        var htmltoSet = "";
-        if (elm.value == 1)
-        {
-            $("#data-area").load('/new/partial/events/{{ selectedMatch }}/');
-        }
-        else if (elm.value == 2)
-        {
-            $("#data-area").load('/new/partial/narrations/{{ selectedMatch }}/');
-        }
-        else if (elm.value == 3)
-        {
-            $("#data-area").load('/new/partial/teamstats/{{ selectedMatch }}/');
-        }
-        else if (elm.value == 4)
-        {
-            $("#data-area").load('/new/partial/playerstats/{{ selectedMatch }}/');
-        }
+        $("#div-menu li.active").removeClass("active")
+        $(elm).addClass("active")
+        var url = '/new/partial/' + valueMap[elm.value] + "/{{ selectedMatch }}/";
+        $("#data-area").load(url);
+    }
+
+    function refreshScreens()
+    {
+        $(".fixture").load('/new/partial/fixture/{{ selectedMatch }}/', function(responseTxt,statusTxt,xhr){
+            if(statusTxt=="success")
+                prepTimelinr();
+        });
+
+        var activeTab = $("#div-menu li.active").attr("value");
+        var url = '/new/partial/' + valueMap[activeTab] + "/{{ selectedMatch }}/";
+        $("#data-area").load(url);
     }
     </script>
 
@@ -86,24 +94,23 @@
 
 
 {% block menu %}
-    <div id="navbar">
-        <div id="nav">
-            <a href="../before">MAÇ ÖNCESİ</a>
-            <div id="active">
-                <a href="../center">STADYUM</a>
-            </div>
-            <a href="../table">MAÇ TAHTASI</a>
-            <button class="btn-primary" id="tryRefresh">Refresh!</button>
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <ul class="nav">
+                <li><a href="../before">MAÇ ÖNCESİ</a></li>
+                <li class="active"><a href="../center">STADYUM</a></li>
+                <li><a href="../table">MAÇ TAHTASI</a></li>
+            </ul>
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
+    <button class="btn btn-primary" onclick="refreshScreens()">Refresh!</button>
     <div class="row">
         <div id="radarContainer">
             <p><button class="btn" id="startMatch">Maci Baslat</button></p>
             <div id="timeDisplay"></div>
-
         </div>
     </div>
     <div class="row">
@@ -111,23 +118,20 @@
     </div>
 
     <div id="div-menu" style="background-color: #2a2a28; width: 100%;float: left;line-height: 50px;text-align: center;margin-top: 2px">
-        <div id="navbar">
-            <div id="nav">
-
-                <div id="active">
-                    <button value="1" style="width: 22%;font-size: 12px" onclick="handleSelect(this)">OLAYLAR</button>
-                </div>
-                <button value="2" style="width: 22%;font-size: 12px" onclick="handleSelect(this)">ANLATIM</button>
-
-                <button value="3" style="width: 22%;font-size: 12px" onclick="handleSelect(this)">TAKIM İSTATİSTİKLERİ</button>
-
-                <button value="4" style="width: 22%;font-size: 12px" onclick="handleSelect(this)">OYUNCU İSTATİSTİKLERİ</button>
-
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <ul class="nav">
+                    <li class="active" value="1" onclick="handleSelect(this)"><a>OLAYLAR</a></li>
+                    <li value="2" onclick="handleSelect(this)"><a>ANLATIM</a></li>
+                    <li value="3" onclick="handleSelect(this)"><a>TAKIM İSTATİSTİKLERİ</a></li>
+                    <li value="4" onclick="handleSelect(this)"><a>OYUNCU İSTATİSTİKLERİ</a></li>
+                </ul>
             </div>
         </div>
     </div>
-    <div class="data-area" id="data-area">
 
+
+    <div class="data-area" id="data-area">
     </div>
 
 

@@ -206,7 +206,7 @@ def get_team_forms(homeTeamId, awayTeamId, currentWeek):
     return getlist(homelist, homeTeamId), getlist(awaylist, awayTeamId)
 
 def get_match_events(match_id):
-    data = {"matchId":match_id}
+    data = {"matchId": match_id}
     datalist = service_request("GetMatchEvents", data)
 
     if len(datalist) == 0:

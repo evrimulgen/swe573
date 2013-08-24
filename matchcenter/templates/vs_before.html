@@ -2,21 +2,19 @@
 
 
 {% block menu %}
-    <div id="navbar">
-        <div id="nav">
-            <div id="active">
-                <a href="../before">MAÇ ÖNCESİ</a>
-            </div>
-            <a href="../center">STADYUM</a>
-
-            <a href="../table">MAÇ TAHTASI</a>
-
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <ul class="nav">
+                <li class="active"><a href="../before">MAÇ ÖNCESİ</a></li>
+                <li><a href="../center">STADYUM</a></li>
+                <li><a href="../table">MAÇ TAHTASI</a></li>
+            </ul>
         </div>
     </div>
 {% endblock %}
 {% block content %}
     <div class="history-area">
-        <h1>Rekabet Geçmişi</h1>
+        <h1 class="main">Rekabet Geçmişi</h1>
             <div id="home">
                 <h2>{{ matchInfo.homeTeam }}</h2>
                 <img src="{{ STATIC_URL }}images/logo{{ matchInfo.homeTeamId }}.png">
@@ -56,13 +54,21 @@
         {% include '_vs_before_squads.html' with awaySquad=awaySquad homeSquad=homeSquad only %}
     </div>
 
-    <h1 class="past-match-area">Son Karşılaşmalar</h1>
+    <h1 class="main">Son Karşılaşmalar</h1>
     <div class="past-match-area">
         {% for match in history.pastMatches %}
             <a class="past-match">
-                <p id="upper-info">{{ match.stadium }}</p>
-                <p id="upper-info">{{ match.date }}</p>
-                <p id="upper-info">{{ match.referee }}</p>
+                {% if match.referee %}
+                    <p class="upper-info"> {{ match.stadium }}</p>
+                {% else  %}
+                    <p class="upper-info"> </p>
+                {% endif %}
+                <p class="upper-info">{{ match.date }}</p>
+                {% if match.referee %}
+                    <p class="upper-info"> {{ match.referee }}</p>
+                {% else  %}
+                    <p class="upper-info"> </p>
+                {% endif %}
                 <img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png" id="homelogo">
                 <p id="homename">{{ match.homeTeam }}</p>
                 <p id="homescore">{{ match.homeScore }}</p>

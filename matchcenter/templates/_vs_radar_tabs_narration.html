@@ -1,3 +1,5 @@
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
 {% for narration in narrations|dictsortreversed:'min' %}
     <div class='narration'><p id='min'>{{ narration.min }}'<p>
         {% if narration.type %}

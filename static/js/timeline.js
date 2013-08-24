@@ -2,7 +2,7 @@ function Timeline(options){
     var div_id = options.divId;
     var match_id = options.matchId;
     var sliderCount = options.sliderCount;
-    var scope = options.paperScope;
+    var scope = new paper.PaperScope();
 
     var width = 662;
     var height = 50;

@@ -57,8 +57,10 @@ function FootballPitch(div_id, scope){
     drawField();
 };
 
-function Radar(matchId, scope){
+function Radar(matchId){
     var teams = {};
+    var scope = new paper.PaperScope();
+
     var pitch = new FootballPitch("radarContainer", scope);
 
     // scaling stuff
@@ -166,7 +168,9 @@ function Radar(matchId, scope){
     var minute = 0;
     var second = 0;
 
-    var matchStatus = false;
+    var matchInfo = {};
+    var matchSquad = null;
+    var connected = false;
     var started = false;
     var paused = false;
     var events = [];
@@ -196,26 +200,43 @@ function Radar(matchId, scope){
 
     scope.tool.onMouseDown = function(event){
         _.each(teams, function(vals, team){
-            if(team==="ball") return;
+            if(team=="ball" || team==2) return;
             _.each(vals, function(group, jersey_no){
+
                 if(group.hitTest(event.point)){
-                    if(team_id === 0 || team_id === 1){
-                        $.event.trigger({type: "playerClick", team_id: team, jersey_no: jersey_no});
-                        console.log("clicked player - team id " + team + " - jersey number " + jersey_no);
-                    }
+                    var team_id = null, player_id=null;
+                    if(team==0) team_id = matchInfo.homeId;
+                    else if(team==1) team_id = matchInfo.awayId;
+
+                    _.each(matchSquad, function(data){
+                        if(data.data[1]==jersey_no && data.data[3]==team_id){
+                            player_id = data.data[5];
+                        }
+                    });
+
+                    $.event.trigger({type: "radarPlayerClick", team_id: team_id, 
+                                     player_id: player_id, week: matchInfo.week, homeOrAway: team});
                 }
             });
         });
     }
 
     $.post("/api/GetMatchInfo", JSON.stringify({"matchId": matchId})).done(function(data){
-        matchStatus = data.data[0][2]; // match status, see API docs
+        matchInfo.week = data.data[0][0];
+        matchInfo.status = data.data[0][2]; // match status, see API docs
+        matchInfo.homeId = data.data[0][5];
+        matchInfo.awayId = data.data[0][6];
+    });
+
+    $.post("/api/GetMatchSquad", JSON.stringify({"matchId": window.matchId})).done(function(data){
+        matchSquad = data.data;
     });
 
     var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
     //var socket = io.connect('http://localhost:8080/');
 
     socket.on("welcome", function(){
+        connected = true;
         console.log("connected");
     });
 
@@ -232,18 +253,26 @@ function Radar(matchId, scope){
         }
     });
 
+    socket.on("disconnect", function(){
+        // TODO: error message on page instead of console.log
+        console.log("disconnected");
+        connected = false;
+    });
 
     this.startMatch = function(){
         // match status: 2 => First half is being played
         //               3 => Second half is being played
         //               6 => Played
-
+        if(!connected){
+            // TODO: error message
+            return;
+        }
         if(!started){
             started = true;
 
-            if(matchStatus === 2 || matchStatus === 3){
+            if(matchInfo.status === 2 || matchInfo.status === 3){
                 socket.emit('getlivematch', matchId);
-            } else if(matchStatus === 6){
+            } else if(matchInfo.status === 6){
                 socket.emit('getmatch', matchId);
             } else {
                 // TODO: error message or something

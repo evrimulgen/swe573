@@ -36,79 +36,39 @@
         var htmltoSet = "";
         if (elm.value == 1)
         {
-            htmltoSet += "<div id='navbar'><div id='nav'><div id='active'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button></div><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div>";
-            $("#div-menu").html(htmltoSet);
-            var htmltoSet = "";
-            htmltoSet += "{% include "try.html" %}"
-            $("#data-area").html(htmltoSet);
+            $("#data-area").load('/new/partial/events/{{ selectedMatch }}/');
         }
         else if (elm.value == 2)
         {
-            htmltoSet += "<div id='navbar'><div id='nav'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button><div id='active'><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button></div><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div>";
-            $("#div-menu").html(htmltoSet);
-            htmltoSet = "";
-            {% for narration in narrations|dictsortreversed:'min' %}
-                htmltoSet += "<div class='narration'><p id='min'>{{ narration.min }}'<p>"
-                {% if narration.type == 0 %}
-                    htmltoSet += "<img src='{{ STATIC_URL }}images/own-goal.png'>"
-                {% elif narration.type == 1 %}
-                    htmltoSet += "<img src='{{ STATIC_URL }}images/goal.png'>"
-                {% elif narration.type == 2 %}
-                    htmltoSet += "<img src='{{ STATIC_URL }}images/penalty.png'>"
-                {% elif narration.type == 3 %}
-                    htmltoSet += "<img src='{{ STATIC_URL }}images/missed-pen.png'>"
-                {% elif narration.type == 4 %}
-                    htmltoSet += "<img src='{{ STATIC_URL }}images/yellow.png'>"
-                {% elif narration.type == 5 %}
-                    htmltoSet += "<img src='{{ STATIC_URL }}images/second-yellow.png'>"
-                {% elif narration.type == 6 %}
-                    htmltoSet += "<img src='{{ STATIC_URL }}images/red.png'>"
-                {% elif narration.type == 7 %}
-                    htmltoSet += "<img src='{{ STATIC_URL }}images/substitution.png'>"
-                {% else %}
-                    htmltoSet += "<p id='holder'></p>"
-                {% endif %}
-                htmltoSet += "<p id='text'>{{ narration.text }}</p></div>"
-            {% endfor %}
-            $("#data-area").html(htmltoSet);
+            $("#data-area").load('/new/partial/narrations/{{ selectedMatch }}/');
         }
         else if (elm.value == 3)
         {
-            htmltoSet += "<div id='navbar'><div id='nav'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button><div id='active'><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button></div><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div>";
-            $("#div-menu").html(htmltoSet);
-            var htmltoSet = "";
-            htmltoSet += "{% include "team_data.html" %}"
-            $("#data-area").html(htmltoSet);
-
+            $("#data-area").load('/new/partial/teamstats/{{ selectedMatch }}/');
         }
         else if (elm.value == 4)
         {
-            htmltoSet += "<div id='navbar'><div id='nav'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button><div id='active'><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div></div>";
-            $("#div-menu").html(htmltoSet);
-            var htmltoSet = "";
-            htmltoSet += "{% include "player_data.html" %}"
-            $("#data-area").html(htmltoSet);
+            $("#data-area").load('/new/partial/playerstats/{{ selectedMatch }}/');
         }
     }
     </script>
 
     <!-- refresh try -->
     <script type="text/javascript">
-    $(window).load(function(){
+    $(document).ready(function(){
+
+        $("#data-area").load('/new/partial/events/{{ selectedMatch }}/');
 
         var refreshFixture = function(){
             $(".fixture").load('/new/partial/fixture/{{ selectedMatch }}/', function(responseTxt,statusTxt,xhr){
                 if(statusTxt=="success")
                     prepTimelinr();
-                if(statusTxt=="error")
-                    console.log("Error: "+xhr.status+": "+xhr.statusText + ": " + responseTxt);
-                    console.log("{{ selectedMatch }}")
             });
         }
 
         $("#tryRefresh").click(refreshFixture);
 
-        setInterval(refreshFixture, 5000);
+        //setInterval(refreshFixture, 5000);
     })
 
     </script>
@@ -167,9 +127,7 @@
         </div>
     </div>
     <div class="data-area" id="data-area">
-        {% for event in events|dictsortreversed:'min' %}
-            {% sl_center_eventitem event homeSquad awaySquad %}
-        {% endfor %}
+
     </div>
 
 

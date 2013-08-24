@@ -18,10 +18,8 @@ def sl_before_playerlistitem(player):
         "player": player
     }
 
-@register.inclusion_tag('_vs_center_eventitem.html', takes_context=True)
-def sl_center_eventitem(context, event, homeSquad, awaySquad):
 
-    img_lookup = lambda x: {
+img_lookup = lambda x: {
         0: "images/goal.png",
         1: "images/own-goal.png",
         2: "images/penalty.png",
@@ -29,15 +27,29 @@ def sl_center_eventitem(context, event, homeSquad, awaySquad):
         4: "images/yellow.png",
         5: "images/second-yellow.png",
         6: "images/red.png",
+        7: "images/substitution.png"
     }.get(x)
+
+@register.inclusion_tag('_vs_center_eventitem.html', takes_context=True)
+def sl_center_eventitem(context, event, homeid, awayid):
 
     ctx = {
         "event": event,
-        "homeSquad": homeSquad,
-        "awaySquad": awaySquad,
-        "eventImagePath": img_lookup(int(event["type"])),
-        "homeTeamId": context.get("homeTeamId"),
-        "awayTeamId": context.get("awayTeamId")
+        "homeTeamId": homeid,
+        "awayTeamId": awayid,
+        "eventImagePath": img_lookup(int(event["type"]))
     }
 
     return ctx
+
+@register.inclusion_tag('_vs_radar_tabs_narration.html')
+def sl_center_narration(narrations):
+    for narration in narrations:
+        narration["type"] = img_lookup(int(narration.get("type"))) if narration.get("type") is not None else ""
+
+    return {"narrations": narrations}
+
+@register.inclusion_tag('_vs_center_team_data.html')
+def sl_center_team_data(match_id):
+    # currently stubbed, will handle thru view
+    pass

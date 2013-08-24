@@ -6,8 +6,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from matchcenter.helpers import *
-from matchcenter.templatetags.match_center_tags import sl_fixture
+from matchcenter.templatetags.match_center_tags import sl_fixture, sl_center_narration
 from matchcenter.utils import service_request
+from django.views.decorators.csrf import csrf_exempt
 
 # DEFINE ALL CONSTANTS HERE
 
@@ -76,14 +77,12 @@ def center(request, reqid):
     context = prep_common_context(reqid)
 
     #data for match events in the game, used in "center" and "table" views
-    eventDict = get_match_events(reqid)
 
     #data of all match(distance,pass,shot,cross,faul, etc..), used in all views
     #data for match narrations, used in "center" and "table" views
     narrationDict = get_match_narration(reqid)
 
     context.update({
-        'events':eventDict,
         'narrations':narrationDict
     })
 
@@ -110,5 +109,34 @@ def partial_renderer(request, partial, match_id):
     sl_fixture
     return render_to_response('_vs_fixture.html', sl_fixture(match_id))
 
+@csrf_exempt
 def partial_fixture(request,match_id):
     return render_to_response('_vs_fixture.html', sl_fixture(match_id))
+
+@csrf_exempt
+def partial_events(request, match_id):
+    home_team, away_team, match_info = get_match_info(match_id)
+
+    eventDict = get_match_events(match_id)
+
+    return render_to_response('_vs_radar_tabs_events.html', {"homeTeamId": home_team,
+                                                             "awayTeamId": away_team,
+                                                             "events": eventDict})
+
+def partial_narration(request, match_id):
+    narrations = get_match_narration(match_id)
+    return render_to_response('_vs_radar_tabs_narration.html', sl_center_narration(narrations))
+
+def partial_teamstats(request, match_id):
+    homeid, awayid, all = get_match_info(match_id)
+    teamStats, a, b, c = get_match_stats(match_id, homeid, awayid)
+
+    return render_to_response('_vs_center_team_data.html', {"teamStats": teamStats})
+
+def partial_playerstats(request, match_id):
+    homeid, awayid, all = get_match_info(match_id)
+    teamStats, matchData, homeData, awayData = get_match_stats(match_id, homeid, awayid)
+
+    return render_to_response('_vs_center_player_data.html', {'homeData': homeData,
+                                                          'awayData': awayData,
+                                                          'matchInfo': all})

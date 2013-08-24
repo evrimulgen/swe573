@@ -1,0 +1,5 @@
+{% load match_center_tags %}
+
+{% for event in events|dictsortreversed:'min' %}
+    {% sl_center_eventitem event homeTeamId awayTeamId%}
+{% endfor %}

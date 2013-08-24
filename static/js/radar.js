@@ -57,8 +57,10 @@ function FootballPitch(div_id, scope){
     drawField();
 };
 
-function Radar(matchId, scope){
+function Radar(matchId){
     var teams = {};
+    var scope = new paper.PaperScope();
+
     var pitch = new FootballPitch("radarContainer", scope);
 
     // scaling stuff
@@ -200,7 +202,7 @@ function Radar(matchId, scope){
             _.each(vals, function(group, jersey_no){
                 if(group.hitTest(event.point)){
                     if(team_id === 0 || team_id === 1){
-                        $.event.trigger({type: "playerClick", team_id: team, jersey_no: jersey_no});
+                        $.event.trigger({type: "radarPlayerClick", team_id: team, jersey_no: jersey_no});
                         console.log("clicked player - team id " + team + " - jersey number " + jersey_no);
                     }
                 }
@@ -231,7 +233,6 @@ function Radar(matchId, scope){
             processEvent();
         }
     });
-
 
     this.startMatch = function(){
         // match status: 2 => First half is being played

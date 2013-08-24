@@ -1,16 +1,9 @@
 {% for narration in narrations|dictsortreversed:'min' %}
     <div class='narration'><p id='min'>{{ narration.min }}'<p>
-        <img src='{{ STATIC_URL }}images/substitution.png'>
+        {% if narration.type %}
+            <img src='{{ STATIC_URL }}{{ narration.type }}'>
+        {% endif %}
         <p id='holder'></p>
         <p id='text'>{{ narration.text }}</p>
     </div>
 {% endfor %}
-
-htmltoSet += "<img src='{{ STATIC_URL }}images/own-goal.png'>"
-htmltoSet += "<img src='{{ STATIC_URL }}images/goal.png'>"
-htmltoSet += "<img src='{{ STATIC_URL }}images/penalty.png'>"
-htmltoSet += "<img src='{{ STATIC_URL }}images/missed-pen.png'>"
-htmltoSet += "<img src='{{ STATIC_URL }}images/yellow.png'>"
-htmltoSet += "<img src='{{ STATIC_URL }}images/second-yellow.png'>"
-htmltoSet += "<img src='{{ STATIC_URL }}images/red.png'>"
-<img src='{{ STATIC_URL }}images/substitution.png'>

@@ -40,27 +40,15 @@
         }
         else if (elm.value == 2)
         {
-            htmltoSet += "<div id='navbar'><div id='nav'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button><div id='active'><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button></div><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div>";
-            $("#div-menu").html(htmltoSet);
-            htmltoSet = "";
-            $("#data-area").html(htmltoSet);
+            $("#data-area").load('/new/partial/narrations/{{ selectedMatch }}/');
         }
         else if (elm.value == 3)
         {
-            htmltoSet += "<div id='navbar'><div id='nav'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button><div id='active'><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button></div><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div>";
-            $("#div-menu").html(htmltoSet);
-            var htmltoSet = "";
-            htmltoSet += "{% include "team_data.html" %}"
-            $("#data-area").html(htmltoSet);
-
+            $("#data-area").load('/new/partial/teamstats/{{ selectedMatch }}/');
         }
         else if (elm.value == 4)
         {
-            htmltoSet += "<div id='navbar'><div id='nav'><button value='1' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OLAYLAR</button><button value='2' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>ANLATIM</button><button value='3' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>TAKIM İSTATİSTİKLERİ</button><div id='active'><button value='4' style='width: 22%;font-size: 12px' onclick='handleSelect(this)'>OYUNCU İSTATİSTİKLERİ</button></div></div></div>";
-            $("#div-menu").html(htmltoSet);
-            var htmltoSet = "";
-            htmltoSet += "{% include "player_data.html" %}"
-            $("#data-area").html(htmltoSet);
+            $("#data-area").load('/new/partial/playerstats/{{ selectedMatch }}/');
         }
     }
     </script>

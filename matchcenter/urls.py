@@ -3,12 +3,13 @@ from django.conf.urls import patterns, url
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
+from django.views.generic.simple import redirect_to
 
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'dje.views.statscenter', name='home'),
     url(r'^(\d*)/before/$', 'matchcenter.views.before'),
-    url(r'^(\d*)/$', 'matchcenter.views.before'),
+    url(r'^(?P<match>\d*)/$', redirect_to, {'url': '/new/%(match)s/before/'}),
     url(r'^(\d*)/center/$', 'matchcenter.views.center'),
     url(r'^(\d*)/table/$', 'matchcenter.views.table'),
     url(r'^(\d*)/radar_webview/$', 'matchcenter.views.radar_webview'),
@@ -20,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^partial/narrations/(\d*)/$', 'matchcenter.views.partial_narration'),
     url(r'^partial/teamstats/(\d*)/$', 'matchcenter.views.partial_teamstats'),
     url(r'^partial/playerstats/(\d*)/$', 'matchcenter.views.partial_playerstats'),
+    url(r'^partial/score/(\d*)/$', 'matchcenter.views.partial_score'),
     # url(r'^api/(?P<path>\w+)$', 'matchcenter.views.router'),
 
     # url(r'^radar/$', 'dje.views.radar'),

@@ -30,14 +30,20 @@
     </script>
     <script type="text/javascript">
         $(function() {
-            startRefreshFixture();
+            startRefresh();
         });
 
-        function startRefreshFixture() {
-            setTimeout(startRefreshFixture,30000);
-            $("#fixture").load('/new/partial/fixture/'+ {{ selectedMatch }} + "/", function(){
+        function startRefresh() {
+            setTimeout(startRefresh,30000);
+            $("#fixture").load("/new/partial/fixture/{{ selectedMatch }}/", function(){
                 prepTimelinr();
             });
+             $.ajax({ url: "/new/partial/score/{{ selectedMatch }}/",
+                    success: function(d){
+                        $("#homeTeamScore").html(d.home);
+                        $("#awayTeamScore").html(d.away);
+                    }});
+
         }
     </script>
 

@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.utils import simplejson as json
 from matchcenter.helpers import *
 from matchcenter.templatetags.match_center_tags import sl_fixture, sl_center_narration
 from matchcenter.utils import service_request
@@ -140,3 +141,14 @@ def partial_playerstats(request, match_id):
     return render_to_response('_vs_center_player_data.html', {'homeData': homeData,
                                                           'awayData': awayData,
                                                           'matchInfo': all})
+
+def radar_webview(request):
+    pass
+
+def partial_score(request, match_id):
+    homeid, awayid, all = get_match_info(match_id)
+
+    context= {"home": all.get("homeTeamScore"),
+              "away": all.get("awayTeamScore")}
+
+    return HttpResponse(json.dumps(context), mimetype="application/json")

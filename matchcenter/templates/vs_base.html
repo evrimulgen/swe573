@@ -12,21 +12,33 @@
     <title>{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}</title>
 
     {% include '_vs_headincludes.html' %}
-    <script>
+    <script type="text/javascript">
         var week = {{ currentWeek }}
                 console.log("{{ currentWeek }}")
         console.log("{{ selectedMatch }}")
 
         var prepTimelinr = function(){
             $().timelinr({
-                issuesSpeed: 	300,
-                datesSpeed: 	100,
+                issuesSpeed: 	500,
+                datesSpeed: 	200,
                 arrowKeys: 		'true',
                 startAt:		week
             })
         }
 
         $(prepTimelinr);
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            startRefreshFixture();
+        });
+
+        function startRefreshFixture() {
+            setTimeout(startRefreshFixture,30000);
+            $("#fixture").load('/new/partial/fixture/'+ {{ selectedMatch }} + "/", function(){
+                prepTimelinr();
+            });
+        }
     </script>
 
     {% block head-addition %}{% endblock %}
@@ -42,7 +54,7 @@
 <div id="content">
     <div id="sidebar">
 
-        <div class="fixture">
+        <div class="fixture" id="fixture">
             {% sl_fixture selectedMatch %}
         </div>
 

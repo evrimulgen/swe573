@@ -50,20 +50,20 @@
 
     function refreshScreens()
     {
-        $(".fixture").load('/new/partial/fixture/{{ selectedMatch }}/', function(responseTxt,statusTxt,xhr){
-            if(statusTxt=="success")
-                prepTimelinr();
-        });
-
         var activeTab = $("#div-menu li.active").attr("value");
         var url = '/new/partial/' + valueMap[activeTab] + "/{{ selectedMatch }}/";
         $("#data-area").load(url);
+    }
+
+    function bindTimer(){
+        setInterval(refreshScreens, 30000);
     }
     </script>
 
     <!-- refresh try -->
     <script type="text/javascript">
     $(document).ready(function(){
+        bindTimer();
 
         $("#data-area").load('/new/partial/events/{{ selectedMatch }}/');
 
@@ -74,9 +74,7 @@
             });
         }
 
-        $("#tryRefresh").click(refreshFixture);
 
-        //setInterval(refreshFixture, 5000);
     })
 
     </script>
@@ -106,7 +104,6 @@
 {% endblock %}
 
 {% block content %}
-    <button class="btn btn-primary" onclick="refreshScreens()">Refresh!</button>
     <div class="row">
         <div id="radarContainer">
             <p><button class="btn" id="startMatch">Maci Baslat</button></p>

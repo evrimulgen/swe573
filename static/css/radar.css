@@ -1,0 +1,46 @@
+ #radarContainer > * {
+    margin-left: 50px;
+}
+canvas#slider {
+    margin-top: 20px;
+    margin-bottom: -15px;
+    margin-left: 50px;
+}
+
+#playerCardsContainer{
+    margin-left: 30px;
+}
+
+.player-card{
+    background-color: #eee;
+    color: #333;
+    padding: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 2px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow:    2px 2px 2px rgba(50, 50, 50, 0.3);
+    box-shadow:         2px 2px 2px rgba(50, 50, 50, 0.3);
+}
+
+.player-card img{
+    height: 72px;
+    float: left;
+}
+
+.player-card ul{
+    float: left;
+    list-style-type: none;
+}
+
+.player-card h5{
+    margin-top: 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #777;
+}
+
+.player-card h5 img{
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 10px;
+}

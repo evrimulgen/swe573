@@ -7,43 +7,22 @@
     <script src="{{ STATIC_URL }}/js/timeline.js" type="text/javascript"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js"></script>
+    <script type="text/javascript"> window.matchId = {{selectedMatch}}; </script>
+    <script src="{{ STATIC_URL }}js/radar_ui.js" type="text/javascript"></script>
 
-    <!-- radar script -->
-    <script type="text/javascript">
-        $(function(){
-            var timelineScope = new paper.PaperScope();
-            var radarScope = new paper.PaperScope;
-
-            var radar = new Radar({{selectedMatch}}, radarScope);
-            var timeline = new Timeline({divId: "slider", matchId: {{selectedMatch}} , sliderCount: 1, paperScope: timelineScope});
-
-            $(document).on("radarTimeChange", function(event){
-                timeline.moveSlider("left", event.minute, event.second);
-            });
-
-            $("#slider").on("timeChanged", function(event){
-
-            });
-
-            $("#startMatch").click(function(){
-                radar.startMatch();
-            });
-        });
-    </script>
-
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/radar.css" />
 
     <script type="text/javascript">
 
     var valueMap = {1: "events",
         2: "narrations",
         3: "teamstats",
-        4: "playerstats"}
-
+        4: "playerstats"};
 
     function handleSelect(elm)
     {
-        $("#div-menu li.active").removeClass("active")
-        $(elm).addClass("active")
+        $("#div-menu li.active").removeClass("active");
+        $(elm).addClass("active");
         var url = '/new/partial/' + valueMap[elm.value] + "/{{ selectedMatch }}/";
         $("#data-area").load(url);
     }
@@ -74,20 +53,14 @@
             });
         }
 
+        $("#div-menu .navbar li").click(function(){
+            handleSelect(this);
+        });
 
-    })
+    });
 
     </script>
     <!-- end refresh try -->
-
-    <style type="text/css">
-        #radarContainer > * {
-            margin-left: 50px;
-        }
-        canvas#slider {
-            margin-left: 50px;
-        }
-    </style>
 {% endblock %}
 
 
@@ -105,23 +78,32 @@
 
 {% block content %}
     <div class="row">
-        <div id="radarContainer">
-            <p><button class="btn" id="startMatch">Maci Baslat</button></p>
-            <div id="timeDisplay"></div>
-        </div>
-    </div>
-    <div class="row">
         <canvas id="slider"></canvas>
     </div>
+    <div class="row">
+        <div id="radarContainer">
+            <p><button class="btn" id="startMatch">Maci Baslat</button>
+               <button class="btn" id="pauseMatch">Duraklat/Devam Et</button>
+               <span id="timeDisplay"></span></p>
+        </div>
+    </div>
 
-    <div id="div-menu" style="background-color: #2a2a28; width: 100%;float: left;line-height: 50px;text-align: center;margin-top: 2px">
+    <div class="row" id="playerCardsContainer">
+        <div class="span4 player-card" id="leftPlayerCard" style="display: none;">
+        </div>
+
+        <div class="span4 player-card" id="rightPlayerCard" style="display: none;">
+        </div>
+    </div>
+
+    <div id="div-menu">
         <div class="navbar navbar-static-top">
             <div class="navbar-inner">
                 <ul class="nav">
-                    <li class="active" value="1" onclick="handleSelect(this)"><a>OLAYLAR</a></li>
-                    <li value="2" onclick="handleSelect(this)"><a>ANLATIM</a></li>
-                    <li value="3" onclick="handleSelect(this)"><a>TAKIM İSTATİSTİKLERİ</a></li>
-                    <li value="4" onclick="handleSelect(this)"><a>OYUNCU İSTATİSTİKLERİ</a></li>
+                    <li class="active" value="1"><a>OLAYLAR</a></li>
+                    <li value="2"><a>ANLATIM</a></li>
+                    <li value="3"><a>TAKIM İSTATİSTİKLERİ</a></li>
+                    <li value="4"><a>OYUNCU İSTATİSTİKLERİ</a></li>
                 </ul>
             </div>
         </div>

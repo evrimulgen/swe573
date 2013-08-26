@@ -8,7 +8,7 @@
 <div class='player-data'>
     <p id='title'> İsabetli Pas / Toplam Pas </p>
 
-    <div id='content'>
+    <div id='content' class="player-data-pass in">
         <div id='home-area'>
             <div class='sidebox' id='pass-home'>
                 {% for x in homeData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <button class='collapse' value='1' onclick='collapse(this)'></button>
+    <button class='collapse' data-toggle='collapse' data-target=".player-data-pass"></button>
 
 </div>
 
@@ -56,7 +56,7 @@
 <div class='player-data'>
     <p id='title'> Koşu Mesafesi </p>
 
-    <div id='content'>
+    <div id='content' class="player-data-run in">
         <div id='home-area'>
             <div class='sidebox' id='run-home'>
                 {% for x in homeData|dictsortreversed:'totalDistance' %}
@@ -83,11 +83,11 @@
                         <p id='value'>{{ x.totalDistance }} m</p></a></div>{% endif %}{% endfor %}</div>
         </div>
     </div>
-    <button class='collapse' value='2' onclick='collapse(this)'></button>
+    <button class='collapse' data-toggle='collapse' data-target=".player-data-run"></button>
 </div>
 <div class='player-data'><p id='title'> İsabetli Şut / Toplam Şut </p>
 
-    <div id='content'>
+    <div id='content' class="player-data-shot in">
         <div id='home-area'>
             <div class='sidebox' id='shot-home'>
                 {% for x in homeData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
@@ -117,5 +117,5 @@
                     {% endif %}{% endfor %}</div>
         </div>
     </div>
-    <button class='collapse' value='3' onclick='collapse(this)'></button>
+    <button class='collapse' data-toggle='collapse' data-target=".player-data-shot"></button>
 </div>

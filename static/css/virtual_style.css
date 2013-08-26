@@ -1489,7 +1489,7 @@ p.score-seperator{
     padding-left: 5%;
     margin-bottom: 10px;
 }
-.collapse{
+button.collapse{
     width: 100%;
     height: 25px;
     margin-top: 5px;
@@ -1500,7 +1500,7 @@ p.score-seperator{
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
-.collapse:hover{
+button.collapse:hover{
     background-image: url(../images/collapse-bar-hover.png);
     background-size: cover;
     border: 1px solid #b1b1b1;

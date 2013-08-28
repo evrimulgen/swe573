@@ -27,6 +27,10 @@ function Timeline(options){
     var bg = new scope.Path.Rectangle(0, 0, width, height);
     bg.fillColor = "#ccccff";
 
+    var middleLine = new scope.Path.Line(new scope.Point(0, height/2), new scope.Point(width, height/2));
+    middleLine.strokeColor = "#555599";
+    middleLine.strokeWidth = 2;
+
     var leftHandle = null;
     var rightHandle = null;
     if(sliderCount > 0){

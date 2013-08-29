@@ -8,11 +8,15 @@
 <div class='player-data'>
     <p id='title'> İsabetli Pas / Toplam Pas </p>
 
-    <div id='content' class="player-data-pass in">
+    <div id='content' class="player-data-pass">
         <div id='home-area'>
             <div class='sidebox' id='pass-home'>
                 {% for x in homeData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
-                    {% if forloop.counter < 6 and x.totalPass > 0 %}
+
+                    {% if forloop.counter == 6 %}
+                        <div class='player-data-pass-extra collapse'>
+                    {% endif %}
+                    {% if x.totalPass > 0 %}
                         <div style='height: 40px'>
                             <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
                                 <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
@@ -25,13 +29,19 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+                {% if homeData|length > 5 %}
+                    </div>
+                {% endif %}
             </div>
         </div>
 
         <div id='away-area'>
             <div class='sidebox' id='pass-away'>
                 {% for x in awayData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
-                    {% if forloop.counter < 6 and x.totalPass > 0 %}
+                    {% if forloop.counter == 6 %}
+                        <div class='player-data-pass-extra collapse'>
+                    {% endif %}
+                    {% if x.totalPass > 0 %}
                         <div style='height: 40px'>
                             <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
                                 <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
@@ -44,11 +54,14 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+                {% if awayData|length > 5 %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 
-    <button class='collapse' data-toggle='collapse' data-target=".player-data-pass"></button>
+    <button class='collapse' data-toggle='collapse' data-target=".player-data-pass-extra"></button>
 
 </div>
 
@@ -56,66 +69,103 @@
 <div class='player-data'>
     <p id='title'> Koşu Mesafesi </p>
 
-    <div id='content' class="player-data-run in">
+    <div id='content' class="player-data-run">
         <div id='home-area'>
             <div class='sidebox' id='run-home'>
                 {% for x in homeData|dictsortreversed:'totalDistance' %}
-                    {% if forloop.counter < 6 and x.totalDistance > 0 %}
+                    {% if forloop.counter == 6 %}
+                        <div class='player-data-run-extra collapse'>
+                    {% endif %}
+                    {% if x.totalDistance > 0 %}
                         <div style='height: 40px'>
-                        <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'><img
-                                src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
+                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
+                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
+                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
 
-                            <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.playerName }}</p>
 
-                            <p id='value'>{{ x.totalDistance }} m</p></a></div>{% endif %}{% endfor %}</div>
+                                <p id='value'>{{ x.totalDistance }} m</p>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
         </div>
         <div id='away-area'>
-            <div class='sidebox' id='run-away'>{% for x in awayData|dictsortreversed:'totalDistance' %}
-                {% if forloop.counter < 6 and x.totalDistance > 0 %}
-                    <div style='height: 40px'>
-                    <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'><img
-                            src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                            onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
+            <div class='sidebox' id='run-away'>
+                {% for x in awayData|dictsortreversed:'totalDistance' %}
+                    {% if forloop.counter == 6 %}
+                        <div class='player-data-run-extra collapse'>
+                    {% endif %}
+                    {% if x.totalDistance > 0 %}
+                        <div style='height: 40px'>
+                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
+                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
+                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
 
-                        <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.playerName }}</p>
 
-                        <p id='value'>{{ x.totalDistance }} m</p></a></div>{% endif %}{% endfor %}</div>
+                                <p id='value'>{{ x.totalDistance }} m</p>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
-    <button class='collapse' data-toggle='collapse' data-target=".player-data-run"></button>
+    <button class='collapse' data-toggle='collapse' data-target=".player-data-run-extra"></button>
 </div>
 <div class='player-data'><p id='title'> İsabetli Şut / Toplam Şut </p>
 
-    <div id='content' class="player-data-shot in">
+    <div id='content' class="player-data-shot">
         <div id='home-area'>
             <div class='sidebox' id='shot-home'>
                 {% for x in homeData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
-                    {% if forloop.counter < 6 and x.totalShot > 0 %}
+                    {% if forloop.counter == 6 %}
+                        <div class='player-data-shot-extra collapse'>
+                    {% endif %}
+                    {% if x.totalDistance > 0 %}
                         <div style='height: 40px'>
-                        <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'><img
-                                src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
+                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
+                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
+                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
 
-                            <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.playerName }}</p>
 
-                            <p id='value'>{{ x.successfulShot }} / {{ x.totalShot }}</p></a></div>
-                    {% endif %}{% endfor %}</div>
+                                <p id='value'>{{ x.successfulShot }} / {{ x.totalShot }}</p>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if homeData|length > 5 %}
+                    </div>
+                {% endif %}
+            </div>
         </div>
         <div id='away-area'>
             <div class='sidebox' id='shot-away'>
                 {% for x in awayData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
-                    {% if forloop.counter < 6 and x.totalShot > 0 %}
+                    {% if forloop.counter == 6 %}
+                        <div class='player-data-shot-extra collapse'>
+                    {% endif %}
+                    {% if x.totalDistance > 0 %}
                         <div style='height: 40px'>
-                        <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'><img
-                                src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
+                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
+                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
+                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
 
-                            <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.playerName }}</p>
 
-                            <p id='value'>{{ x.successfulShot }} / {{ x.totalShot }}</p></a></div>
-                    {% endif %}{% endfor %}</div>
+                                <p id='value'>{{ x.successfulShot }} / {{ x.totalShot }}</p>
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
-    <button class='collapse' data-toggle='collapse' data-target=".player-data-shot"></button>
+    <button class='collapse' data-toggle='collapse' data-target=".player-data-shot-extra"></button>
 </div>

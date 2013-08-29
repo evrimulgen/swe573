@@ -1,5 +1,7 @@
 $(function(){
     var radar = new Radar(window.matchId);
+    var started = false;
+    var paused = false;
     var timeline = new Timeline({divId: "slider", matchId: window.matchId, sliderCount: 1});
 
     $(document).on("radarTimeChange", function(event){
@@ -10,12 +12,24 @@ $(function(){
         radar.changeTime(event.time);
     });
 
-    $("#startMatch").click(function(){
-        radar.startMatch();
-    });
-
     $("#pauseMatch").click(function(){
-        radar.togglePause();
+        if(!started){
+            radar.startMatch();
+            $("#pauseMatch i").removeClass("icon-play");
+            $("#pauseMatch i").addClass("icon-pause");
+            started = true;
+        } else {
+            radar.togglePause();
+            if(paused){
+                paused = false;
+                $("#pauseMatch i").removeClass("icon-play");
+                $("#pauseMatch i").addClass("icon-pause");
+            } else {
+                paused = true;
+                $("#pauseMatch i").removeClass("icon-pause");
+                $("#pauseMatch i").addClass("icon-play");
+            }
+        }
     });
 
     $(document).on("radarPlayerClick", function(event){

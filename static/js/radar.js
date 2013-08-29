@@ -115,6 +115,7 @@ function Radar(matchId){
         }
         else{
             // 
+            teams[team_id][jersey_no].visible = true;
             teams[team_id][jersey_no].position = new scope.Point(mt2px(xpos), mt2px(ypos));
         }
     };
@@ -134,14 +135,16 @@ function Radar(matchId){
         }
     };
 
-    var hideBall = function(){
-        if(teams.ball!==undefined){
-            teams.ball.visible = false;
-        }
-    }
-
     var modifyPlayerLocations = function(coords){
         var ballVisible = false;
+        _.each(teams, function(team, key){
+            if(key=='ball') team.visible = false;
+            _.each(team, function(player){
+                if(player!=undefined){
+                    player.visible = false;
+                }
+            });
+        });
         _.each(coords, function(coord){
             // coordinate format:
             // [Type, JerseyNo, X, Y]
@@ -157,12 +160,10 @@ function Radar(matchId){
             if(coord[0]==3 || coord[0]==4) coord[0] -= 3;
             
             if(coord[0]==5){
-                ballVisible = true;
                 modifyBallLocation(coord[2],coord[3]);
             } 
             else modifyPlayerLocation(coord[0], coord[1], coord[2], coord[3]);
         });
-        if(!ballVisible) hideBall();
     }
 
     var minute = 0;

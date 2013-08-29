@@ -19,10 +19,23 @@ WEEK_LIST = range(1,35)
 
 # VIEW CONTROLLERS
 
+def turkify_date(date):
+    """
+    Takes a string as date (format 2013-08-24) and prints out Turkified date: '24 Ağu 2013'
+
+    **Doctests**
+    >>> turkify_date('2013-08-24')
+    "24 Ağu 2013"
+    """
+    dt = datetime.strptime(date, '%Y-%m-%d')
+    turk_month = {1: u"Oca", 2: u"Şub", 3: u"Mar", 4: u"Nis", 5: u"May", 6: u"Haz",
+                7: u"Tem", 8: u"Ağu", 9: u"Eyl", 10: u"Eki", 11: u"Kas", 12: u"Ara"}.get(dt.month)
+    return u"%s %s %s" % (dt.day, turk_month, dt.year)
+
 def prep_common_context(reqid):
 
     # must take currentWeek and weekDict here
-    # weekDict, currentWeek = get_fixture(LEAGUE_ID, SEASON_ID, reqid)
+    weekDict, currentWeek = get_fixture(LEAGUE_ID, SEASON_ID, reqid)
 
     # data for match info, used for all views in match center
     homeTeamId, awayTeamId, infoDict = get_match_info(reqid)
@@ -38,7 +51,10 @@ def prep_common_context(reqid):
 
     teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(reqid, homeTeamId, awayTeamId)
 
+    infoDict['date'] = turkify_date(infoDict.get("date"))
+
     common_context = {'teamStats':teamStatsDict,
+                      'currentWeek': currentWeek,
                       'awayData':awayDataDict,
                       'homeData':homeDataDict,
                       'matchData':matchDataDict,
@@ -149,6 +165,8 @@ def partial_score(request, match_id):
     homeid, awayid, all = get_match_info(match_id)
 
     context= {"home": all.get("homeTeamScore"),
-              "away": all.get("awayTeamScore")}
+              "away": all.get("awayTeamScore"),
+              "mminute": all.get("liveTime")}
 
+    print context
     return HttpResponse(json.dumps(context), mimetype="application/json")

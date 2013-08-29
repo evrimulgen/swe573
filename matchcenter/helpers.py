@@ -8,7 +8,8 @@ from datetime import datetime
 LEAGUE_ID = 1
 SEASON_ID = 9064
 
-from .utils import service_request
+from .utils import service_request, calc_match_minute
+import pytz
 
 def get_match_narration(mid):
     """
@@ -59,10 +60,18 @@ def get_fixture(league_id, season_id, match_id):
                 if matchId == "weekStatus":
                     status = week[matchId]
                 else:
-                    matches.append({'matchId':matchId,'matchStatus':week[matchId][0],'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2], 'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],'homeScore':week[matchId][9],'awayScore':week[matchId][10],'date':week[matchId][11],'liveTime':week[matchId][12],'referee':week[matchId][13],'stadium':week[matchId][14]})
+                    matches.append({'matchId':matchId,'matchStatus':week[matchId][0],
+                                    'homeTeam':week[matchId][1], 'homeTeamCond':week[matchId][2],
+                                    'homeTeamInt':week[matchId][3],'awayTeam':week[matchId][4],
+                                    'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],
+                                    'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],
+                                    'homeScore':week[matchId][9],'awayScore':week[matchId][10],
+                                    'date':week[matchId][11],'liveTime':calc_match_minute(week[matchId][13], week[matchId][0]),
+                                    'referee':week[matchId][13],'stadium':week[matchId][14]})
                     #add weeks
-            weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
 
+
+            weekDict.append({'weekId':int(weekId),'status':status,'matches':matches})
     return weekDict, currentWeek
 
 def get_match_info(match_id):
@@ -77,7 +86,10 @@ def get_match_info(match_id):
     x = datalist[0]
     homeTeamId = x[5] #set home team id
     awayTeamId = x[6] #set away team id
-    infoDict = {'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':int(x[7] or 0),'awayTeamScore':int(x[8] or 0),'date':x[9],'time':x[10],'liveTime':x[11],'referee':x[12],'stadium':x[13]}
+    infoDict = {'weekId':x[0],'matchId':x[1],'status':x[2],'homeTeam':x[3],
+                'awayTeam':x[4],'homeTeamId':x[5],'awayTeamId':x[6],'homeTeamScore':int(x[7] or 0),
+                'awayTeamScore':int(x[8] or 0),'date':x[9],'time':x[10],
+                'liveTime':calc_match_minute(x[11], x[2]),'referee':x[12],'stadium':x[13]}
 
     return homeTeamId, awayTeamId, infoDict
 

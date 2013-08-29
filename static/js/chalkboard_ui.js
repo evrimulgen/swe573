@@ -41,6 +41,9 @@ $(function () {
 
             // for dynamically creating elements and binding events to them:
             // $("<p>xdxd</p>").click(function(){ alert("xd"); }).appendTo("#header");
+
+            $(".teamlist-container .homeTeamName").html(homeTeam.name);
+            $(".teamlist-container .awayTeamName").html(awayTeam.name);
             var homeList = $("#homeTeamJersey");
             _.each(homeTeam.players, function(player){
                 $("<li>"+player.jersey_number+" "+player.name+"</li>").click(function(){

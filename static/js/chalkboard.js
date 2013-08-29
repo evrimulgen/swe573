@@ -19,6 +19,7 @@ function Chalkboard(div_id, match_id){
     $('<canvas id="bgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .chalkboard");
     $('<canvas id="fgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .chalkboard");
     $(divSelector+" .chalkboard").append('<img id="spinner" src="/static/images/spinner.gif" />');
+    $(".pitch canvas").width(canvasWidth).height(canvasHeight);
 
     // setting up two scopes for two canvases
     // bgCanvas contains the football field and fgCanvas has everything else

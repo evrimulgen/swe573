@@ -6,6 +6,16 @@ $(function(){
 
     $(document).on("radarTimeChange", function(event){
         timeline.moveSlider("left", event.minute, event.second);
+
+        var timeString = ''
+        if(event.minute < 10){
+            timeString += '0';
+        }
+        timeString += String(event.minute) + ':';
+        if(event.second < 10)
+            timeString += '0';
+        timeString += String(event.second);
+        $("#timeDisplay").html(timeString);
     });
 
     $("#slider").on("timeChanged", function(event){

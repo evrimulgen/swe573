@@ -188,7 +188,6 @@ function Radar(matchId){
         if(data.minute!=minute || data.second!=second){
             minute = data.minute;
             second = data.second;
-            $("#timeDisplay").html(minute+":"+second);
 
             $.event.trigger({type: "radarTimeChange", "minute": minute, "second":second});
         }
@@ -282,7 +281,6 @@ function Radar(matchId){
     };
 
     this.changeTime = function(time){
-        console.log(time);
         events = [];
         socket.emit('setmatchtime', time);
     };

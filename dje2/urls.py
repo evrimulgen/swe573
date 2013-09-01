@@ -26,7 +26,8 @@ urlpatterns = patterns('',
        #url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '../static/images/favicon.ico'}),
        url(r'^new/', include('matchcenter.urls')),
 
-    url(r'^radar/$', 'dje.views.radar'),
+        url(r'^radar/$', 'dje.views.radar'),
+        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '../static/', 'show_indexes': True}),
 
                        # url(r'^dje2/', include('dje2.foo.urls')),
 

@@ -61,7 +61,10 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+# below config is for azure deployment
+# normally: STATIC_ROOT = ''
+PROJECT_ROOT = os.path.dirname(__file__)
+STATIC_ROOT = os.path.join(PROJECT_ROOT, '../static').replace('\\','/')
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"

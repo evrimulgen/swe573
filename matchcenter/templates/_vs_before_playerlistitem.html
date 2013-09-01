@@ -7,7 +7,15 @@
     {% for event in player.playerEvents|dictsortreversed:"matchTime" %}
         <div class="event">
             {% if event.eventType == 7 %}
-                <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-out.png">
+                 {% if player.eleven == 0 %}
+                     {% if event.playerId == player.playerId %}
+                         <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-out.png">
+                     {% else %}
+                         <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-in.png">
+                     {% endif %}
+                 {% else %}
+                     <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/sub-out.png">
+                 {% endif %}
             {% endif %}
             {% if event.eventType == 0 %}
                 <img alt="{{ event.matchTime }}'" title="{{ event.matchTime }}'" src="{{ STATIC_URL }}images/goal.png">

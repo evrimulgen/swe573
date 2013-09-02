@@ -9,6 +9,13 @@ function Timeline(options){
 
     var handleWidth = 20;
 
+    var currentPoint = [0,0];
+    var maxSecond = 90*60;
+
+    var leftHandle = null;
+    var rightHandle = null; 
+    var draggedHandle = null;
+
     var eventImages = [];
 
     $("#"+div_id).width(width).height(height);
@@ -24,31 +31,76 @@ function Timeline(options){
         }
     });
 
-    var bg = new scope.Path.Rectangle(0, 0, width, height);
-    bg.fillColor = "#ccccff";
+    var drawSlider = function(){
+        var bg = new scope.Path.Rectangle(0, 0, width, height);
+        bg.fillColor = "#ccccff";
 
-    var middleLine = new scope.Path.Line(new scope.Point(0, height/2), new scope.Point(width, height/2));
-    middleLine.strokeColor = "#555599";
-    middleLine.strokeWidth = 2;
+        var middleLine = new scope.Path.Line(new scope.Point(0, height/2), new scope.Point(width, height/2));
+        middleLine.strokeColor = "#555599";
+        middleLine.strokeWidth = 2;
 
-    var leftHandle = null;
-    var rightHandle = null;
-    if(sliderCount > 0){
-        leftHandle = new scope.Path.Rectangle(0, 0, handleWidth, height);
-        leftHandle.fillColor = "#9999ff";
+        if(sliderCount > 0){
+            leftHandle = new scope.Path.Rectangle(0, 0, handleWidth, height);
+            leftHandle.fillColor = "#9999ff";
+        }
+        if(sliderCount > 1){
+            rightHandle = new scope.Path.Rectangle(width-handleWidth, 0, handleWidth, height);
+            rightHandle.fillColor = "#9999ff";
+        }
+        scope.view.draw();
     }
-    if(sliderCount > 1){
-        rightHandle = new scope.Path.Rectangle(width-handleWidth, 0, handleWidth, height);
-        rightHandle.fillColor = "#9999ff";
+
+    var loadMomentum = function(){
+        $.post("/api/GetMatchMomentum", JSON.stringify({"matchId": match_id})).done(function(data){
+            maxSecond = data.data[data.data.length-1][0]*60;
+            paper = scope;
+            var path = new scope.Path();
+            path.strokeColor = "black";
+            path.strokeWidth = 2;
+
+            var maxAbs = 0;
+            _.each(data.data, function(pt){
+                maxAbs = Math.max(maxAbs, Math.abs(pt[1]));
+            });
+
+            var factor = 0.95/maxAbs;
+
+            _.each(data.data, function(pt){
+                var x = timeToPixel(pt[0],0);
+                var y = height*(pt[1]*factor + 1)/2;
+                path.add(new scope.Point(x, y));
+            });
+            //path.simplify(0.5);
+            scope.view.draw();
+        });
     }
 
-    scope.view.draw();
-    var scope_id = scope._id;
+    var loadEvents = function(){
+        var homeId, awayId;
+        $.post("/api/GetMatchInfo", JSON.stringify({"matchId": match_id})).done(function(data){
+            homeId = data.data[0][5];
+            awayId = data.data[0][6];
 
-    var currentPoint = [0,0];
-    var maxSecond = 90*60;
+            $.post("/api/GetMatchEvents", JSON.stringify({"matchId": match_id})).done(function(data){
+                _.each(data.data, function(event){
+                    if(event[2]===homeId){
+                        event.push("home");
+                    } else if(event[2]===awayId){
+                        event.push("away");
+                    }
+                    drawEvent(event);
+                });
+                scope.view.draw();
+            });
 
-    var draggedHandle = null;
+        });
+    
+    };
+
+
+    drawSlider();
+    loadEvents();
+    loadMomentum();
 
     var timeToPixel = function(minute, second){
         var totalSeconds = minute*60+second;
@@ -138,27 +190,7 @@ function Timeline(options){
         eventImages.push(img);
     }
 
-    var loadEvents = function(){
-        var homeId, awayId;
-        $.post("/api/GetMatchInfo", JSON.stringify({"matchId": match_id})).done(function(data){
-            homeId = data.data[0][5];
-            awayId = data.data[0][6];
-
-            $.post("/api/GetMatchEvents", JSON.stringify({"matchId": match_id})).done(function(data){
-                _.each(data.data, function(event){
-                    if(event[2]===homeId){
-                        event.push("home");
-                    } else if(event[2]===awayId){
-                        event.push("away");
-                    }
-                    drawEvent(event);
-                });
-                scope.view.draw();
-            });
-
-        });
     
-    };
 
     this.moveSlider = function(which, minute, second){
         paper = scope;
@@ -172,5 +204,4 @@ function Timeline(options){
         scope.view.draw();
     }
 
-    loadEvents();
 }

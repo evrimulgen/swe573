@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r'^partial/sidestats/(\d*)/$', 'matchcenter.views.partial_sidestats'),
     # url(r'^api/(?P<path>\w+)$', 'matchcenter.views.router'),
 
+    url(r'^d3/$', 'matchcenter.views.d3_try'),
     # url(r'^radar/$', 'dje.views.radar'),
 
     # url(r'^dje2/', include('dje2.foo.urls')),

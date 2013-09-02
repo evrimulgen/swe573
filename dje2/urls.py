@@ -1,8 +1,11 @@
+import os
 from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
+
+static_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static')
 
 urlpatterns = patterns('',
        # Examples:
@@ -26,7 +29,8 @@ urlpatterns = patterns('',
        #url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '../static/images/favicon.ico'}),
        url(r'^new/', include('matchcenter.urls')),
 
-    url(r'^radar/$', 'dje.views.radar'),
+        url(r'^radar/$', 'dje.views.radar'),
+        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': static_path, 'show_indexes': True}),
 
                        # url(r'^dje2/', include('dje2.foo.urls')),
 

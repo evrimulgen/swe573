@@ -67,12 +67,30 @@ function Timeline(options){
 
             _.each(data.data, function(pt){
                 var x = timeToPixel(pt[0],0);
-                var y = height*(pt[1]*factor + 1)/2;
+                var value = (-pt[1])*factor
+                var y = height*(value + 1)/2;
                 path.add(new scope.Point(x, y));
             });
-            //path.simplify(0.5);
             scope.view.draw();
         });
+    }
+
+    var drawTeamLogos = function(home, away){
+        paper = scope;
+        var homeRaster = new scope.Raster("/static/images/logo"+home+".png");
+        var awayRaster = new scope.Raster("/static/images/logo"+away+".png");
+
+        homeRaster.onLoad = function(){
+            var scaleFactor = 20/homeRaster.height;
+            homeRaster.position = new scope.Point(30, 12);
+            homeRaster.scale(scaleFactor);
+        };
+
+        awayRaster.onLoad = function(){
+            var scaleFactor = 20/awayRaster.height;
+            awayRaster.position = new scope.Point(30, 37);
+            awayRaster.scale(scaleFactor);
+        };
     }
 
     var loadEvents = function(){
@@ -80,6 +98,9 @@ function Timeline(options){
         $.post("/api/GetMatchInfo", JSON.stringify({"matchId": match_id})).done(function(data){
             homeId = data.data[0][5];
             awayId = data.data[0][6];
+
+            // drawing the team logos
+            drawTeamLogos(homeId, awayId);
 
             $.post("/api/GetMatchEvents", JSON.stringify({"matchId": match_id})).done(function(data){
                 _.each(data.data, function(event){

@@ -178,3 +178,6 @@ def partial_sidestats(request, match_id):
     context = {"matchData": matchDataDict}
 
     return render_to_response('_vs_sidestats.html', context)
+
+def d3_try(request):
+    return render_to_response('_d3_trial.html')

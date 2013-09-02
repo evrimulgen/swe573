@@ -69,6 +69,7 @@ def prep_common_context(reqid):
 
     return common_context
 
+@ensure_csrf_cookie
 def before(request, reqid):
     context = prep_common_context(reqid)
 
@@ -90,6 +91,7 @@ def before(request, reqid):
 
     return render_to_response('vs_before.html', context)
 
+@ensure_csrf_cookie
 def center(request, reqid):
     context = prep_common_context(reqid)
 
@@ -105,6 +107,7 @@ def center(request, reqid):
 
     return render_to_response('vs_radar.html', context)
 
+@ensure_csrf_cookie
 def table(request, reqid):
     context = prep_common_context(reqid)
 

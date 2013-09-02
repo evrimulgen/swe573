@@ -65,8 +65,9 @@
 
         {% include '_vs_goalvideo.html' with goals=goals only %}
 
-        {% include '_vs_sidestats.html' with matchData=matchData only %}
-
+        <div id="sidestats-container">
+            {% include '_vs_sidestats.html' with matchData=matchData only %}
+        </div>
     </div>
     <div id="main">
         <div id="menu">

@@ -162,11 +162,19 @@ def radar_webview(request):
     pass
 
 def partial_score(request, match_id):
-    homeid, awayid, all = get_match_info(match_id)
+    homeid, awayid, alli = get_match_info(match_id)
 
-    context= {"home": all.get("homeTeamScore"),
-              "away": all.get("awayTeamScore"),
-              "mminute": all.get("liveTime")}
+    context= {"home": alli.get("homeTeamScore"),
+              "away": alli.get("awayTeamScore"),
+              "mminute": alli.get("liveTime")}
 
-    print context
+    #print context
     return HttpResponse(json.dumps(context), mimetype="application/json")
+
+def partial_sidestats(request, match_id):
+    homeid, awayid, all = get_match_info(match_id)
+    teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(match_id, homeid, awayid)
+
+    context = {"matchData": matchDataDict}
+
+    return render_to_response('_vs_sidestats.html', context)

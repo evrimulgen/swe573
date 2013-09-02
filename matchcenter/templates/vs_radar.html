@@ -32,6 +32,7 @@
         var activeTab = $("#div-menu li.active").attr("value");
         var url = '/new/partial/' + valueMap[activeTab] + "/{{ selectedMatch }}/";
         $("#data-area").load(url);
+        $("#sidestats-container").load("/new/partial/sidestats/{{ selectedMatch }}/")
     }
 
     function bindTimer(){

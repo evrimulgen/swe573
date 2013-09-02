@@ -23,7 +23,7 @@ urlpatterns = patterns('',
        url(r'^board/$', 'dje.views.chalkboard'),
        url(r'^(\d*)/radar_vebview/$', 'dje.views.radar_vebview'),
        url(r'^api/(?P<path>\w+)$', 'dje.views.router'),
-       url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '../static/images/favicon.ico'}),
+       #url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '../static/images/favicon.ico'}),
        url(r'^new/', include('matchcenter.urls')),
 
     url(r'^radar/$', 'dje.views.radar'),

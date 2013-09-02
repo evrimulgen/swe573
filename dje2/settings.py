@@ -61,6 +61,8 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
+# below config is for azure deployment
+
 STATIC_ROOT = ''
 
 # URL prefix for static files.

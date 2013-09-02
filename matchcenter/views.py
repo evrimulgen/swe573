@@ -9,7 +9,7 @@ from django.utils import simplejson as json
 from matchcenter.helpers import *
 from matchcenter.templatetags.match_center_tags import sl_fixture, sl_center_narration
 from matchcenter.utils import service_request
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 # DEFINE ALL CONSTANTS HERE
 

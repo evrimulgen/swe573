@@ -57,13 +57,20 @@ function Timeline(options){
             var path = new scope.Path();
             path.strokeColor = "black";
             path.strokeWidth = 2;
+
+            var maxAbs = 0;
+            _.each(data.data, function(pt){
+                maxAbs = Math.max(maxAbs, Math.abs(pt[1]));
+            });
+
+            var factor = 0.95/maxAbs;
+
             _.each(data.data, function(pt){
                 var x = timeToPixel(pt[0],0);
-                var y = height*(pt[1] + 1)/2;
-                console.log(x, y);
+                var y = height*(pt[1]*factor + 1)/2;
                 path.add(new scope.Point(x, y));
             });
-            path.simplify();
+            //path.simplify(0.5);
             scope.view.draw();
         });
     }

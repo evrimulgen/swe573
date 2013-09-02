@@ -150,8 +150,9 @@ def partial_narration(request, match_id):
 def partial_teamstats(request, match_id):
     homeid, awayid, all = get_match_info(match_id)
     teamStats, a, b, c = get_match_stats(match_id, homeid, awayid)
+    colors = get_team_colors(homeid, awayid)
 
-    return render_to_response('_vs_center_team_data.html', {"teamStats": teamStats})
+    return render_to_response('_vs_center_team_data.html', {"teamStats": teamStats, "colors": colors})
 
 def partial_playerstats(request, match_id):
     homeid, awayid, all = get_match_info(match_id)

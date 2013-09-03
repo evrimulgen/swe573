@@ -26,14 +26,16 @@ $(function () {
                 var info = x.data;
 
                 var player = {id: info[5], name: info[0], jersey_number: info[1], team_id: info[3]};
-                if(info[3]==homeTeam.id){
-                    homeTeam.players.push(player);
-                } else if(info[3]==awayTeam.id){
-                    awayTeam.players.push(player);
-                } else {
-                    console.log("wtf - player belongs to neither home nor away team");
-                    console.log(info);
-                } 
+                if(info[16]==1){
+                    if(info[3]==homeTeam.id){
+                        homeTeam.players.push(player);
+                    } else if(info[3]==awayTeam.id){
+                        awayTeam.players.push(player);
+                    } else {
+                        console.log("wtf - player belongs to neither home nor away team");
+                        console.log(info);
+                    } 
+                }
             });
 
             homeTeam.players = _.sortBy(homeTeam.players, "jersey_number");

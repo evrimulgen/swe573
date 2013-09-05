@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'dje',
     'matchcenter',
+    'statcenter',
 )
 
 # A sample logging configuration. The only tangible logging

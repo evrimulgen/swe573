@@ -9,7 +9,7 @@ import django.utils.simplejson as json
 import pytz
 
 def service_request(id, data):
-    url = "http://sentio.cloudapp.net:8080/api/%s" % id
+    url = "http://sentios.cloudapp.net/api/%s" % id
     if data:
         d = json.dumps(data)
         try:
@@ -52,3 +52,4 @@ def calc_match_minute(stamp_str, status):
         tdelta = "DA"
 
     return tdelta
+

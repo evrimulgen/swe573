@@ -1,10 +1,10 @@
-
 """
-Utilities for Sentiolytics Frontend
+Util functions for Stat Center
 """
 
 import urllib2
-import django.utils.simplejson as json
+from django.utils import simplejson as json
+
 
 def service_request(id, data):
     url = "http://sentios.cloudapp.net/api/%s" % id
@@ -18,10 +18,3 @@ def service_request(id, data):
         except:
             empty = []
             return empty
-
-def tryService():
-    data = {"leagueId":1,"seasonId":8918,"matchId":11730066}
-    print service_request("GetMatchSquad",data)
-
-tryService()
-

@@ -22,9 +22,11 @@ urlpatterns = patterns('',
     url(r'^partial/teamstats/(\d*)/$', 'matchcenter.views.partial_teamstats'),
     url(r'^partial/playerstats/(\d*)/$', 'matchcenter.views.partial_playerstats'),
     url(r'^partial/score/(\d*)/$', 'matchcenter.views.partial_score'),
+    url(r'^partial/teamdump/(\d*)/$', 'matchcenter.views.partial_teamstats_dump'),
     url(r'^partial/sidestats/(\d*)/$', 'matchcenter.views.partial_sidestats'),
     # url(r'^api/(?P<path>\w+)$', 'matchcenter.views.router'),
 
+    url(r'^d3/$', 'matchcenter.views.d3_try'),
     # url(r'^radar/$', 'dje.views.radar'),
 
     # url(r'^dje2/', include('dje2.foo.urls')),

@@ -335,3 +335,15 @@ def get_match_stats(match_id, homeTeamId, awayTeamId):
 
     return teamStatsDict, matchDataDict, homeDataDict, awayDataDict
 
+
+def get_team_colors(homeid, awayid):
+    """
+    Fetch team color pairs (fill and stroke, in hex format) from web services
+
+    **Doctests**:
+
+    >>> get_team_colors(1,2)
+    {u'awaystroke': u'ffd700', u'homefill': u'b22222', u'awayfill': u'13427c', u'homestroke': u'f9b41a'}
+
+    """
+    return service_request("GetTeamColors", {"homeid": homeid, "awayid": awayid})

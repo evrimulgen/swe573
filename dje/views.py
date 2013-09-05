@@ -1499,7 +1499,7 @@ def radar(request):
     return render_to_response('radar.html')
 
 def router(request, path):
-    target_url = "http://sentio.cloudapp.net:8080/api/"
+    target_url = "http://sentios.cloudapp.net/api/"
     url = '%s%s' % (target_url, path)
     if request.META.has_key('QUERY_STRING'):
         url += '?' + request.META['QUERY_STRING']
@@ -1527,7 +1527,5 @@ def matchcenter(request,match_id):
 
 def statscenter(request):
     data = {"leagueId":leagueId,"seasonId":seasonId}
-    list = service_request("GetWeeks", data)
-
-    for x in list:
-        return HttpResponseRedirect('week/%s' %x[1])
+    week = service_request("GetWeeks", data)
+    return HttpResponseRedirect('week/%s' % week[0][1]) # Roll to current week

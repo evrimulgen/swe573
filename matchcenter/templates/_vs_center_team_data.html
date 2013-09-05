@@ -4,15 +4,15 @@
         <p id='home-value'>{{ stat.homeValue }}{{ stat.addition }}</p>
         <div id='ratio-area'>
             {% if stat.homePercent != 0 and stat.homePercent != 100 %}
-                <p class='home-ratio' style='width: {{ stat.homePercent }}%'>%{{ stat.homePercent }}</p>
+                <p class='home-ratio' style='width: {{ stat.homePercent }}%; background-color: #{{ colors.homefill }};'>%{{ stat.homePercent }}</p>
             {% elif stat.homePercent == 100%}
-                <p class='home-ratio-full' style='width: 100%'>%100</p>
+                <p class='home-ratio-full' style='width: 100%; background-color: #{{ colors.homefill }};'>%100</p>
             {% endif %}
 
             {% if stat.awayPercent != 0 and stat.awayPercent != 100 %}
-                <p class='away-ratio' style='width: {{ stat.awayPercent }}%'>%{{ stat.awayPercent }}</p>
+                <p class='away-ratio' style='width: {{ stat.awayPercent }}%; background-color: #{{ colors.awayfill }};'>%{{ stat.awayPercent }}</p>
             {% elif stat.awayPercent == 100%}
-                <p class='away-ratio-full' style='width: 100%'>%100</p>
+                <p class='away-ratio-full' style='width: 100%; background-color: #{{ colors.awayfill }};'>%100</p>
             {% endif %}
         </div>
         <p id='away-value'>{{ stat.awayValue }}{{ stat.addition }}</p>

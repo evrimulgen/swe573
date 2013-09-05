@@ -9,7 +9,7 @@ from django.utils import simplejson as json
 from matchcenter.helpers import *
 from matchcenter.templatetags.match_center_tags import sl_fixture, sl_center_narration
 from matchcenter.utils import service_request
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 # DEFINE ALL CONSTANTS HERE
 
@@ -69,6 +69,7 @@ def prep_common_context(reqid):
 
     return common_context
 
+@ensure_csrf_cookie
 def before(request, reqid):
     context = prep_common_context(reqid)
 
@@ -90,6 +91,7 @@ def before(request, reqid):
 
     return render_to_response('vs_before.html', context)
 
+@ensure_csrf_cookie
 def center(request, reqid):
     context = prep_common_context(reqid)
 
@@ -105,6 +107,7 @@ def center(request, reqid):
 
     return render_to_response('vs_radar.html', context)
 
+@ensure_csrf_cookie
 def table(request, reqid):
     context = prep_common_context(reqid)
 
@@ -147,8 +150,22 @@ def partial_narration(request, match_id):
 def partial_teamstats(request, match_id):
     homeid, awayid, all = get_match_info(match_id)
     teamStats, a, b, c = get_match_stats(match_id, homeid, awayid)
+    colors = get_team_colors(homeid, awayid)
 
-    return render_to_response('_vs_center_team_data.html', {"teamStats": teamStats})
+    return render_to_response('_vs_center_team_data.html', {"teamStats": teamStats, "colors": colors})
+
+def partial_teamstats_dump(request, match_id):
+    """
+    dump the team stats in JSON format
+    """
+    homeid, awayid, all = get_match_info(match_id)
+    teamStats, a, b, c = get_match_stats(match_id, homeid, awayid)
+    colors = get_team_colors(homeid, awayid)
+
+    data = json.dumps({"teamStats": teamStats, "colors": colors})
+
+    return HttpResponse(data, mimetype="application/json")
+
 
 def partial_playerstats(request, match_id):
     homeid, awayid, all = get_match_info(match_id)
@@ -178,3 +195,6 @@ def partial_sidestats(request, match_id):
     context = {"matchData": matchDataDict}
 
     return render_to_response('_vs_sidestats.html', context)
+
+def d3_try(request):
+    return render_to_response('_d3_trial.html')

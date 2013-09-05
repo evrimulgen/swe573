@@ -1,0 +1,54 @@
+{% extends "statsbase.html" %}
+
+{% block head-addition %}
+
+    <script>
+        function changeContent(num){
+            htmltoSet = "";
+            if(num == 1){
+                htmltoSet = "<p style='width: 1.4%;float: left'></p><div id='active'><a> <button onclick='changeContent(1)'>Oyuncu Bilgisi</button> </a></div><a> <button onclick='changeContent(2)'>Oyuncu Karşı</button> </a>"
+            }
+            else if(num==2){
+                htmltoSet = "<p style='width: 1.4%;float: left'></p><a> <button onclick='changeContent(1)'>Oyuncu Bilgisi</button> </a><div id='active'><a> <button onclick='changeContent(2)'>Oyuncu Karşı</button> </a></div>"
+            }
+
+            $("#menu").html(htmltoSet);
+        }
+    </script>
+
+{% endblock %}
+
+{% block menu-header %}
+
+    <ul id="nav">
+        <li>
+            <a href="../static">Ana Sayfa</a>
+        </li>
+        <li><a href="../team">Takımlar</a>
+
+        </li>
+        <li>
+            <a  href="../player">Oyuncular</a>
+        </li>
+        <li>
+            <a class="active" href="">Karşılaştır!</a>
+            <ul>
+                <li><a href="#">Takım</a></li>
+                <li><a href="#">Oyuncu</a></li>
+            </ul>
+        </li>
+    </ul>
+
+{% endblock %}
+
+
+{% block content %}
+
+{% endblock %}
+
+
+{% block sidebar %}
+    <div id="content" style="min-height: 600px">
+        <p style="width: 100%;text-align: center;">player comparison widget</p>
+    </div>
+{% endblock %}

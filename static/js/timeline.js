@@ -3,6 +3,17 @@ function Timeline(options){
     var match_id = options.matchId;
     var sliderCount = options.sliderCount;
     var scope = new paper.PaperScope();
+    var isLive = null;
+    var matchInfo = {};
+
+    $.post("/api/GetMatchInfo", JSON.stringify({"matchId": matchId})).done(function(data){
+        matchInfo.week = data.data[0][0];
+        matchInfo.status = data.data[0][2]; // match status, see API docs
+        matchInfo.homeId = data.data[0][5];
+        matchInfo.awayId = data.data[0][6];
+
+        if(matchInfo.status == 2 || matchInfo.status == 3) isLive = true;
+    });
 
     var width = 662;
     var height = 50;
@@ -17,6 +28,8 @@ function Timeline(options){
     var draggedHandle = null;
 
     var eventImages = [];
+
+    var momentumPath = null;
 
     $("#"+div_id).width(width).height(height);
 
@@ -54,9 +67,12 @@ function Timeline(options){
         $.post("/api/GetMatchMomentum", JSON.stringify({"matchId": match_id})).done(function(data){
             maxSecond = data.data[data.data.length-1][0]*60;
             paper = scope;
-            var path = new scope.Path();
-            path.strokeColor = "black";
-            path.strokeWidth = 2;
+            
+            if(momentumPath) momentumPath.visible = false;
+
+            momentumPath = new scope.Path();
+            momentumPath.strokeColor = "black";
+            momentumPath.strokeWidth = 2;
 
             var maxAbs = 0;
             _.each(data.data, function(pt){
@@ -69,7 +85,7 @@ function Timeline(options){
                 var x = timeToPixel(pt[0],0);
                 var value = (-pt[1])*factor
                 var y = height*(value + 1)/2;
-                path.add(new scope.Point(x, y));
+                momentumPath.add(new scope.Point(x, y));
             });
             scope.view.draw();
         });
@@ -136,6 +152,8 @@ function Timeline(options){
     }
 
     scope.tool.onMouseDown = function(event){
+        if(isLive) return;
+
         if(leftHandle && leftHandle.hitTest(event.point)){
             draggedHandle = leftHandle;
         } else if(rightHandle && rightHandle.hitTest(event.point)){
@@ -211,7 +229,11 @@ function Timeline(options){
         eventImages.push(img);
     }
 
-    
+    this.changeTime = function(minute, second){
+        if(isLive && second == 0 && minute != 0){
+            loadMomentum();
+        }
+    }
 
     this.moveSlider = function(which, minute, second){
         paper = scope;

@@ -19,13 +19,13 @@
     </style>
 {% endblock %}
 {% block menu %}
-    <div class="navbar navbar-static-top">
-        <div class="navbar-inner">
-            <ul class="nav">
-                <li><a href="../before">MAÇ ÖNCESİ</a></li>
-                <li><a href="../center">STADYUM</a></li>
-                <li class="active"><a href="../table">MAÇ TAHTASI</a></li>
-            </ul>
+    <div id="navbar">
+        <div id="nav">
+            <a href="../before">MAÇ ÖNCESİ</a>
+            <a href="../center">STADYUM</a>
+            <div id="active">
+                <a href="../table">MAÇ TAHTASI</a>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -34,7 +34,7 @@
     <div class="row">
         <canvas id="slider"></canvas>
     </div>
-    
+
     <div class="row">
         <div id="chalkboardContainer"></div>
     </div>
@@ -57,7 +57,7 @@
     <div class="row">
         <div class="span6 teamlist-container">
             <div class="teamlist-inner">
-                <h5 class="homeTeamName"></h5> 
+                <h5 class="homeTeamName"></h5>
                 <ul class="no-bullets teamlist" id="homeTeamJersey">
                 </ul>
             </div>

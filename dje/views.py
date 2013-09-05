@@ -1525,3 +1525,7 @@ def matchcenter(request,match_id):
         else:
             return HttpResponseRedirect("before")
 
+def statscenter(request):
+    data = {"leagueId":leagueId,"seasonId":seasonId}
+    week = service_request("GetWeeks", data)
+    return HttpResponseRedirect('week/%s' % week[0][1]) # Roll to current week

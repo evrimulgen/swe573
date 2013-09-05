@@ -85,193 +85,230 @@
 
 <div id="content">
 <div id="sidebar">
-
-    <div class="fixture">
-
-        <div id="timeline">
-            <ul id="dates">
-                {% for i in weeks|dictsort:"weekId" %}
-                    {% if i.weekId  == currentWeek %}
-                        <li><a href="#{{ i.weekId }}" class="selected">{{ i.weekId }}. Hafta</a></li>
-                    {% else %}
-                        <li><a href="#{{ i.weekId }}">{{ i.weekId }}. Hafta</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul id="issues">
-                {% for week in weeks|dictsort:"weekId" %}
-                    <li>
-                        {% if week.status == 0 %}
-                            {% for match in week.matches|dictsort:"date" %}
-                                {% if match.matchStatus != 1 and match.matchStatus != 6 and match.matchStatus != 11 and match.matchStatus != 13 and match.matchStatus != 5 and match.matchStatus != 17 %}
-                                    {% if selectedMatch == match.matchId %}
-                                        <a class="match-selected" href="../../{{ match.matchId }}">
-                                    {% else %}
-                                        <a class="match" href="../../{{ match.matchId }}">
-                                    {% endif %}
-                                <div id="scorearea">
-                                    <div id="home">
-                                        <div id="name"><p>{{ match.homeTeamCond }}</p></div>
-                                        <div id="score"><p>:{{ match.homeScore }}</p></div>
-                                    </div>
-                                    <div id="away">
-                                        <div id="name"><p>{{ match.awayTeamCond }}</p></div>
-                                        <div id="score"><p>:{{ match.awayScore }}</p></div>
-                                    </div>
-                                </div>
-                                <div id="live">
-                                    <p class="live-time">{{ match.liveTime }}'</p>
-                                </div>
-                                </a>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                        {% if week.status == 0 or  week.status == 1 %}
-                            <p class="line-info"> Oynanmış Maçlar</p>
-                            {% for match in week.matches|dictsort:"date" %}
-                                {% if match.matchStatus == 6 or match.matchStatus == 11 or match.matchStatus == 13%}
-                                    {% if selectedMatch == match.matchId %}
-                                        <a class="match-selected" href="../../{{ match.matchId }}">
-                                    {% else %}
-                                        <a class="match" href="../../{{ match.matchId }}">
-                                    {% endif %}
-                                <div id="scorearea">
-                                    <div id="home">
-                                        <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png"><p>{{ match.homeTeamCond}}</p></div>
-                                        <div id="score"><p>:{{ match.homeScore }}</p></div>
-                                    </div>
-                                    <div id="away">
-                                        <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png"><p>{{ match.awayTeamCond }}</p></div>
-                                        <div id="score"><p>:{{ match.awayScore }}</p></div>
-                                    </div>
-                                </div>
-                                <div id="datearea" onload="javascript:formatDate(this,{{ match.date }})">
-                                    <p>{{ match.date }}</p>
-                                </div>
-                                </a>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                        {% if week.status == 0 or  week.status == 2 %}
-                            <p class="line-info"> Oynanmamış Maçlar</p>
-                            {% for match in week.matches|dictsort:"date" %}
-                                {% if match.matchStatus == 1 %}
-                                    {% if selectedMatch == match.matchId %}
-                                        <a class="match-selected" href="../../{{ match.matchId }}">
-                                    {% else %}
-                                        <a class="match" href="../../{{ match.matchId }}">
-                                    {% endif %}
-                                <div id="scorearea">
-                                    <div id="home">
-                                        <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png"><p>{{ match.homeTeamCond }}</p></div>
-
-                                    </div>
-                                    <div id="away">
-                                        <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png"><p>{{ match.awayTeamCond }}</p></div>
-
-                                    </div>
-                                </div>
-                                <div id="datearea">
-                                    <p>{{ match.date }}</p>
-                                </div>
-                                </a>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    </li>
-                {% endfor %}
-        </div>
-    </div>
-
-    <div class="sidebox">
-        <h1 class="sidebox"> Gol Videoları </h1>
-
-        {% for x in goals %}
-            <div style="height: 40px">
-                <a href="{{ x.goalLink }}" target="_blank">
-                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                    <p id="name">{{ x.playerName }}</p>
-                    <p id="min">{{ x.min }}'</p>
-                </a>
-            </div>
-
-        {% endfor %}
-
-    </div>
-    <div class="sidebox">
-        <h1 class="sidebox">Koşu Mesafesi</h1>
-
-        {% for x in matchData|dictsortreversed:'totalDistance' %}
-            {% if forloop.counter < 6 %}
-                <div style="height: 40px">
-                    <a href="../../player/{{ x.teamId }}/{{ x.playerId }}" target="_blank">
-                        <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                        <p id="name">{{ x.playerName }}</p>
-                        <p id="value">{{ x.totalDistance }} m</p>
-                    </a>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="sidebox">
-        <h1 class="sidebox">İsabetli Pas/Toplam Pas</h1>
-        {% for x in matchData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
-            {% if forloop.counter < 6 %}
-                <div style="height: 40px">
-                    <a href="../../player/{{ x.teamId }}/{{ x.playerId }}" target="_blank">
-                        <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                        <p id="name">{{ x.playerName }}</p>
-                        <p id="value">{{ x.successfulPass}} / {{ x.totalPass }}</p>
-                    </a>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="sidebox">
-        <h1 class="sidebox">İsabetli Şut/Toplam Şut</h1>
-        {% for x in matchData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
-            {% if forloop.counter < 6 %}
-                <div style="height: 40px">
-                    <a href="../../player/{{ x.teamId }}/{{ x.playerId }}" target="_blank">
-                        <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                        <p id="name">{{ x.playerName }}</p>
-                        <p id="value">{{ x.successfulShot}} / {{ x.totalShot }}</p>
-                    </a>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div style="width: 100%">
-        <ul class="date" id="week-holder" data-bind='template: { foreach: weeksToShow,
-                            beforeRemove: hideMatch,
-                            afterAdd: showMatch }' >
-            <li> <a href="#" data-bind="text: week_id + '. Hafta',
+<div style="width: 100%">
+    <ul class="date" id="week-holder" data-bind='foreach: weeksToShow' >
+        <li> <a href="#" data-bind="text: week_id + '. Hafta',
                    css: { selected: week_id == $root.selectedWeek() },
                    click: $root.changeWeek"> </a>
-            </li>
+        </li>
+    </ul>
+    <div data-bind='foreach: liveMatches'>
+        <a data-bind='attr:{href:"../../" + matchId , class : matchClass }'>
+            <div id="scorearea">
+                <div id="home">
+                    <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + homeTeamId + ".png"}'><p data-bind='text: homeTeamCond'></p></div>
+                    <div id="score"><p data-bind="text: ':' + homeScore,
+                                                                fadeVisible: matchStatus != 1"></p></div>
+                </div>
+                <div id="away">
+                    <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + awayTeamId + ".png"}'><p data-bind='text: awayTeamCond'></p></div>
+                    <div id="score"><p data-bind="text: ':' + awayScore,
+                                                                fadeVisible: matchStatus != 1"></p></div>
+                </div>
+            </div>
+            <div id="live">
+                <p class="live-time" data-bind='text: liveTime'></p>
+            </div>
+        </a>
+    </div>
+    <p class="line-info" data-bind="fadeVisible: playedMatches().length > 0"> Oynanmış Maçlar</p>
+    <div data-bind='foreach: playedMatches'>
+        <a data-bind='attr:{href:"../../" + matchId , class : matchClass }'>
+            <div id="scorearea">
+                <div id="home">
+                    <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + homeTeamId + ".png"}'><p data-bind='text: homeTeamCond'></p></div>
+                    <div id="score"><p data-bind="text: ':' + homeScore,
+                                                                fadeVisible: matchStatus != 1"></p></div>
+                </div>
+                <div id="away">
+                    <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + awayTeamId + ".png"}'><p data-bind='text: awayTeamCond'></p></div>
+                    <div id="score"><p data-bind="text: ':' + awayScore,
+                                                                fadeVisible: matchStatus != 1"></p></div>
+                </div>
+            </div>
+            <div id="datearea">
+                <p data-bind='text: date'></p>
+            </div>
+        </a>
+    </div>
+    <p class="line-info" data-bind="fadeVisible: notPlayedMatches().length > 0"> Oynanmış Maçlar</p>
+    <div data-bind='foreach: notPlayedMatches'>
+        <a data-bind='attr:{href:"../../" + matchId , class : matchClass }'>
+            <div id="scorearea">
+                <div id="home">
+                    <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + homeTeamId + ".png"}'><p data-bind='text: homeTeamCond'></p></div>
+                    <div id="score"><p data-bind="text: ':' + homeScore,
+                                                                fadeVisible: matchStatus != 1"></p></div>
+                </div>
+                <div id="away">
+                    <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + awayTeamId + ".png"}'><p data-bind='text: awayTeamCond'></p></div>
+                    <div id="score"><p data-bind="text: ':' + awayScore,
+                                                                fadeVisible: matchStatus != 1"></p></div>
+                </div>
+            </div>
+            <div id="datearea">
+                <p data-bind='text: date'></p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="fixture">
+
+    <div id="timeline">
+        <ul id="dates">
+            {% for i in weeks|dictsort:"weekId" %}
+                {% if i.weekId  == currentWeek %}
+                    <li><a href="#{{ i.weekId }}" class="selected">{{ i.weekId }}. Hafta</a></li>
+                {% else %}
+                    <li><a href="#{{ i.weekId }}">{{ i.weekId }}. Hafta</a></li>
+                {% endif %}
+            {% endfor %}
         </ul>
-        <div data-bind='template: { foreach: matchesToShow,
-                            beforeRemove: hideMatch,
-                            afterAdd: showMatch }'>
-            <a data-bind='attr:{href:"../../" + matchId , class : matchClass }'>
-                <div id="scorearea">
-                    <div id="home">
-                        <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + homeTeamId + ".png"}'><p data-bind='text: homeTeamCond'></p></div>
-                        <div id="score"><p data-bind="text: ':' + homeScore,
-                                                                fadeVisible: matchStatus != 1"></p></div>
-                    </div>
-                    <div id="away">
-                        <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + awayTeamId + ".png"}'><p data-bind='text: awayTeamCond'></p></div>
-                        <div id="score"><p data-bind="text: ':' + awayScore,
-                                                                fadeVisible: matchStatus != 1"></p></div>
-                    </div>
-                </div>
-                <div id="datearea">
-                    <p data-bind='text: date'></p>
-                </div>
+        <ul id="issues">
+            {% for week in weeks|dictsort:"weekId" %}
+                <li>
+                    {% if week.status == 0 %}
+                        {% for match in week.matches|dictsort:"date" %}
+                            {% if match.matchStatus != 1 and match.matchStatus != 6 and match.matchStatus != 11 and match.matchStatus != 13 and match.matchStatus != 5 and match.matchStatus != 17 %}
+                                {% if selectedMatch == match.matchId %}
+                                    <a class="match-selected" href="../../{{ match.matchId }}">
+                                {% else %}
+                                    <a class="match" href="../../{{ match.matchId }}">
+                                {% endif %}
+                            <div id="scorearea">
+                                <div id="home">
+                                    <div id="name"><p>{{ match.homeTeamCond }}</p></div>
+                                    <div id="score"><p>:{{ match.homeScore }}</p></div>
+                                </div>
+                                <div id="away">
+                                    <div id="name"><p>{{ match.awayTeamCond }}</p></div>
+                                    <div id="score"><p>:{{ match.awayScore }}</p></div>
+                                </div>
+                            </div>
+                            <div id="live">
+                                <p class="live-time">{{ match.liveTime }}'</p>
+                            </div>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if week.status == 0 or  week.status == 1 %}
+                        <p class="line-info"> Oynanmış Maçlar</p>
+                        {% for match in week.matches|dictsort:"date" %}
+                            {% if match.matchStatus == 6 or match.matchStatus == 11 or match.matchStatus == 13%}
+                                {% if selectedMatch == match.matchId %}
+                                    <a class="match-selected" href="../../{{ match.matchId }}">
+                                {% else %}
+                                    <a class="match" href="../../{{ match.matchId }}">
+                                {% endif %}
+                            <div id="scorearea">
+                                <div id="home">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png"><p>{{ match.homeTeamCond}}</p></div>
+                                    <div id="score"><p>:{{ match.homeScore }}</p></div>
+                                </div>
+                                <div id="away">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png"><p>{{ match.awayTeamCond }}</p></div>
+                                    <div id="score"><p>:{{ match.awayScore }}</p></div>
+                                </div>
+                            </div>
+                            <div id="datearea" onload="javascript:formatDate(this,{{ match.date }})">
+                                <p>{{ match.date }}</p>
+                            </div>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if week.status == 0 or  week.status == 2 %}
+                        <p class="line-info"> Oynanmamış Maçlar</p>
+                        {% for match in week.matches|dictsort:"date" %}
+                            {% if match.matchStatus == 1 %}
+                                {% if selectedMatch == match.matchId %}
+                                    <a class="match-selected" href="../../{{ match.matchId }}">
+                                {% else %}
+                                    <a class="match" href="../../{{ match.matchId }}">
+                                {% endif %}
+                            <div id="scorearea">
+                                <div id="home">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png"><p>{{ match.homeTeamCond }}</p></div>
+
+                                </div>
+                                <div id="away">
+                                    <div id="name"><img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png"><p>{{ match.awayTeamCond }}</p></div>
+
+                                </div>
+                            </div>
+                            <div id="datearea">
+                                <p>{{ match.date }}</p>
+                            </div>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+    </div>
+</div>
+
+<div class="sidebox">
+    <h1 class="sidebox"> Gol Videoları </h1>
+
+    {% for x in goals %}
+        <div style="height: 40px">
+            <a href="{{ x.goalLink }}" target="_blank">
+                <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                <p id="name">{{ x.playerName }}</p>
+                <p id="min">{{ x.min }}'</p>
             </a>
         </div>
-    </div>
+
+    {% endfor %}
+
+</div>
+<div class="sidebox">
+    <h1 class="sidebox">Koşu Mesafesi</h1>
+
+    {% for x in matchData|dictsortreversed:'totalDistance' %}
+        {% if forloop.counter < 6 %}
+            <div style="height: 40px">
+                <a href="../../player/{{ x.teamId }}/{{ x.playerId }}" target="_blank">
+                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                    <p id="name">{{ x.playerName }}</p>
+                    <p id="value">{{ x.totalDistance }} m</p>
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class="sidebox">
+    <h1 class="sidebox">İsabetli Pas/Toplam Pas</h1>
+    {% for x in matchData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
+        {% if forloop.counter < 6 %}
+            <div style="height: 40px">
+                <a href="../../player/{{ x.teamId }}/{{ x.playerId }}" target="_blank">
+                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                    <p id="name">{{ x.playerName }}</p>
+                    <p id="value">{{ x.successfulPass}} / {{ x.totalPass }}</p>
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class="sidebox">
+    <h1 class="sidebox">İsabetli Şut/Toplam Şut</h1>
+    {% for x in matchData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
+        {% if forloop.counter < 6 %}
+            <div style="height: 40px">
+                <a href="../../player/{{ x.teamId }}/{{ x.playerId }}" target="_blank">
+                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                    <p id="name">{{ x.playerName }}</p>
+                    <p id="value">{{ x.successfulShot}} / {{ x.totalShot }}</p>
+                </a>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
 </div>
 <div id="main">
     <div id="menu">
@@ -292,99 +329,6 @@
 <div id="footer">
 
 </div>
-
-<script src="{{ STATIC_URL }}js/knockout-2.3.0.js"></script>
-<script>
-    var csrftoken = $.cookie('csrftoken');
-    $.ajaxSetup({
-        crossDomain: false,
-        beforeSend: function(xhr, settings) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    });
-
-    // fades in or fades out the element depending on the value of the logical comparison
-    ko.bindingHandlers.fadeVisible = {
-        init: function(element, valueAccessor) {
-            // Start visible/invisible according to initial value
-            var shouldDisplay = valueAccessor();
-            $(element).toggle(shouldDisplay);
-        },
-        update: function(element, valueAccessor) {
-            // On update, fade in/out
-            var shouldDisplay = valueAccessor();
-            shouldDisplay ? $(element).fadeIn() : $(element).fadeOut();
-        }
-    };
-
-    var FixtureModel = function() {
-        var self = this;
-
-        //stores weeks of the fixture
-        self.weeks = ko.observableArray([
-            {% for week in weeks|dictsort:"weekId" %}
-                {week_id: "{{ week.weekId }}", week_status:"{{ week.status }}"},
-            {% endfor %}
-        ]);
-
-        //stores all matches in the fixture
-        self.matches = ko.observableArray([
-            {% for week in weeks|dictsort:"weekId" %}
-                {% for match in week.matches|dictsort:"date" %}
-                    {% if match.matchId == selectedMatch  %}
-                        {weekId: "{{ week.weekId }}", matchId:"{{ match.matchId }}",matchStatus:"{{ match.matchStatus }}",homeTeam:"{{ match.homeTeam }}", homeTeamCond:"{{ match.homeTeamCond }}", homeTeamInt:"{{ match.homeTeamInt }}",awayTeam:"{{ match.awayTeam }}",awayTeamCond:"{{ match.awayTeamCond}}", awayTeamInt:"{{ match.awayTeamInt }}",homeTeamId:"{{ match.homeTeamId }}",awayTeamId:"{{ match.awayTeamId }}",homeScore:"{{ match.homeScore }}",awayScore:"{{ match.awayScore }}",date:"{{ match.date }}",liveTime:"{{ match.liveTime}}",referee:"{{ match.referee }}",stadium:"{{ match.stadium }}",matchClass:"match-selected"},
-                    {% else %}
-                        {weekId: "{{ week.weekId }}", matchId:"{{ match.matchId }}",matchStatus:"{{ match.matchStatus }}",homeTeam:"{{ match.homeTeam }}", homeTeamCond:"{{ match.homeTeamCond }}", homeTeamInt:"{{ match.homeTeamInt }}",awayTeam:"{{ match.awayTeam }}",awayTeamCond:"{{ match.awayTeamCond}}", awayTeamInt:"{{ match.awayTeamInt }}",homeTeamId:"{{ match.homeTeamId }}",awayTeamId:"{{ match.awayTeamId }}",homeScore:"{{ match.homeScore }}",awayScore:"{{ match.awayScore }}",date:"{{ match.date }}",liveTime:"{{ match.liveTime}}",referee:"{{ match.referee }}",stadium:"{{ match.stadium }}",matchClass:"match"},
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-        ]);
-
-        self.selectedWeek = ko.observable("{{ currentWeek }}");
-        self.selectedMatch = ko.observable("{{ selectedMatch }}");
-
-        //filters the matches for selected match
-        self.matchesToShow = ko.coputed(function() {
-            // Represents a filtered list of matches
-            var desiredWeek = this.selectedWeek();
-            return ko.utils.arrayFilter(this.matches(), function(match) {
-                return match.weekId.toLowerCase() == desiredWeek.toLowerCase();
-            });
-        }, this);
-
-
-        // Selects 3 weeks to show, depending on the selected week
-        self.weeksToShow = ko.computed(function() {
-            // Represents a filtered list of weeks
-            var desiredWeek = this.selectedWeek();
-            return ko.utils.arrayFilter(this.weeks(), function(week) {
-                // if first week return first 3 weeks
-                if(parseInt(desiredWeek) == 1 && week.week_id<4){
-                    return week.week_id;
-                }
-                // if last week return last 3 weeks
-                if(parseInt(desiredWeek) == 34 && week.week_id>31){
-                    return week.week_id;
-                }
-                // else return selected week with one before and one after
-                if(week.week_id == parseInt(desiredWeek) + 1 | week.week_id == desiredWeek | week.week_id == parseInt(desiredWeek) - 1){
-                    return week.week_id;
-                }
-            });
-        }, this);
-
-        // changes the selected week
-        self.changeWeek = function(elem) {
-            self.selectedWeek(elem.week_id);
-        };
-
-        // show and hide effects
-        this.showMatch = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideDown() };
-        this.hideMatch = function(elem) { if (elem.nodeType === 1) $(elem).slideUp(function() { $(elem).remove(); }) };
-    };
-
-    ko.applyBindings(new FixtureModel());
-</script>
 
 </body>
 

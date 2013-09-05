@@ -47,7 +47,7 @@
             </div>
         </a>
     </div>
-    <p class="line-info" data-bind="fadeVisible: notPlayedMatches().length > 0"> Oynanmış Maçlar</p>
+    <p class="line-info" data-bind="fadeVisible: notPlayedMatches().length > 0"> Oynanmamış Maçlar</p>
     <div data-bind='foreach: notPlayedMatches'>
         <a data-bind='attr:{href:"../../" + matchId , class : matchClass }'>
             <div id="scorearea">

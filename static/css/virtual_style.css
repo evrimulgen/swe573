@@ -490,7 +490,8 @@ p.score-seperator{
 .match {
 
     padding-left: 1px;
-    width: 100%;
+    width: 96%;
+    margin-left: 2%;
     height: 40px;
     text-decoration: none;
 
@@ -510,7 +511,8 @@ p.score-seperator{
 
 .match-selected{
     padding-left: 1px;
-    width: 100%;
+    width: 96%;
+    margin-left: 2%;
     height: 40px;
     text-decoration: none;
     background-image: -moz-linear-gradient(top, #b8b8b8 0%, #e0e0e0 5%,#e0e0e0 95%, #e0e0e0 95%); /* FF3.6+ */
@@ -1040,7 +1042,7 @@ p.score-seperator{
     background-image: -o-linear-gradient(top, #7c94eb 0%, #5d77eb 5%, #5d77eb  95%, #293598 100%); /* Opera 11.10+ */
     background-image: -ms-linear-gradient(top,  #7c94eb 0%, #5d77eb 5%, #5d77eb  95%, #293598 100%); /* IE10+ */
     background-image: linear-gradient(to bottom, #7c94eb 0%, #5d77eb 5%, #5d77eb  95%, #293598 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7c94eb', endColorstr='#293598',GradientType=0 ); *//* IE6-9 */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7c94eb', endColorstr='#293598',GradientType=0 ); /* IE6-9 */
 
     -webkit-border-radius: 0px 5px 5px 0px;
     -moz-border-radius: 0px 5px 5px 0px;
@@ -1576,6 +1578,11 @@ button.collapse:hover{
     border-top: 2px solid transparent;
     border-left: 2px solid transparent;
     border-right: 2px solid transparent;
+
+    padding-top: 8px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 9px;
 
     color: #ffffff;
     text-decoration: none;

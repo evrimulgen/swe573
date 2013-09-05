@@ -29,7 +29,7 @@ def turkify_date(date):
     """
     dt = datetime.strptime(date, '%Y-%m-%d')
     turk_month = {1: u"Oca", 2: u"Şub", 3: u"Mar", 4: u"Nis", 5: u"May", 6: u"Haz",
-                7: u"Tem", 8: u"Ağu", 9: u"Eyl", 10: u"Eki", 11: u"Kas", 12: u"Ara"}.get(dt.month)
+                  7: u"Tem", 8: u"Ağu", 9: u"Eyl", 10: u"Eki", 11: u"Kas", 12: u"Ara"}.get(dt.month)
     return u"%s %s %s" % (dt.day, turk_month, dt.year)
 
 def prep_common_context(reqid):
@@ -53,7 +53,9 @@ def prep_common_context(reqid):
 
     infoDict['date'] = turkify_date(infoDict.get("date"))
 
-    common_context = {'teamStats':teamStatsDict,
+    common_context = {'leagueId': LEAGUE_ID,
+                      'seasonId': SEASON_ID,
+                      'teamStats':teamStatsDict,
                       'currentWeek': currentWeek,
                       'awayData':awayDataDict,
                       'homeData':homeDataDict,
@@ -63,6 +65,7 @@ def prep_common_context(reqid):
                       'homeSquad':homeSquadDict,
                       'awaySquad':awaySquadDict,
                       'weeklist': WEEK_LIST,
+                      'weeks': weekDict,
                       'goals':goalDict,
                       'matchInfo':infoDict,
                       'selectedMatch':str(reqid)}
@@ -172,8 +175,8 @@ def partial_playerstats(request, match_id):
     teamStats, matchData, homeData, awayData = get_match_stats(match_id, homeid, awayid)
 
     return render_to_response('_vs_center_player_data.html', {'homeData': homeData,
-                                                          'awayData': awayData,
-                                                          'matchInfo': all})
+                                                              'awayData': awayData,
+                                                              'matchInfo': all})
 
 def radar_webview(request):
     pass

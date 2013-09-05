@@ -1499,7 +1499,7 @@ def radar(request):
     return render_to_response('radar.html')
 
 def router(request, path):
-    target_url = "http://sentio.cloudapp.net:8080/api/"
+    target_url = "http://sentios.cloudapp.net/api/"
     url = '%s%s' % (target_url, path)
     if request.META.has_key('QUERY_STRING'):
         url += '?' + request.META['QUERY_STRING']

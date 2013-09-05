@@ -7,7 +7,7 @@ import urllib2
 import django.utils.simplejson as json
 
 def service_request(id, data):
-    url = "http://sentio.cloudapp.net:8080/api/%s" % id
+    url = "http://sentios.cloudapp.net/api/%s" % id
     if data:
         d = json.dumps(data)
         try:

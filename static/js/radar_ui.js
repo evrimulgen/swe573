@@ -6,6 +6,7 @@ $(function(){
 
     $(document).on("radarTimeChange", function(event){
         timeline.moveSlider("left", event.minute, event.second);
+        timeline.changeTime(event.minute, event.second);
 
         var timeString = ''
         if(event.minute < 10){

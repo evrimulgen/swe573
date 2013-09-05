@@ -1525,9 +1525,3 @@ def matchcenter(request,match_id):
         else:
             return HttpResponseRedirect("before")
 
-def statscenter(request):
-    data = {"leagueId":leagueId,"seasonId":seasonId}
-    list = service_request("GetWeeks", data)
-
-    for x in list:
-        return HttpResponseRedirect('week/%s' %x[1])

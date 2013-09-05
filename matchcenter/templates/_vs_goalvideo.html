@@ -3,7 +3,6 @@
 
 <div class="sidebox">
     <h1 class="sidebox"> Gol Videoları </h1>
-
     {% for x in goals %}
         <div style="height: 40px">
             <a href="{{ x.goalLink }}" target="_blank">
@@ -12,7 +11,5 @@
                 <p id="min">{{ x.min }}'</p>
             </a>
         </div>
-
     {% endfor %}
-
 </div>

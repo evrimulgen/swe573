@@ -197,4 +197,4 @@ def partial_sidestats(request, match_id):
     return render_to_response('_vs_sidestats.html', context)
 
 def d3_try(request):
-    return render_to_response('_d3_trial.html')
+    return render_to_response('_card_trial.html')

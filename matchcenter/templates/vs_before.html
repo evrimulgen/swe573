@@ -2,53 +2,54 @@
 
 
 {% block menu %}
-    <div class="navbar navbar-static-top">
-        <div class="navbar-inner">
-            <ul class="nav">
-                <li class="active"><a href="../before">MAÇ ÖNCESİ</a></li>
-                <li><a href="../center">STADYUM</a></li>
-                <li><a href="../table">MAÇ TAHTASI</a></li>
-            </ul>
+    <div id="navbar">
+        <div id="nav">
+            <div id="active">
+                <a href="../before">MAÇ ÖNCESİ</a>
+            </div>
+            <a href="../center">STADYUM</a>
+            <a href="../table">MAÇ TAHTASI</a>
         </div>
     </div>
 {% endblock %}
+
 {% block content %}
     <div class="history-area">
         <h1 class="main">Rekabet Geçmişi</h1>
-            <div id="home">
-                <h2>{{ matchInfo.homeTeam }}</h2>
-                <img src="{{ STATIC_URL }}images/logo{{ matchInfo.homeTeamId }}.png">
+        <div id="home">
+            <h2>{{ matchInfo.homeTeam }}</h2>
+            <img src="{{ STATIC_URL }}images/logo{{ matchInfo.homeTeamId }}.png">
+        </div>
+        <div id="comparison">
+            <div class="holder">
+                <h3>Geçmiş Maçlar</h3>
+                <p class="home-ratio home-ratio-before" style="width:{{ history.homeWinRatio }}%">{{ history.homeWins }}</p>
+                <p class="draw-ratio draw-ratio-before" style="width:{{ history.drawRatio }}%">{{ history.draws}}</p>
+                <p class="away-ratio away-ratio-before" style="width:{{ history.awayWinRatio }}%">{{ history.awayWins }}</p>
             </div>
-            <div id="comparison">
-                    <div class="holder">
-                        <h3>Geçmiş Maçlar</h3>
-                        <p class="home-ratio home-ratio-before" style="width:{{ history.homeWinRatio }}%">{{ history.homeWins }}</p>
-                        <p class="draw-ratio draw-ratio-before" style="width:{{ history.drawRatio }}%">{{ history.draws}}</p>
-                        <p class="away-ratio away-ratio-before" style="width:{{ history.awayWinRatio }}%">{{ history.awayWins }}</p>
-                    </div>
-                    <div class="holder">
-                        <h3>Karşılıklı Goller</h3>
-                        <p class="home-ratio home-ratio-before" style="width:{{ history.homeGoalRatio }}%">{{ history.homeGoals }}</p>
-                        <p class="away-ratio away-ratio-before" style="width:{{ history.awayGoalRatio }}%">{{ history.awayGoals }}</p>
-                    </div>
-                    <div class="holder">
-                        <h3>Son 5 Maç</h3>
-                        <div style="width: 50%;float: left;margin-top: 0px">
-                            <div class="form">
-                                {% include '_vs_before_form.html' with form=homeForm only %}
-                            </div>
-                        </div>
-                        <div style="width: 50%;float: left;margin-top: 0px">
-                            <div class="form">
-                                {% include '_vs_before_form.html' with form=awayForm only %}
-                            </div>
-                        </div>
-                    </div>
+            <div class="holder">
+                <h3>Karşılıklı Goller</h3>
+                <p class="home-ratio home-ratio-before" style="width:{{ history.homeGoalRatio }}%">{{ history.homeGoals }}</p>
+                <p class="away-ratio away-ratio-before" style="width:{{ history.awayGoalRatio }}%">{{ history.awayGoals }}</p>
             </div>
-            <div id="away">
-                <h2>{{ matchInfo.awayTeam }}</h2>
-                <img src="{{ STATIC_URL }}images/logo{{ matchInfo.awayTeamId }}.png">
+            <div class="holder">
+                <h3>Son 5 Maç</h3>
+                <div style="width: 50%;float: left;margin-top: 0px">
+                    <div class="form">
+                        {% include '_vs_before_form.html' with form=homeForm only %}
+                    </div>
+                </div>
+                <div style="width: 50%;float: left;margin-top: 0px">
+                    <div class="form">
+                        {% include '_vs_before_form.html' with form=awayForm only %}
+                    </div>
+                </div>
             </div>
+        </div>
+        <div id="away">
+            <h2>{{ matchInfo.awayTeam }}</h2>
+            <img src="{{ STATIC_URL }}images/logo{{ matchInfo.awayTeamId }}.png">
+        </div>
     </div>
     <div class="squad-area">
         {% include '_vs_before_squads.html' with awaySquad=awaySquad homeSquad=homeSquad only %}

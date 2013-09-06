@@ -17,81 +17,81 @@
 
     <script type="text/javascript">
 
-    var valueMap = {1: "events",
-        2: "narrations",
-        3: "teamstats",
-        4: "playerstats"};
+        var valueMap = {1: "events",
+            2: "narrations",
+            3: "teamstats",
+            4: "playerstats"};
 
-    function handleSelect(elm)
-    {
-        $("#div-menu li.active").removeClass("active");
-        $(elm).addClass("active");
-        if (elm.value == 3) {
-            loadTeamStats();
-        }
-        else {
-            var url = '/new/partial/' + valueMap[elm.value] + "/{{ selectedMatch }}/";
-            $("#data-area").load(url);
-        }
-    }
-
-    function loadTeamStats(){
-        $.ajax({
-            dataType: "json",
-            url: "/new/partial/teamdump/{{ selectedMatch }}",
-            success: function(d){
-
-                console.log(d);
-                var pref = {
-                    "homefill": d.colors.homefill,
-                    "awayfill": d.colors.awayfill,
-                    "width": $("#data-area").width()
-                };
-                $("#data-area").empty();
-                simpleBar("#data-area", d.teamStats, pref);
+        function handleSelect(elm)
+        {
+            $("#div-menu li.active").removeClass("active");
+            $(elm).addClass("active");
+            if (elm.value == 3) {
+                loadTeamStats();
             }
-        });
-    }
-
-    function refreshScreens()
-    {
-        var activeTab = $("#div-menu li.active").attr("value");
-
-
-        if (activeTab==3){
-            loadTeamStats();
+            else {
+                var url = '/new/partial/' + valueMap[elm.value] + "/{{ selectedMatch }}/";
+                $("#data-area").load(url);
+            }
         }
-        else {
-            var url = '/new/partial/' + valueMap[activeTab] + "/{{ selectedMatch }}/";
-            $("#data-area").load(url);
-        }
-        $("#sidestats-container").load("/new/partial/sidestats/{{ selectedMatch }}/")
-    }
 
-    function bindTimer(){
-        setInterval(refreshScreens, 30000);
-    }
+        function loadTeamStats(){
+            $.ajax({
+                dataType: "json",
+                url: "/new/partial/teamdump/{{ selectedMatch }}",
+                success: function(d){
+
+                    console.log(d);
+                    var pref = {
+                        "homefill": d.colors.homefill,
+                        "awayfill": d.colors.awayfill,
+                        "width": $("#data-area").width()
+                    };
+                    $("#data-area").empty();
+                    simpleBar("#data-area", d.teamStats, pref);
+                }
+            });
+        }
+
+        function refreshScreens()
+        {
+            var activeTab = $("#div-menu li.active").attr("value");
+
+
+            if (activeTab==3){
+                loadTeamStats();
+            }
+            else {
+                var url = '/new/partial/' + valueMap[activeTab] + "/{{ selectedMatch }}/";
+                $("#data-area").load(url);
+            }
+            $("#sidestats-container").load("/new/partial/sidestats/{{ selectedMatch }}/")
+        }
+
+        function bindTimer(){
+            setInterval(refreshScreens, 30000);
+        }
     </script>
 
     <!-- refresh try -->
     <script type="text/javascript">
-    $(document).ready(function(){
-        bindTimer();
+        $(document).ready(function(){
+            bindTimer();
 
-        $("#data-area").load('/new/partial/events/{{ selectedMatch }}/');
+            $("#data-area").load('/new/partial/events/{{ selectedMatch }}/');
 
-        var refreshFixture = function(){
-            $(".fixture").load('/new/partial/fixture/{{ selectedMatch }}/', function(responseTxt,statusTxt,xhr){
-                if(statusTxt=="success")
-                    prepTimelinr();
+            var refreshFixture = function(){
+                $(".fixture").load('/new/partial/fixture/{{ selectedMatch }}/', function(responseTxt,statusTxt,xhr){
+                    if(statusTxt=="success")
+                        prepTimelinr();
+                });
+            }
+
+            $("#div-menu .navbar li").click(function(){
+                handleSelect(this);
             });
-        }
 
-        $("#div-menu .navbar li").click(function(){
-            handleSelect(this);
         });
-
-    });
 
     </script>
     <!-- end refresh try -->
@@ -99,13 +99,13 @@
 
 
 {% block menu %}
-    <div class="navbar navbar-static-top">
-        <div class="navbar-inner">
-            <ul class="nav">
-                <li><a href="../before">MAÇ ÖNCESİ</a></li>
-                <li class="active"><a href="../center">STADYUM</a></li>
-                <li><a href="../table">MAÇ TAHTASI</a></li>
-            </ul>
+    <div id="navbar">
+        <div id="nav">
+            <a href="../before">MAÇ ÖNCESİ</a>
+            <div id="active">
+                <a href="../center">STADYUM</a>
+            </div>
+            <a href="../table">MAÇ TAHTASI</a>
         </div>
     </div>
 {% endblock %}
@@ -116,8 +116,8 @@
     </div>
     <div class="row">
         <div id="radarContainer">
-               <button class="btn" id="pauseMatch"><i class="icon-play"></i></button>
-               <span id="timeDisplay" class="pull-right"></span></p>
+            <button class="btn" id="pauseMatch"><i class="icon-play"></i></button>
+            <span id="timeDisplay" class="pull-right"></span></p>
         </div>
     </div>
 

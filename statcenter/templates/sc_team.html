@@ -69,7 +69,7 @@
                 htmltoSet += "<div style='width:48.5%;margin-left:1%;height:300px' class='infobox'><h1>Son Maç</h1></div>"
                 htmltoSet += "<div style='width:48.5%;margin-left:1%;height:300px' class='infobox'><h1>Gelecek Maç</h1></div>"
                 htmltoSet += "<div style='width:48.5%;margin-left:1%;margin-top:10px' class='infobox'><h1>Tüm Maçlar</h1><div style='height:400px;overflow-y:scroll'>";
-                htmltoSet += "{% include "teamfixture.html" %}";
+                htmltoSet += "{% include "_sc_team_fixture.html" %}";
                 htmltoSet += "</div></div>";
                 htmltoSet += "<div style='width:48.5%;margin-left:1%;height:400px;margin-top:10px' class='infobox'><h1>Puan Tablosu</h1></div>"
                 $("#insideright").html(htmltoSet);
@@ -83,7 +83,7 @@
                 htmltoSet = "<div class='active'><a> <button onclick='changeContent(3)'>Takım Özeti</button> </a></div><a> <button onclick='changeContent(1)'>Fikstür</button> </a><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a>";
                 $("#menu").html(htmltoSet);
                 htmltoSet = "";
-                htmltoSet += "{% include "teamsummary.html" %}";
+                htmltoSet += "{% include "_sc_team_summary.html" %}";
                 $("#insideright").html(htmltoSet);
 
             }

@@ -56,7 +56,7 @@ def playerselect(request, num):
 
     :param num: team id passed in by the route config
     """
-    return render_to_response('playerselection.html', { 'team_selected': int(num),
+    return render_to_response('sc_playerselect.html', { 'team_selected': int(num),
                                                         'try_list':get_teams(),
                                                         #'team_list': teamList,
                                                         'players':get_team_players(num),

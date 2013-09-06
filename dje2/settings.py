@@ -157,3 +157,7 @@ LOGGING = {
         },
     }
 }
+
+# Match Center, Stats Center settings
+LEAGUE_ID = 1
+SEASON_ID = 9064

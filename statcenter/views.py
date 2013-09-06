@@ -27,7 +27,7 @@ def home(request,weekId):
                                                'weekList':weekDict,
                                                'weekSelected': int(weekId),
                                                'lastPlayedWeek':int(lastPlayed),
-                                               'standing_list':get_standings_by_week(),
+                                               'standing_list':get_standings_by_week(int(weekId)),
                                                'best_eleven_list':None})
 @ensure_csrf_cookie
 def team(request, num):

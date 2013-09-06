@@ -1,20 +1,6 @@
 {% extends "sc_base.html" %}
 
 {% block head-addition %}
-
-    <script>
-        function changeContent(num){
-            htmltoSet = "";
-            if(num == 1){
-                htmltoSet = "<p style='width: 1.4%;float: left'></p><div class='active'><a> <button onclick='changeContent(1)'>Oyuncu Bilgisi</button> </a></div><a> <button onclick='changeContent(2)'>Oyuncu Özeti</button> </a>"
-            }
-            else if(num==2){
-                htmltoSet = "<p style='width: 1.4%;float: left'></p><a> <button onclick='changeContent(1)'>Oyuncu Bilgisi</button> </a><div class='active'><a> <button onclick='changeContent(2)'>Oyuncu Özeti</button> </a></div>"
-            }
-
-            $("#menu").html(htmltoSet);
-        }
-    </script>
     <script type="text/javascript">
         function handleSelect(elm)
         {
@@ -25,7 +11,7 @@
                 type: "POST",
                 data: {
                     "leagueId": 1,
-                    "seasonId": 8918,
+                    "seasonId": 9064,
                     "teamId": elm.value
                 },
                 success: function( data ) {
@@ -35,10 +21,8 @@
             });
         }
     </script>
-
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/d3.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/simpled3.js"></script>
     <script>
         $(function() {
             var availableTags = [
@@ -50,8 +34,11 @@
                 source: availableTags
             });
 
+            var objectChart = new d3BarChart();
+            objectChart.drawChart('player-chart-container',500,200,null);
         });
     </script>
+
 
 {% endblock %}
 
@@ -114,13 +101,7 @@
 
 
 {% block content %}
-    <div class="line-menu" id="menu" style="margin-bottom: 5px">
-        <p style="width: 1.4%;float: left"></p>
-        <div class="active">
-            <a href="#"> <button onclick="changeContent(1)">Oyuncu Bilgisi</button> </a>
-        </div>
-        <a href="#"> <button onclick="changeContent(2)">Oyuncu Özeti</button> </a>
-    </div>
+
     <div class="insideleft">
         {% for x in details %}
             <div class="infobox">
@@ -129,7 +110,6 @@
                 <div class="line-holder">
                     <p class="first">Takım</p>
                     <p class="second">{{ x.teamName }}</p>
-
                 </div>
                 <div class="line-holder">
                     <p class="first">Doğum Tarihi</p>
@@ -190,23 +170,28 @@
 
 
         <div class="box-container" style="width: 96%;margin-top: 0px">
+            <h3>Oyuncu Özeti</h3>
+            <table class="table-player-stats table-hover">
+                <tr>
+                    <th>İstatistik</th>
+                    <th>Bu Sezon</th>
+                    <th>Bu Hafta</th>
+                </tr>
+                {% for k,v in player_stats.items %}
+                    <tr>
+                        <td>{{ k }}</td>
+                        <td>{{ v.0|floatformat }}</td>
+                        <td>{{ v.1|floatformat }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
 
-            <a class="content">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">İstatistikler</p>
-                <div id="image" style="width: 10%;margin-top: -2px">
+        <div id="player-chart-container" class="box-container" style="width: 96%;">
 
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    {% for x in "xxxxxxxxxxxxxxxxxxxxxxxxxxx" %}
-                        <li><p class="first">İstatistik {{ forloop.counter }}</li>
-                    {% endfor %}
-                </ul>
-            </a>
         </div>
 
     </div>
-
-
 
 {% endblock %}
 

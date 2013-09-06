@@ -5,7 +5,7 @@ from random import randint
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
-from statcenter.helpers import get_standings, get_teams, get_fixture, get_team_players, get_player_details, get_team_details, get_standings_by_week
+from statcenter.helpers import get_standings, get_teams, get_fixture, get_team_players, get_player_details, get_team_details, get_standings_by_week, get_week_details, get_player_stats
 from statcenter.utils import service_request
 from dje2.settings import LEAGUE_ID, SEASON_ID
 
@@ -13,7 +13,7 @@ weekList = range(1, 35)
 
 @ensure_csrf_cookie
 def statscenter(request):
-    week = service_request("GetWeeks", {"leagueId":LEAGUE_ID,"seasonId":SEASON_ID})
+    week = get_week_details()
     return HttpResponseRedirect('week/%s' % week[0][1]) # Roll to current week
 
 @ensure_csrf_cookie
@@ -77,10 +77,12 @@ def player(request, num, player_id):
                                                    'try_list':get_teams(),
                                                    'players':get_team_players(num),
                                                    'team_selected': int(num),
+                                                   'player_stats': get_player_stats(player_id),
                                                    #'team_list': teamList,
                                                    #'player_list':playerList,
                                                    #"best_eleven_list":bestList,
                                                    'weeklist': weekList})
 
+@ensure_csrf_cookie
 def compare(request):
     return render_to_response('sc_compare.html')

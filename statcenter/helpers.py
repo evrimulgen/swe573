@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 Helper functions for frequently used Stats Center code
 """
@@ -155,3 +156,46 @@ def get_standings_by_week(weekid):
                                  'change': int(item[11])})
 
     return standingDict
+
+def get_week_details():
+    data = service_request("GetWeeks", {"leagueId":LEAGUE_ID,"seasonId":SEASON_ID})
+    return data
+
+def get_player_stats(playerid):
+    """
+    Invoke GetPlayerCard in api
+    """
+
+    weeks = get_week_details()
+    data = service_request("GetPlayerCard", {"leagueId": LEAGUE_ID,
+                                             "seasonId": SEASON_ID,
+                                             "playerId": playerid,
+                                             "weekId": weeks[0][1]})
+
+    stats = data.get("statistics")
+
+    if not stats:
+        return []
+
+    stat_lookup = lambda x: {"passes": "Toplam Pas",
+                     "shotsOnTarget": "İsabetli Şut",
+                     "crosses": "Toplam Orta",
+                     "foulsSuffered": "Maruz Kalınan Faul",
+                     "totalDistance": "Kat Edilen Mesafe",
+                     "yellowCard": "Sarı Kart",
+                     "corners": "Korner",
+                     "redCard": "Kırmızı Kart",
+                     "successfulCross": "İsabetli Orta",
+                     "penalty": "Penaltı",
+                     "assists": "Asist",
+                     "goals": "Gol",
+                     "shots": "Şut",
+                     "foulsCommitted": "Yapılan Faul",
+                     "matchesPlayed": "Oynadığı Maç Sayısı",
+                     "successfulPass": "İsabetli Pas"}.get(x)
+
+    result = {}
+    for i in stats:
+        result[stat_lookup(i)] = [stats[i][0], stats[i][1]]
+
+    return result

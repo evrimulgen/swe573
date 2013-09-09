@@ -45,22 +45,41 @@ $(function(){
 
     $(document).on("radarPlayerClick", function(event){
         $.post("/api/GetPlayerCard", JSON.stringify({leagueId: 1, seasonId: 9064, weekId: event.week, playerId: event.player_id})).done(function(data){
-            var renderedHtml = "<h5><img src='/static/images/logo" + data.data.teamId + ".png' />"
-            renderedHtml += data.data.playerName+"</h5>";
-            renderedHtml += "<img src='/static/images/players/"+data.data.playerId+".jpg' />";
-            renderedHtml += "<ul>";
-            _.each(data.data.statistics, function(value, key){
-                renderedHtml += "<li>" + key + ": " + JSON.stringify(value) + "</li>";
+            var info = data.data;
+            var $card = (event.homeOrAway==0) ? $("#leftPlayerCard") : $("#rightPlayerCard");
+
+            var imageTag = "<img class='teamLogo' src='/static/images/logo"+info.teamId+".png' />";
+            $card.find(".playerName").html(imageTag + info.playerName + " (#"+event.jersey_no+")");
+            $card.find(".playerImage").attr("src", "/static/images/players/"+event.player_id+".jpg");
+            
+            var $table = $card.find(".card-table");
+            $table.empty();
+            $table.append("<tr><th>İstatistik</th><th>Bu Sezon</th><th>Bu Hafta</th></tr>");
+
+            var statNames = {"passes": "Toplam Pas",
+                     "shotsOnTarget": "İsabetli Şut",
+                     "crosses": "Toplam Orta",
+                     "foulsSuffered": "Maruz Kalınan Faul",
+                     "totalDistance": "Kat Edilen Mesafe",
+                     "yellowCard": "Sarı Kart",
+                     "corners": "Korner",
+                     "redCard": "Kırmızı Kart",
+                     "successfulCross": "İsabetli Orta",
+                     "penalty": "Penaltı",
+                     "assists": "Asist",
+                     "goals": "Gol",
+                     "shots": "Şut",
+                     "foulsCommitted": "Yapılan Faul",
+                     "matchesPlayed": "Oynadığı Maç Sayısı",
+                     "successfulPass": "İsabetli Pas"};
+            _.each(info.statistics, function(value, key){
+                var statName = statNames[key];
+
+                var val0 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
+                var val1 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
+
+                $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
             });
-            renderedHtml += "</ul>";
-            console.log(event);
-            if(event.homeOrAway==0){
-                $("#leftPlayerCard").html(renderedHtml);
-                $("#leftPlayerCard").show();
-            } else {
-                $("#rightPlayerCard").html(renderedHtml);
-                $("#rightPlayerCard").show();
-            }
         });
     });
 });

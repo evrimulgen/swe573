@@ -1619,3 +1619,58 @@ table.point-table td {
     margin: 0px;
     margin-right: 4px
 }
+
+
+/*Player Stats Page*/
+
+table.table-player-stats {
+    border: 1px solid #d3d3d3;
+    color: #111111;
+    width: 90%;
+    margin: auto;
+    text-align: center;
+}
+
+table.table-player-stats tr td:nth-child(1) {
+    width: 40%;
+    text-align: left;
+    padding-left: 5px;
+}
+
+table.table-player-stats tr:nth-child(even) {
+    background-color: #FFF;
+}
+
+.box-container {
+    margin-top: 10px;
+}
+
+/* Player Stats Chart Related */
+
+.chart div{
+    font: 10px sans-serif;
+    background-color: steelblue;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
+}
+
+.chart rect {
+    stroke: white;
+    fill: steelblue;
+    stroke-width: 5px;
+}
+
+div .toolTip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}

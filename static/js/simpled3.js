@@ -140,3 +140,257 @@ function simpleBar(divname, data, options){
 		 .attr("class", "text label-text")
 	     .text(function(d) {return beautifyText(d.awayValue);});
 }
+
+/*
+    Alternating Bar Chart for Player/Team Stats
+*/
+
+// Source : http://mbostock.github.io/d3/tutorial/bar-1.html
+
+
+function feedWithRandomData()
+{
+
+    var dataset = [],
+        i = 0;
+
+    for(i=0; i<15; i++){
+        dataset.push(Math.round(Math.random()*100));
+    }
+    objectChart.updateChart(dataset);
+}
+
+
+function d3BarChart(){
+
+    var chartXCoefficient;
+    var chartYCoefficient;
+    var elementToDraw = "body";;
+    var chartHeight = 200;
+    var chartWidth = 500;
+    var tooltip;
+    var fontFamily = "calibri";
+    var chartTextSize = 15;
+    var dataset = [45, 48, 42, 36, 35, 31, 38, 39, 12,100,36,42];
+    var textSizeCoefficient = 1.3;
+    var hoverColor = "#83C0E6";
+
+    this.drawChart =  function (elementID,width, height, data)
+    {
+
+        if(width != null)
+        {
+            chartWidth = width;
+        }
+
+        if(height != null )
+        {
+            chartHeight = height;
+        }
+
+        if(data != null )
+        {
+            dataset = data;
+
+
+            while(dataset.length < 15)
+            {
+                dataset.push(0);
+            }
+        }
+
+        if(elementID != null)
+        {
+            elementToDraw = "#" + elementID;
+        }
+
+        chartWidth = chartWidth -chartTextSize;
+
+        chartXCoefficient = chartWidth / 15;
+        chartYCoefficient = chartHeight / d3.max(dataset);
+
+        var chartXCoefficient2  = d3.scale.linear()
+            .domain([0, d3.max(dataset)])
+            .range([0, chartHeight- chartTextSize]);
+
+        var chartYCoefficient2  = d3.scale.ordinal()
+            .domain(dataset)
+            .rangeBands([0, chartHeight]);
+
+        tooltip = d3.select(elementToDraw)
+            .append("div")//.attr("class","toolTip")
+            .style("font-size",(chartTextSize + "px"))
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("font-family",fontFamily)
+            .text("a simple tooltip");
+
+        var chart = d3.select(elementToDraw).append("svg")
+            .attr("class", "chart")
+            .attr("width", chartWidth)
+            .attr("height",chartHeight);
+
+        chartHeight = chartHeight - chartTextSize;
+
+        var ticks = chartXCoefficient2.ticks(10);
+        ticks[ticks.length] = 0;
+
+        chart.selectAll("line")
+            .data(chartXCoefficient2.ticks(10))
+            .enter().append("line")
+            .attr("x1", 0)
+            .attr("x2", chartWidth)
+            .attr("y1", chartXCoefficient2)
+            .attr("y2", chartXCoefficient2)
+            .style("stroke", "#ccc");
+
+        chart.selectAll("rect")
+            .data(dataset)
+            .enter().append("rect")
+            .attr("y", function(d,i) {return chartHeight - d*chartYCoefficient})
+            .attr("x", function(d,i) {return i*chartXCoefficient})
+            .attr("width", chartXCoefficient)
+            .attr("height", function(d,i) {return d*chartYCoefficient})
+            .on("mouseover", function(d,i){
+
+                console.log(d3.select(this).attr("x"));
+                console.log(chartXCoefficient);
+
+                var xValue = parseInt(d3.select(this).attr("x"),10) ;
+                xValue += chartXCoefficient / 2;
+                var yValue = parseInt(d3.select(this).attr("y"), 10);
+
+
+                if(yValue < 0)
+                    yValue += 23;
+                else
+                    yValue += 10;
+
+                if(yValue + 10  > chartHeight)
+                {
+                    yValue -= 20;
+
+                }
+
+                console.log(xValue);
+                d3.select(this).style("fill",hoverColor);
+                tooltip.style("top",
+                    yValue+"px").style("left",xValue+"px");
+                tooltip.text(d);
+                return tooltip.style("visibility", "visible");
+
+            })
+            .on("mouseout", function(){
+                d3.select(this).style("fill","steelblue")
+                return tooltip.style("visibility", "hidden");});
+
+        chart.selectAll("text")
+            .data(dataset)
+            .enter().append("text")
+            //.attr("font-size","15px")
+            .style("font-family",fontFamily)
+            .attr("font-size",chartTextSize)
+            .attr("x", function(d,i) {return i*chartXCoefficient + chartXCoefficient / 2})
+            .attr("y", function(d,i) {return chartHeight + chartTextSize})
+            .attr("dx", chartTextSize/3) // padding-right
+            //.attr("dy", ".35em") // vertical-align: middle
+            .attr("text-anchor", "end") // text-align: right
+            .text(function(d,i) {return i + 1});
+
+    }
+
+
+    this.updateChart = function  (datasetNew)
+    {
+        while( datasetNew.length < 15)
+        {
+            datasetNew.push(0);
+            console.log(dataset);
+        }
+
+        chartXCoefficient = chartWidth / datasetNew.length;
+        chartYCoefficient = chartHeight / d3.max(datasetNew);
+
+        var chart = d3.select(elementToDraw).selectAll("rect").data(datasetNew);
+
+        //chart.selectAll("rect")
+        chart
+            .on("mouseover", function(d,i){
+                d3.select(this).style("fill",hoverColor);
+
+                var xValue = parseInt(d3.select(this).attr("x"),10) ;
+                xValue += chartXCoefficient / 2;
+                var yValue = parseInt(d3.select(this).attr("y"), 10);
+
+
+                if(yValue < 0)
+                    yValue += 23;
+                else
+                    yValue += 10;
+
+
+                if(yValue + chartTextSize > chartHeight)
+                {
+                    yValue -= 20;
+
+                }
+
+                tooltip.style("top",
+                    //(d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                    yValue+"px").style("left",xValue+"px");
+                tooltip.text(d);
+                return tooltip.style("visibility", "visible");
+            })
+            .transition()
+            .duration(1000)
+            .attr("y", function(d,i) {return chartHeight - d*chartYCoefficient})
+            .attr("x", function(d,i) {return i*chartXCoefficient})
+            .attr("width", chartXCoefficient)
+            .attr("height", function(d,i) {return d*chartYCoefficient});
+
+
+        chart.exit().transition()
+            .duration(1000)
+            .attr("height", 0)
+            .remove();
+
+
+        chart = d3.select(elementToDraw).selectAll("text").data(datasetNew);
+
+
+        chart.enter().append("text")
+            .style("font-family",fontFamily)
+            .attr("font-size",chartTextSize)
+            .attr("x", function(d,i) {return i*chartXCoefficient + chartXCoefficient / 2})
+            .attr("y", function(d,i) {return chartHeight + chartTextSize})
+            .attr("dx", chartTextSize/3)
+            .attr("text-anchor", "end")
+            .text(function(d,i) {return i + 1});
+
+        chart.exit().transition()
+            .duration(1000)
+            .attr("height", 0)
+            .remove();
+
+        var lineScale  = d3.scale.linear()
+            .domain([0, d3.max(dataset)])
+            .range([0, chartWidth]);
+
+        chart = d3.select(elementToDraw).selectAll("line").data(lineScale.ticks(10))
+            .enter().append("line")
+            .attr("x1", 0)
+            .attr("x2", chartWidth)
+            .attr("y1", lineScale)
+            .attr("y2", lineScale)
+            .style("stroke", "#ccc");
+
+        chart.transition()
+            .duration(1000)
+            .attr("width", 0)
+            .remove();
+    }
+}
+
+
+

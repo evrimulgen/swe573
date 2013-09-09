@@ -1,0 +1,335 @@
+{% load url from future %}
+{% load static %}
+{% load templateextras %}
+{% get_static_prefix as STATIC_URL %}
+
+<script type="text/javascript">
+paper.install(window);
+window.onload = function() {
+    // Get a reference to the canvas object
+    var canvas = document.getElementById('canvas');
+    paper.setup(canvas);
+
+    var pitch = new paper.Raster('{{ STATIC_URL }}images/pitch.png');
+
+    var width = paper.view.size.width;
+    var height = paper.view.size.height;
+    console.log("screen dimensions: " + width + " " + height);
+    var midPoint = [width/2,height/2];
+    var paddingLeft = width/40;
+    pitch.onLoad = function(){
+        var scale = (height/pitch.height)*(90/100);
+        console.log("scale: " + scale);
+        pitch.scale(scale);
+        console.log("pitch dimensions: " + pitch.height + " " + pitch.width);
+        pitch.position = [midPoint[0] + paddingLeft - (width-pitch.width*scale)/2 , midPoint[1]];
+        console.log("pitch position: " + pitch.position);
+    };
+
+    var Player = function (teamId_, play_, selected_, name_, number_, id_) {
+        this.teamId = teamId_;
+        this.play = play_;
+        this.name = name_;
+        this.number = number_;
+        this.id = id_;
+        var selection = selected_;
+        this.position = [];
+
+        if (play_ == 0) {
+            this.position = [width / 7.5, midPoint[1]];
+        }
+        else {
+            this.position = [width / 4 * (Math.floor((play_ - 1) / 4) + 1) + width / 9.5, height / (19/4) * ((play_ - 1) % 4) + height / (6.4)]
+        }
+        var screenPos = this.position;
+
+        if(selection){
+            var bgBox = new Path.Rectangle({
+                rectangle: {
+                    size: [92, 62],
+                    center: [screenPos[0],screenPos[1]+8]
+                },
+                radius: 5,
+                fillColor : {
+                    gradient: {
+                        stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
+                    },
+                    origin: [screenPos[0],screenPos[1]-23],
+                    destination: [screenPos[0],screenPos[1]+39]
+                }
+            });
+        }
+        else{
+            var bgBox = new Path.Rectangle({
+                rectangle: {
+                    size: [92, 62],
+                    center: [screenPos[0],screenPos[1]+8]
+                },
+                radius: 5,
+                fillColor: new Color(0,0,0,0)
+            });
+        }
+
+
+        if (play_ == 0) {
+            var jersey = new paper.Raster('{{ STATIC_URL }}images/jerseygk' + teamId_ + '.png');
+        }
+        else {
+            var jersey = new paper.Raster('{{ STATIC_URL }}images/jersey' + teamId_ + '.png');
+        }
+        jersey.onLoad =function(){
+            jersey.position = screenPos;
+            jersey.scale((height / jersey.height) * (1 / 7));
+        }
+        var jerseyNum = new PointText(new Point(screenPos[0],screenPos[1]+6));
+        jerseyNum.justification = 'center';
+        if(teamId_ == 1){
+            jerseyNum.fillColor = 'black';
+        }
+        else{
+            jerseyNum.fillColor = 'white';
+        }
+        jerseyNum.content = number_;
+
+        var playerName = new PointText(new Point(screenPos[0],screenPos[1]+33));
+        playerName.justification = 'center';
+        playerName.fillColor = 'white';
+
+        playerName.content = name_;
+
+        this.remove = function(){
+            bgBox.remove();
+            jersey.remove();
+            jerseyNum.remove();
+            playerName.remove();
+        }
+        this.select = function (){
+            console.log("selected value" + this.selected);
+            bgBox.fillColor = {
+                gradient: {
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
+                },
+                origin: [screenPos[0],screenPos[1]-23],
+                destination: [screenPos[0],screenPos[1]+39]
+            }
+            selection = true;
+            console.log("selected value" + this.selected);
+        }
+        this.deselect = function (){
+            bgBox.fillColor = new Color(0,0,0,0);
+            selection = false;
+        }
+        jersey.onMouseEnter = function () {
+            bgBox.fillColor = {
+                gradient: {
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
+                },
+                origin: [screenPos[0],screenPos[1]-23],
+                destination: [screenPos[0],screenPos[1]+39]
+            }
+        }
+
+        jersey.onMouseLeave = function () {
+            if(!selection){
+                bgBox.fillColor = new Color(0,0,0,0);
+            }
+        }
+
+        bgBox.onMouseEnter = function () {
+            bgBox.fillColor = {
+                gradient: {
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
+                },
+                origin: [screenPos[0],screenPos[1]-23],
+                destination: [screenPos[0],screenPos[1]+39]
+            }
+        }
+
+        bgBox.onMouseLeave = function () {
+            if(selection == false){
+                bgBox.fillColor = new Color(0,0,0,0);
+            }
+        }
+        jerseyNum.onMouseEnter = function () {
+            bgBox.fillColor = {
+                gradient: {
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
+                },
+                origin: [screenPos[0],screenPos[1]-23],
+                destination: [screenPos[0],screenPos[1]+39]
+            }
+        }
+
+        jerseyNum.onMouseLeave = function () {
+            if(selection == false){
+                bgBox.fillColor = new Color(0,0,0,0);
+            }
+        }
+        playerName.onMouseEnter = function () {
+            bgBox.fillColor = {
+                gradient: {
+                    stops: [[new Color(0.79,0.13,0.13,0.9), 0], [new Color(0.77,0.06,0.07,0.9), 0.08], [new Color(0.77,0.06,0.07,0.9), 0.92], [new Color(0.68,0.06,0.06,0.9), 1]]
+                },
+                origin: [screenPos[0],screenPos[1]-23],
+                destination: [screenPos[0],screenPos[1]+39]
+            }
+        }
+
+        playerName.onMouseLeave = function () {
+            if(selection == false){
+                bgBox.fillColor = new Color(0,0,0,0);
+            }
+        }
+    };
+
+    var players = [];
+    {% for i in best_eleven_list %}
+
+        var player = new Player({{ i.teamId }}, {{ i.playPosition }}, false, "{{ i.playerName }}", {{ i.jerseyNumber }}, {{ i.playerId }});
+        players.push(player);
+
+    {% endfor %}
+    var tool = new Tool();
+    tool.onMouseDown = function(event) {
+        console.log(event.point);
+
+        for(var i=0; i<players.length; i++){
+            if(event.point.getDistance(players[i].position)<35){
+                console.log(event.point.getDistance(players[i].position));
+                players[i].select();
+                setPlayer(players[i].id,players);
+            }
+            else{
+                players[i].deselect();
+            }
+        }
+        paper.view.draw();
+    }
+
+    paper.view.draw();
+}
+function setPlayer(id_,players)
+{
+    console.log(id_);
+    for(var i=0; i<players.length; i++){
+        if(players[i].id == id_){
+            console.log("noldu");
+            {% for i in best_eleven_list %}
+                if(id_ == {{ i.playerId }}){
+                    console.log("oldu");
+                    $("#playerName").text("{{ i.jerseyNumber }} - {{ i.playerName }}");
+                    $("#goalLeague").text("{{ i.goalLeague }}");
+                    $("#goalMatch").text("{{ i.goalMatch}}");
+                    $("#assistLeague").text("{{ i.assistLeague }}");
+                    $("#assistMatch").text("{{ i.assistMatch }}");
+                    $("#shotLeague").text("{{ i.shotSuccessfulLeague }}/{{ i.shotTotalLeague }}");
+                    $("#shotMatch").text("{{ i.shotSuccessfulMatch }}/{{ i.shotTotalMatch }}");
+                    $("#passLeague").text("{{ i.passSuccessfulLeague }}/{{ i.passTotalLeague }}");
+                    $("#passMatch").text("{{ i.passSuccessfulMatch }}/{{ i.passTotalMatch }}");
+                    $("#crossLeague").text("{{ i.crossSuccessfulLeague }}/{{ i.crossTotalLeague }}");
+                    $("#crossMatch").text("{{ i.crossSuccessfulMatch }}/{{ i.crossTotalMatch }}");
+                    $("#totalLeague").text("{{ i.distanceLeague }}");
+                    $("#totalMatch").text("{{ i.distanceMatch }}");
+                    $("#HIRLeague").text("{{ i.HIRLeague }}");
+                    $("#HIRMatch").text("{{ i.HIRMatch }}");
+                    $("#sprintLeague").text("{{ i.sprintLeague }}");
+                    $("#sprintMatch").text("{{ i.sprintMatch }}");
+                    $("#faulAgainstLeague").text("{{ i.faulAgainstLeague }}");
+                    $("#faulAgainstMatch").text("{{ i.faulAgainstMatch }}");
+                    $("#faulCommittedLeague").text("{{ i.faulCommittedLeague}}");
+                    $("#faulCommittedMatch").text("{{ i.faulCommittedMatch }}");
+                    $("#stealLeague").text("{{ i.stealLeague }}");
+                    $("#stealMatch").text("{{ i.stealMatch }}");
+                    $("#turnoverLeague").text("{{ i.turnoverLeague }}");
+                    $("#turnoverMatch").text("{{ i.turnoverMatch }}");
+                    $("#playerImage").attr("src","{{ STATIC_URL }}images/player{{ i.playerId }}.png");
+                }
+            {% endfor %}
+        }
+    }
+}
+
+
+</script>
+
+<canvas id="canvas" style="width: 63%; height: 100%; float:left"></canvas>
+<div style="width: 35%;height:100%;float: left;margin: 1%">
+    <div id="card-container" style="background-color:#940b14;width: 98%;height: 302px;padding: 1%;margin-top: 8px;-webkit-border-radius: 4px 4px 0px 0px;
+    -moz-border-radius: 4px 4px 0px 0px;
+    border-radius: 4px 4px 0px 0px;">
+        <div id="card-content" style="width: 100%; height: 120px;float: left">
+            <div id="card" style="width: 100%; padding-top: 6px">
+                <img id="playerImage" src="" style=" height: 90px;margin-left: 16px;float:left">
+                <p id = "playerName" style="text-align: center;font-size:12px;color: #ffffff; height: 6px;margin-top: 15px">Saha Üzerinden Oyuncu Seçiniz</p>
+                <p id = "playerInfo" style="text-align: center;font-size:12px;color: #ffffff;"></p>
+            </div>
+            <div id="data"style="float: left; width: 100%; height: 200px;margin-top: 6px">
+                <div id="data-header" style="background-color:#c51015;   height: 20px; width: 100%">
+                    <p style="float:right;font-size: 10px;    height: 0px;;text-align:center;color: #ffffff;width:45px;margin-right: 4px"> Sezon</p>
+                    <p style="float:right;font-size: 10px;    height: 0px;;text-align:center;color: #ffffff;width:45px;margin-right: 4px"> Maç</p>
+                </div>
+                <ul class="teamlist">
+                    <li>
+                        <p id = "goalLeague" class="else"> {{ goalLeague }}</p>
+                        <p id = "goalMatch" class="else"> {{ goalMatch }}</p>
+                        <p class="first"> Gol</p>
+                    </li>
+                    <li>
+                        <p id = "assistLeague" class="else"> {{ assistLeague }}</p>
+                        <p id = "assistMatch" class="else"> {{ assistMatch }}</p>
+                        <p class="first"> Asist</p>
+                    </li>
+                    <li>
+                        <p id = "shotLeague" class="else"> {{ shotLeague }}</p>
+                        <p id = "shotMatch" class="else"> {{ shotMatch }}</p>
+                        <p class="first"> Şut</p>
+                    </li>
+                    <li>
+                        <p id = "passLeague" class="else"> {{ passLeague }}</p>
+                        <p id = "passMatch" class="else"> {{ passMatch }}</p>
+                        <p class="first"> Pas</p>
+                    </li>
+                    <li>
+                        <p id = "crossLeague" class="else"> {{ crossLeague }}</p>
+                        <p id = "crossMatch" class="else"> {{ crossMatch }}</p>
+                        <p class="first"> Orta</p>
+                    </li>
+                    <li>
+                        <p id = "totalLeague" class="else"> {{ totalDistanceLeague }}</p>
+                        <p id = "totalMatch" class="else"> {{ totalDistanceMatch }}</p>
+                        <p class="first"> Mesafe(m)</p>
+                    </li>
+                    <li>
+                        <p id = "HIRLeague" class="else"> {{ HIRLeague }}</p>
+                        <p id = "HIRMatch" class="else"> {{ HIRMatch }}</p>
+                        <p class="first"> Şiddetli Koşu(m)</p>
+                    </li>
+                    <li>
+                        <p id = "sprintLeague" class="else"> {{ sprintLeague }}</p>
+                        <p id = "sprintMatch" class="else"> {{ sprintMatch }}</p>
+                        <p class="first"> Sprint(m)</p>
+                    </li>
+                    <li>
+                        <p id = "faulAgainstLeague" class="else"> {{ faulAgainstLeague }}</p>
+                        <p id = "faulAgainstMatch" class="else"> {{ faulAgainstMatch }}</p>
+                        <p class="first"> Yapılan Faul</p>
+                    </li>
+                    <li>
+                        <p id = "faulCommittedLeague" class="else"> {{ faulCommittedLeague }}</p>
+                        <p id = "faulCommittedMatch" class="else"> {{ faulCommittedMatch }}</p>
+                        <p class="first"> Yaptığı Faul</p></li>
+                    <li>
+                        <p id = "stealLeague" class="else"> {{ stealLeague }}</p>
+                        <p id = "stealMatch" class="else"> {{ stealMatch }}</p>
+                        <p class="first"> Top Çalma</p>
+                    </li>
+                    <li>
+                        <p id = "turnoverLeague" class="else"> {{ turnoverLeague }}</p>
+                        <p id = "turnoverMatch" class="else"> {{ turnoverMatch }}</p>
+                        <p class="first">Top Kaybı</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

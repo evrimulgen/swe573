@@ -214,7 +214,7 @@ function Radar(matchId){
                         }
                     });
 
-                    $.event.trigger({type: "radarPlayerClick", team_id: team_id, 
+                    $.event.trigger({type: "radarPlayerClick", team_id: team_id, jersey_no: jersey_no,
                                      player_id: player_id, week: matchInfo.week, homeOrAway: team});
                 }
             });

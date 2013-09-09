@@ -10,7 +10,7 @@
             <div style="height: 40px">
                 <a href="">
                     <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                    <p id="name">{{ x.playerName }}</p>
+                    <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
                     <p id="value">{{ x.totalDistance }} m</p>
                 </a>
             </div>
@@ -18,13 +18,13 @@
     {% endfor %}
 </div>
 <div class="sidebox">
-    <h1 class="sidebox"> Pas </h1>
+    <h1 class="sidebox"> İsabetli Pas/Toplam Pas </h1>
     {% for x in matchData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
         {% if forloop.counter < 6 %}
             <div style="height: 40px">
                 <a href="">
                     <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                    <p id="name">{{ x.playerName }}</p>
+                    <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
                     <p id="value">{{ x.successfulPass}} / {{ x.totalPass }}</p>
                 </a>
             </div>
@@ -32,13 +32,13 @@
     {% endfor %}
 </div>
 <div class="sidebox">
-    <h1 class="sidebox"> Şut </h1>
+    <h1 class="sidebox"> İsabetli Şut/Toplam Şut </h1>
     {% for x in matchData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
         {% if forloop.counter < 6 %}
             <div style="height: 40px">
                 <a href="">
                     <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                    <p id="name">{{ x.playerName }}</p>
+                    <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
                     <p id="value">{{ x.successfulShot}} / {{ x.totalShot }}</p>
                 </a>
             </div>

@@ -173,12 +173,12 @@ def get_history(homeTeamId, awayTeamId):
     # ratio calculations for history graph
     # calculations made on 99 percent because graph borders causes problem on sizing
 
-    homeWinRatio = int(99*homeWin/(homeWin+awayWin+datalist["draws"]))
-    drawRatio = int(99*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
-    awayWinRatio = 99 - (homeWinRatio+drawRatio)
+    homeWinRatio = int(97*homeWin/(homeWin+awayWin+datalist["draws"]))
+    drawRatio = int(97*datalist["draws"]/(homeWin+awayWin+datalist["draws"]))
+    awayWinRatio = 97 - (homeWinRatio+drawRatio)
 
-    homeGoalRatio = int(99*homeGoal/(homeGoal+awayGoal))
-    awayGoalRatio = 99-homeGoalRatio
+    homeGoalRatio = int(97*homeGoal/(homeGoal+awayGoal))
+    awayGoalRatio = 97-homeGoalRatio
 
     historicDict = {'homeWins':datalist.get("homeWins"),
                      'awayWins':datalist.get("awayWins"),
@@ -346,4 +346,8 @@ def get_team_colors(homeid, awayid):
     {u'awaystroke': u'ffd700', u'homefill': u'b22222', u'awayfill': u'13427c', u'homestroke': u'f9b41a'}
 
     """
-    return service_request("GetTeamColors", {"homeid": homeid, "awayid": awayid})
+    colorDict = []
+    colorList = service_request("GetTeamColors", {"homeid": homeid, "awayid": awayid})
+    colorDict = {'homeFill': colorList["homefill"], 'homeStroke': colorList["homestroke"], 'awayFill': colorList["awayfill"], 'awayStroke': colorList["awaystroke"]}
+
+    return colorDict

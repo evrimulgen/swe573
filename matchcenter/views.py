@@ -43,6 +43,8 @@ def prep_common_context(reqid):
     # data for match goals, used for all views in match center
     goalDict = get_goal_videos(reqid)
 
+    colorDict = get_team_colors(homeTeamId,awayTeamId)
+
     # TODO: maç özeti ve diğer maç videoları buraya eklenmeli, yapı değişikliği olacak.
 
     # data for team squads, used in all views in match center
@@ -66,6 +68,7 @@ def prep_common_context(reqid):
                       'awaySquad':awaySquadDict,
                       'weeklist': WEEK_LIST,
                       'weeks': weekDict,
+                      'teamColors': colorDict,
                       'goals':goalDict,
                       'matchInfo':infoDict,
                       'selectedMatch':str(reqid)}

@@ -9,6 +9,15 @@
         {% if forloop.counter < 6 %}
             <div style="height: 40px">
                 <a href="">
+                    <div class="teamColor">
+                        {% if x.teamId == homeTeamId %}
+                            <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
+                            <div id="box" style="background-color: #{{ teamColors.homeStroke }}"></div>
+                        {% else %}
+                            <div id="box" style="background-color: #{{ teamColors.awayFill }}"></div>
+                            <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
+                        {% endif %}
+                    </div>
                     <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
                     <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
                     <p id="value">{{ x.totalDistance }} m</p>
@@ -23,6 +32,15 @@
         {% if forloop.counter < 6 %}
             <div style="height: 40px">
                 <a href="">
+                    <div class="teamColor">
+                        {% if x.teamId == homeTeamId %}
+                            <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
+                            <div id="box" style="background-color: #{{ teamColors.homeStroke }}"></div>
+                        {% else %}
+                            <div id="box" style="background-color: #{{ teamColors.awayFill }}"></div>
+                            <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
+                        {% endif %}
+                    </div>
                     <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
                     <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
                     <p id="value">{{ x.successfulPass}} / {{ x.totalPass }}</p>
@@ -37,6 +55,15 @@
         {% if forloop.counter < 6 %}
             <div style="height: 40px">
                 <a href="">
+                    <div class="teamColor">
+                        {% if x.teamId == homeTeamId %}
+                            <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
+                            <div id="box" style="background-color: #{{ teamColors.homeStroke }}"></div>
+                        {% else %}
+                            <div id="box" style="background-color: #{{ teamColors.awayFill }}"></div>
+                            <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
+                        {% endif %}
+                    </div>
                     <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
                     <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
                     <p id="value">{{ x.successfulShot}} / {{ x.totalShot }}</p>

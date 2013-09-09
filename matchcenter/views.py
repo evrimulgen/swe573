@@ -197,8 +197,13 @@ def partial_score(request, match_id):
 def partial_sidestats(request, match_id):
     homeid, awayid, all = get_match_info(match_id)
     teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(match_id, homeid, awayid)
+    colorDict = get_team_colors(homeid,awayid)
 
-    context = {"matchData": matchDataDict}
+    context = {"matchData": matchDataDict,
+               "teamColors" : colorDict,
+               "homeTeamId" : homeid,
+               "awayTeamId" : awayid
+               }
 
     return render_to_response('_vs_sidestats.html', context)
 

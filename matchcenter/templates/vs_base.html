@@ -45,7 +45,7 @@
 <div id="content">
     <div id="sidebar">
         {% sl_fixture selectedMatch %}
-        {% include '_vs_goalvideo.html' with goals=goals only %}
+        {% include '_vs_goalvideo.html' with goals=goals teamColors=teamColors homeTeamId=homeTeamId awayTeamId=awayTeamId  only %}
 
         <div id="sidestats-container">
             {% include '_vs_sidestats.html' with matchData=matchData teamColors=teamColors homeTeamId=homeTeamId awayTeamId=awayTeamId only %}
@@ -55,7 +55,7 @@
         <div id="menu">
             {% block menu %}{% endblock %}
         </div>
-        <div style="width:100%;">
+        <div id="content">
             {% block content %}{% endblock %}
         </div>
     </div>

@@ -24,7 +24,7 @@
 
         function handleSelect(elm)
         {
-            $("#div-menu li.active").removeClass("active");
+            $(".inside-menu button.active").removeClass("active");
             $(elm).addClass("active");
             if (elm.value == 3) {
                 loadTeamStats();
@@ -55,8 +55,7 @@
 
         function refreshScreens()
         {
-            var activeTab = $("#div-menu li.active").attr("value");
-
+            var activeTab = $(".inside-menu button.active").attr("value");
 
             if (activeTab==3){
                 loadTeamStats();
@@ -86,10 +85,6 @@
                         prepTimelinr();
                 });
             }
-
-            $("#div-menu .navbar li").click(function(){
-                handleSelect(this);
-            });
 
         });
 
@@ -159,18 +154,13 @@
         </div>
     </div>
 
-    <div id="div-menu">
-        <div class="navbar navbar-static-top">
-            <div class="navbar-inner">
-                <ul class="nav">
-                    <li class="active" value="1"><a>OLAYLAR</a></li>
-                    <li value="2"><a>ANLATIM</a></li>
-                    <li value="3"><a>TAKIM İSTATİSTİKLERİ</a></li>
-                    <li value="4"><a>OYUNCU İSTATİSTİKLERİ</a></li>
-                </ul>
-            </div>
-        </div>
+    <div class="inside-menu">
+        <button value="1" class="active" onclick="handleSelect(this)">OLAYLAR</button>
+        <button value="2" onclick="handleSelect(this)">ANLATIM</button>
+        <button value="3" onclick="handleSelect(this)">TAKIM İSTATİSTİKLERİ</button>
+        <button value="4" onclick="handleSelect(this)">OYUNCU İSTATİSTİKLERİ</button>
     </div>
+
 
 
     <div class="data-area" id="data-area">

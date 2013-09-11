@@ -4,44 +4,67 @@
 
 <div class="sidebox">
     <h1 class="sidebox"> Koşu Mesafesi </h1>
-
     {% for x in matchData|dictsortreversed:'totalDistance' %}
         {% if forloop.counter < 6 %}
-            <div style="height: 40px">
-                <a href="">
-                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                    <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
-                    <p id="value">{{ x.totalDistance }} m</p>
-                </a>
-            </div>
+            <a href="">
+                <div class="teamColor">
+                    {% if x.teamId == homeTeamId %}
+                        <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
+                        <div id="box" style="background-color: #{{ teamColors.homeStroke }}"></div>
+                    {% else %}
+                        <div id="box" style="background-color: #{{ teamColors.awayFill }}"></div>
+                        <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
+                    {% endif %}
+                </div>
+                <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
+                <p id="value">{{ x.totalDistance }} m</p>
+            </a>
         {% endif %}
     {% endfor %}
+    <br style="clear:both"/>
 </div>
 <div class="sidebox">
-    <h1 class="sidebox"> İsabetli Pas/Toplam Pas </h1>
+    <h1 class="sidebox"> İsabetli Pas / Toplam Pas </h1>
     {% for x in matchData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
         {% if forloop.counter < 6 %}
-            <div style="height: 40px">
-                <a href="">
-                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                    <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
-                    <p id="value">{{ x.successfulPass}} / {{ x.totalPass }}</p>
-                </a>
-            </div>
+            <a href="">
+                <div class="teamColor">
+                    {% if x.teamId == homeTeamId %}
+                        <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
+                        <div id="box" style="background-color: #{{ teamColors.homeStroke }}"></div>
+                    {% else %}
+                        <div id="box" style="background-color: #{{ teamColors.awayFill }}"></div>
+                        <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
+                    {% endif %}
+                </div>
+                <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
+                <p id="value">{{ x.successfulPass}} / {{ x.totalPass }}</p>
+            </a>
         {% endif %}
     {% endfor %}
+    <br style="clear:both"/>
 </div>
 <div class="sidebox">
-    <h1 class="sidebox"> İsabetli Şut/Toplam Şut </h1>
+    <h1 class="sidebox"> İsabetli Şut / Toplam Şut </h1>
     {% for x in matchData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
         {% if forloop.counter < 6 %}
-            <div style="height: 40px">
-                <a href="">
-                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                    <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
-                    <p id="value">{{ x.successfulShot}} / {{ x.totalShot }}</p>
-                </a>
-            </div>
+            <a href="">
+                <div class="teamColor">
+                    {% if x.teamId == homeTeamId %}
+                        <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
+                        <div id="box" style="background-color: #{{ teamColors.homeStroke }}"></div>
+                    {% else %}
+                        <div id="box" style="background-color: #{{ teamColors.awayFill }}"></div>
+                        <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
+                    {% endif %}
+                </div>
+                <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
+                <p id="value">{{ x.successfulShot}} / {{ x.totalShot }}</p>
+            </a>
         {% endif %}
     {% endfor %}
+    <br style="clear:both"/>
 </div>

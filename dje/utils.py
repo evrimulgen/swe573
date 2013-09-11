@@ -20,8 +20,11 @@ def service_request(id, data):
             return empty
 
 def tryService():
-    data = {"leagueId":1,"seasonId":8918,"matchId":11730066}
-    print service_request("GetMatchSquad",data)
+    colorDict = []
+    colorList = service_request("GetTeamColors", {"homeid": 1, "awayid": 2})
+    colorDict = {'homeFill': colorList["homefill"], 'homeStroke': colorList["homestroke"], 'awayFill': colorList["awayfill"], 'awayStroke': colorList["awaystroke"]}
+
+    print colorDict
 
 tryService()
 

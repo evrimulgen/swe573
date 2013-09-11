@@ -3,9 +3,8 @@
 
 <div class="fixture">
     <ul class="date" id="week-holder" data-bind='foreach: weeksToShow' >
-        <li> <a href="#" data-bind="text: week_id + '. Hafta',
-                   css: { selected: week_id == $root.selectedWeek() },
-                   click: $root.changeWeek"> </a>
+        <li> <a href="#" data-bind="css: { selected: week_id == $root.selectedWeek() },
+                   click: $root.changeWeek"> <p data-bind="text: week_id + '. Hafta'"></p></a>
         </li>
     </ul>
     <div data-bind='foreach: liveMatches'>

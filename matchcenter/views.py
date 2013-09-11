@@ -43,6 +43,8 @@ def prep_common_context(reqid):
     # data for match goals, used for all views in match center
     goalDict = get_goal_videos(reqid)
 
+    colorDict = get_team_colors(homeTeamId,awayTeamId)
+
     # TODO: maç özeti ve diğer maç videoları buraya eklenmeli, yapı değişikliği olacak.
 
     # data for team squads, used in all views in match center
@@ -66,6 +68,7 @@ def prep_common_context(reqid):
                       'awaySquad':awaySquadDict,
                       'weeklist': WEEK_LIST,
                       'weeks': weekDict,
+                      'teamColors': colorDict,
                       'goals':goalDict,
                       'matchInfo':infoDict,
                       'selectedMatch':str(reqid)}
@@ -194,10 +197,16 @@ def partial_score(request, match_id):
 def partial_sidestats(request, match_id):
     homeid, awayid, all = get_match_info(match_id)
     teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(match_id, homeid, awayid)
+    colorDict = get_team_colors(homeid,awayid)
 
-    context = {"matchData": matchDataDict}
+    context = {"matchData": matchDataDict,
+               "teamColors" : colorDict,
+               "homeTeamId" : homeid,
+               "awayTeamId" : awayid
+               }
 
     return render_to_response('_vs_sidestats.html', context)
 
+@ensure_csrf_cookie
 def d3_try(request):
     return render_to_response('_card_trial.html')

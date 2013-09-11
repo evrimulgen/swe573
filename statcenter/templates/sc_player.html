@@ -36,6 +36,24 @@
 
             var objectChart = new d3BarChart();
             objectChart.drawChart('player-chart-container',500,200,null);
+
+            var refreshChart = function(attr){
+                $.ajax({
+                    url: "/api/GetPlayerLastNValue",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        "leagueId": 1,
+                        "seasonId": 9064,
+                        "playerId": attr
+                    },
+                    success: function(d){
+                        // TODO: Handle Data Here
+                    }
+                })
+            }
+
+
         });
     </script>
 
@@ -142,8 +160,8 @@
 
                     </div>
                     <ul style="width: 70%; margin-top: -2px">
-                        {% for x in "xxxxx" %}
-                            <li><p class="first">{{ team_selected }}spor - {{ forloop.counter }}spor</p></li>
+                        {% for i in lastMatches %}
+                            <li><p class="first">{{ i.0 }}</p></li>
                         {% endfor %}
                     </ul>
                 </a>
@@ -153,8 +171,10 @@
 
                     </div>
                     <ul style="width: 70%; margin-top: -2px">
-                        {% for x in "xxxxx" %}
-                            <li><p class="first">{{ team_selected }}spor - {{ forloop.counter }}spor</li>
+                        {% for i in lastGoals %}
+                            <li>
+                                <a href="{{ i.5 }}">{{ i.1 }}</a>
+                            </li>
                         {% endfor %}
                     </ul>
                 </a>

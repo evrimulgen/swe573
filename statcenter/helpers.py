@@ -199,3 +199,24 @@ def get_player_stats(playerid):
         result[stat_lookup(i)] = [stats[i][0], stats[i][1]]
 
     return result
+
+
+def get_player_last_matches(pid):
+    """
+    :param pid: player id
+    """
+
+    return service_request("GetPlayerLastMatches", {"playerId": pid,
+                                                    "count": 5,
+                                                    "leagueId": LEAGUE_ID,
+                                                    "seasonId": SEASON_ID})
+
+def get_player_last_goals(pid):
+    """
+    :param pid: player id
+    """
+
+    return service_request("GetPlayerGoals", {"playerId": pid,
+                                                    "count": 5,
+                                                    "leagueId": LEAGUE_ID,
+                                                    "seasonId": SEASON_ID})

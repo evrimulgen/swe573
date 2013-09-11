@@ -5,7 +5,7 @@ from random import randint
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import ensure_csrf_cookie
-from statcenter.helpers import get_standings, get_teams, get_fixture, get_team_players, get_player_details, get_team_details, get_standings_by_week, get_week_details, get_player_stats
+from statcenter.helpers import *
 from statcenter.utils import service_request
 from dje2.settings import LEAGUE_ID, SEASON_ID
 
@@ -81,6 +81,8 @@ def player(request, num, player_id):
                                                    #'team_list': teamList,
                                                    #'player_list':playerList,
                                                    #"best_eleven_list":bestList,
+                                                   'lastMatches': get_player_last_matches(player_id),
+                                                   'lastGoals': get_player_last_goals(player_id),
                                                    'weeklist': weekList})
 
 @ensure_csrf_cookie

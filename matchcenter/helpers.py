@@ -347,3 +347,4 @@ def get_team_colors(homeid, awayid):
 
     """
     return service_request("GetTeamColors", {"homeid": homeid, "awayid": awayid})
+

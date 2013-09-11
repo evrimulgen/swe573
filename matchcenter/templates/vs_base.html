@@ -55,10 +55,11 @@
         <div id="menu">
             {% block menu %}{% endblock %}
         </div>
-        <div id="content">
+        <div id="container">
             {% block content %}{% endblock %}
         </div>
     </div>
+    <br style="clear:both"/>
 
 </div>
 
@@ -102,9 +103,9 @@
             {% for week in weeks|dictsort:"weekId" %}
                 {% for match in week.matches|dictsort:"date" %}
                     {% if match.matchId == selectedMatch  %}
-                        {weekId: "{{ week.weekId }}", weekStatus: "{{ week.status }}", matchId:"{{ match.matchId }}",matchStatus:"{{ match.matchStatus }}",homeTeam:"{{ match.homeTeam }}", homeTeamCond:"{{ match.homeTeamCond }}", homeTeamInt:"{{ match.homeTeamInt }}",awayTeam:"{{ match.awayTeam }}",awayTeamCond:"{{ match.awayTeamCond}}", awayTeamInt:"{{ match.awayTeamInt }}",homeTeamId:"{{ match.homeTeamId }}",awayTeamId:"{{ match.awayTeamId }}",homeScore:"{{ match.homeScore }}",awayScore:"{{ match.awayScore }}",date:"{{ match.date }}",liveTime:"{{ match.liveTime}}",referee:"{{ match.referee }}",stadium:"{{ match.stadium }}",matchClass:"match-selected"},
+                        {weekId: "{{ week.weekId }}", weekStatus: "{{ week.status }}", matchId:"{{ match.matchId }}",matchStatus:"{{ match.matchStatus }}",homeTeam:"{{ match.homeTeam }}", homeTeamCond:"{{ match.homeTeamCond }}", homeTeamInt:"{{ match.homeTeamInt }}",awayTeam:"{{ match.awayTeam }}",awayTeamCond:"{{ match.awayTeamCond}}", awayTeamInt:"{{ match.awayTeamInt }}",homeTeamId:"{{ match.homeTeamId }}",awayTeamId:"{{ match.awayTeamId }}",homeScore:"{{ match.homeScore }}",awayScore:"{{ match.awayScore }}",date:"{{ match.date }}",time:"{{ match.time }}",liveTime:"{{ match.liveTime}}",referee:"{{ match.referee }}",stadium:"{{ match.stadium }}",matchClass:"match-selected"},
                     {% else %}
-                        {weekId: "{{ week.weekId }}", weekStatus: "{{ week.status }}", matchId:"{{ match.matchId }}",matchStatus:"{{ match.matchStatus }}",homeTeam:"{{ match.homeTeam }}", homeTeamCond:"{{ match.homeTeamCond }}", homeTeamInt:"{{ match.homeTeamInt }}",awayTeam:"{{ match.awayTeam }}",awayTeamCond:"{{ match.awayTeamCond}}", awayTeamInt:"{{ match.awayTeamInt }}",homeTeamId:"{{ match.homeTeamId }}",awayTeamId:"{{ match.awayTeamId }}",homeScore:"{{ match.homeScore }}",awayScore:"{{ match.awayScore }}",date:"{{ match.date }}",liveTime:"{{ match.liveTime}}",referee:"{{ match.referee }}",stadium:"{{ match.stadium }}",matchClass:"match"},
+                        {weekId: "{{ week.weekId }}", weekStatus: "{{ week.status }}", matchId:"{{ match.matchId }}",matchStatus:"{{ match.matchStatus }}",homeTeam:"{{ match.homeTeam }}", homeTeamCond:"{{ match.homeTeamCond }}", homeTeamInt:"{{ match.homeTeamInt }}",awayTeam:"{{ match.awayTeam }}",awayTeamCond:"{{ match.awayTeamCond}}", awayTeamInt:"{{ match.awayTeamInt }}",homeTeamId:"{{ match.homeTeamId }}",awayTeamId:"{{ match.awayTeamId }}",homeScore:"{{ match.homeScore }}",awayScore:"{{ match.awayScore }}",date:"{{ match.date }}",time:"{{ match.time }}",liveTime:"{{ match.liveTime}}",referee:"{{ match.referee }}",stadium:"{{ match.stadium }}",matchClass:"match"},
                     {% endif %}
                 {% endfor %}
             {% endfor %}

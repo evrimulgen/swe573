@@ -10,6 +10,23 @@ SEASON_ID = 9064
 
 from .utils import service_request, calc_match_minute
 import pytz
+def turkify_date(date):
+    """
+    Takes a string as date (format 2013-08-24) and prints out Turkified date: '24 Ağu 2013'
+
+    **Doctests**
+    >>> turkify_date('2013-08-24')
+    "24 Ağu 2013"
+    """
+    dt = datetime.strptime(date, '%Y-%m-%d')
+    turk_month = {1: u"Oca", 2: u"Şub", 3: u"Mar", 4: u"Nis", 5: u"May", 6: u"Haz",
+                  7: u"Tem", 8: u"Ağu", 9: u"Eyl", 10: u"Eki", 11: u"Kas", 12: u"Ara"}.get(dt.month)
+    return u"%s %s %s" % (dt.day, turk_month, dt.year)
+
+def formatTime(time):
+    tm = datetime.strptime(time, '%H:%M:%S.0000000')
+
+    return u"%s:%s" % (tm.hour, tm.minute)
 
 def get_match_narration(mid):
     """
@@ -66,8 +83,9 @@ def get_fixture(league_id, season_id, match_id):
                                     'awayTeamCond':week[matchId][5], 'awayTeamInt':week[matchId][6],
                                     'homeTeamId':week[matchId][7],'awayTeamId':week[matchId][8],
                                     'homeScore':week[matchId][9],'awayScore':week[matchId][10],
-                                    'date':week[matchId][11],'liveTime':calc_match_minute(week[matchId][13], week[matchId][0]),
-                                    'referee':week[matchId][13],'stadium':week[matchId][14]})
+                                    'date':turkify_date(week[matchId][11]), 'time':week[matchId][12],
+                                    'liveTime':calc_match_minute(week[matchId][13], week[matchId][0]),
+                                    'referee':week[matchId][14],'stadium':week[matchId][15]})
                     #add weeks
 
 

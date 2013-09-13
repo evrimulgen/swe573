@@ -24,9 +24,13 @@ def turkify_date(date):
     return u"%s %s %s" % (dt.day, turk_month, dt.year)
 
 def formatTime(time):
-    tm = datetime.strptime(time, '%H:%M:%S.0000000')
-
-    return u"%s:%s" % (tm.hour, tm.minute)
+    tm = datetime.strptime(time, '%Y-%m-%d %H:%M:%S.0000000')
+    turk_month = {1: u"Oca", 2: u"Şub", 3: u"Mar", 4: u"Nis", 5: u"May", 6: u"Haz",
+                  7: u"Tem", 8: u"Ağu", 9: u"Eyl", 10: u"Eki", 11: u"Kas", 12: u"Ara"}.get(tm.month)
+    min = tm.minute;
+    if tm.minute == 0:
+        min = "00";
+    return u"%s %s %s, %s:%s" % (tm.day, turk_month, tm.year, tm.hour, min)
 
 def get_match_narration(mid):
     """
@@ -174,7 +178,7 @@ def get_history(homeTeamId, awayTeamId):
                     'awayTeam':match[1],
                     'homeScore':match[2],
                     'awayScore':match[3],
-                    'date':datetime.strptime(match[4],'%Y-%m-%d %H:%M:%S.0000000'),
+                    'date':formatTime(match[4]),
                     'referee':match[5],
                     'stadium':match[6],
                     'homeTeamId':match[8],

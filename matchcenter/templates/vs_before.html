@@ -14,12 +14,19 @@
 {% endblock %}
 
 {% block content %}
-    <div class="history-area">
-        <h1 class="main">Rekabet Geçmişi</h1>
+    <div class="info-area">
+        <h1 class="main">Maç Bilgisi</h1>
         <div id="home">
             <h2>{{ matchInfo.homeTeam }}</h2>
             <img src="{{ STATIC_URL }}images/logo{{ matchInfo.homeTeamId }}.png">
         </div>
+        <div id="content"></div>
+        <div id="away">
+            <h2>{{ matchInfo.awayTeam }}</h2>
+            <img src="{{ STATIC_URL }}images/logo{{ matchInfo.awayTeamId }}.png">
+        </div>
+    </div>
+    <div class="history-area">
         <div id="comparison">
             <div class="holder">
                 <h3>Geçmiş Maçlar</h3>
@@ -45,10 +52,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="away">
-            <h2>{{ matchInfo.awayTeam }}</h2>
-            <img src="{{ STATIC_URL }}images/logo{{ matchInfo.awayTeamId }}.png">
         </div>
     </div>
     <div class="squad-area">

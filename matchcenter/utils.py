@@ -52,4 +52,3 @@ def calc_match_minute(stamp_str, status):
         tdelta = "DA"
 
     return tdelta
-

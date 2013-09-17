@@ -65,10 +65,15 @@ function Timeline(options){
 
     var loadMomentum = function(){
         $.post("/api/GetMatchMomentum", JSON.stringify({"matchId": match_id})).done(function(data){
-            maxSecond = data.data[data.data.length-1][0]*60;
+            if(isLive){
+                maxSecond = 90*60;
+            } else {
+                maxSecond = data.data[data.data.length-1][0]*60;
+            }
+
             paper = scope;
             
-            if(momentumPath) momentumPath.visible = false;
+            if(momentumPath) momentumPath.remove();
 
             momentumPath = new scope.Path();
             momentumPath.strokeColor = "black";

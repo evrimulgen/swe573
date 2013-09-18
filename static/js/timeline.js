@@ -51,6 +51,7 @@ function Timeline(options){
     });
 
     var drawSlider = function(){
+        paper = scope;
         var bg = new scope.Path.Rectangle(0, 0, width, height);
         bg.fillColor = "#ccccff";
 

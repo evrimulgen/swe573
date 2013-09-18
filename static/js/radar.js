@@ -83,16 +83,19 @@ function Radar(matchId){
         if(teams[team_id]===undefined) teams[team_id] = {};
         if(teams[team_id][jersey_no]===undefined){
             var fillColor;
-            var strokeColor = "yellow";
+            var strokeColor;
             var text;
             if(team_id===0){
-                fillColor = "blue";
+                fillColor = teamColors.homefill;
+                strokeColor = teamColors.homestroke;
                 text = jersey_no;
             } else if(team_id===1){
-                fillColor = "red";
+                fillColor = teamColors.awayfill;
+                strokeColor = teamColors.awaystroke;
                 text = jersey_no;
             } else {
                 fillColor = "black";
+                strokeColor = "yellow";
                 text = "R";
             }
 
@@ -101,7 +104,7 @@ function Radar(matchId){
                 new scope.Path.Circle({
                     center: [mt2px(xpos), mt2px(ypos)],
                     radius: 8,
-                    strokeColor: 'yellow',
+                    strokeColor: strokeColor,
                     strokeWidth: 2,
                     fillColor: fillColor
                 }),
@@ -109,7 +112,7 @@ function Radar(matchId){
                     point: [mt2px(xpos), mt2px(ypos)+4],
                     content: text,
                     justification: 'center',
-                    fillColor: 'white'
+                    fillColor: strokeColor
                 })
             ]);
         }
@@ -125,7 +128,7 @@ function Radar(matchId){
             teams.ball = new scope.Path.Circle({
                 center: [mt2px(x), mt2px(y)],
                 radius: 4,
-                fillColor: "magenta",
+                fillColor: "orange",
                 strokeColor: "black",
                 strokeWidth: 1
             });
@@ -170,6 +173,7 @@ function Radar(matchId){
     var second = 0;
 
     var matchInfo = {};
+    var teamColors = {};
     var matchSquad = null;
     var connected = false;
     var started = false;
@@ -226,7 +230,12 @@ function Radar(matchId){
         matchInfo.status = data.data[0][2]; // match status, see API docs
         matchInfo.homeId = data.data[0][5];
         matchInfo.awayId = data.data[0][6];
+
+        $.post("/api/GetTeamColors", JSON.stringify({"homeid": matchInfo.homeId, "awayid": matchInfo.awayId})).done(function(data){
+            teamColors = data.data;
+        });
     });
+
 
     $.post("/api/GetMatchSquad", JSON.stringify({"matchId": window.matchId})).done(function(data){
         matchSquad = data.data;

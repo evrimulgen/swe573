@@ -13,22 +13,6 @@
 
     {% include '_vs_headincludes.html' %}
 
-    <script type="text/javascript">
-        $(function() {
-            startRefresh();
-        });
-
-        function startRefresh() {
-            setTimeout(startRefresh,30000);
-            $.ajax({ url: "/new/partial/score/{{ selectedMatch }}/",
-                success: function(d){
-                    $("#homeTeamScore").html(d.home);
-                    $("#awayTeamScore").html(d.away);
-                    $("#sb-match-time-p").html(d.mminute+"'");
-                }});
-
-        }
-    </script>
 
     {% block head-addition %}
 
@@ -66,149 +50,255 @@
 <div id="footer"></div>
 <script src="{{ STATIC_URL }}js/knockout-2.3.0.js"></script>
 <script>
-    var csrftoken = $.cookie('csrftoken');
-    $.ajaxSetup({
-        crossDomain: false,
-        beforeSend: function(xhr, settings) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
+var csrftoken = $.cookie('csrftoken');
+$.ajaxSetup({
+    crossDomain: false,
+    beforeSend: function(xhr, settings) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    }
+});
+
+// fades in or fades out the element depending on the value of the logical comparison
+ko.bindingHandlers.fadeVisible = {
+    init: function(element, valueAccessor) {
+        // Start visible/invisible according to initial value
+        var shouldDisplay = valueAccessor();
+        $(element).toggle(shouldDisplay);
+    },
+    update: function(element, valueAccessor) {
+        // On update, fade in/out
+        var shouldDisplay = valueAccessor();
+        shouldDisplay ? $(element).show() : $(element).hide();
+    }
+};
+
+service_request = function(request,jsData,returnValue){
+    $.post("/api/"+request, JSON.stringify(jsData)).done(function(rawData){
+        returnValue(rawData.data[0]);
     });
+};
+function MatchObject(weekId,weekStatus,matchId,matchStatus,homeTeam,homeTeamCond,homeTeamInt,awayTeam,awayTeamCond,awayTeamInt,homeTeamId,awayTeamId,homeScore,awayScore,date,time,liveTime,referee,stadium,matchClass){
+    var self = this;
+    self.weekId = weekId;
+    self.weekStatus = weekStatus;
+    self.matchId = matchId;
+    self.matchStatus = ko.observable(matchStatus);
+    if(matchStatus == 6 || matchStatus == 11 || matchStatus == 13){
+        self.liveTime = ko.observable("MS");
+        self.homeScore = ko.observable(homeScore);
+        self.awayScore = ko.observable(awayScore);
+    }
+    else if(matchStatus == 1){
+        self.liveTime = ko.observable("");
+        self.homeScore = ko.observable("0");
+        self.awayScore = ko.observable("0");
+    }
+    else if(matchStatus == 10){
+        self.liveTime = ko.observable("İY");
+        self.homeScore = ko.observable(homeScore);
+        self.awayScore = ko.observable(awayScore);
+    }
+    else{
+        self.liveTime = ko.observable(liveTime + "'");
+        self.homeScore = ko.observable(homeScore);
+        self.awayScore = ko.observable(awayScore);
+    }
+    self.homeTeam = homeTeam;
+    self.homeTeamCond = homeTeamCond;
+    self.homeTeamInt = homeTeamInt;
+    self.awayTeam = awayTeam;
+    self.awayTeamCond = awayTeamCond;
+    self.awayTeamInt = awayTeamInt;
+    self.homeTeamId = homeTeamId;
+    self.awayTeamId = awayTeamId;
+    self.date = date;
+    self.time = time;
+    if(referee == "None"){
+        self.referee = "Henüz belirli değil.";
+    }
+    else{
+        self.referee = referee;
+    }
+    if(stadium == "None"){
+        self.stadium = "Henüz belirli değil.";
+    }
+    else{
+        self.stadium = stadium;
+    }
+    self.matchClass = matchClass;
+};
 
-    // fades in or fades out the element depending on the value of the logical comparison
-    ko.bindingHandlers.fadeVisible = {
-        init: function(element, valueAccessor) {
-            // Start visible/invisible according to initial value
-            var shouldDisplay = valueAccessor();
-            $(element).toggle(shouldDisplay);
-        },
-        update: function(element, valueAccessor) {
-            // On update, fade in/out
-            var shouldDisplay = valueAccessor();
-            shouldDisplay ? $(element).show() : $(element).hide();
+function MatchEvent(type,min,teamId,playerId,playerIdIn,jerseyNumber,jerseyNumberIn,playerName,playerNameIn){
+    var self = this;
+    self.type = type;
+    self.min = min;
+    self.teamId = teamId;
+    self.playerId = playerId;
+    self.playerIdIn = playerIdIn;
+    self.jerseyNumber = jerseyNumber;
+    self.jerseyNumberIn = jerseyNumberIn;
+    self.playerName = playerName;
+    self.playerNameIn = playerNameIn;
+};
+
+var FixtureModel = function() {
+    var self = this;
+
+    //stores weeks of the fixture
+    self.weeks = ko.observableArray([
+        {% for week in weeks|dictsort:"weekId" %}
+            {week_id: "{{ week.weekId }}", week_status:"{{ week.status }}"},
+        {% endfor %}
+    ]);
+
+    self.matchEvents = ko.observableArray();
+
+    {% for event in events|dictsortreversed:'min' %}
+        self.matchEvents.push(new MatchEvent("{{ event.type }}","{{ event.min }}","{{ event.teamId }}","{{ event.playerId }}","{{ event.playerIdIn }}","{{ event.jerseyNumber }}","{{ event.jerseyNumberIn }}","{{ event.playerName }}","{{ event.playerNameIn }}"));
+    {% endfor %}
+
+    //stores all matches in the fixture
+    self.matches = ko.observableArray();
+    {% for week in weeks|dictsort:"weekId" %}
+        {% for match in week.matches|dictsort:"date" %}
+            {% if match.matchId == selectedMatch  %}
+                self.matches.push(new MatchObject("{{ week.weekId }}","{{ week.status }}","{{ match.matchId }}",{{ match.matchStatus }},"{{ match.homeTeam }}", "{{ match.homeTeamCond }}","{{ match.homeTeamInt }}","{{ match.awayTeam }}","{{ match.awayTeamCond}}", "{{ match.awayTeamInt }}","{{ match.homeTeamId }}","{{ match.awayTeamId }}","{{ match.homeScore }}","{{ match.awayScore }}","{{ match.date }}","{{ match.time }}","{{ match.liveTime}}","{{ match.referee }}","{{ match.stadium }}","match-selected"));
+            {% else %}
+                self.matches.push(new MatchObject("{{ week.weekId }}","{{ week.status }}","{{ match.matchId }}",{{ match.matchStatus }},"{{ match.homeTeam }}", "{{ match.homeTeamCond }}","{{ match.homeTeamInt }}","{{ match.awayTeam }}","{{ match.awayTeamCond}}", "{{ match.awayTeamInt }}","{{ match.homeTeamId }}","{{ match.awayTeamId }}","{{ match.homeScore }}","{{ match.awayScore }}","{{ match.date }}","{{ match.time }}","{{ match.liveTime}}","{{ match.referee }}","{{ match.stadium }}","match"));
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+
+
+    self.selectedWeek = ko.observable("{{ currentWeek }}");
+    self.selectedMatch = ko.observable("{{ selectedMatch }}");
+
+    //filters the matches for selected week
+    self.matchesToShow = ko.computed(function() {
+        // Represents a filtered list of matches
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            return match.weekId.toLowerCase() == desiredWeek.toLowerCase();
+        });
+    }, this);
+
+    self.playedMatches = ko.computed(function(){
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus() == 6 || match.matchStatus() == 11 || match.matchStatus() == 13)){
+                return match;
+            }
+        });
+    },this);
+
+    self.liveMatches = ko.computed(function(){
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus() != 6 && match.matchStatus() != 11 && match.matchStatus() != 13 && match.matchStatus() != 1 && match.matchStatus() != 5 && match.matchStatus() != 17)){
+                return match;
+            }
+        });
+    },this);
+
+    self.notPlayedMatches = ko.computed(function(){
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus() ==1)){
+                return match;
+            }
+        });
+    },this);
+
+    self.fixtureWidgetHeight = ko.computed(function(){
+        var baseHeight = 310;
+        if( self.playedMatches().length>0){
+            baseHeight += 20;
         }
+        if( self.notPlayedMatches.length>0){
+            baseHeight += 20;
+        }
+        return baseHeight + "px";
+    },this);
+
+
+    // Selects 3 weeks to show, depending on the selected week
+    self.weeksToShow = ko.computed(function() {
+        // Represents a filtered list of weeks
+        var desiredWeek = self.selectedWeek();
+        return ko.utils.arrayFilter(this.weeks(), function(week) {
+            // if first week return first 3 weeks
+            if(parseInt(desiredWeek) == 1 && week.week_id<4){
+                return week.week_id;
+            }
+            // if last week return last 3 weeks
+            if(parseInt(desiredWeek) == 34 && week.week_id>31){
+                return week.week_id;
+            }
+            // else return selected week with one before and one after
+            if(week.week_id == parseInt(desiredWeek) + 1 | week.week_id == desiredWeek | week.week_id == parseInt(desiredWeek) - 1){
+                return week.week_id;
+            }
+        });
+    }, this);
+
+    self.matchInfo = ko.computed(function(){
+        var matchId = self.selectedMatch();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(parseInt(matchId) == match.matchId){
+                return match.matchId;
+            }
+        });
+    }, this);
+
+    self.autoRefresh = function(){
+        ko.utils.arrayForEach(self.matches(), function(match) {
+            var currentMatch = self.selectedMatch();
+            if(parseInt(match.weekStatus) == 0 || parseInt(match.matchId) == currentMatch){
+                service_request("GetMatchInfo",{"leagueId": {{ leagueId }}, "seasonId": {{seasonId}}, "matchId": match.matchId},function(info){
+                    match.homeScore(info[7] | 0);
+                    match.awayScore(info[8] | 0);
+                    match.matchStatus(info[2]);
+                    if(match.matchStatus() == 6 || match.matchStatus() == 11 || match.matchStatus() == 13){
+                        match.liveTime("MS");
+                    }
+                    else if(match.matchStatus() == 1){
+                        match.liveTime("");
+                    }
+                    else if(match.matchStatus() == 10){
+                        match.liveTime("DA");
+                    }
+                    else{
+                        match.liveTime(info[11] + "'");
+                    }
+                    console.log(match.homeTeam + " - " + match.awayTeam + " match updated with; matchStatus:" + match.matchStatus() + " homeScore:" + match.homeScore() + " awayScore:" + match.awayScore() + " liveTime:" + match.liveTime());
+                });
+            }
+            if(parseInt(match.matchId) == currentMatch && parseInt(match.matchStatus()) != (6|11|13|1)){
+                console.log("this match is live: " + match.homeTeam + " - " + match.awayTeam);
+                service_request("GetMatchEvents",{"leagueId": {{ leagueId }}, "seasonId": {{seasonId}}, "matchId": match.matchId},function(events){
+                    console.log(self.matchEvents().length);
+                    self.matchEvents.removeAll();
+                    console.log(self.matchEvents().length);
+                });
+            }
+        });
     };
 
-    var FixtureModel = function() {
-        var self = this;
 
-        //stores weeks of the fixture
-        self.weeks = ko.observableArray([
-            {% for week in weeks|dictsort:"weekId" %}
-                {week_id: "{{ week.weekId }}", week_status:"{{ week.status }}"},
-            {% endfor %}
-        ]);
+    setInterval(self.autoRefresh,10000);
 
-        //stores all matches in the fixture
-        self.matches = ko.observableArray([
-            {% for week in weeks|dictsort:"weekId" %}
-                {% for match in week.matches|dictsort:"date" %}
-                    {% if match.matchId == selectedMatch  %}
-                        {weekId: "{{ week.weekId }}", weekStatus: "{{ week.status }}", matchId:"{{ match.matchId }}",matchStatus:"{{ match.matchStatus }}",homeTeam:"{{ match.homeTeam }}", homeTeamCond:"{{ match.homeTeamCond }}", homeTeamInt:"{{ match.homeTeamInt }}",awayTeam:"{{ match.awayTeam }}",awayTeamCond:"{{ match.awayTeamCond}}", awayTeamInt:"{{ match.awayTeamInt }}",homeTeamId:"{{ match.homeTeamId }}",awayTeamId:"{{ match.awayTeamId }}",homeScore:"{{ match.homeScore }}",awayScore:"{{ match.awayScore }}",date:"{{ match.date }}",time:"{{ match.time }}",liveTime:"{{ match.liveTime}}",referee:"{{ match.referee }}",stadium:"{{ match.stadium }}",matchClass:"match-selected"},
-                    {% else %}
-                        {weekId: "{{ week.weekId }}", weekStatus: "{{ week.status }}", matchId:"{{ match.matchId }}",matchStatus:"{{ match.matchStatus }}",homeTeam:"{{ match.homeTeam }}", homeTeamCond:"{{ match.homeTeamCond }}", homeTeamInt:"{{ match.homeTeamInt }}",awayTeam:"{{ match.awayTeam }}",awayTeamCond:"{{ match.awayTeamCond}}", awayTeamInt:"{{ match.awayTeamInt }}",homeTeamId:"{{ match.homeTeamId }}",awayTeamId:"{{ match.awayTeamId }}",homeScore:"{{ match.homeScore }}",awayScore:"{{ match.awayScore }}",date:"{{ match.date }}",time:"{{ match.time }}",liveTime:"{{ match.liveTime}}",referee:"{{ match.referee }}",stadium:"{{ match.stadium }}",matchClass:"match"},
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-        ]);
-
-        self.selectedWeek = ko.observable("{{ currentWeek }}");
-        self.selectedMatch = ko.observable("{{ selectedMatch }}");
-
-        //filters the matches for selected week
-        self.matchesToShow = ko.computed(function() {
-            // Represents a filtered list of matches
-            var desiredWeek = this.selectedWeek();
-            return ko.utils.arrayFilter(this.matches(), function(match) {
-                return match.weekId.toLowerCase() == desiredWeek.toLowerCase();
-            });
-        }, this);
-
-        self.playedMatches = ko.computed(function(){
-            var desiredWeek = this.selectedWeek();
-            return ko.utils.arrayFilter(this.matches(), function(match) {
-                if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus == 6 || match.matchStatus == 11 || match.matchStatus == 13)){
-                    return match;
-                }
-            });
-        },this);
-
-        self.liveMatches = ko.computed(function(){
-            var desiredWeek = this.selectedWeek();
-            return ko.utils.arrayFilter(this.matches(), function(match) {
-                if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus != 6 && match.matchStatus != 11 && match.matchStatus != 13 && match.matchStatus != 1 && match.matchStatus != 5 && match.matchStatus != 17)){
-                    return match;
-                }
-            });
-        },this);
-
-        self.notPlayedMatches = ko.computed(function(){
-            var desiredWeek = this.selectedWeek();
-            return ko.utils.arrayFilter(this.matches(), function(match) {
-                if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus ==1)){
-                    return match;
-                }
-            });
-        },this);
-
-        self.fixtureWidgetHeight = ko.computed(function(){
-            var baseHeight = 310;
-            if( self.playedMatches().length>0){
-                baseHeight += 20;
-            }
-            if( self.notPlayedMatches.length>0){
-                baseHeight += 20;
-            }
-            return baseHeight + "px";
-        },this);
-
-
-        // Selects 3 weeks to show, depending on the selected week
-        self.weeksToShow = ko.computed(function() {
-            // Represents a filtered list of weeks
-            var desiredWeek = this.selectedWeek();
-            return ko.utils.arrayFilter(this.weeks(), function(week) {
-                // if first week return first 3 weeks
-                if(parseInt(desiredWeek) == 1 && week.week_id<4){
-                    return week.week_id;
-                }
-                // if last week return last 3 weeks
-                if(parseInt(desiredWeek) == 34 && week.week_id>31){
-                    return week.week_id;
-                }
-                // else return selected week with one before and one after
-                if(week.week_id == parseInt(desiredWeek) + 1 | week.week_id == desiredWeek | week.week_id == parseInt(desiredWeek) - 1){
-                    return week.week_id;
-                }
-            });
-        }, this);
-
-        self.autoRefresh = function(){
-            ko.utils.arrayForEach(self.matches(), function(match) {
-                if(parseInt(match.weekStatus) == 0 ){
-                    $.post("/api/GetMatchInfo", JSON.stringify({"leagueId": {{ leagueId }}, "seasonId": {{seasonId}}, "matchId": match.matchId})).done(function(data){
-                        match.homeScore = data.data[0][7];
-                        match.awayScore = data.data[0][8];
-                        match.liveTime = data.data[0][11];
-                        match.matchStatus = data.data[0][2];
-                        console.log(match.homeTeam + " - " + match.awayTeam + " match updated with; matchStatus:" + match.matchStatus + " homeScore:" + match.homeScore + " awayScore:" + match.awayScore + " liveTime:" + match.liveTime);
-                    });
-                }
-            });
-        };
-
-        setInterval(self.autoRefresh,60000);
-
-        // changes the selected week
-        self.changeWeek = function(elem) {
-            self.selectedWeek(elem.week_id);
-        };
-
-        // show and hide effects
-        this.showMatch = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideToggle() };
-        this.hideMatch = function(elem) { if (elem.nodeType === 1) $(elem).slideToggle(function() { $(elem).remove(); }),1200 };
+    // changes the selected week
+    self.changeWeek = function(elem) {
+        self.selectedWeek(elem.week_id);
     };
 
-    ko.applyBindings(new FixtureModel());
+    // show and hide effects
+    this.showMatch = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideToggle() };
+    this.hideMatch = function(elem) { if (elem.nodeType === 1) $(elem).slideToggle(function() { $(elem).remove(); }),1200 };
+};
+
+ko.applyBindings(new FixtureModel());
 </script>
 
 </body>

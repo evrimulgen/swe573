@@ -1,21 +1,17 @@
 <div id="logo">
     <p>Süper Stadyum</p>
 </div>
-<div id="scoreboard">
+<div id="scoreboard" data-bind='foreach: matchInfo'>
     <div class="match-info">
-        <p id="matchDay">{{ matchInfo.date }}</p>
-        <p id="matchTime">{{ matchInfo.time }}</p>
     </div>
     <div class="score-area">
-        <p id="homeTeamName" class="header-team-name" style="text-align:right">{{ matchInfo.homeTeam}}</p>
-        <p id="homeTeamScore" class="score">{{ matchInfo.homeTeamScore }}</p>
+        <p id="homeTeamName" class="header-team-name" style="text-align:right" data-bind='text: homeTeam'></p>
+        <p id="homeTeamScore" class="score" data-bind='text: homeScore()'></p>
         <p class="score-seperator">-</p>
-        <p id="awayTeamScore" class="score">{{ matchInfo.awayTeamScore }}</p>
-        <p id="awayTeamName" class="header-team-name" style="text-align:left">{{ matchInfo.awayTeam }}</p>
+        <p id="awayTeamScore" class="score" data-bind='text: awayScore()'></p>
+        <p id="awayTeamName" class="header-team-name" style="text-align:left" data-bind='text: awayTeam'></p>
     </div>
-    {% if matchInfo.liveTime %}
-        <div class="match-time">
-            <p id="sb-match-time-p">{{ matchInfo.liveTime }}'</p>
-        </div>
-    {% endif %}
+    <div class="match-time">
+        <p id="sb-match-time-p" data-bind="text: liveTime()"></p>
+    </div>
 </div>

@@ -20,7 +20,12 @@
             <h2>{{ matchInfo.homeTeam }}</h2>
             <img src="{{ STATIC_URL }}images/logo{{ matchInfo.homeTeamId }}.png">
         </div>
-        <div id="content"></div>
+
+        <div id="matchinfo" data-bind="foreach: matchInfo">
+            <img src="{{ STATIC_URL }}images/saat.png"><p><span data-bind="text: date + ', ' + time"></span></p>
+            <img src="{{ STATIC_URL }}images/saha2.png"><p><span data-bind="text:stadium"></span></p>
+            <img src="{{ STATIC_URL }}images/duduk.png"><p><span data-bind="text:referee"></span></p>
+        </div>
         <div id="away">
             <h2>{{ matchInfo.awayTeam }}</h2>
             <img src="{{ STATIC_URL }}images/logo{{ matchInfo.awayTeamId }}.png">
@@ -43,12 +48,12 @@
                 <h3>Son 5 Maç</h3>
                 <div style="width: 50%;float: left;margin-top: 0px">
                     <div class="form">
-                        {% include '_vs_before_form.html' with form=homeForm only %}
+                        {% include '_vs_before_form.html' with form=homeForm team=1 currentWeek=currentWeek only %}
                     </div>
                 </div>
                 <div style="width: 50%;float: left;margin-top: 0px">
                     <div class="form">
-                        {% include '_vs_before_form.html' with form=awayForm only %}
+                        {% include '_vs_before_form.html' with form=awayForm team=2 currentWeek=currentWeek only %}
                     </div>
                 </div>
             </div>

@@ -1,20 +1,45 @@
-{% for f in form reversed%}
+{% for f in form%}
     {% if f.win == 1 %}
-        <p class="win"> G </p>
-        {% if forloop.counter < 5 %}
-            <p class="seperator">-</p>
-        {% endif %}
+        <a class="win" title="" id="{{ team }}{{ forloop.counter }}f"></a>
     {% endif %}
     {% if f.win == 0 %}
-        <p class="draw"> B </p>
-        {% if forloop.counter < 5 %}
-            <p class="seperator">-</p>
-        {% endif %}
+        <a class="draw" title="" id="{{ team }}{{ forloop.counter }}f"></a>
     {% endif %}
     {% if f.win == 2 %}
-        <p class="lose"> M </p>
-        {% if forloop.counter < 5 %}
-            <p class="seperator">-</p>
-        {% endif %}
+        <a class="lose" title="" id="{{ team }}{{ forloop.counter }}f"></a>
     {% endif %}
+    <script>
+
+        $(function() {
+            var divname = "#" +"{{ team }}{{ forloop.counter }}" + "f";
+            $( divname ).tooltip({
+                content: function(){
+                    var week = {{ currentWeek }};
+                    var counter = {{ forloop.counter }};
+                    var matchWeek = week - counter;
+                    return "<div><p style='text-align:center'>"+matchWeek+". Hafta</p><br><p>{{ f.homeTeam }} {{ f.homeScore }} - {{ f.awayScore }} {{ f.awayTeam }}</p></div>"
+                },
+                show: {
+                    effect: "clip",
+                    delay: 50
+                },
+                hide: {
+                    effect: "hide",
+                    delay: 100
+                },
+                position: {
+                    my: "center bottom-20",
+                    at: "center top",
+                    using: function( position, feedback ) {
+                        $( this ).css( position );
+                        $( "<div>" )
+                                .addClass( "arrow" )
+                                .addClass( feedback.vertical )
+                                .addClass( feedback.horizontal )
+                                .appendTo( this );
+                    }
+                }
+            });
+        });
+    </script>
 {% endfor %}

@@ -43,8 +43,10 @@
 
                     console.log(d);
                     var pref = {
-                        "homefill": d.colors.homefill,
-                        "awayfill": d.colors.awayfill,
+                        "homefill": "{{ teamColors.homeFill }}",
+                        "awayfill": "{{ teamColors.awayFill }}",
+                        "homestroke": "{{ teamColors.homeStroke }}",
+                        "awaystroke": "{{ teamColors.awayStroke }}",
                         "width": $("#data-area").width()
                     };
                     $("#data-area").empty();
@@ -72,24 +74,6 @@
         }
     </script>
 
-    <!-- refresh try -->
-    <script type="text/javascript">
-        $(document).ready(function(){
-            bindTimer();
-
-            $("#data-area").load('/new/partial/events/{{ selectedMatch }}/');
-
-            var refreshFixture = function(){
-                $(".fixture").load('/new/partial/fixture/{{ selectedMatch }}/', function(responseTxt,statusTxt,xhr){
-                    if(statusTxt=="success")
-                        prepTimelinr();
-                });
-            }
-
-        });
-
-    </script>
-    <!-- end refresh try -->
 {% endblock %}
 
 

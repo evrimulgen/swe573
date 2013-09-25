@@ -6,15 +6,6 @@ function Timeline(options){
     var isLive = null;
     var matchInfo = {};
 
-    $.post("/api/GetMatchInfo", JSON.stringify({"matchId": matchId})).done(function(data){
-        matchInfo.week = data.data[0][0];
-        matchInfo.status = data.data[0][2]; // match status, see API docs
-        matchInfo.homeId = data.data[0][5];
-        matchInfo.awayId = data.data[0][6];
-
-        if(matchInfo.status == 2 || matchInfo.status == 3) isLive = true;
-    });
-
     var width = 662;
     var height = 50;
 
@@ -30,6 +21,7 @@ function Timeline(options){
     var eventImages = [];
 
     var momentumPath = null;
+    var eventImagesGroup = null;
 
     $("#"+div_id).width(width).height(height);
 
@@ -44,7 +36,22 @@ function Timeline(options){
         }
     });
 
+    $.post("/api/GetMatchInfo", JSON.stringify({"matchId": matchId})).done(function(data){
+        matchInfo.week = data.data[0][0];
+        matchInfo.status = data.data[0][2]; // match status, see API docs
+        matchInfo.homeId = data.data[0][5];
+        matchInfo.awayId = data.data[0][6];
+
+        if(matchInfo.status == 2 || matchInfo.status == 3) isLive = true;
+
+        drawSlider();
+        drawTeamLogos(matchInfo.homeId, matchInfo.awayId);
+        loadEvents();
+        loadMomentum();
+    });
+
     var drawSlider = function(){
+        paper = scope;
         var bg = new scope.Path.Rectangle(0, 0, width, height);
         bg.fillColor = "#ccccff";
 
@@ -65,10 +72,15 @@ function Timeline(options){
 
     var loadMomentum = function(){
         $.post("/api/GetMatchMomentum", JSON.stringify({"matchId": match_id})).done(function(data){
-            maxSecond = data.data[data.data.length-1][0]*60;
+            if(isLive){
+                maxSecond = 90*60;
+            } else {
+                maxSecond = data.data[data.data.length-1][0]*60;
+            }
+
             paper = scope;
             
-            if(momentumPath) momentumPath.visible = false;
+            if(momentumPath) momentumPath.remove();
 
             momentumPath = new scope.Path();
             momentumPath.strokeColor = "black";
@@ -110,34 +122,26 @@ function Timeline(options){
     }
 
     var loadEvents = function(){
-        var homeId, awayId;
-        $.post("/api/GetMatchInfo", JSON.stringify({"matchId": match_id})).done(function(data){
-            homeId = data.data[0][5];
-            awayId = data.data[0][6];
+        paper = scope;
 
-            // drawing the team logos
-            drawTeamLogos(homeId, awayId);
+        if(eventImagesGroup){
+            eventImagesGroup.remove();
+        }
 
-            $.post("/api/GetMatchEvents", JSON.stringify({"matchId": match_id})).done(function(data){
-                _.each(data.data, function(event){
-                    if(event[2]===homeId){
-                        event.push("home");
-                    } else if(event[2]===awayId){
-                        event.push("away");
-                    }
-                    drawEvent(event);
-                });
-                scope.view.draw();
+        eventImagesGroup = new scope.Group();
+
+        $.post("/api/GetMatchEvents", JSON.stringify({"matchId": match_id})).done(function(data){
+            _.each(data.data, function(event){
+                if(event[2]===matchInfo.homeId){
+                    event.push("home");
+                } else if(event[2]===matchInfo.awayId){
+                    event.push("away");
+                }
+                drawEvent(event);
             });
-
+            scope.view.draw();
         });
-    
-    };
-
-
-    drawSlider();
-    loadEvents();
-    loadMomentum();
+    }
 
     var timeToPixel = function(minute, second){
         var totalSeconds = minute*60+second;
@@ -226,12 +230,14 @@ function Timeline(options){
         var point = new scope.Point(xoffset, yoffset);
 
         var img = new scope.Raster("/static/images/"+ imageNames[event[0]], point);
+        eventImagesGroup.addChild(img);
         eventImages.push(img);
     }
 
     this.changeTime = function(minute, second){
         if(isLive && second == 0 && minute != 0){
             loadMomentum();
+            loadEvents();
         }
     }
 

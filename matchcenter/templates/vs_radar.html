@@ -58,12 +58,13 @@
         function refreshScreens()
         {
             var activeTab = $(".inside-menu button.active").attr("value");
-
+            console.log(activeTab);
             if (activeTab==3){
                 loadTeamStats();
             }
             else {
                 var url = '/new/partial/' + valueMap[activeTab] + "/{{ selectedMatch }}/";
+                console.log(activeTab);
                 $("#data-area").load(url);
             }
             $("#sidestats-container").load("/new/partial/sidestats/{{ selectedMatch }}/")
@@ -72,6 +73,7 @@
         function bindTimer(){
             setInterval(refreshScreens, 30000);
         }
+        bindTimer();
     </script>
 
 {% endblock %}
@@ -145,10 +147,13 @@
         <button value="4" onclick="handleSelect(this)">OYUNCU İSTATİSTİKLERİ</button>
     </div>
 
-
-
     <div class="data-area" id="data-area">
+
     </div>
+    <script>
+        var url = '/new/partial/' + valueMap[1] + "/{{ selectedMatch }}/";
+        $("#data-area").load(url);
+    </script>
 
 
 {% endblock %}

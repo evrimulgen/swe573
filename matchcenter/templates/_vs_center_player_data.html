@@ -20,9 +20,9 @@
                         <div style='height: 40px'>
                             <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
                                 <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'/>
+                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'/>
 
-                                <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
                                 <p id='value'>{{ x.successfulPass }} / {{ x.totalPass }}</p>
                             </a>
@@ -45,9 +45,9 @@
                         <div style='height: 40px'>
                             <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
                                 <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
+                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
 
-                                <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
                                 <p id='value'>{{ x.successfulPass }} / {{ x.totalPass }}</p>
                             </a>
@@ -80,9 +80,9 @@
                         <div style='height: 40px'>
                             <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
                                 <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
+                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
 
-                                <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
                                 <p id='value'>{{ x.totalDistance }} m</p>
                             </a>
@@ -102,9 +102,9 @@
                         <div style='height: 40px'>
                             <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
                                 <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
+                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
 
-                                <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
                                 <p id='value'>{{ x.totalDistance }} m</p>
                             </a>
@@ -130,9 +130,9 @@
                         <div style='height: 40px'>
                             <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
                                 <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
+                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
 
-                                <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
                                 <p id='value'>{{ x.successfulShot }} / {{ x.totalShot }}</p>
                             </a>
@@ -154,9 +154,9 @@
                         <div style='height: 40px'>
                             <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
                                 <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'>
+                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
 
-                                <p id='name'>{{ x.playerName }}</p>
+                                <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
                                 <p id='value'>{{ x.successfulShot }} / {{ x.totalShot }}</p>
                             </a>

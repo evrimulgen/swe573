@@ -63,7 +63,7 @@
         function changeContent(num){
             var htmltoSet = "";
             if(num == 1){
-                htmltoSet = "<a> <button onclick='changeContent(3)'>Takım Özeti</button> </a><div class='active'><a> <button onclick='changeContent(1)'>Fikstür</button> </a></div><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a>";
+                htmltoSet = "<a> <button onclick='changeContent(3)'>Takım Özeti</button> </a><div class='active'><a> <button onclick='changeContent(1)'>Fikstür</button> </a></div>";
                 $("#menu").html(htmltoSet);
                 htmltoSet = "";
                 htmltoSet += "<div style='width:48.5%;margin-left:1%;height:300px' class='infobox'><h1>Son Maç</h1></div>"
@@ -74,13 +74,8 @@
                 htmltoSet += "<div style='width:48.5%;margin-left:1%;height:400px;margin-top:10px' class='infobox'><h1>Puan Tablosu</h1></div>"
                 $("#insideright").html(htmltoSet);
             }
-            else if(num==2){
-                htmltoSet = "<a> <button onclick='changeContent(3)'>Takım Özeti</button> </a><a> <button onclick='changeContent(1)'>Fikstür</button> </a><div class='active'><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a></div>";
-                $("#menu").html(htmltoSet);
-
-            }
             else if(num==3){
-                htmltoSet = "<div class='active'><a> <button onclick='changeContent(3)'>Takım Özeti</button> </a></div><a> <button onclick='changeContent(1)'>Fikstür</button> </a><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a>";
+                htmltoSet = "<div class='active'><a> <button onclick='changeContent(3)'>Takım Özeti</button> </a></div><a> <button onclick='changeContent(1)'>Fikstür</button> </a>";
                 $("#menu").html(htmltoSet);
                 htmltoSet = "";
                 htmltoSet += "{% include "_sc_team_summary.html" %}";
@@ -179,7 +174,6 @@
             <a> <button onclick="changeContent(3)">Takım Özeti</button> </a>
         </div>
         <a> <button onclick="changeContent(1)">Fikstür</button> </a>
-        <a> <button onclick="changeContent(2)">Kadro Analizi</button> </a>
     </div>
     <div class="insideleft">
         <div class="infobox">
@@ -227,14 +221,6 @@
                     <p class="second">{{ i.cupchamp }}</p>
                 </div>
             {% endfor %}
-            <h2>Karşılaştır!</h2>
-            <select style="width: 60%;margin-left:5%;float: left">
-                <option class="item"> <a>Takım Seçiniz</a> </option>
-                {% for i in standing_list %}
-                    <option class="item"> <a>{{ i.teamName }}</a> </option>
-                {% endfor %}
-            </select>
-            <button style="float: left;width: 30%;font-size: 12px;padding-left: 2px;">Karşılaştır</button>
         </div>
         <div class="infobox" style="margin-top: 5px">
             <div class="player-header">

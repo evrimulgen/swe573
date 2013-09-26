@@ -42,6 +42,7 @@ def team(request, num):
                                                  'details':get_team_details(num),
                                                  'players':get_team_players(num),
                                                  'standing_list':get_standings(),
+                                                 's_list': get_team_past_standings(num),
                                                  'team_selected': int(num)})
 
 @ensure_csrf_cookie

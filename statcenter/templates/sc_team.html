@@ -11,7 +11,7 @@
             var data = google.visualization.arrayToDataTable([
                 ['Hafta', 'Siralama' ],
                 {% for x in s_list %}
-                    [ {{ forloop.counter }}, {{ x }}],
+                    [ {{ x.0 }}, {{ x.1 }}],
                 {% endfor %}
 
             ]);
@@ -21,25 +21,26 @@
                 vAxis: {
                     maxValue: 18,
                     minValue: 1,
-                    textStyle: {
-                        color: 'black'
-                    },
                     direction: -1,
                     gridlines: {
+                        color: "#fff",
                         count: 18
                     },
-                    baselineColor : 'black'
+                    baselineColor: "#fff"
                 },
                 hAxis: {
-                    baselineColor : 'black',
-                    textStyle: {
-                        color: 'black'
-                    },
+                    maxValue: 34,
+                    minValue: 1,
                     gridlines: {
+                        color: "#fff",
                         count: 34
-                    }
+                    },
+                    baselineColor: "#fff"
                 },
-                backgroundColor: '#b7b7b7',
+                backgroundColor: {
+                    "fill": '#fff',
+                    "stroke": '#fff'
+                },
                 chartArea: {
                     left:20,
                     top:20,
@@ -93,12 +94,6 @@
             {
                 {% for i in players|dictsortreversed:"match" %}
                     htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.match }}</p></a>";
-                {% endfor %}
-            }
-            else if (elm.value == 2)
-            {
-                {% for i in players|dictsortreversed:"minutes" %}
-                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.minutes }}</p></a>";
                 {% endfor %}
             }
             else if (elm.value == 3)
@@ -227,7 +222,6 @@
                 <h1>Takım Kadrosu</h1>
                 <select class="player-filter" onchange="javascript:handleSelect(this)">
                     <option class="item" style="float: right" value="1"> <a>Maç Sayısı</a> </option>
-                    <option class="item" value="2"> <a>Dakika</a> </option>
                     <option class="item" value="3"> <a>Gol</a> </option>
                     <option class="item" value="4"> <a>Asist</a> </option>
                     <option class="item" value="5"> <a>Sarı Kart</a> </option>

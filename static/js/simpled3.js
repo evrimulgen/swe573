@@ -401,4 +401,103 @@ function d3BarChart(){
 }
 
 
+function drawLineChart(elementID, dataArray, options)
+{
+    var fontFamily = "sans-serif";
+    var chartTextSize = 9;
+    var nodeRadius = 6;
+
+    //Argument controls
+    if(elementID == null)
+    {
+        return "Error : elementID is null";
+    }
+    if(dataArray == null)
+    {
+        //To draw something  with default dataset
+        dataArray = [5,6,3,8,6,9,10,5,7,3,2,1,10,3];
+        console.log("Data Array was selected as default data array..");
+    }
+
+//    $.extend(options,
+//        {
+//            width: 400,
+//            height: 300
+//        }
+//    );
+
+    var m = [5, 10, 20, 10]; // margins
+    var w = options.width - m[1] - m[3]; // width
+    var h = 300 - m[0] - m[2]; // height
+
+    // create a simple data array that we'll plot with a line (this array represents only the Y values, X will just be the index location)
+    var data = dataArray;
+
+    // X scale will fit all values from data[] within pixels 0-w
+    var x = d3.scale.linear().domain([1, 34]).range([0, w]);
+    // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
+    var y = d3.scale.linear().domain([18,0]).range([h - 7, 0]);
+    // automatically determining max range can work something like this
+    // var y = d3.scale.linear().domain([0, d3.max(data)]).range([h, 0]);
+
+    // create a line function that can convert data[] into x and y points
+    var line = d3.svg.line()
+        // assign the X function to plot our line as we wish
+        .x(function(d,i) {
+            return x(i+1);
+        })
+        .y(function(d) {
+            return y(d);
+        })
+
+    var graph = d3.select("#" + elementID).append("svg:svg")
+        .attr("width", w + m[1] + m[3])
+        .attr("height", h + m[0] + m[2])
+        .append("svg:g")
+        .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+    var xAxis = d3.svg.axis().scale(x).ticks(34).tickSize(-h).tickSubdivide(true);
+
+    graph.append("svg:g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + h + ")")
+        .call(xAxis);
+
+    graph.append("svg:path").attr("d", line(data));
+
+    var group = graph.selectAll("g.nodess").data(data).enter().append("g").attr("class","nodess")
+
+    group
+        .append("circle")
+        .attr("fill","white")
+        .attr("stroke","darkred")
+        .attr("stroke-width",1)
+        .attr("r", nodeRadius)
+        .attr("cx",function(d,i) { return x(i) + 5 + nodeRadius + nodeRadius / 2; })
+        .attr("cy", function(d,i) { return y(d) ; });
+
+    group
+        .append("text")
+        .style("font-family",fontFamily)
+        .attr("font-size",chartTextSize)
+        .attr("cursor","default")
+        .attr("font-weight","bold")
+        .attr("x", function(d,i) { if(d > 9) return x(i) + 9.5 ; return x(i) + 8; })
+        .attr("y", function(d,i) {  return y(d) + 3 ; })
+        .attr("dx", chartTextSize) // padding-right
+        .attr("text-anchor", "end") // text-align: right
+        .text(function(d,i) {  return d});
+
+
+    graph.append("text")
+        .attr("text-anchor", "end")
+        .attr("font-size", 10)
+        .attr("font-family", "sans-serif")
+        .attr("x",m[2])
+        .attr("y",295)
+        .text("Hafta");
+
+}
+
+
 

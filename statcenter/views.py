@@ -38,12 +38,15 @@ def team(request, num):
     # TODO: Sag paneldeki "best list" entegre edilmeli
     # TODO: Takimin pozisyonlari degisimi daha iyi bi grafikte ve gercek datayla verilecek
 
+    slist = [x[1] for x in get_team_past_standings(num)]
+    slist = simplejson.dumps(slist)
+
     return render_to_response('sc_team.html', {'fixture':get_fixture(),
                                                  'try_list':get_teams(),
                                                  'details':get_team_details(num),
                                                  'players':get_team_players(num),
                                                  'standing_list':get_standings(),
-                                                 's_list': get_team_past_standings(num),
+                                                 's_list': slist,
                                                  'team_selected': int(num)})
 
 @ensure_csrf_cookie

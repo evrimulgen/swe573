@@ -20,7 +20,7 @@ def service_request(id, data):
             return empty
 
 def tryService():
-    print service_request("GetPlayerCard", {"leagueId": 1, "seasonId": 9064, "weekId": 1, "playerId": 80})
+    print service_request("GetTeamForm", {"leagueId": 1, "seasonId": 9064, "weekId": 5, "teamId": 1, "type": 0})
 
 
 tryService()

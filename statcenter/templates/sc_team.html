@@ -318,42 +318,10 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
 {% endblock %}
 
 {% block sidebar %}
-    <div id="content" style="min-height: 600px">
-        <div style="width: 100%;height: 35px">
-            <select id="teamsideselect" class="topmenuoption">
-                <option class="item" style="float: right"> Gol </option>
-                <option class="item"> Yenilen Gol </option>
-                <option class="item"> Averaj </option>
-                <option class="item"> Koşu Mesafesi </option>
-                <option class="item"> Pas </option>
-                <option class="item"> Şut </option>
-                <option class="item"> İsabetli Şut </option>
-                <option class="item"> Yapılan Faul </option>
-                <option class="item"> Sarı Kart </option>
-                <option class="item"> Kırmızı Kart </option>
-            </select>
-        </div>
-
-        <div class="teamcomparison" id="teamsidedata">
-            {% for i in standing_list|dictsortreversed:"score" %}
-                <div class="teamitem">
-                    <img alt="{{ i.teamName }}" title="{{ i.teamName }}" src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png">
-                    <p style="width: {{ i.score}}%">{{ i.score }}</p>
-                    <div class="placeholder"></div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    {% include '_sc_team_sidebase.html' %}
 {% endblock %}
 
 

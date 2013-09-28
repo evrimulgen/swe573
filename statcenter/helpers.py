@@ -7,13 +7,15 @@ from dje2.settings import LEAGUE_ID, SEASON_ID
 
 def get_standings():
     standingDict = []
+    current_week = get_week_details()[0][1]
     datalist =  service_request("GetStandings",{"leagueId":LEAGUE_ID,"seasonId":SEASON_ID,"type":0})
     if len(datalist) == 0:
         return []
 
-    for item in datalist:
-        if int(item[0]) == 34: # TODO: Secilen hafta neyse o olacak
-            standingDict.append({'teamId': int(item[1]),
+    current_week_tuples = [x for x in datalist if x[0] == current_week]
+
+    for item in current_week_tuples:
+        standingDict.append({'teamId': int(item[1]),
                                  'teamName': item[2],
                                  'played':int(item[3]),
                                  'win':int(item[4]),

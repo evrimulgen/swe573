@@ -124,7 +124,7 @@
             $("#player").html(htmltoSet);
         }
     </script>
-
+    <script type="text/javascript" src="{{ STATIC_URL }}js/teamstatselect.js"></script>
 {% endblock %}
 
 {% block team-menu %}
@@ -330,28 +330,21 @@
 {% block sidebar %}
     <div id="content" style="min-height: 600px">
         <div style="width: 100%;height: 35px">
-            <select class="topmenuoption">
-                {% for i in weeklist %}
-                    <option class="item"> <a>{{ i }}. Hafta</a> </option>
-                {% endfor %}
-            </select>
-            <select class="topmenuoption">
-                <option class="item" style="float: right"> <a>Gol</a> </option>
-                <option class="item"> <a>Yenilen Gol</a> </option>
-                <option class="item"> <a>Averaj</a> </option>
-                <option class="item"> <a>Koşu Mesafesi</a> </option>
-                <option class="item"> <a>Pas Yüzdesi</a> </option>
-                <option class="item"> <a>Şut Yüzdesi</a> </option>
-                <option class="item"> <a>Orta Yüzdesi</a> </option>
-                <option class="item"> <a>Korner</a> </option>
-                <option class="item"> <a>Faul</a> </option>
-                <option class="item"> <a>Yapılan Faul</a> </option>
-                <option class="item"> <a>Sarı Kart</a> </option>
-                <option class="item"> <a>Kırmızı Kart</a> </option>
+            <select id="teamsideselect" class="topmenuoption">
+                <option class="item" style="float: right"> Gol </option>
+                <option class="item"> Yenilen Gol </option>
+                <option class="item"> Averaj </option>
+                <option class="item"> Koşu Mesafesi </option>
+                <option class="item"> Pas </option>
+                <option class="item"> Şut </option>
+                <option class="item"> İsabetli Şut </option>
+                <option class="item"> Yapılan Faul </option>
+                <option class="item"> Sarı Kart </option>
+                <option class="item"> Kırmızı Kart </option>
             </select>
         </div>
 
-        <div class="teamcomparison">
+        <div class="teamcomparison" id="teamsidedata">
             {% for i in standing_list|dictsortreversed:"score" %}
                 <div class="teamitem">
                     <img alt="{{ i.teamName }}" title="{{ i.teamName }}" src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png">

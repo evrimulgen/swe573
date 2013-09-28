@@ -42,6 +42,7 @@ def team(request, num):
     slist = simplejson.dumps(slist)
 
     return render_to_response('sc_team.html', {'fixture':get_fixture(),
+                                                 'card': get_team_card(num),
                                                  'try_list':get_teams(),
                                                  'details':get_team_details(num),
                                                  'players':get_team_players(num),

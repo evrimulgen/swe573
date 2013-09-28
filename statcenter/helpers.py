@@ -235,3 +235,28 @@ def get_team_past_standings(tid):
                                                     "leagueId": LEAGUE_ID,
                                                     "seasonId": SEASON_ID})
 
+def get_team_card(tid):
+    """
+    :param tid: team id
+    """
+
+    list = service_request("GetTeamCard", {"teamId": tid,
+                                    "leagueId": LEAGUE_ID,
+                                    "seasonId": SEASON_ID})
+
+    turkify_stat = lambda x: {"CrossSuccess": (u"İsabetli Orta", 8),
+                                "CrossTotal": (u"Toplam Orta", 7),
+                                "Faul": (u"Yapılan Faul", 9),
+                                "Goal": (u"Gol", 1),
+                                "GoalConceded": (u"Yenilen Gol", 2),
+                                "PassSuccess": (u"İsabetli Pas", 6),
+                                "PassTotal": (u"Toplam Pas", 5),
+                                "RedCard": (u"Kırmızı Kart", 11),
+                                "ShotSuccess": (u"İsabetli Şut", 4),
+                                "ShotTotal": (u"Toplam Şut", 3),
+                                "YellowCard": (u"Sarı Kart", 10)}.get(x)
+
+    res = [[turkify_stat(x[0])[0], turkify_stat(x[0])[1], int(x[1]), int(x[2])] for x in list]
+    res = sorted(res, key=lambda x: x[1])
+
+    return res

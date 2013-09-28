@@ -1,0 +1,10 @@
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
+
+{% for i in slist %}
+    <div class="teamitem">
+        <img src="{{ STATIC_URL }}images/logo{{ i.0 }}.png">
+        <p style="width: {{ i.1 }}%">{{ i.1 }}</p>
+        <div class="placeholder"></div>
+    </div>
+{% endfor %}

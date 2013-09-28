@@ -105,15 +105,17 @@ def partial_teamsidestats(request):
         a = service_request("GetTeamPass", common_param)
     elif code in ["shot", "shoton"]:
         a = service_request("GetTeamShot", common_param)
-        ix = 1 if code=="shot" else 0
+        ix = 1 if code=="shot" else 2
         a = prune_lists([0,ix], a)
-
     elif code == "distance":
         a = service_request("GetTeamRun", common_param)
         a = prune_lists([0,2], a)
+    elif code in ["foul", "yellow", "red"]:
+        ix = {"foul": 1, "yellow": 3, "red": 4}.get(code)
+        a = service_request("GetTeamFoul", common_param)
+        a = prune_lists([0, ix], a)
     else:
         return HttpResponse()
 
-    stats = ["distance", "pass", "shot", "shoton", "foul", "yellow", "red"]
-
-    return HttpResponse(simplejson.dumps(a), mimetype="application/json")
+    # return HttpResponse(simplejson.dumps(a), mimetype="application/json")
+    return render_to_response('_sc_team_sidebar.html', {"slist": a})

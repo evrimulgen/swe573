@@ -45,4 +45,5 @@ def prune_lists(ices, ilist):
         if i[0] != 0:
             res.append([i[x] for x in ices])
 
+    res = sorted(res, key=lambda x: x[1], reverse=True)
     return res

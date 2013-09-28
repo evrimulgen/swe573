@@ -11,7 +11,7 @@
             var data = google.visualization.arrayToDataTable([
                 ['Hafta', 'Siralama' ],
                 {% for x in s_list %}
-                    [ {{ forloop.counter }}, {{ x }}],
+                    [ {{ x.0 }}, {{ x.1 }}],
                 {% endfor %}
 
             ]);
@@ -21,25 +21,26 @@
                 vAxis: {
                     maxValue: 18,
                     minValue: 1,
-                    textStyle: {
-                        color: 'black'
-                    },
                     direction: -1,
                     gridlines: {
+                        color: "#fff",
                         count: 18
                     },
-                    baselineColor : 'black'
+                    baselineColor: "#fff"
                 },
                 hAxis: {
-                    baselineColor : 'black',
-                    textStyle: {
-                        color: 'black'
-                    },
+                    maxValue: 34,
+                    minValue: 1,
                     gridlines: {
+                        color: "#fff",
                         count: 34
-                    }
+                    },
+                    baselineColor: "#fff"
                 },
-                backgroundColor: '#b7b7b7',
+                backgroundColor: {
+                    "fill": '#fff',
+                    "stroke": '#fff'
+                },
                 chartArea: {
                     left:20,
                     top:20,
@@ -63,7 +64,7 @@
         function changeContent(num){
             var htmltoSet = "";
             if(num == 1){
-                htmltoSet = "<a> <button onclick='changeContent(3)'>Takım Özeti</button> </a><div class='active'><a> <button onclick='changeContent(1)'>Fikstür</button> </a></div><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a>";
+                htmltoSet = "<a> <button onclick='changeContent(3)'>Takım Özeti</button> </a><div class='active'><a> <button onclick='changeContent(1)'>Fikstür</button> </a></div>";
                 $("#menu").html(htmltoSet);
                 htmltoSet = "";
                 htmltoSet += "<div style='width:48.5%;margin-left:1%;height:300px' class='infobox'><h1>Son Maç</h1></div>"
@@ -74,13 +75,8 @@
                 htmltoSet += "<div style='width:48.5%;margin-left:1%;height:400px;margin-top:10px' class='infobox'><h1>Puan Tablosu</h1></div>"
                 $("#insideright").html(htmltoSet);
             }
-            else if(num==2){
-                htmltoSet = "<a> <button onclick='changeContent(3)'>Takım Özeti</button> </a><a> <button onclick='changeContent(1)'>Fikstür</button> </a><div class='active'><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a></div>";
-                $("#menu").html(htmltoSet);
-
-            }
             else if(num==3){
-                htmltoSet = "<div class='active'><a> <button onclick='changeContent(3)'>Takım Özeti</button> </a></div><a> <button onclick='changeContent(1)'>Fikstür</button> </a><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a>";
+                htmltoSet = "<div class='active'><a> <button onclick='changeContent(3)'>Takım Özeti</button> </a></div><a> <button onclick='changeContent(1)'>Fikstür</button> </a>";
                 $("#menu").html(htmltoSet);
                 htmltoSet = "";
                 htmltoSet += "{% include "_sc_team_summary.html" %}";
@@ -98,12 +94,6 @@
             {
                 {% for i in players|dictsortreversed:"match" %}
                     htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.match }}</p></a>";
-                {% endfor %}
-            }
-            else if (elm.value == 2)
-            {
-                {% for i in players|dictsortreversed:"minutes" %}
-                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.minutes }}</p></a>";
                 {% endfor %}
             }
             else if (elm.value == 3)
@@ -134,7 +124,7 @@
             $("#player").html(htmltoSet);
         }
     </script>
-
+    <script type="text/javascript" src="{{ STATIC_URL }}js/teamstatselect.js"></script>
 {% endblock %}
 
 {% block team-menu %}
@@ -179,7 +169,6 @@
             <a> <button onclick="changeContent(3)">Takım Özeti</button> </a>
         </div>
         <a> <button onclick="changeContent(1)">Fikstür</button> </a>
-        <a> <button onclick="changeContent(2)">Kadro Analizi</button> </a>
     </div>
     <div class="insideleft">
         <div class="infobox">
@@ -227,21 +216,12 @@
                     <p class="second">{{ i.cupchamp }}</p>
                 </div>
             {% endfor %}
-            <h2>Karşılaştır!</h2>
-            <select style="width: 60%;margin-left:5%;float: left">
-                <option class="item"> <a>Takım Seçiniz</a> </option>
-                {% for i in standing_list %}
-                    <option class="item"> <a>{{ i.teamName }}</a> </option>
-                {% endfor %}
-            </select>
-            <button style="float: left;width: 30%;font-size: 12px;padding-left: 2px;">Karşılaştır</button>
         </div>
         <div class="infobox" style="margin-top: 5px">
             <div class="player-header">
                 <h1>Takım Kadrosu</h1>
                 <select class="player-filter" onchange="javascript:handleSelect(this)">
                     <option class="item" style="float: right" value="1"> <a>Maç Sayısı</a> </option>
-                    <option class="item" value="2"> <a>Dakika</a> </option>
                     <option class="item" value="3"> <a>Gol</a> </option>
                     <option class="item" value="4"> <a>Asist</a> </option>
                     <option class="item" value="5"> <a>Sarı Kart</a> </option>
@@ -350,28 +330,21 @@
 {% block sidebar %}
     <div id="content" style="min-height: 600px">
         <div style="width: 100%;height: 35px">
-            <select class="topmenuoption">
-                {% for i in weeklist %}
-                    <option class="item"> <a>{{ i }}. Hafta</a> </option>
-                {% endfor %}
-            </select>
-            <select class="topmenuoption">
-                <option class="item" style="float: right"> <a>Gol</a> </option>
-                <option class="item"> <a>Yenilen Gol</a> </option>
-                <option class="item"> <a>Averaj</a> </option>
-                <option class="item"> <a>Koşu Mesafesi</a> </option>
-                <option class="item"> <a>Pas Yüzdesi</a> </option>
-                <option class="item"> <a>Şut Yüzdesi</a> </option>
-                <option class="item"> <a>Orta Yüzdesi</a> </option>
-                <option class="item"> <a>Korner</a> </option>
-                <option class="item"> <a>Faul</a> </option>
-                <option class="item"> <a>Yapılan Faul</a> </option>
-                <option class="item"> <a>Sarı Kart</a> </option>
-                <option class="item"> <a>Kırmızı Kart</a> </option>
+            <select id="teamsideselect" class="topmenuoption">
+                <option class="item" style="float: right"> Gol </option>
+                <option class="item"> Yenilen Gol </option>
+                <option class="item"> Averaj </option>
+                <option class="item"> Koşu Mesafesi </option>
+                <option class="item"> Pas </option>
+                <option class="item"> Şut </option>
+                <option class="item"> İsabetli Şut </option>
+                <option class="item"> Yapılan Faul </option>
+                <option class="item"> Sarı Kart </option>
+                <option class="item"> Kırmızı Kart </option>
             </select>
         </div>
 
-        <div class="teamcomparison">
+        <div class="teamcomparison" id="teamsidedata">
             {% for i in standing_list|dictsortreversed:"score" %}
                 <div class="teamitem">
                     <img alt="{{ i.teamName }}" title="{{ i.teamName }}" src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png">

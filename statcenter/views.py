@@ -2,11 +2,12 @@
 Django View Controllers for Stat Center
 """
 from random import randint
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils import simplejson
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from statcenter.helpers import *
-from statcenter.utils import service_request
+from statcenter.utils import service_request, prune_dicts, prune_lists
 from dje2.settings import LEAGUE_ID, SEASON_ID
 
 weekList = range(1, 35)
@@ -42,6 +43,7 @@ def team(request, num):
                                                  'details':get_team_details(num),
                                                  'players':get_team_players(num),
                                                  'standing_list':get_standings(),
+                                                 's_list': get_team_past_standings(num),
                                                  'team_selected': int(num)})
 
 @ensure_csrf_cookie
@@ -88,3 +90,30 @@ def player(request, num, player_id):
 @ensure_csrf_cookie
 def compare(request):
     return render_to_response('sc_compare.html')
+
+@csrf_exempt
+def partial_teamsidestats(request):
+    data = simplejson.loads(request.body)
+
+    code = data.get("stat")
+    common_param = {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID}
+
+    # if the said statistics can be retreived from the get_standings method (TF_STANDINGS)
+    if code in ["score", "conceded", "average"]:
+        a = prune_dicts(["teamId", code], get_standings())
+    elif code == "pass":
+        a = service_request("GetTeamPass", common_param)
+    elif code in ["shot", "shoton"]:
+        a = service_request("GetTeamShot", common_param)
+        ix = 1 if code=="shot" else 0
+        a = prune_lists([0,ix], a)
+
+    elif code == "distance":
+        a = service_request("GetTeamRun", common_param)
+        a = prune_lists([0,2], a)
+    else:
+        return HttpResponse()
+
+    stats = ["distance", "pass", "shot", "shoton", "foul", "yellow", "red"]
+
+    return HttpResponse(simplejson.dumps(a), mimetype="application/json")

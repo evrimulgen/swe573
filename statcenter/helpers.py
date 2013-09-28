@@ -7,13 +7,15 @@ from dje2.settings import LEAGUE_ID, SEASON_ID
 
 def get_standings():
     standingDict = []
+    current_week = get_week_details()[0][1]
     datalist =  service_request("GetStandings",{"leagueId":LEAGUE_ID,"seasonId":SEASON_ID,"type":0})
     if len(datalist) == 0:
         return []
 
-    for item in datalist:
-        if int(item[0]) == 34: # TODO: Secilen hafta neyse o olacak
-            standingDict.append({'teamId': int(item[1]),
+    current_week_tuples = [x for x in datalist if x[0] == current_week]
+
+    for item in current_week_tuples:
+        standingDict.append({'teamId': int(item[1]),
                                  'teamName': item[2],
                                  'played':int(item[3]),
                                  'win':int(item[4]),
@@ -80,17 +82,19 @@ def get_team_players(teamid):
     if len(datalist) == 0:
         return []
 
+    coal = lambda x: x if x is not None else 0
+
     for x in datalist:
-        playerDict.append({'playerId':x[0],
-                           'playerName':x[1],
-                           'jerseyNumber':x[2],
-                           'position':x[3],
-                           'match':x[4],
-                           'minutes':x[5],
-                           'goals':x[6],
-                           'assists':x[7],
-                           'yellowCards':x[8],
-                           'redCards':x[9]})
+        playerDict.append({'playerId':coal(x[0]),
+                           'playerName':coal(x[1]),
+                           'jerseyNumber':coal(x[2]),
+                           'position':coal(x[3]),
+                           'match':int(coal(x[4])),
+                           'minutes':int(coal(x[5])),
+                           'goals':int(coal(x[6])),
+                           'assists':int(coal(x[7])),
+                           'yellowCards':int(coal(x[8])),
+                           'redCards':int(coal(x[9]))})
 
     return playerDict
 
@@ -220,3 +224,14 @@ def get_player_last_goals(pid):
                                                     "count": 5,
                                                     "leagueId": LEAGUE_ID,
                                                     "seasonId": SEASON_ID})
+
+def get_team_past_standings(tid):
+    """
+    :param tid: team id
+    :param weekid: week id
+    """
+
+    return service_request("GetTeamPastPositions", {"teamId": tid,
+                                                    "leagueId": LEAGUE_ID,
+                                                    "seasonId": SEASON_ID})
+

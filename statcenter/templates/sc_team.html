@@ -4,61 +4,6 @@
 
 {% block head-addition %}
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-        google.load("visualization", "1", {packages:["corechart"]});
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Hafta', 'Siralama' ],
-                {% for x in s_list %}
-                    [ {{ x.0 }}, {{ x.1 }}],
-                {% endfor %}
-
-            ]);
-
-            var options = {
-                title: 'Performans Grafigi',
-                vAxis: {
-                    maxValue: 18,
-                    minValue: 1,
-                    direction: -1,
-                    gridlines: {
-                        color: "#fff",
-                        count: 18
-                    },
-                    baselineColor: "#fff"
-                },
-                hAxis: {
-                    maxValue: 34,
-                    minValue: 1,
-                    gridlines: {
-                        color: "#fff",
-                        count: 34
-                    },
-                    baselineColor: "#fff"
-                },
-                backgroundColor: {
-                    "fill": '#fff',
-                    "stroke": '#fff'
-                },
-                chartArea: {
-                    left:20,
-                    top:20,
-                    width:"95%",
-                    height:"80%"
-                },
-                legend: {
-                    position: 'none'
-                },
-                titlePosition: 'none',
-                axisTitlesPosition: 'none'
-
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-        }
-    </script>
 
     <script>
         function changeContent(num){
@@ -124,7 +69,15 @@
             $("#player").html(htmltoSet);
         }
     </script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/chartstyle.css" type="text/css"/>
     <script type="text/javascript" src="{{ STATIC_URL }}js/teamstatselect.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/d3.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/simpled3.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            drawLineChart('chart-div',{{ s_list }}, {width: 510});
+        });
+    </script>
 {% endblock %}
 
 {% block team-menu %}
@@ -245,7 +198,7 @@
 
         <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
             <h1>Lig Pozisyonu</h1>
-            <div id="chart_div" style="width: 98%; height: 300px;margin: 1%;"></div>
+            <div id="chart-div" style="width: 98%; height: 300px;margin: 1%;"></div>
         </div>
         <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
             <h1>Son 5 Maç</h1>

@@ -312,10 +312,8 @@ p.no-data{
 #content #main #menu{
     margin-top: 3px;
     width: 98%;
-    margin-left: 1%;
-    height: 40px;
-    border-bottom: 1px solid #b8b8b8;
-    border-top: 1px solid #b8b8b8;
+    margin-left: 1.2%;
+    height: 42px;
     border-left: 1px solid #b8b8b8;
 }
 #navbar{
@@ -344,11 +342,13 @@ p.no-data{
     background-image: linear-gradient(to bottom, #f3f3f3 0%,  #ddddd7 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#ddddd7',GradientType=0 ); /* IE6-9 */
     border-right: 1px solid #b8b8b8;
+    border-bottom: 1px solid #b8b8b8;
+    border-top: 1px solid #b8b8b8;
 
     color: #000000;
     text-decoration: none;
 
-    width: 244px;
+    width: 243px;
     height: 40px;
     line-height: 40px;
 
@@ -387,7 +387,7 @@ p.no-data{
 #navbar #nav #active > button:hover,
 #navbar #nav #active > button:focus {
 
-    width: 244px;
+    width: 243px;
     height: 40px;
     line-height: 40px;
     float: left;
@@ -411,6 +411,8 @@ p.no-data{
     color: #ffffff;
 
     border-right: 1px solid #b8b8b8;
+    border-bottom: 1px solid #b8b8b8;
+    border-top: 1px solid #b8b8b8;
 
 
 }
@@ -797,13 +799,41 @@ p.no-data{
     font-size: 12px;
     cursor: default;
 }
-.event img{
+.event a{
     height: 24px;
     margin-top: 3px;
     display: block;
     float: right;
     margin-right: 2px;
     cursor: pointer;
+    width: 18px;
+}
+.sub-out{
+    background-image: url(../images/sub-out.png);
+}
+.sub-in{
+    background-image: url(../images/sub-in.png);
+}
+.goal{
+    background-image: url(../images/goal.png);
+}
+.own-goal{
+    background-image: url(../images/own-goal.png);
+}
+.penalty{
+    background-image: url(../images/penalty.png);
+}
+.missed-pen{
+    background-image: url(../images/missed-pen.png);
+}
+.yellow{
+    background-image: url(../images/yellow.png);
+}
+.second-yellow{
+    background-image: url(../images/second-yellow.png);
+}
+.red{
+    background-image: url(../images/red.png);
 }
 
 .history-area{
@@ -1470,21 +1500,21 @@ button.collapse:hover{
 .date{
     width: 231px;
     float: left;
-    height: 31px;
-    margin-left: 2%;
+    height: 32px;
+    margin-left: 2.5%;
     margin-bottom: 0px;
     margin-top: 3px;
-    border-bottom: 1px solid #b8b8b8;
     border-left: 1px solid #b8b8b8;
 }
 .date li{
     font-family: 'Helvetica Neue', Helvetica, sans-serif;
     list-style: none;
     height: 30px;
-    width: 76px;
+    width: 75px;
     float: left;
     border-right: 1px solid #b8b8b8;
     border-top: 1px solid #b8b8b8;
+    border-bottom: 1px solid #b8b8b8;
 }
 
 .date li a p{
@@ -1618,12 +1648,13 @@ button.collapse:hover{
 }
 
 .ui-tooltip, .arrow:after {
-    background: #2a2a28;
-    border: 2px solid #696969;
+    color: #000000;
+    background: #d0d0d0;
+    border: 2px solid #5c5c58;
 }
 .ui-tooltip {
     padding: 2px 5px;
-    color: white;
+    color: #000000;
     border-radius: 20px;
     font: 12px "Helvetica Neue", Sans-Serif;
     box-shadow: 0 0 7px black;

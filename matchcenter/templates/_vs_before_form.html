@@ -1,12 +1,12 @@
 {% for f in form%}
     {% if f.win == 1 %}
-        <a class="win" title="" id="{{ team }}{{ forloop.counter }}f"></a>
+        <a href="../../{{ f.matchId }}" class="win" title="" id="{{ team }}{{ forloop.counter }}f"></a>
     {% endif %}
     {% if f.win == 0 %}
-        <a class="draw" title="" id="{{ team }}{{ forloop.counter }}f"></a>
+        <a href="../../{{ f.matchId }}" class="draw" title="" id="{{ team }}{{ forloop.counter }}f"></a>
     {% endif %}
     {% if f.win == 2 %}
-        <a class="lose" title="" id="{{ team }}{{ forloop.counter }}f"></a>
+        <a href="../../{{ f.matchId }}" class="lose" title="" id="{{ team }}{{ forloop.counter }}f"></a>
     {% endif %}
     <script>
 
@@ -14,13 +14,10 @@
             var divname = "#" +"{{ team }}{{ forloop.counter }}" + "f";
             $( divname ).tooltip({
                 content: function(){
-                    var week = {{ currentWeek }};
-                    var counter = {{ forloop.counter }};
-                    var matchWeek = week - counter;
-                    return "<div><p style='text-align:center'>"+matchWeek+". Hafta</p><br><p>{{ f.homeTeam }} {{ f.homeScore }} - {{ f.awayScore }} {{ f.awayTeam }}</p></div>"
+                    return "<div style='color:black'><p style='text-align:center'>{{ f.weekId }}. Hafta</p><br><p>{{ f.homeTeam }} {{ f.homeScore }} - {{ f.awayScore }} {{ f.awayTeam }}</p></div>"
                 },
                 show: {
-                    effect: "clip",
+                    effect: "show",
                     delay: 50
                 },
                 hide: {
@@ -38,6 +35,9 @@
                                 .addClass( feedback.horizontal )
                                 .appendTo( this );
                     }
+                }
+                close: function (event, ui) {
+                    $('div.ui-effects-wrapper').remove();
                 }
             });
         });

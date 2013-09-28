@@ -147,7 +147,9 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
                           'playerId':int(event[3]),
                           'playerIdIn':event[4],
                           'jerseyNumber':event[5],
-                          'jerseyNumberIn':event[6]} for event in playerEvents]
+                          'jerseyNumberIn':event[6],
+                          'playerName':event[7],
+                          'playerNameIn':event[8]} for event in playerEvents]
         else:
             eventDict = []
 
@@ -235,6 +237,7 @@ def get_team_forms(homeTeamId, awayTeamId, currentWeek):
                          'awayTeamId':match[5],
                          'homeTeam':match[6],
                          'awayTeam':match[7],
+                         'weekId':match[8],
                          'win':getwin(match, team)} for match in x]
 
     return getlist(homelist, homeTeamId), getlist(awaylist, awayTeamId)

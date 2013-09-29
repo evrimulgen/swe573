@@ -1,19 +1,111 @@
-<div id="content" style="min-height: 600px">
+<div id="content">
     <div style="width: 100%;height: 35px">
-        <select id="teamsideselect" class="topmenuoption">
-            <option class="item" style="float: right" data-option="score"> Gol </option>
-            <option class="item" data-option="conceded"> Yenilen Gol </option>
-            <option class="item" data-option="average"> Averaj </option>
-            <option class="item" data-option="distance"> Koşu Mesafesi </option>
-            <option class="item" data-option="pass"> Pas </option>
-            <option class="item" data-option="shot"> Şut </option>
-            <option class="item" data-option="shoton"> İsabetli Şut </option>
-            <option class="item" data-option="foul"> Yapılan Faul </option>
-            <option class="item" data-option="yellow"> Sarı Kart </option>
-            <option class="item" data-option="red"> Kırmızı Kart </option>
-        </select>
+        <select id="teamsideselect" class="topmenuoption" data-bind="options: statsToShow, optionsText: 'text', optionsValue: 'id', value: selectedField"></select>
     </div>
+    <div class="teamcomparison" id="teamsidedata" data-bind="foreach: dataToShow().sort(function (l, r) { return l.width < r.width ? 1 : -1 })">
+        <div class="teamitem">
+            <img data-bind="attr:{src:'{{ STATIC_URL }}images/logo'+teamId+'.png'}">
+            <p data-bind="text: text, style: { width: width + '%'}"></p>
+        </div>
+    </div>
+    <script src="{{ STATIC_URL }}js/knockout-2.3.0.js"></script>
+    <script>
+        // fades in or fades out the element depending on the value of the logical comparison
+        ko.bindingHandlers.fadeVisible = {
+            init: function(element, valueAccessor) {
+                // Start visible/invisible according to initial value
+                var shouldDisplay = valueAccessor();
+                $(element).toggle(shouldDisplay);
+            },
+            update: function(element, valueAccessor) {
+                // On update, fade in/out
+                var shouldDisplay = valueAccessor();
+                shouldDisplay ? $(element).show() : $(element).hide();
+            }
+        };
+        function TeamDataObject(teamId,teamName,matches,scored,conceded,penaltyGoal,passTotal,passSuccess,shotTotal,shotSuccess,crossTotal,crossSuccess,yellow,red,foulCommitted,foulSuffered,totalDistance){
+            var self =this;
+            self.teamId = teamId;
+            self.teamName = teamName;
+            self.matches = parseInt(matches);
+            self.scored = parseInt(scored);
+            self.conceded = parseInt(conceded);
+            self.average = parseInt(scored-conceded);
+            self.penaltyGoal = parseInt(penaltyGoal);
+            self.passTotal = parseFloat(passTotal/matches).toFixed(0);
+            self.passSuccess = parseFloat(passSuccess/matches).toFixed(0);
+            self.passRatio = parseInt(passSuccess/passTotal*100);
+            self.shotTotal = parseFloat(shotTotal/matches).toFixed(0);
+            self.shotSuccess = parseFloat(shotSuccess/matches).toFixed(0);
+            self.shotRatio = parseInt(shotSuccess/shotTotal*100);
+            self.crossTotal = parseFloat(crossTotal/matches).toFixed(0);
+            self.crossSuccess = parseFloat(crossSuccess/matches).toFixed(0);
+            self.crossRatio = parseInt(crossSuccess/crossTotal*100);
+            self.yellow = parseInt(yellow);
+            self.red = parseInt(red);
+            self.foulCommitted = parseFloat(foulCommitted/matches).toFixed(0);
+            self.foulSuffered = parseFloat(foulSuffered/matches).toFixed(0);
+            self.totalDistance = parseInt(totalDistance/matches);
+            self.width = ko.observable(0);
+        }
+        var SideTeamStatsModel = function() {
+            var self = this;
+            self.statsToShow = ko.observableArray();
+            self.statsToShow.push({"text":"Atılan Gol","id":"scored"});
+            self.statsToShow.push({"text":"Yenilen Gol","id":"conceded"});
+            self.statsToShow.push({"text":"Averaj","id":"average"});
+            self.statsToShow.push({"text":"Penaltı Golleri","id":"penalty"});
+            self.statsToShow.push({"text":"Koşu Mesafesi (Ortalama)","id":"totalDistance"});
+            self.statsToShow.push({"text":"Pas Sayısı (Ortalama)","id":"passSuccess"});
+            self.statsToShow.push({"text":"Şut Sayısı (Ortalama)","id":"shotSuccess"});
+            self.statsToShow.push({"text":"Orta Sayısı (Ortalama)","id":"crossSuccess"});
+            self.statsToShow.push({"text":"Sarı Kart","id":"yellow"});
+            self.statsToShow.push({"text":"Kırmızı Kart","id":"red"});
+            self.statsToShow.push({"text":"Yapılan Faul","id":"foulCommitted"});
+            self.statsToShow.push({"text":"Alınan Faul","id":"foulSuffered"});
 
-    <div class="teamcomparison" id="teamsidedata">
-    </div>
+            self.selectedField = ko.observable("scored");
+
+            self.teams = ko.observableArray();
+            {% for team in team_data %}
+                self.teams.push(new TeamDataObject("{{team.teamId}}","{{team.teamName}}","{{team.matches}}","{{team.scored}}","{{team.conceded}}","{{team.penaltyGoal}}","{{team.passTotal}}","{{team.passSuccessful}}","{{team.shotTotal}}","{{team.shotSuccessful}}","{{team.crossTotal}}","{{team.crossSuccessful}}","{{team.yellow}}","{{team.red}}","{{team.foulCommitted}}","{{team.foulSuffered}}","{{team.totalDistance}}"));
+            {% endfor %}
+
+            self.bestTeamValue = function(id){
+                var bestValue = 0;
+                ko.utils.arrayForEach(self.teams(), function(team) {
+                    if(team[id] > bestValue){
+                        bestValue = team[id];
+                    }
+                });
+                return bestValue;
+            };
+
+            self.getValue = function(match,id){
+                if(id == "passSuccess"){
+                    return match.passSuccess + "/" + match.passTotal + " (%" + match.passRatio + ")";
+                }
+                else if(id == "shotSuccess"){
+                    return match.shotSuccess + "/" + match.shotTotal + " (%" + match.shotRatio + ")";
+                }
+                else if(id == "crossSuccess"){
+                    return match.crossSuccess + "/" + match.crossTotal + " (%" + match.crossRatio + ")";
+                }
+                else{
+                    return match[id];
+                }
+            };
+
+            self.dataToShow = ko.computed(function(){
+                var field = self.selectedField();
+                var bestValue = self.bestTeamValue(field);
+                return ko.utils.arrayMap(self.teams(), function(team) {
+                    var ratio = parseInt(team[field]/bestValue*80);
+                    return{"teamName":team.teamName,"teamId":team.teamId,"text":self.getValue(team,field),"width":ratio};
+                })
+            });
+
+        }
+        ko.applyBindings(new SideTeamStatsModel());
+    </script>
 </div>

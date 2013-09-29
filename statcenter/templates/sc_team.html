@@ -109,7 +109,7 @@
             <a href="../../player"><img src="{{ STATIC_URL }}images/players_disabled.png">Oyuncular</a>
         </li>
         <li>
-            <a href=""><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
+            <a href="../../compare"><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
         </li>
     </ul>
 
@@ -183,7 +183,7 @@
             </div>
             <div style="width:100%;height: 400px;overflow-y: scroll">
                 <div class="player" id="player" >
-                    {% for i in players %}
+                    {% for i in players|dictsortreversed:"match" %}
                         <a  href="../../player/{{ team_selected }}/{{ i.playerId }}">
                             <img src="{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
                             <p class="first">{{ i.jerseyNumber }} - {{ i.playerName }}</p>
@@ -202,17 +202,52 @@
         </div>
         <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
             <h1>Son 5 Maç</h1>
-            <div class="form">
-                <p class="win">G</p>
-                <p class="seperator">-</p>
-                <p class="draw">B</p>
-                <p class="seperator">-</p>
-                <p class="lose">M</p>
-                <p class="seperator">-</p>
-                <p class="win">G</p>
-                <p class="seperator">-</p>
-                <p class="win">G</p>
-            </div>
+            {% for f in form%}
+                {% if f.win == 1 %}
+                    <a href="../../{{ f.matchId }}" class="win" title="" id="{{ team }}{{ forloop.counter }}f"></a>
+                {% endif %}
+                {% if f.win == 0 %}
+                    <a href="../../{{ f.matchId }}" class="draw" title="" id="{{ team }}{{ forloop.counter }}f"></a>
+                {% endif %}
+                {% if f.win == 2 %}
+                    <a href="../../{{ f.matchId }}" class="lose" title="" id="{{ team }}{{ forloop.counter }}f"></a>
+                {% endif %}
+                <script>
+
+                    $(function() {
+                        var divname = "#" +"{{ team }}{{ forloop.counter }}" + "f";
+                        $( divname ).tooltip({
+                            content: function(){
+                                return "<div style='color:black'><p style='text-align:center'>{{ f.weekId }}. Hafta</p><br><p>{{ f.homeTeam }} {{ f.homeScore }} - {{ f.awayScore }} {{ f.awayTeam }}</p></div>"
+                            },
+                            show: {
+                                effect: "show",
+                                delay: 50
+                            },
+                            hide: {
+                                effect: "hide",
+                                delay: 100
+                            },
+                            position: {
+                                my: "center bottom-20",
+                                at: "center top",
+                                using: function( position, feedback ) {
+                                    $( this ).css( position );
+                                    $( "<div>" )
+                                            .addClass( "arrow" )
+                                            .addClass( feedback.vertical )
+                                            .addClass( feedback.horizontal )
+                                            .appendTo( this );
+                                }
+                            },
+                            close: function (event, ui) {
+                                $('div.ui-effects-wrapper').remove();
+                            }
+                        });
+                    });
+                </script>
+            {% endfor %}
+
         </div>
         <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
             <h1>Takım Karşılaştırması</h1>
@@ -225,8 +260,8 @@
                 {% for i in card %}
                     <tr>
                         <td>{{i.0}}</td>
-                        <td>{{i.2}}</td>
-                        <td>{{i.3}}</td>
+                        <td style="text-align: center">{{i.2}}</td>
+                        <td style="text-align: center">{{i.3}}</td>
                     </tr>
                 {% endfor %}
             </table>

@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^player/(\d*)/$', 'statcenter.views.playerselect'),
     url(r'^player/(?P<num>\d*)/(?P<player_id>\d*)/$', 'statcenter.views.player'),
     url(r'^compare/$', 'statcenter.views.compare'),
+    url(r'^compare/player/$', 'statcenter.views.compareplayer'),
     url(r'^player/$', 'statcenter.views.player_teamselect'),
     url(r'^partial_teamstats/$', 'statcenter.views.partial_teamsidestats')
 )

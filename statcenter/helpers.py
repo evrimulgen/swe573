@@ -40,6 +40,110 @@ def get_teams():
 
     return teamDict
 
+def get_all_team_data():
+    team_list = get_teams()
+    run_list = get_team_run()
+    goal_list = get_team_goal()
+    pass_list = get_team_pass()
+    shot_list = get_team_shot()
+    foul_list = get_team_foul()
+    team_data = []
+    for team in team_list:
+        tid = team["teamId"]
+        team_data.append({"teamId":tid,
+                          "teamName":team["teamName"],
+                          "matches":get_team_from_dict(run_list,tid)["matches"],
+                          "totalDistance":get_team_from_dict(run_list,tid)["totalDistance"],
+                          "averageSpeed":get_team_from_dict(run_list,tid)["averageSpeed"],
+                          "HIRDistance":get_team_from_dict(run_list,tid)["HIRDistance"],
+                          "sprintDistance":get_team_from_dict(run_list,tid)["sprintDistance"],
+                          "HIRNumber":get_team_from_dict(run_list,tid)["HIRNumber"],
+                          "sprintNumber":get_team_from_dict(run_list,tid)["sprintNumber"],
+                          "scored":get_team_from_dict(goal_list,tid)["scored"],
+                          "conceded":get_team_from_dict(goal_list,tid)["conceded"],
+                          "penaltyGoal":get_team_from_dict(goal_list,tid)["penaltyGoal"],
+                          "passTotal":get_team_from_dict(pass_list,tid)["passTotal"],
+                          "passSuccessful":get_team_from_dict(pass_list,tid)["passSuccessful"],
+                          "crossTotal":get_team_from_dict(pass_list,tid)["crossTotal"],
+                          "crossSuccessful":get_team_from_dict(pass_list,tid)["crossSuccessful"],
+                          "shotTotal":get_team_from_dict(shot_list,tid)["shotTotal"],
+                          "shotSuccessful":get_team_from_dict(shot_list,tid)["shotSuccessful"],
+                          "foulCommitted":get_team_from_dict(foul_list,tid)["foulCommitted"],
+                          "foulSuffered":get_team_from_dict(foul_list,tid)["foulSuffered"],
+                          "yellow":get_team_from_dict(foul_list,tid)["yellow"],
+                          "red":get_team_from_dict(foul_list,tid)["red"]
+                          })
+    return team_data
+
+def get_team_run():
+    runList = service_request("GetTeamRun", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID})
+    runDict = []
+    for run in runList:
+        runDict.append({run[0]:{"matches":run[1],"totalDistance":run[2],"averageSpeed":run[3],"HIRDistance":run[4],"sprintDistance":run[5],"HIRNumber":run[6],"sprintNumber":run[7]}})
+    return runDict
+
+def get_team_goal():
+    goalList = service_request("GetTeamGoal", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID})
+    goalDict = []
+    for goal in goalList:
+        goalDict.append({goal[0]:{"scored":goal[1],"conceded":goal[2],"penaltyGoal":goal[3]}})
+    return goalDict
+
+def get_team_pass():
+    passList = service_request("GetTeamPass", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID})
+    passDict = []
+    for pas in passList:
+        passDict.append({pas[0]:{"passTotal":pas[1],"passSuccessful":pas[2],"crossTotal":pas[3],"crossSuccessful":pas[3]}})
+    return passDict
+
+def get_team_shot():
+    shotList = service_request("GetTeamShot", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID})
+    shotDict = []
+    for shot in shotList:
+        shotDict.append({shot[0]:{"shotTotal":shot[1],"shotSuccessful":shot[2]}})
+    return shotDict
+
+def get_team_foul():
+    foulList = service_request("GetTeamFoul", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID})
+    foulDict = []
+    for foul in foulList:
+        foulDict.append({foul[0]:{"foulCommitted":foul[1],"foulSuffered":foul[2],"yellow":foul[3],"red":foul[4]}})
+    return foulDict
+
+def get_team_from_dict(diction,teamId):
+    for team in diction:
+        for id in team:
+            if id == teamId:
+                return team[id]
+
+def get_best_scorers(weekid,count):
+    week = 0
+    weeks = []
+    while week < weekid:
+        weeks.append(week)
+    bestList = service_request("GetBestScorers", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID,"weekList":weeks,"count":count})
+
+def get_team_form(teamId):
+    data = {"leagueId":LEAGUE_ID,"seasonId":SEASON_ID,"teamId":teamId,"type":0,"weekId":40}
+    teamlist = service_request("GetTeamForm", data)
+
+    getwin = lambda x, team: 1 if (int(x[2]) > int(x[3]) and int(x[4]) == team) or (int(x[2]) < int(x[3]) and int(x[5]) == team) \
+                        else (0 if int(x[2]) == int(x[3]) else 2)
+
+    # TODO: Verinin cogunu kullanmiyoruz neden template e pasliyoruz?
+    getlist = lambda x, team: [{'matchId':match[0],
+                         'matchName':match[1],
+                         'homeScore':match[2],
+                         'awayScore':match[3],
+                         'homeTeamId':match[4],
+                         'awayTeamId':match[5],
+                         'homeTeam':match[6],
+                         'awayTeam':match[7],
+                         'weekId':match[8],
+                         'win':getwin(match, team)} for match in x]
+
+    return getlist(teamlist, teamId)
+
 def get_fixture():
     weeklist = service_request("GetFixture", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID})
 

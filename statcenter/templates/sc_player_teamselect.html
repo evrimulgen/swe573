@@ -69,7 +69,7 @@
             <a class="active" href=""><img src="{{ STATIC_URL }}images/players.png">Oyuncular</a>
         </li>
         <li>
-            <a href=""><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
+            <a href="../compare"><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
         </li>
     </ul>
 
@@ -78,11 +78,6 @@
 {% block sidebar %}
     <div id="content">
         <div style="width: 100%;height: 35px">
-            <select class="topmenuoption">
-                {% for i in weeklist %}
-                    <option class="item"> <a>{{ i }}. Hafta</a> </option>
-                {% endfor %}
-            </select>
             <select class="topmenuoption">
                 <option class="item" style="float: right"> <a>Gol</a> </option>
                 <option class="item"> <a>Asist</a> </option>

@@ -1,0 +1,99 @@
+{% extends "sc_base.html" %}
+
+{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}
+
+{% block head-addition %}
+
+    <script src="{{ STATIC_URL }}js/jquery.jcarousel.min.js"></script>
+    <script src="{{ STATIC_URL }}js/underscore-min.js"></script>
+    <script src="{{ STATIC_URL }}js/deneme.js" type="text/javascript"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="{{ STATIC_URL }}js/simpled3.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}ie7/skin.css" />
+
+    <script>
+        var csrftoken = $.cookie('csrftoken');
+        $.ajaxSetup({
+            crossDomain: false,
+            beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        });
+    </script>
+
+
+{% endblock %}
+
+{% block menu-header %}
+
+    <ul id="nav">
+        <li>
+            <a href="../../"><img src="{{ STATIC_URL }}images/home_disabled.png">Ana Sayfa</a>
+        </li>
+        <li><a href="../../team"><img src="{{ STATIC_URL }}images/clubs_disabled.png">Takımlar</a>
+
+        </li>
+        <li>
+            <a href="../../player"><img src="{{ STATIC_URL }}images/players_disabled.png">Oyuncular</a>
+        </li>
+        <li>
+            <a class="active" href="../"><img src="{{ STATIC_URL }}images/compare.png">Karşılaştır!</a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block content %}
+    <div class="ui-widget ui-helper-clearfix float_left">
+        <div id="trash_left" class="ui-widget-content ui-state-default"></div>
+    </div>
+
+    <div class="ui-widget ui-helper-clearfix float_left">
+        <ul id="gallery" class="gallery ui-helper-reset ui-helper-clearfix">
+
+            <!-- here comes team logos from database. -->
+
+        </ul>
+    </div>
+
+    <div class="ui-widget ui-helper-clearfix float_right">
+        <div id="trash_right" class="ui-widget-content ui-state-default"></div>
+    </div>
+
+
+
+    <div id="wrap" class="float_left mycarousel-container">
+        <div id="mycarousel" class="jcarousel-skin-ie7">
+
+            <div id="LoadingImage" style="display: none">
+                <img src="{{ STATIC_URL }}ie7/loading.gif" style="margin-left:335px; margin-top:10px;"/>
+            </div>
+
+            <div id="SelectTeam" style="display: none">
+                <h1 style="margin-left: 320px; margin-bottom: 73px;">Select a team...</h1>
+            </div>
+
+
+            <ul id="player_img">
+
+                <!-- player images comes here. -->
+
+            </ul>
+
+        </div>
+    </div>
+
+
+    <div >
+        <div id="graphicsLeft" >
+            Football player details left:
+        </div>
+        <div id="graphicsRight" >
+            Football player details right:
+        </div >
+        <div id="data-area"></div>
+    </div>
+{% endblock %}

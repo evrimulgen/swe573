@@ -75,8 +75,15 @@ ko.bindingHandlers.fadeVisible = {
 service_request = function(request,jsData,returnValue){
     $.post("/api/"+request, JSON.stringify(jsData)).done(function(rawData){
         returnValue(rawData.data[0]);
-    });
+    })
 };
+
+match_info = function(match_id,returnValue){
+    $.post("/matchinfo/" + match_id).done(function(response){
+        console.log(response);
+        returnValue(response);
+    })
+}
 function MatchObject(weekId,weekStatus,matchId,matchStatus,homeTeam,homeTeamCond,homeTeamInt,awayTeam,awayTeamCond,awayTeamInt,homeTeamId,awayTeamId,homeScore,awayScore,date,time,liveTime,referee,stadium,matchClass){
     var self = this;
     self.weekId = weekId;
@@ -99,6 +106,7 @@ function MatchObject(weekId,weekStatus,matchId,matchStatus,homeTeam,homeTeamCond
         self.awayScore = ko.observable(awayScore);
     }
     else{
+        {{ calc }}
         self.liveTime = ko.observable(liveTime + "'");
         self.homeScore = ko.observable(homeScore);
         self.awayScore = ko.observable(awayScore);
@@ -255,10 +263,11 @@ var FixtureModel = function() {
         ko.utils.arrayForEach(self.matches(), function(match) {
             var currentMatch = self.selectedMatch();
             if(parseInt(match.weekStatus) == 0 || parseInt(match.matchId) == currentMatch){
-                service_request("GetMatchInfo",{"leagueId": {{ leagueId }}, "seasonId": {{seasonId}}, "matchId": match.matchId},function(info){
-                    match.homeScore(info[7] | 0);
-                    match.awayScore(info[8] | 0);
-                    match.matchStatus(info[2]);
+
+                match_info(match.matchId,function(response){
+                    match.homeScore(response["homescore"] | 0);
+                    match.awayScore(response["awayscore"] | 0);
+                    match.matchStatus(response["matchStatus"]);
                     if(match.matchStatus() == 6 || match.matchStatus() == 11 || match.matchStatus() == 13){
                         match.liveTime("MS");
                     }
@@ -269,10 +278,11 @@ var FixtureModel = function() {
                         match.liveTime("DA");
                     }
                     else{
-                        match.liveTime(info[11] + "'");
+                        match.liveTime(response["liveTime"]+"'");
                     }
                     console.log(match.homeTeam + " - " + match.awayTeam + " match updated with; matchStatus:" + match.matchStatus() + " homeScore:" + match.homeScore() + " awayScore:" + match.awayScore() + " liveTime:" + match.liveTime());
                 });
+
             }
             if(parseInt(match.matchId) == currentMatch && parseInt(match.matchStatus()) != (6|11|13|1)){
                 console.log("this match is live: " + match.homeTeam + " - " + match.awayTeam);

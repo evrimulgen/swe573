@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from random import randint
 from django.http import HttpRequest, HttpResponse
 import urllib2, urllib
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from dje.helpers import get_match_narration
 from .utils import service_request
 import django.utils.simplejson as json
@@ -1498,6 +1498,7 @@ def team2(request):
 def radar(request):
     return render_to_response('radar.html')
 
+@csrf_exempt
 def router(request, path):
     target_url = "http://sentios.cloudapp.net/api/"
     url = '%s%s' % (target_url, path)

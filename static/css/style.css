@@ -1655,7 +1655,7 @@ table.table-player-stats tr:nth-child(even) {
 
 .chart div{
     font: 10px sans-serif;
-    background-color: steelblue;
+    background-color: darkred;
     text-align: right;
     padding: 3px;
     margin: 1px;
@@ -1664,11 +1664,25 @@ table.table-player-stats tr:nth-child(even) {
 
 .chart rect {
     stroke: white;
-    fill: steelblue;
+    fill: darkred;
     stroke-width: 5px;
 }
 
-
+div .toolTip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: #ffb6c1;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+#player-chart-container svg {
+    background-color: white;
+}
 .ui-tooltip, .arrow:after {
     color: #000000;
     background: #d0d0d0;

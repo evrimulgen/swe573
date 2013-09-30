@@ -1,10 +1,3 @@
-//****** http://jqueryui.com/droppable/#photo-manager ESİNLENİLMİŞTİR *****
-//****** item ın draggable özelliginin duruma göre enable ya da disable olması
-//****** http://forum.jquery.com/topic/jquery-ui-how-do-i-re-enable-draggable
-//****** adresinden alınmıstır.
-
-
-
 
 $(function() {
 
@@ -49,7 +42,9 @@ $(function() {
     // database den data cekmek icin kullanıcam bu fonksiyonu.
     function serviceRequest(method, data, callback){
         $.post("/api/" + method, JSON.stringify(data)).done(function(data){
-            callback(JSON.parse(data).data);
+            //console.log(data);
+            //console.log(JSON.parse(data));
+            callback(data.data);
         });
     }
 
@@ -73,7 +68,7 @@ $(function() {
                 var xd = $("<li class=\"ui-widget-content ui-corner-tr\" id=\"" + teamData[i][0] + "\"><h5 class=\"ui-widget-header\">Logo</h5></li>").appendTo("#gallery");
 
 
-                $('<img src="/images/teams/' + teamData[i][0] + '.png" />').click(function(){ // takım logosuna tıklandı.
+                $('<img src="/static/images/logo' + teamData[i][0] + '.png" />').click(function(){ // takım logosuna tıklandı.
 
                     $(element_left).fadeTo(400, 1);
                     $(element_right).fadeTo(400, 1);
@@ -111,7 +106,7 @@ $(function() {
                             console.log("players data length : " + playersData.length);
                             _.each(playersData, function(val, i){
 
-                                carousel.add(i+1, $('<img src="/images/players/' + val[0] + '.jpg" style="width:55px; height:70px; margin-left:10px;" data-player_position=' + val[3] + ' data-player_id=' + val[0] + ' data-name=' + val[1] + ' /><h5 class=\"ui-widget-header\">' + val[1] + '</h5>'));
+                                carousel.add(i+1, $('<img src="/static/images/players/' + val[0] + '.jpg" style="width:55px; height:70px; margin-left:10px;" data-player_position=' + val[3] + ' data-player_id=' + val[0] + ' data-name=' + val[1] + ' /><h5 class=\"ui-widget-header\">' + val[1] + '</h5>'));
                             });
 
 

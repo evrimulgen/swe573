@@ -27,6 +27,8 @@ def home(request,weekId):
     top_passers = get_top5("pass", weeks[0][1])
     map(lambda x: x.append("%%%s"%int(float(x[4])*100/float(x[3]))), top_passers)
 
+    best_eleven = get_besteleven(weeks[0][1])
+
 
     return render_to_response('sc_home.html', {'fixture':get_fixture(),
                                                'weekList':weekDict,
@@ -36,7 +38,9 @@ def home(request,weekId):
                                                'best_eleven_list':None,
                                                'top_passers': top_passers,
                                                'top_scorers': get_top5("goal", weeks[0][1]),
-                                               'top_runners': get_top5("distance", weeks[0][1])})
+                                               'top_runners': get_top5("distance", weeks[0][1]),
+                                               'quad_ace': get_quadace(weeks[0][1]),
+                                               'best_eleven': best_eleven})
 @ensure_csrf_cookie
 def team(request, num):
     """

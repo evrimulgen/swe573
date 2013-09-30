@@ -132,30 +132,15 @@
 
         <div class="baraja-demo">
             <ul id="baraja-el" class="baraja-container">
-                <li value="20" onclick="handleSelect(this)">
-                    <img src="{{ STATIC_URL }}images/player20.png" alt="image1"/>
-                    <h3>10-Pablo Batalla</h3>
-                    <p> Orta Saha</p>
-                    <p> Bursaspor</p>
-                </li>
-                <li value="14" onclick="handleSelect(this)">
-                    <img src="{{ STATIC_URL }}images/player14.png" alt="image2"/>
-                    <h3>3 - Tomas Sivok</h3>
-                    <p> Defans</p>
-                    <p> Beşiktaş</p>
-                </li>
-                <li value="15" onclick="handleSelect(this)">
-                    <img src="{{ STATIC_URL }}images/player15.png" alt="image3"/>
-                    <h3>4 - Albert Riera</h3>
-                    <p> Orta Saha</p>
-                    <p> Galatasaray</p>
-                </li>
-                <li value="16" onclick="handleSelect(this)">
-                    <img src="{{ STATIC_URL }}images/player16.png" alt="image4"/>
-                    <h3>30 - Jerry Akaminko</h3>
-                    <p> Defans</p>
-                    <p> Eskişehirspor</p>
-                </li>
+                {% for p in quad_ace %}
+                    <li value="{{ p.0 }}" onclick="handleSelect(this)">
+                        <img src="{{ STATIC_URL }}images/players/{{ p.0 }}.jpg" alt="image1"/>
+                        <h3>{{ p.1 }}</h3>
+                        <p>{{ p.2 }}</p>
+                        <p>{{ p.3 }}</p>
+                    </li>
+                {% endfor %}
+
             </ul>
             <div id="info">
 

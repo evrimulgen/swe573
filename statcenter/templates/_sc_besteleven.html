@@ -31,15 +31,19 @@ window.onload = function() {
         this.play = play_;
         this.name = name_;
         this.number = number_;
-        this.id = id_;
+        this.playerid = id_;
         var selection = selected_;
         this.position = [];
 
-        if (play_ == 0) {
+        var mapDict = {"GK":0,"LB":1,"CBL":2,"CB":3,"CBR":3,"RB":4,"DML":7,"DMC":8,"DMR":9,"ML":5,"MCL":5,"MC":6,"MCR":7,"MR":8,"AML":16,"AMC":18,"AMR":20,"WL":10,"FL":22,"FC":11,"FR":24,"WR":8,"SSC":18};
+
+        var posPlay = parseInt(mapDict[play_]);
+        console.log(posPlay);
+        if (posPlay == 0) {
             this.position = [width / 7.5, midPoint[1]];
         }
         else {
-            this.position = [width / 4 * (Math.floor((play_ - 1) / 4) + 1) + width / 9.5, height / (19/4) * ((play_ - 1) % 4) + height / (6.4)]
+            this.position = [width / 4 * (Math.floor((posPlay - 1) / 4) + 1) + width / 9.5, height / (19/4) * ((posPlay - 1) % 4) + height / (6.4)]
         }
         var screenPos = this.position;
 
@@ -71,7 +75,7 @@ window.onload = function() {
         }
 
 
-        if (play_ == 0) {
+        if (posPlay == 0) {
             var jersey = new paper.Raster('{{ STATIC_URL }}images/jerseygk' + teamId_ + '.png');
         }
         else {
@@ -183,9 +187,10 @@ window.onload = function() {
     };
 
     var players = [];
-    {% for i in best_eleven_list %}
+    {% for i in best_eleven %}
 
-        var player = new Player({{ i.teamId }}, {{ i.playPosition }}, false, "{{ i.playerName }}", {{ i.jerseyNumber }}, {{ i.playerId }});
+        console.log("{{ i.teamId }}, {{ i.playPosition }}, false, {{ i.playerName }}, {{ i.jerseyNumber }}, {{ i.playerId }}");
+        var player = new Player({{ i.teamId }}, "{{ i.playPosition }}" , false, "{{ i.playerName }}", {{ i.jerseyNumber }}, {{ i.playerId }});
         players.push(player);
 
     {% endfor %}
@@ -197,7 +202,7 @@ window.onload = function() {
             if(event.point.getDistance(players[i].position)<35){
                 console.log(event.point.getDistance(players[i].position));
                 players[i].select();
-                setPlayer(players[i].id,players);
+                setPlayer(players[i].playerid,players);
             }
             else{
                 players[i].deselect();
@@ -212,39 +217,35 @@ function setPlayer(id_,players)
 {
     console.log(id_);
     for(var i=0; i<players.length; i++){
-        if(players[i].id == id_){
+        if(players[i].playerid == id_){
             console.log("noldu");
-            {% for i in best_eleven_list %}
-                if(id_ == {{ i.playerId }}){
-                    console.log("oldu");
-                    $("#playerName").text("{{ i.jerseyNumber }} - {{ i.playerName }}");
-                    $("#goalLeague").text("{{ i.goalLeague }}");
-                    $("#goalMatch").text("{{ i.goalMatch}}");
-                    $("#assistLeague").text("{{ i.assistLeague }}");
-                    $("#assistMatch").text("{{ i.assistMatch }}");
-                    $("#shotLeague").text("{{ i.shotSuccessfulLeague }}/{{ i.shotTotalLeague }}");
-                    $("#shotMatch").text("{{ i.shotSuccessfulMatch }}/{{ i.shotTotalMatch }}");
-                    $("#passLeague").text("{{ i.passSuccessfulLeague }}/{{ i.passTotalLeague }}");
-                    $("#passMatch").text("{{ i.passSuccessfulMatch }}/{{ i.passTotalMatch }}");
-                    $("#crossLeague").text("{{ i.crossSuccessfulLeague }}/{{ i.crossTotalLeague }}");
-                    $("#crossMatch").text("{{ i.crossSuccessfulMatch }}/{{ i.crossTotalMatch }}");
-                    $("#totalLeague").text("{{ i.distanceLeague }}");
-                    $("#totalMatch").text("{{ i.distanceMatch }}");
-                    $("#HIRLeague").text("{{ i.HIRLeague }}");
-                    $("#HIRMatch").text("{{ i.HIRMatch }}");
-                    $("#sprintLeague").text("{{ i.sprintLeague }}");
-                    $("#sprintMatch").text("{{ i.sprintMatch }}");
-                    $("#faulAgainstLeague").text("{{ i.faulAgainstLeague }}");
-                    $("#faulAgainstMatch").text("{{ i.faulAgainstMatch }}");
-                    $("#faulCommittedLeague").text("{{ i.faulCommittedLeague}}");
-                    $("#faulCommittedMatch").text("{{ i.faulCommittedMatch }}");
-                    $("#stealLeague").text("{{ i.stealLeague }}");
-                    $("#stealMatch").text("{{ i.stealMatch }}");
-                    $("#turnoverLeague").text("{{ i.turnoverLeague }}");
-                    $("#turnoverMatch").text("{{ i.turnoverMatch }}");
-                    $("#playerImage").attr("src","{{ STATIC_URL }}images/player{{ i.playerId }}.png");
-                }
-            {% endfor %}
+            var postData = {"leagueId":{{ leagueId }},"seasonId":{{ seasonId }},"weekId":{{ weekSelected }},"playerId":id_} ;
+            console.log(postData)
+            service_request("GetPlayerCard", postData , function(cardData){
+                console.log(cardData);
+                var stats = cardData.statistics;
+                var htmltoSet = "";
+                htmltoSet += "{%include '_sc_quad.html' %}";
+                $("#info").html(htmltoSet);
+                $("#playerName").text(cardData.playerName);
+                $("#goalLeague").text(stats.goals[1]);
+                $("#goalMatch").text(stats.goals[0]);
+                $("#assistLeague").text(stats.assists[1]);
+                $("#assistMatch").text(stats.assists[0]);
+                $("#shotLeague").text(parseFloat(stats.shotsOnTarget[1]).toFixed(1)+"/"+parseFloat(stats.shots[1]).toFixed(1));
+                $("#shotMatch").text(stats.shotsOnTarget[0]+"/"+stats.shots[0]);
+                $("#passLeague").text(parseFloat(stats.successfulPass[1]).toFixed(1)+"/"+parseFloat(stats.passes[1]).toFixed(1));
+                $("#passMatch").text(stats.successfulPass[0]+"/"+stats.passes[0]);
+                $("#crossLeague").text(parseFloat(stats.successfulCross[1]).toFixed(1)+"/"+parseFloat(stats.crosses[1]).toFixed(1));
+                $("#crossMatch").text(stats.successfulCross[0]+"/"+stats.crosses[0]);
+                $("#totalLeague").text(stats.totalDistance[1]);
+                $("#totalMatch").text(stats.totalDistance[0]);
+                $("#faulAgainstLeague").text(stats.foulsSuffered[1]);
+                $("#faulAgainstMatch").text(stats.foulsSuffered[0]);
+                $("#faulCommittedLeague").text(stats.foulsCommitted[1]);
+                $("#faulCommittedMatch").text(stats.foulsCommitted[0]);
+                $("#playerImage").attr("src","{{ STATIC_URL }}images/players/"+id_+".jpg");
+            });
         }
     }
 }
@@ -300,16 +301,6 @@ function setPlayer(id_,players)
                         <p class="first"> Mesafe(m)</p>
                     </li>
                     <li>
-                        <p id = "HIRLeague" class="else"> {{ HIRLeague }}</p>
-                        <p id = "HIRMatch" class="else"> {{ HIRMatch }}</p>
-                        <p class="first"> Şiddetli Koşu(m)</p>
-                    </li>
-                    <li>
-                        <p id = "sprintLeague" class="else"> {{ sprintLeague }}</p>
-                        <p id = "sprintMatch" class="else"> {{ sprintMatch }}</p>
-                        <p class="first"> Sprint(m)</p>
-                    </li>
-                    <li>
                         <p id = "faulAgainstLeague" class="else"> {{ faulAgainstLeague }}</p>
                         <p id = "faulAgainstMatch" class="else"> {{ faulAgainstMatch }}</p>
                         <p class="first"> Yapılan Faul</p>
@@ -318,16 +309,6 @@ function setPlayer(id_,players)
                         <p id = "faulCommittedLeague" class="else"> {{ faulCommittedLeague }}</p>
                         <p id = "faulCommittedMatch" class="else"> {{ faulCommittedMatch }}</p>
                         <p class="first"> Yaptığı Faul</p></li>
-                    <li>
-                        <p id = "stealLeague" class="else"> {{ stealLeague }}</p>
-                        <p id = "stealMatch" class="else"> {{ stealMatch }}</p>
-                        <p class="first"> Top Çalma</p>
-                    </li>
-                    <li>
-                        <p id = "turnoverLeague" class="else"> {{ turnoverLeague }}</p>
-                        <p id = "turnoverMatch" class="else"> {{ turnoverMatch }}</p>
-                        <p class="first">Top Kaybı</p>
-                    </li>
                 </ul>
             </div>
         </div>

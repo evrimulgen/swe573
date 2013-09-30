@@ -28,7 +28,7 @@ def home(request,weekId):
     map(lambda x: x.append("%%%s"%int(float(x[4])*100/float(x[3]))), top_passers)
 
     best_eleven = get_besteleven(weekId)
-
+    print best_eleven
 
     return render_to_response('sc_home.html', {'fixture':get_fixture(),
                                                'weekList':weekDict,

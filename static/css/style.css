@@ -1668,18 +1668,6 @@ table.table-player-stats tr:nth-child(even) {
     stroke-width: 5px;
 }
 
-div .toolTip {
-    position: absolute;
-    text-align: center;
-    width: 60px;
-    height: 28px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: lightsteelblue;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-}
 
 .ui-tooltip, .arrow:after {
     color: #000000;
@@ -1728,10 +1716,6 @@ div .toolTip {
     top: auto;
 }
 
-body {
-	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
-	font-size: 62.5%;
-}
 
 #gallery { float: left; width: 100%; min-height: 8em; margin-left: 8px;}
 .gallery.custom-state-active { background: #eee; }

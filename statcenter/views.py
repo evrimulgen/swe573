@@ -24,10 +24,10 @@ def home(request,weekId):
 
     weekDict = range(1, weekNumber+1)
 
-    top_passers = get_top5("pass", weeks[0][1])
+    top_passers = get_top5("pass", weekId)
     map(lambda x: x.append("%%%s"%int(float(x[4])*100/float(x[3]))), top_passers)
 
-    best_eleven = get_besteleven(weeks[0][1])
+    best_eleven = get_besteleven(weekId)
 
 
     return render_to_response('sc_home.html', {'fixture':get_fixture(),
@@ -37,10 +37,11 @@ def home(request,weekId):
                                                'standing_list':get_standings_by_week(int(weekId)),
                                                'best_eleven_list':None,
                                                'top_passers': top_passers,
-                                               'top_scorers': get_top5("goal", weeks[0][1]),
-                                               'top_runners': get_top5("distance", weeks[0][1]),
-                                               'quad_ace': get_quadace(weeks[0][1]),
+                                               'top_scorers': get_top5("goal", weekId),
+                                               'top_runners': get_top5("distance", weekId),
+                                               'quad_ace': get_quadace(weekId),
                                                'best_eleven': best_eleven})
+
 @ensure_csrf_cookie
 def team(request, num):
     """

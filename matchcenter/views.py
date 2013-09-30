@@ -207,6 +207,10 @@ def partial_sidestats(request, match_id):
 
     return render_to_response('_vs_sidestats.html', context)
 
+def matchinfo(request,reqid):
+    homeTeamId, awayTeamId, infoDict = get_match_info(reqid)
+    return HttpResponse(json.dumps(infoDict))
+
 @ensure_csrf_cookie
 def d3_try(request):
     return render_to_response('_card_trial.html')

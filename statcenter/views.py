@@ -48,13 +48,17 @@ def team(request, num):
                                                  'players':get_team_players(num),
                                                  'standing_list':get_standings(),
                                                  's_list': slist,
+                                                 'team_data':get_all_team_data(),
+                                                 'form':get_team_form(num),
                                                  'team_selected': int(num)})
 
 @ensure_csrf_cookie
 def teamselect(request):
+
     return render_to_response('sc_teamselect.html',{'standing_list':get_standings(),
                                                     'weeklist':weekList,
-                                                    'try_list':get_teams()} )
+                                                    'try_list':get_teams(),
+                                                    'team_data':get_all_team_data()} )
 @ensure_csrf_cookie
 def playerselect(request, num):
     """
@@ -94,6 +98,11 @@ def player(request, num, player_id):
 @ensure_csrf_cookie
 def compare(request):
     return render_to_response('sc_compare.html')
+
+@csrf_exempt
+def compareplayer(request):
+    return render_to_response('sc_player_compare.html')
+
 
 @csrf_exempt
 def partial_teamsidestats(request):

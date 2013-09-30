@@ -41,7 +41,7 @@ urlpatterns = patterns('',
         url(r'^compare/$', 'dje.views.compare'),
         url(r'^summary/$', 'dje.views.summary'),
         url(r'^player/$', 'dje.views.player'),
-
+        url(r'^matchinfo/(\d*)/$', 'matchcenter.views.matchinfo'),
         # new stats center
         url(r'^ns/', include('statcenter.urls')),
 )

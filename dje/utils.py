@@ -20,7 +20,7 @@ def service_request(id, data):
             return empty
 
 def tryService():
-    print service_request("GetMatchVideos", { "matchId": 11868997})
+    print service_request("GetBestScorers", {"league_id": 1, "season_id": 9064, "count": 3})
 
 
 tryService()

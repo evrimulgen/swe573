@@ -475,35 +475,17 @@ $(function() {
 
         rightPlayerIsPrinted =true;
 
-        console.log(playerIdForDetails);
         serviceRequest("GetPlayerDetails", {"leagueId": 1, "seasonId": 9064, "playerId": playerIdForDetails}, function(playerDetails) {
-            $('#graphicsRight > div').remove();
             if(!playerDetails){
                 $('#chartRight > div').remove();
-                $("#graphicsRight").append("<div >Oyuncuyla ilgili data mevcut değil.</div>");
+                $("#graphicsRight").append("<div >Oyuncuyla ilgili veri mevcut değil.</div>");
                 return;
             }
-            $('#message-right').remove();
-            $("#graphicsRight > p ").remove();
             var player = new PlayerInfo(playerDetails);
-            $("#graphicsRight").append("<p>" + player.name+ "</p>");
-            $("#graphicsRight").append("<p>" + player.height+ "</p>");
-            $("#graphicsRight").append("<p>" + player.birthdate+ "</p>");
-            $("#graphicsRight").append("<p>" + player.team+ "</p>");
-
-            //var data =[playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]]
-            //$("#graphicsLeft").append("<p>passes and average passes: " + playerCardDetails.statistics.passes+ "</p>");
-            //$("#graphicsLeft").append("<p>shots and on target shots:" + playerCardDetails.statistics.shotsOnTarget+ "</p>");
-            //loadPlayerStats(data,position);
-            /*
-             console.log("player id: " + playerCardDetails.playerId );
-             console.log("player playerName: " + playerCardDetails.playerName);
-             console.log("player teamId: " + playerCardDetails.teamId);
-             console.log("player passes and average pass: " + playerCardDetails.statistics.passes);
-             console.log("player shots on target: " + playerCardDetails.statistics.shotsOnTarget);
-             */
-
-
+            $("#rightPlayerCard .card-header .playerInfo .playerName").text(player.name);
+            $("#rightPlayerCard > .card-data tr:nth-child(1) > td").text(player.height);
+            $("#rightPlayerCard > .card-data tr:nth-child(2) > td").text(player.birthdate);
+            $("#rightPlayerCard > .card-data tr:nth-child(3) > td").text(player.team);
         });
     }
 
@@ -512,33 +494,18 @@ $(function() {
 
         leftPlayerIsPrinted =true;
 
-        console.log(playerIdForDetails);
         serviceRequest("GetPlayerDetails", {"leagueId": 1, "seasonId": 9064, "playerId": playerIdForDetails}, function(playerDetails) {
-            $('#graphicsLeft > div').remove();
             if(!playerDetails){
                 $('#chartLeft > div').remove();
-                $("#graphicsLeft").append("<div >Oyuncuyla ilgili data mevcut değil.</div>");
+                $("#graphicsLeft").append("<div >Oyuncuyla ilgili veri mevcut değil.</div>");
                 return;
             }
-            $('#message-left').remove();
-            $("#graphicsLeft > p ").remove();
             var player = new PlayerInfo(playerDetails);
-            $("#graphicsLeft").append("<p>" + player.name+ "</p>");
-            $("#graphicsLeft").append("<p>" + player.height+ "</p>");
-            $("#graphicsLeft").append("<p>" + player.birthdate+ "</p>");
-            $("#graphicsLeft").append("<p>" + player.team+ "</p>");
+            $("#leftPlayerCard .card-header .playerInfo .playerName").text(player.name);
+            $("#leftPlayerCard > .card-data tr:nth-child(1) > td").text(player.height);
+            $("#leftPlayerCard > .card-data tr:nth-child(2) > td").text(player.birthdate);
+            $("#leftPlayerCard > .card-data tr:nth-child(3) > td").text(player.team);
 
-            //var data =[playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]]
-            //$("#graphicsLeft").append("<p>passes and average passes: " + playerCardDetails.statistics.passes+ "</p>");
-            //$("#graphicsLeft").append("<p>shots and on target shots:" + playerCardDetails.statistics.shotsOnTarget+ "</p>");
-            // loadPlayerStats(data,position);
-            /*
-             console.log("player id: " + playerCardDetails.playerId );
-             console.log("player playerName: " + playerCardDetails.playerName);
-             console.log("player teamId: " + playerCardDetails.teamId);
-             console.log("player passes and average pass: " + playerCardDetails.statistics.passes);
-             console.log("player shots on target: " + playerCardDetails.statistics.shotsOnTarget);
-             */
         });
 
 

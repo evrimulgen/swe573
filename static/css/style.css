@@ -1680,7 +1680,6 @@ div .toolTip {
     border-radius: 8px;
     pointer-events: none;
 }
-
 #player-chart-container svg {
     background-color: white;
 }
@@ -1731,10 +1730,6 @@ div .toolTip {
     top: auto;
 }
 
-body {
-	font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
-	font-size: 62.5%;
-}
 
 #gallery { float: left; width: 100%; min-height: 8em; margin-left: 8px;}
 .gallery.custom-state-active { background: #eee; }

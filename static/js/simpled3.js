@@ -177,11 +177,11 @@ function d3BarChart(){
     var chartHeight = 200;
     var chartWidth = 500;
     var tooltip;
-    var fontFamily = "calibri";
-    var chartTextSize = 15;
+    var fontFamily = "Verdana";
+    var chartTextSize = 10;
     var dataset = [45, 48, 42, 36, 35, 31, 38, 39, 12,100,36,42];
     var textSizeCoefficient = 1.3;
-    var hoverColor = "#83C0E6";
+    var hoverColor = "red";
 
     this.drawChart =  function (elementID,width, height, data)
     {
@@ -215,10 +215,10 @@ function d3BarChart(){
         chartWidth = chartWidth -chartTextSize;
 
         chartXCoefficient = chartWidth / 15;
-        chartYCoefficient = chartHeight / d3.max(dataset);
+        chartYCoefficient = chartHeight / (d3.max(dataset)*1.3);
 
         var chartXCoefficient2  = d3.scale.linear()
-            .domain([0, d3.max(dataset)])
+            .domain([0, d3.max(dataset)*1.3])
             .range([0, chartHeight- chartTextSize]);
 
         var chartYCoefficient2  = d3.scale.ordinal()
@@ -290,7 +290,7 @@ function d3BarChart(){
 
             })
             .on("mouseout", function(){
-                d3.select(this).style("fill","steelblue")
+                d3.select(this).style("fill","darkred")
                 return tooltip.style("visibility", "hidden");});
 
         chart.selectAll("text")
@@ -306,6 +306,15 @@ function d3BarChart(){
             .attr("text-anchor", "end") // text-align: right
             .text(function(d,i) {return i + 1});
 
+        chart.selectAll("text")
+            .data(dataset)
+            .enter().append("text")
+            .style("font-family", fontFamily)
+            .attr("font-size", chartTextSize)
+            .attr("x", function(d,i) {return (i+0.5)*chartXCoefficient;})
+            .attr("text-anchor", "middle")
+            //.attr("y", )
+
     }
 
 
@@ -318,7 +327,7 @@ function d3BarChart(){
         }
 
         chartXCoefficient = chartWidth / datasetNew.length;
-        chartYCoefficient = chartHeight / d3.max(datasetNew);
+        chartYCoefficient = chartHeight / (d3.max(datasetNew)*1.3);
 
         var chart = d3.select(elementToDraw).selectAll("rect").data(datasetNew);
 
@@ -418,13 +427,6 @@ function drawLineChart(elementID, dataArray, options)
         dataArray = [5,6,3,8,6,9,10,5,7,3,2,1,10,3];
         console.log("Data Array was selected as default data array..");
     }
-
-//    $.extend(options,
-//        {
-//            width: 400,
-//            height: 300
-//        }
-//    );
 
     var m = [5, 10, 20, 10]; // margins
     var w = options.width - m[1] - m[3]; // width

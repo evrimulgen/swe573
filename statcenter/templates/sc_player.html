@@ -38,20 +38,38 @@
             objectChart.drawChart('player-chart-container',500,200,null);
 
             var refreshChart = function(attr){
+                var data = {
+                    "leagueId": 1,
+                    "seasonId": 9064,
+                    "attributeId": attr,
+                    "playerId": "{{ p_id }}"
+                };
+
+                console.log(JSON.stringify(data));
+
                 $.ajax({
                     url: "/api/GetPlayerLastNValue",
                     type: "POST",
                     dataType: "json",
-                    data: {
-                        "leagueId": 1,
-                        "seasonId": 9064,
-                        "playerId": attr
-                    },
+                    data: JSON.stringify(data),
+                    processData: false,
                     success: function(d){
-                        // TODO: Handle Data Here
+                        var a = [];
+                        //console.log(d);
+
+                        $.each(d.data, function(ix, val){
+                            a.push(val[4]);
+                            //console.log(val);
+                        });
+                        //console.log(a);
+                        objectChart.updateChart(a);
                     }
                 })
             }
+
+            $("#player-chart-attr-select").change(function(){
+               refreshChart($(this).val());
+            });
 
 
         });
@@ -208,7 +226,14 @@
         </div>
 
         <div id="player-chart-container" class="box-container" style="width: 96%;">
-
+            <select name="player-chart-option" id="player-chart-attr-select">
+                <option value="25"> Toplam Mesafe (m) </option>
+                <option value="25"> Sprint Mesafesi (m) </option>
+                <option value="25"> İsabetli Pas </option>
+                <option value="25"> Pas </option>
+                <option value="25"> İsabetli Şut </option>
+                <option value="25"> Şut </option>
+            </select>
         </div>
 
     </div>

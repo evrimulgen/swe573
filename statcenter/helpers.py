@@ -391,3 +391,34 @@ def get_top5(item, week):
 
     return prune_lists_nosort(method[1], service_request(method[0], data))
 
+def get_quadace(week):
+    """
+    Get QuadAce of a given week
+
+    :type week: int
+    """
+
+    posn_lookup = lambda x: {
+        1: "Kaleci",
+        2: "Defans",
+        3: "Orta Saha",
+        4: "Forvet"
+    }.get(x)
+
+    res = service_request("GetQuadAcePreset", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID, "week": week})
+
+    for i in res:
+        i[2] = posn_lookup(i[2])
+
+    return res
+
+def get_besteleven(week):
+    """
+    Get Best Eleven of a given week
+
+    :type week: int
+    """
+
+    return service_request("GetBestElevenPreset", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID, "week": week})
+
+

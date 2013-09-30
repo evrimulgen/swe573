@@ -252,7 +252,6 @@ body{
 }
 #container #content #footer{
     margin-top: 4px;
-    min-height: 200px;
     background : none;
     float: left;
     width: 100%;
@@ -1180,7 +1179,7 @@ ul.baraja-container li {
     padding: 2%;
     background-color: #dadada;
     -webkit-border-radius: 3px 3px 3px 3px;
-    -moz-border-radius: 30px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
     border-radius: 3px 3px 3px 3px;
 }
 .teamitem{
@@ -1731,29 +1730,66 @@ div .toolTip {
 }
 
 
-#gallery { float: left; width: 100%; min-height: 8em; margin-left: 8px;}
+#gallery {
+    float: left;
+    width: 100%;
+    margin-left: 8px;
+    margin-bottom: 10px;
+}
+
 .gallery.custom-state-active { background: #eee; }
-.gallery li { float: left; width: 33px; padding: 0.4em; margin: 2px; text-align: center; background-color: #66CD00; }
+
+.gallery li{
+    float: left;
+    text-decoration: none;
+    width:5%;
+    margin-top: 1px;
+    height:48px;;
+
+    background-image: -moz-linear-gradient(top, #cb2224 0%, #c51015 50%, #b90f13 50%, #ae0e13 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cb2224), color-stop(50%,#c51015), color-stop(50%,#b90f13), color-stop(100%,#ae0e13)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top,  #cb2224 0%, #c51015 50%, #b90f13 50%, #ae0e13 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, #cb2224 0%, #c51015 50%, #b90f13 50%, #ae0e13 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top,  #cb2224 0%, #c51015 50%, #b90f13 50%, #ae0e13 100%); /* IE10+ */
+    background-image: linear-gradient(to bottom,  #cb2224 0%, #c51015 50%, #b90f13 50%, #ae0e13 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cb2224', endColorstr='#ae0e13',GradientType=0 ); /* IE6-9 */
+
+    -webkit-border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 3px 3px;
+
+    cursor: pointer;
+    Margin-left:2px;
+    Margin-right:2px;
+    border: none;
+    text-align: center;
+}
+.gallery li:hover, .gallery li.active{
+    background-image: -moz-linear-gradient(top, #168b21 0%, #13791d 50%, #116d1a 50%, #0e5b16 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#168b21), color-stop(50%,#13791d), color-stop(50%, #116d1a), color-stop(100%,#0e5b16)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top,  #168b21 0%, #13791d 50%, #116d1a 50%, #0e5b16 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, #168b21 0%, #13791d 50%, #116d1a 50%, #0e5b16 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top,  #168b21 0%, #13791d 50%, #116d1a 50%, #0e5b16 100%); /* IE10+ */
+    background-image: linear-gradient(to bottom,  #168b21 0%, #13791d 50%, #116d1a 50%, #0e5b16 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#168b21', endColorstr='#0e5b16',GradientType=0 ); /* IE6-9 */
+}
+
 .gallery li h5 { margin: 0 0 0.4em; cursor: move; }
 .gallery li a { float: right; }
 .gallery li a.ui-icon-zoomin { float: left; }
-.gallery li img { width: 100%; height: 40px; cursor: move; }
+.gallery li img { width: 90%; height: 40px; cursor: pointer; margin-top: 4px; margin-left: 5%}
 
-#trash_right { 
-    float: right; 
-    width: 100px; 
-    height: 180px; 
-    padding: 3px; 
-    margin-top: 10px;
-
+#trash_right {
+    float: left;
+    width: 100%;
+    height: 190px;
 }
 
-#trash_left { 
-    float: left; 
-    width: 100px; 
-    height: 180px; 
-    padding: 3px; 
-    margin-top: 10px;
+#trash_left {
+    float: left;
+    width: 100%;
+    height: 190px;
+
 }
 
 
@@ -1771,39 +1807,39 @@ div .toolTip {
 
 #wrap {
     margin-left: 5px;
-    width: 80%;
+    width: 60%;
 }
 
-.goalkeeper li { 
+.goalkeeper li {
     margin-top: 2px;
-    height: 170px; 
-    padding: 0.4em; 
-    text-align: center; 
-    background-color: #ffdc00; 
+    height: 170px;
+    padding: 0.4em;
+    text-align: center;
+    background-color: #ffdc00;
 }
 
-.defense li { 
+.defense li {
     margin-top: 2px;
-    height: 170px; 
-    padding: 0.4em; 
-    text-align: center; 
-    background-color: #5d77eb; 
+    height: 180px;
+    padding: 0.4em;
+    text-align: center;
+    background-color: #5d77eb;
 }
 
-.midfield li { 
+.midfield li {
     margin-top: 2px;
-    height: 170px; 
-    padding: 0.4em; 
-    text-align: center; 
-    background-color: #53b25c; 
+    height: 180px;
+    padding: 0.4em;
+    text-align: center;
+    background-color: #53b25c;
 }
 
-.forward li { 
+.forward li {
     margin-top: 2px;
-    height: 170px; 
-    padding: 0.4em; 
-    text-align: center; 
-    background-color: #eb493a; 
+    height: 180px;
+    padding: 0.4em;
+    text-align: center;
+    background-color: #eb493a;
 }
 
 .jcarousel-skin-ie7 .jcarousel-clip-horizontal {
@@ -1813,22 +1849,38 @@ div .toolTip {
 
 
 .chart div {
-   font: 10px sans-serif;
-   background-color: steelblue;
-   text-align: right;
-   padding: 3px;
-   margin: 1px;
-   color: white;
+    font: 10px sans-serif;
+    background-color: steelblue;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
 
 }
 
 #graphicsLeft{
-    width: 50%;
+    margin-top: 2px;
+    width: 49%;
     float:left;
+    background-color: #dadada;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
 }
 #graphicsRight{
-    width: 50%;
+    margin-top: 2px;
+    margin-left: 1%;
+    width: 49%;
     float:right;
+    background-color: #dadada;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+#graphicsLeft p, #graphicsRight p{
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
 }
 
 #graphics{
@@ -1839,12 +1891,40 @@ div .toolTip {
 }
 
 #chartLeft{
-   width: 50%;
-   float:left;
+    width: 50%;
+    float:left;
 }
 
 #chartRight{
-     width: 50%;
+    width: 50%;
     float:right;
 }
+
+.compare-holder{
+    width: 99%;
+    padding: 0.5%;
+    background-color: #dadada;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+.compare-left-holder{
+    width: 10%;
+    float: left;
+}
+.compare-mid-holder{
+    width: 79.5%;
+    float: left;
+}
+.compare-right-holder{
+    width: 10%;
+    float: left;
+}
+#message-left, #message-right{
+    margin-top: 5px;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}
+
 

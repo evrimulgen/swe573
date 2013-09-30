@@ -46,54 +46,61 @@
 
 {% endblock %}
 
-{% block content %}
-    <div class="ui-widget ui-helper-clearfix float_left">
-        <div id="trash_left" class="ui-widget-content ui-state-default"></div>
-    </div>
+{% block allcontent %}
+    <div class="compare-holder">
 
-    <div class="ui-widget ui-helper-clearfix float_left">
-        <ul id="gallery" class="gallery ui-helper-reset ui-helper-clearfix">
+        <div class="compare-left-holder">
+            <div id="trash_left" class="ui-widget-content ui-state-default"></div>
+            <br style="clear:both">
+        </div>
 
-            <!-- here comes team logos from database. -->
+        <div class="compare-mid-holder">
 
-        </ul>
-    </div>
+            <div class="ui-widget ui-helper-clearfix float_left" style="width:99.5%">
+                <ul id="gallery" class="gallery ui-helper-reset ui-helper-clearfix">
 
-    <div class="ui-widget ui-helper-clearfix float_right">
-        <div id="trash_right" class="ui-widget-content ui-state-default"></div>
-    </div>
+                    <!-- here comes team logos from database. -->
 
-
-
-    <div id="wrap" class="float_left mycarousel-container">
-        <div id="mycarousel" class="jcarousel-skin-ie7">
-
-            <div id="LoadingImage" style="display: none">
-                <img src="{{ STATIC_URL }}ie7/loading.gif" style="margin-left:335px; margin-top:10px;"/>
+                </ul>
             </div>
 
-            <div id="SelectTeam" style="display: none">
-                <h1 style="margin-left: 320px; margin-bottom: 73px;">Select a team...</h1>
+            <div id="wrap" class="float_left mycarousel-container">
+                <div id="mycarousel" class="jcarousel-skin-ie7">
+
+                    <div id="LoadingImage" style="display: none">
+                        <img src="{{ STATIC_URL }}ie7/loading.gif" style="margin-left:335px; margin-top:10px;"/>
+                    </div>
+
+                    <div id="SelectTeam" style="display: none">
+                        <h1 style="margin-left: auto; margin-right: auto;width: 100%;color: #ffffff;text-align: center;font-size: 24px; line-height:80px">Takım Seçiniz</h1>
+                    </div>
+
+
+                    <ul id="player_img">
+
+                        <!-- player images comes here. -->
+
+                    </ul>
+
+                </div>
             </div>
-
-
-            <ul id="player_img">
-
-                <!-- player images comes here. -->
-
-            </ul>
-
+            <br style="clear:both">
         </div>
-    </div>
 
-
-    <div >
-        <div id="graphicsLeft" >
-            Football player details left:
+        <div class="compare-right-holder">
+            <div id="trash_right" class="ui-widget-content ui-state-default"></div>
+            <br style="clear:both">
         </div>
-        <div id="graphicsRight" >
-            Football player details right:
-        </div >
-        <div id="data-area"></div>
+
+        <div >
+            <div id="graphicsLeft" >
+                <p id="message-left"> Oyuncu Seçiniz</p>
+            </div>
+            <div id="graphicsRight" >
+                <p id="message-right"> Oyuncu Seçiniz</p>
+            </div >
+            <div id="data-area"></div>
+        </div>
+        <br style="clear:both">
     </div>
 {% endblock %}

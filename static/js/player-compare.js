@@ -65,7 +65,7 @@ $(function() {
         serviceRequest("GetTeams", {"leagueId": 1, "seasonId": 9064}, function(teamData){
             _.each(teamData, function(value, i){
 
-                var xd = $("<li class=\"ui-widget-content ui-corner-tr\" id=\"" + teamData[i][0] + "\"><h5 class=\"ui-widget-header\">Logo</h5></li>").appendTo("#gallery");
+                var xd = $("<li class=\"ui-widget-content ui-corner-tr\" id=\"" + teamData[i][0] + "\"></li>").appendTo("#gallery");
 
 
                 $('<img src="/static/images/logo' + teamData[i][0] + '.png" />').click(function(){ // takım logosuna tıklandı.
@@ -78,15 +78,15 @@ $(function() {
                     $("#mycarousel .jcarousel-clip").hide();
                     $("#LoadingImage").show();
 
-                    $(".faded").fadeTo(400, 1);// her image canlı gözüksün diye.
-                    $(".faded").removeClass("faded");
-
-
-                    $(this).addClass("faded");
-                    $(this).fadeTo(400, 0.3);// tikladigim takım logosunu soldurdum.
-
                     teamId = teamData[i][0];
                     console.log(teamId + " is selected.");
+
+
+                    $(".active").removeClass("active");
+
+                    $("li#"+teamId).addClass("active");
+
+
 
                     loadNew = true;
 
@@ -106,7 +106,7 @@ $(function() {
                             console.log("players data length : " + playersData.length);
                             _.each(playersData, function(val, i){
 
-                                carousel.add(i+1, $('<img src="/static/images/players/' + val[0] + '.jpg" style="width:55px; height:70px; margin-left:10px;" data-player_position=' + val[3] + ' data-player_id=' + val[0] + ' data-name=' + val[1] + ' /><h5 class=\"ui-widget-header\">' + val[1] + '</h5>'));
+                                carousel.add(i+1, $('<img src="/static/images/players/' + val[0] + '.jpg" onerror="this.src=\'/static/images/players/default.png\'" style="width:55px; height:70px; margin-left:17px; margin-top:4px;margin-bottom:4px" data-player_position=' + val[3] + ' data-player_id=' + val[0] + ' data-name=' + val[1] + ' /><h5 class=\"ui-widget-header\">' + val[1] + '</h5>'));
                             });
 
 
@@ -133,6 +133,8 @@ $(function() {
                                 }
                             });//playerın position ına göre background-color ayarlıyorum.
 
+
+
                             $("#LoadingImage").hide();
                             $("#mycarousel .jcarousel-clip").show();
 
@@ -147,7 +149,7 @@ $(function() {
                                 cancel: "a.ui-icon",
                                 revert: "invalid",
                                 helper: "clone",
-                                cursor: "move",
+                                cursor: "move"
                             });
 
                         });
@@ -173,6 +175,11 @@ $(function() {
                             $(element_left).fadeTo(400, 0.3);
                             $(element_left).draggable("disable");
                         }
+                        else{
+                            element_left = trash_left_array[trash_left_array.length -1];
+                            $(element_left).fadeTo(400, 1);
+                            $(element_left).draggable("enable");
+                        }
                     }
 
 
@@ -186,6 +193,11 @@ $(function() {
                             element_right = trash_right_array[trash_right_array.length -1];
                             $(element_right).fadeTo(400, 0.3);
                             $(element_right).draggable("disable");
+                        }
+                        else{
+                            element_right = trash_right_array[trash_right_array.length -1];
+                            $(element_right).fadeTo(400, 1);
+                            $(element_right).draggable("enable");
                         }
                     }
 
@@ -222,10 +234,10 @@ $(function() {
             processPlayerImage( ui.draggable , $trash_right, 4);
             showDetailsOfPlayersRight();
             rightPlayerIsPrinted = true;
-            getGraphicsSimple3d(leftPlayerIsPrinted,rightPlayerIsPrinted);
             if(leftPlayerIsPrinted && rightPlayerIsPrinted){
                 bothPlayerIsPrintedRight =true;
             }
+            getGraphicsSimple3d(leftPlayerIsPrinted,rightPlayerIsPrinted);
         }
     });
 
@@ -314,7 +326,7 @@ $(function() {
 
         newItem.fadeTo(400, 1, function(){//trashın icindeki bu clone un  boyutunu büyütüyorum.
             newItem.appendTo( $list ).fadeIn(function() {
-                newItem.animate({ width: "92px", margin: 0 }).find( "img" ).animate({ height: "130px",  width: "90px", margin:"0px"});
+                newItem.animate({  margin: 0 }).find( "img" ).animate({ height: "130px",  width: "90px", margin:"0px"});
             });
 
             newItem.click(function(){//bu trashtakine tıklarlarsa, geri gidicek.
@@ -367,10 +379,10 @@ $(function() {
     var dataRight;
 
     function getGraphicsSimple3d(leftGraphicsPrinted, rightGraphicsPrinted){
-        console.log(playerIdForDetails);
+
         serviceRequest("GetPlayerCard", {"leagueId": 1, "seasonId": 9064,"weekId": 1, "playerId": playerIdForDetails}, function(playerCardDetails) {
 
-
+            console.log(playerCardDetails);
             var pref = {
                 "homefill": "c60000",
                 "awayfill": "000000",
@@ -386,7 +398,7 @@ $(function() {
                     {"name": "Toplam Pas", "awayValue": 0, "homeValue": dataLeft[0], "homePercent": 100, "addition": "", "awayPercent": 0},
                     {"name": "Ortalama Pas", "awayValue": 0, "homeValue": dataLeft[1], "homePercent": 100, "addition": "", "awayPercent": 0},
                     {"name": "\u015eut", "awayValue": 0, "homeValue": dataLeft[2], "homePercent": 100, "addition": "", "awayPercent": 0},
-                    {"name": "\u0130sabetli \u015eut", "awayValue": 0, "homeValue": dataLeft[3], "homePercent": 100, "addition": "", "awayPercent": 0},
+                    {"name": "\u0130sabetli \u015eut", "awayValue": 0, "homeValue": dataLeft[3], "homePercent": 100, "addition": "", "awayPercent": 0}
                 ];
             }
             else if(leftGraphicsPrinted === false && rightGraphicsPrinted === true){
@@ -395,7 +407,7 @@ $(function() {
                     {"name": "Toplam Pas", "homeValue": 0, "awayValue": data[0], "homePercent": 0, "addition": "", "awayPercent": 100},
                     {"name": "Ortalama Pas", "homeValue": 0, "awayValue": data[1], "homePercent": 0, "addition": "", "awayPercent": 100},
                     {"name": "\u015eut", "homeValue": 0, "awayValue": data[2], "homePercent": 0, "addition": "", "awayPercent": 100},
-                    {"name": "\u0130sabetli \u015eut", "homeValue": 0, "awayValue": data[3], "homePercent": 0, "addition": "", "awayPercent": 100},
+                    {"name": "\u0130sabetli \u015eut", "homeValue": 0, "awayValue": data[3], "homePercent": 0, "addition": "", "awayPercent": 100}
                 ];
             }
             else if(leftGraphicsPrinted === true && rightGraphicsPrinted === true){
@@ -430,7 +442,7 @@ $(function() {
                     {"name": "Toplam Pas", "awayValue": dataRight[0], "homeValue": dataLeft[0], "homePercent": percentArray[0], "addition": "", "awayPercent": 100-percentArray[0]},
                     {"name": "Ortalama Pas", "awayValue": dataRight[1], "homeValue": dataLeft[1], "homePercent": percentArray[1], "addition": "", "awayPercent": 100-percentArray[1]},
                     {"name": "\u015eut", "awayValue": dataRight[2], "homeValue": dataLeft[2], "homePercent": percentArray[2], "addition": "", "awayPercent": 100-percentArray[2]},
-                    {"name": "\u0130sabetli \u015eut", "awayValue": dataRight[3], "homeValue": dataLeft[3], "homePercent": percentArray[3], "addition": "", "awayPercent": 100-percentArray[3]},
+                    {"name": "\u0130sabetli \u015eut", "awayValue": dataRight[3], "homeValue": dataLeft[3], "homePercent": percentArray[3], "addition": "", "awayPercent": 100-percentArray[3]}
                 ];
 
             }
@@ -444,6 +456,18 @@ $(function() {
 
 
 
+    }
+    function PlayerInfo(info){
+        var self = this;
+        self.name = info[0][0];
+        var date = info[0][1] ? info[0][1] : "1985-1-1";
+        console.log(date);
+        var split = date.split("-");
+        var months = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"]
+        self.birthdate = split[2]+" "+months[parseInt(split[1])-1]+ " " + split[0];
+
+        self.height = info[0][2] | 0;
+        self.team = info[0][7];
     }
 
     function showDetailsOfPlayersRight(){
@@ -459,10 +483,13 @@ $(function() {
                 $("#graphicsRight").append("<div >Oyuncuyla ilgili data mevcut değil.</div>");
                 return;
             }
-            console.log(playerDetails);
-            $("#graphicsRight").append("<div >name: " + playerDetails[0][0]+ "</div>");
-            $("#graphicsRight").append("<div>birthday: " + playerDetails[0][1]+ "</div>");
-            $("#graphicsRight").append("<div>height: " + playerDetails[0][2]+ "</div>");
+            $('#message-right').remove();
+            $("#graphicsRight > p ").remove();
+            var player = new PlayerInfo(playerDetails);
+            $("#graphicsRight").append("<p>" + player.name+ "</p>");
+            $("#graphicsRight").append("<p>" + player.height+ "</p>");
+            $("#graphicsRight").append("<p>" + player.birthdate+ "</p>");
+            $("#graphicsRight").append("<p>" + player.team+ "</p>");
 
             //var data =[playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]]
             //$("#graphicsLeft").append("<p>passes and average passes: " + playerCardDetails.statistics.passes+ "</p>");
@@ -493,10 +520,13 @@ $(function() {
                 $("#graphicsLeft").append("<div >Oyuncuyla ilgili data mevcut değil.</div>");
                 return;
             }
-            console.log(playerDetails);
-            $("#graphicsLeft").append("<div >name: " + playerDetails[0][0]+ "</div>");
-            $("#graphicsLeft").append("<div>birthday: " + playerDetails[0][1]+ "</div>");
-            $("#graphicsLeft").append("<div>height: " + playerDetails[0][2]+ "</div>");
+            $('#message-left').remove();
+            $("#graphicsLeft > p ").remove();
+            var player = new PlayerInfo(playerDetails);
+            $("#graphicsLeft").append("<p>" + player.name+ "</p>");
+            $("#graphicsLeft").append("<p>" + player.height+ "</p>");
+            $("#graphicsLeft").append("<p>" + player.birthdate+ "</p>");
+            $("#graphicsLeft").append("<p>" + player.team+ "</p>");
 
             //var data =[playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]]
             //$("#graphicsLeft").append("<p>passes and average passes: " + playerCardDetails.statistics.passes+ "</p>");

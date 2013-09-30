@@ -798,15 +798,22 @@ body .ui-tooltip {
 	font-size: 1em;
 }
 .ui-widget-content {
-	border: 3px solid;
+	border: 2px solid;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 	color: #222222;
 }
 .ui-widget-content a {
 	color: #222222;
 }
 .ui-widget-header {
-	border: 3px solid;
-	color: #222222;
+    margin-left: 3px;
+    margin-right: 3px;
+    font-size: 12px;
+    margin-top: 0px;
+	color: #2a2a28;
+    text-align: center;
 	font-weight: bold;
 }
 .ui-widget-header a {
@@ -818,7 +825,6 @@ body .ui-tooltip {
 .ui-state-default,
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
-	border: 3px solid;
 	font-weight: normal;
 	color: #555555;
 }

@@ -1,0 +1,25 @@
+<div style="width: 100%;height: 35px">
+    <select class="topmenuoption">
+        <option class="item" data-option="score"> <a>Gol</a> </option>
+        <option class="item" data-option="assist"> <a>Asist</a> </option>
+        <option class="item" data-option="distance"> <a>Koşu Mesafesi</a> </option>
+        <option class="item" data-option="passes"> <a>Pas</a> </option>
+        <option class="item" data-option="shoton"> <a>İsabetli Şut</a> </option>
+        <option class="item" data-option="shot"> <a>Şut</a> </option>
+        <option class="item" data-option="cross"> <a>Orta</a> </option>
+        <option class="item" data-option="foulsuffered"> <a>Faul</a> </option>
+        <option class="item" data-option="foulcommitted"> <a>Yapılan Faul</a> </option>
+        <option class="item" data-option="yellow"> <a>Sarı Kart</a> </option>
+        <option class="item" data-option="red"> <a>Kırmızı Kart</a> </option>
+    </select>
+</div>
+
+<div class="teamcomparison">
+    {% for i in best_eleven_list|dictsortreversed:"goalLeague" %}
+        <div class="teamitem">
+            <img alt="{{ i.playerName }}" title="{{ i.playerName }}" src="{{ STATIC_URL }}images/player{{ i.playerId }}.png">
+            <div style="float: left;margin-left: 2px;line-height: 26px">{{ i.goalLeague }}</div>
+            <div class="placeholder"></div>
+        </div>
+    {% endfor %}
+</div>

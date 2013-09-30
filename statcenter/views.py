@@ -99,10 +99,9 @@ def player(request, num, player_id):
 def compare(request):
     return render_to_response('sc_compare.html')
 
-@csrf_exempt
+@ensure_csrf_cookie
 def compareplayer(request):
     return render_to_response('sc_player_compare.html')
-
 
 @csrf_exempt
 def partial_teamsidestats(request):

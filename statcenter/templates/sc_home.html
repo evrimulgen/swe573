@@ -170,70 +170,20 @@
             <p>Haftanın Golcüleri</p>
         </div>
         <div style="width: 100%;height: 325px; overflow-y: scroll">
-            <a class="content" href="../../player/2/137">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">1 - Didier Drogba</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player23.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Gol</p><p class="last">:2</p></li>
-                    <li><p class="first">Toplam Şut</p><p class="last">:4</p></li>
-                    <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:3</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/10/1318">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">2 - Kalu Uche</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player22.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Gol</p><p class="last">:1</p></li>
-                    <li><p class="first">Toplam Şut</p><p class="last">:7</p></li>
-                    <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:4</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/3/22830">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">3 - Filip Holosko</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player21.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Gol</p><p class="last">:1</p></li>
-                    <li><p class="first">Toplam Şut</p><p class="last">:5</p></li>
-                    <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:1</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/3/22830">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">4 - Filip Holosko</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player21.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Gol</p><p class="last">:1</p></li>
-                    <li><p class="first">Toplam Şut</p><p class="last">:5</p></li>
-                    <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:1</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/3/22830">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">5 - Filip Holosko</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player21.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Gol</p><p class="last">:1</p></li>
-                    <li><p class="first">Toplam Şut</p><p class="last">:5</p></li>
-                    <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:1</p></li>
-                </ul>
-            </a>
+            {% for p in top_scorers %}
+                <a class="content" href="../../player/{{ p.0 }}/{{ p.2 }}">
+                    <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">{{ forloop.counter }} - {{ p.1 }}</p>
+                    <div class="image" style="width: 18%;margin-top: -2px">
+                        <img src="{{ STATIC_URL }}images/players/{{p.2}}.jpg">
+                    </div>
+                    <ul style="width: 70%; margin-top: -2px">
+                        <li><p class="first">Gol</p><p class="last">:{{ p.3|floatformat }}</p></li>
+                        <li><p class="first">Toplam Şut</p><p class="last">:{{ p.4|floatformat }}</p></li>
+                        <li><p class="first">Kaleyi Bulan Şut</p><p class="last">:{{ p.5|floatformat }}</p></li>
+                    </ul>
+                </a>
+            {% endfor %}
         </div>
-
-        <!--<div class="footer">
-            <p>Hafta Detayı</p>
-            <p>Sezon Detayı</p>
-            <p style="font-size: 0px">.</p>
-            <a href="#"><img src="{{ STATIC_URL }}images/weekdetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/weekdetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/weekdetailcomp.png'"></a>
-            <a href="#"><img src="{{ STATIC_URL }}images/leaguedetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/leaguedetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/leaguedetailcomp.png'"></a>
-        </div>-->
     </div>
 
     <div class="box-container" style="width:100%">
@@ -242,70 +192,20 @@
             <p>Haftanın Pasörleri</p>
         </div>
         <div style="width: 100%;height: 325px; overflow-y: scroll">
-            <a class="content" href="../../player/2/15913">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">1 - Emre Belözoğlu</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player19.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Pas</p><p class="last">:42</p></li>
-                    <li><p class="first">Başarılı Pas</p><p class="last">:48</p></li>
-                    <li><p class="first">Pas Yüzdes</p><p class="last">:%87</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/42/17490">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">2 - Pablo Batalla</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player20.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Pas</p><p class="last">:44</p></li>
-                    <li><p class="first">Başarılı Pas</p><p class="last">:55</p></li>
-                    <li><p class="first">Pas Yüzdes</p><p class="last">:%80</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/139/23140">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">3 - Olcan Adın</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player18.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Pas</p><p class="last">:38</p></li>
-                    <li><p class="first">Başarılı Pas</p><p class="last">:48</p></li>
-                    <li><p class="first">Pas Yüzdes</p><p class="last">:%79</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/139/23140">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">4 - Olcan Adın</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player18.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Pas</p><p class="last">:38</p></li>
-                    <li><p class="first">Başarılı Pas</p><p class="last">:48</p></li>
-                    <li><p class="first">Pas Yüzdes</p><p class="last">:%79</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/139/23140">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">5 - Olcan Adın</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player18.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Pas</p><p class="last">:38</p></li>
-                    <li><p class="first">Başarılı Pas</p><p class="last">:48</p></li>
-                    <li><p class="first">Pas Yüzdes</p><p class="last">:%79</p></li>
-                </ul>
-            </a>
+            {% for p in top_passers %}
+                <a class="content" href="../../player/{{ p.0 }}/{{ p.2 }}">
+                    <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">{{ forloop.counter }} - {{ p.1 }}</p>
+                    <div class="image" style="width: 18%;margin-top: -2px">
+                        <img src="{{ STATIC_URL }}images/players/{{p.2}}.jpg">
+                    </div>
+                    <ul style="width: 70%; margin-top: -2px">
+                        <li><p class="first">Toplam Pas</p><p class="last">:{{ p.3|floatformat }}</p></li>
+                        <li><p class="first">İsabetli Pas</p><p class="last">:{{ p.4|floatformat }}</p></li>
+                        <li><p class="first">Pas İsabet Oranı</p><p class="last">:{{ p.5 }}</p></li>
+                    </ul>
+                </a>
+            {% endfor %}
         </div>
-
-        <!--<div class="footer">
-            <p>Hafta Detayı</p>
-            <p>Sezon Detayı</p>
-            <p style="font-size: 0px">.</p>
-            <a href="#"><img src="{{ STATIC_URL }}images/weekdetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/weekdetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/weekdetailcomp.png'"></a>
-            <a href="#"><img src="{{ STATIC_URL }}images/leaguedetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/leaguedetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/leaguedetailcomp.png'"></a>
-        </div>-->
     </div>
     <div class="box-container" style="width:100%">
 
@@ -314,71 +214,22 @@
             <p>Haftanın En Çok Koşanları</p>
         </div>
         <div style="width: 100%;height: 325px; overflow-y: scroll">
-            <a class="content" href="../../player/1/85">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">1 - Albert Riera</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player15.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Koşu</p><p class="last">:12487</p></li>
-                    <li><p class="first">Şiddetli Koşu</p><p class="last">:245</p></li>
-                    <li><p class="first">Sprint</p><p class="last">:90</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/2/22930">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">2 - Gökhan Gönül</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player17.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Koşu</p><p class="last">:12055</p></li>
-                    <li><p class="first">Şiddetli Koşu</p><p class="last">:260</p></li>
-                    <li><p class="first">Sprint</p><p class="last">:77</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/3/22830">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">3 - Filip Holosko</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player21.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Koşu</p><p class="last">:11847</p></li>
-                    <li><p class="first">Şiddetli Koşu</p><p class="last">:180</p></li>
-                    <li><p class="first">Sprint</p><p class="last">:67</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/3/22830">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">4 - Filip Holosko</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player21.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Koşu</p><p class="last">:11847</p></li>
-                    <li><p class="first">Şiddetli Koşu</p><p class="last">:180</p></li>
-                    <li><p class="first">Sprint</p><p class="last">:67</p></li>
-                </ul>
-            </a>
-            <a class="content" href="../../player/3/22830">
-                <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">5 - Filip Holosko</p>
-                <div id="image" style="width: 18%;margin-top: -2px">
-                    <img src="{{ STATIC_URL }}images/player21.png">
-                </div>
-                <ul style="width: 70%; margin-top: -2px">
-                    <li><p class="first">Toplam Koşu</p><p class="last">:11847</p></li>
-                    <li><p class="first">Şiddetli Koşu</p><p class="last">:180</p></li>
-                    <li><p class="first">Sprint</p><p class="last">:67</p></li>
-                </ul>
-            </a>
+            {% for p in top_runners %}
+                <a class="content" href="../../player/{{ p.0 }}/{{ p.2 }}">
+                    <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">{{ forloop.counter }} - {{ p.1 }}</p>
+                    <div class="image" style="width: 18%;margin-top: -2px">
+                        <img src="{{ STATIC_URL }}images/players/{{p.2}}.jpg">
+                    </div>
+                    <ul style="width: 70%; margin-top: -2px">
+                        <li><p class="first">Toplam Mesafe</p><p class="last">:{{ p.3|floatformat }} m</p></li>
+                        <li><p class="first">Y. Şiddetli Koşu</p><p class="last">:{{ p.4|floatformat }} m</p></li>
+                        <li><p class="first">Sprint</p><p class="last">:{{ p.5|floatformat }} m</p></li>
+                    </ul>
+                </a>
+            {% endfor %}
         </div>
-
-        <!--<div class="footer">
-            <p>Hafta Detayı</p>
-            <p>Sezon Detayı</p>
-            <p style="font-size: 0px">.</p>
-            <a href="#"><img src="{{ STATIC_URL }}images/weekdetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/weekdetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/weekdetailcomp.png'"></a>
-            <a href="#"><img src="{{ STATIC_URL }}images/leaguedetailcomp.png"  onmouseover="this.src='{{ STATIC_URL }}images/leaguedetail.png'" onmouseout="this.src='{{ STATIC_URL }}images/leaguedetailcomp.png'"></a>
-        </div>-->
     </div>
+
 
 {% endblock %}
 

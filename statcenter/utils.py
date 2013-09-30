@@ -47,3 +47,17 @@ def prune_lists(ices, ilist):
 
     res = sorted(res, key=lambda x: x[1], reverse=True)
     return res
+
+def prune_lists_nosort(ices, ilist):
+    """
+    Method for choosing only certain indices from a list of lists, without sorting
+
+    :param ices: a list of integers, corresponding to indices
+    :param ilist: a list of lists, to be pruned
+    """
+    res = []
+    for i in ilist:
+        if i[0] != 0:
+            res.append([i[x] for x in ices])
+
+    return res

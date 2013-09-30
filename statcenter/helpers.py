@@ -2,7 +2,7 @@
 """
 Helper functions for frequently used Stats Center code
 """
-from statcenter.utils import service_request
+from statcenter.utils import service_request, prune_lists, prune_lists_nosort
 from dje2.settings import LEAGUE_ID, SEASON_ID
 
 def get_standings():
@@ -364,3 +364,30 @@ def get_team_card(tid):
     res = sorted(res, key=lambda x: x[1])
 
     return res
+
+def get_top5(item, week):
+    """
+    Get Top 5 players in a given item, wrapper function for GetBestX type functions
+
+    :param item: the item, one of "pass", "distance", "goal"
+    :type item: str
+    """
+
+    method = {
+        "pass": ("GetBestPassers", [0,1,2,5,6]),
+        "goal": ("GetBestScorers", [0,1,2,5,6,7]),
+        "distance": ("GetBestRunners", [0,1,2,5,11,12])
+    }.get(item)
+
+    data = {
+        "league_id": LEAGUE_ID,
+        "season_id": SEASON_ID,
+        "count": 5,
+        "weekList": [str(week)]
+    }
+
+    if not method:
+        raise AttributeError("You must provide one of 'pass', 'distance' or 'goal' as argument")
+
+    return prune_lists_nosort(method[1], service_request(method[0], data))
+

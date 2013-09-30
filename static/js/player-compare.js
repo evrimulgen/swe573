@@ -222,7 +222,8 @@ $(function() {
             if(leftPlayerIsPrinted && rightPlayerIsPrinted){
                 bothPlayerIsPrintedLeft =true;
             }
-            getGraphicsSimple3d(leftPlayerIsPrinted,rightPlayerIsPrinted);
+            //getGraphicsSimple3d(leftPlayerIsPrinted,rightPlayerIsPrinted);
+            updateChart(playerIdForDetails, 0);
         }
     });
 
@@ -237,7 +238,8 @@ $(function() {
             if(leftPlayerIsPrinted && rightPlayerIsPrinted){
                 bothPlayerIsPrintedRight =true;
             }
-            getGraphicsSimple3d(leftPlayerIsPrinted,rightPlayerIsPrinted);
+            //getGraphicsSimple3d(leftPlayerIsPrinted,rightPlayerIsPrinted);
+            updateChart(playerIdForDetails, 1);
         }
     });
 
@@ -375,88 +377,7 @@ $(function() {
             });
 
     }
-    var dataLeft;
-    var dataRight;
 
-    function getGraphicsSimple3d(leftGraphicsPrinted, rightGraphicsPrinted){
-
-        serviceRequest("GetPlayerCard", {"leagueId": 1, "seasonId": 9064,"weekId": 1, "playerId": playerIdForDetails}, function(playerCardDetails) {
-
-            console.log(playerCardDetails);
-            var pref = {
-                "homefill": "c60000",
-                "awayfill": "000000",
-                "homestroke": "ffffff",
-                "awaystroke": "0000cd",
-                "width": 800
-            };
-            var teamStats ;
-
-            if(leftGraphicsPrinted === true && rightGraphicsPrinted === false){
-                dataLeft  = [playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]];
-                teamStats = [
-                    {"name": "Toplam Pas", "awayValue": 0, "homeValue": dataLeft[0], "homePercent": 100, "addition": "", "awayPercent": 0},
-                    {"name": "Ortalama Pas", "awayValue": 0, "homeValue": dataLeft[1], "homePercent": 100, "addition": "", "awayPercent": 0},
-                    {"name": "\u015eut", "awayValue": 0, "homeValue": dataLeft[2], "homePercent": 100, "addition": "", "awayPercent": 0},
-                    {"name": "\u0130sabetli \u015eut", "awayValue": 0, "homeValue": dataLeft[3], "homePercent": 100, "addition": "", "awayPercent": 0}
-                ];
-            }
-            else if(leftGraphicsPrinted === false && rightGraphicsPrinted === true){
-                dataRight  = [playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]];
-                teamStats = [
-                    {"name": "Toplam Pas", "homeValue": 0, "awayValue": data[0], "homePercent": 0, "addition": "", "awayPercent": 100},
-                    {"name": "Ortalama Pas", "homeValue": 0, "awayValue": data[1], "homePercent": 0, "addition": "", "awayPercent": 100},
-                    {"name": "\u015eut", "homeValue": 0, "awayValue": data[2], "homePercent": 0, "addition": "", "awayPercent": 100},
-                    {"name": "\u0130sabetli \u015eut", "homeValue": 0, "awayValue": data[3], "homePercent": 0, "addition": "", "awayPercent": 100}
-                ];
-            }
-            else if(leftGraphicsPrinted === true && rightGraphicsPrinted === true){
-                console.log("inside the both true part");
-                /*****************data arraylarinden hangisi boşsa onu doldur***************/
-                if(!dataLeft){
-                    dataLeft  = [playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]];
-                }
-                if(!dataRight){
-                    dataRight  = [playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]];
-                }
-                /*****************data arraylarinden hangisi boşsa onu doldur***************/
-
-                /*****************data arraylarinden hangisi güncellenecekse onu güncelle***************/
-                if(bothPlayerIsPrintedLeft){
-                    dataLeft  = [playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]];
-                    bothPlayerIsPrintedLeft =false;
-                }
-                if(bothPlayerIsPrintedRight){
-                    dataRight  = [playerCardDetails.statistics.passes[0],playerCardDetails.statistics.passes[1],playerCardDetails.statistics.shotsOnTarget[0],playerCardDetails.statistics.shotsOnTarget[1]];
-                    bothPlayerIsPrintedRight =false;
-                }
-                /*****************data arraylarinden hangisi güncellenecekse onu güncelle***************/
-
-                var percentArray = new Array();
-                for(var i=0; i<4 ;i++){
-                    var percent = parseInt([dataLeft[i]/(dataRight[i]+dataLeft[i])]*100);
-                    percentArray.push(percent);
-                }
-
-                teamStats = [
-                    {"name": "Toplam Pas", "awayValue": dataRight[0], "homeValue": dataLeft[0], "homePercent": percentArray[0], "addition": "", "awayPercent": 100-percentArray[0]},
-                    {"name": "Ortalama Pas", "awayValue": dataRight[1], "homeValue": dataLeft[1], "homePercent": percentArray[1], "addition": "", "awayPercent": 100-percentArray[1]},
-                    {"name": "\u015eut", "awayValue": dataRight[2], "homeValue": dataLeft[2], "homePercent": percentArray[2], "addition": "", "awayPercent": 100-percentArray[2]},
-                    {"name": "\u0130sabetli \u015eut", "awayValue": dataRight[3], "homeValue": dataLeft[3], "homePercent": percentArray[3], "addition": "", "awayPercent": 100-percentArray[3]}
-                ];
-
-            }
-
-
-            $("#data-area").empty();
-            simpleBar("#data-area", teamStats, pref);
-
-        });
-
-
-
-
-    }
     function PlayerInfo(info){
         var self = this;
         self.name = info[0][0];
@@ -512,7 +433,80 @@ $(function() {
     }
 
 
+    /* Player Compare D3 invocation */
 
+    var statsList = {"matchesPlayed": "Maç Sayısı",
+        "goals": "Gol",
+        "assists": "Asist",
+        "passes": "Pas",
+        "crosses": "Orta",
+        "shots": "Şut",
+        "shotsOnTarget": "İsabetli Şut",
+        "totalDistance": "Toplam Mesafe",
+        "yellowCard": "Sarı Kart",
+        "redCard": "Kırmızı Kart",
+        "foulsCommitted": "Yapılan Faul"};
+
+    var chartData = [];
+
+    var chartPref = {
+        "homefill": "c60000",
+        "awayfill": "c60000",
+        "homestroke": "ffffff",
+        "awaystroke": "ffffff",
+        "width": 800
+    };
+
+    function prepChart(){
+
+
+        chartData = _.map(statsList, function(v,k){
+            return {
+                "name": v,
+                "homeValue": 0,
+                "awayValue": 0,
+                "key": k
+            }
+        });
+
+        //$("#data-area").empty();
+        simpleBar("#data-area", chartData, chartPref);
+    }
+
+
+    function updateChart(pid, side){
+        /**
+         * @param pid: player id
+         * @param side: side of the chart dropped, either 0 for left, 1 for right
+         */
+        var rqData = {
+            "leagueId": 1,
+            "seasonId": 9064,
+            "weekId": 1,
+            "playerId": pid
+        };
+
+        serviceRequest("GetPlayerCard", rqData , function(card) {
+            var data = []
+            console.log(chartData)
+            _.each(statsList, function(v,k){
+               data.push(card.statistics[k][0]);
+            });
+
+            _.each(chartData, function(val, i){
+                var field = side == 0 ? "homeValue" : "awayValue";
+                chartData[i][field] = data[i];
+            });
+
+            console.log(chartData);
+            $("#data-area").empty();
+
+            simpleBar("#data-area", chartData, chartPref);
+        });
+
+    }
+
+    prepChart();
 
 
 

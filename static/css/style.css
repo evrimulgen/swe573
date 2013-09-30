@@ -1934,7 +1934,8 @@ div .toolTip {
     background-color:#fff;
     width: 300px;
     padding: 10px;
-    margin-top: 8px;
+    margin: 8px auto;
+    float: none;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -2003,4 +2004,9 @@ div .toolTip {
     height: 20px;
     margin-left: 5px;
     margin-right: 10px;
+}
+
+.compare-card-container {
+    margin: 0 auto;
+    float: none;
 }

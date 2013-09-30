@@ -32,6 +32,8 @@ def home(request,weekId):
 
     return render_to_response('sc_home.html', {'fixture':get_fixture(),
                                                'weekList':weekDict,
+                                               'leagueId':LEAGUE_ID,
+                                               'seasonId':SEASON_ID,
                                                'weekSelected': int(weekId),
                                                'lastPlayedWeek':int(lastPlayed),
                                                'standing_list':get_standings_by_week(int(weekId)),

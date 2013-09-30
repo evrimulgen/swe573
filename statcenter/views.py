@@ -24,7 +24,7 @@ def home(request,weekId):
 
     weekDict = range(1, weekNumber+1)
 
-    top_passers = get_top5("pass", weeks[0][1])
+    top_passers = get_top5("pass", weekId)
     map(lambda x: x.append("%%%s"%int(float(x[4])*100/float(x[3]))), top_passers)
 
 
@@ -35,8 +35,8 @@ def home(request,weekId):
                                                'standing_list':get_standings_by_week(int(weekId)),
                                                'best_eleven_list':None,
                                                'top_passers': top_passers,
-                                               'top_scorers': get_top5("goal", weeks[0][1]),
-                                               'top_runners': get_top5("distance", weeks[0][1])})
+                                               'top_scorers': get_top5("goal", weekId),
+                                               'top_runners': get_top5("distance", weekId)})
 @ensure_csrf_cookie
 def team(request, num):
     """

@@ -418,7 +418,14 @@ def get_besteleven(week):
 
     :type week: int
     """
+    bestlist = service_request("GetBestElevenPreset", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID, "week": week})
+    bestDict = []
+    i = 1
+    for player in bestlist:
+        bestDict.append({"playerId":player[0],"playerName":player[1],"playPosition":player[3],"teamId":player[4],"teamName":player[5],"jerseyNumber":i})
+        i = i + 1
 
-    return service_request("GetBestElevenPreset", {"leagueId": LEAGUE_ID, "seasonId": SEASON_ID, "week": week})
+
+    return bestDict
 
 

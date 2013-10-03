@@ -5,10 +5,10 @@
 function simpleBar(divname, data, options){
 
     var	pref = {
-        "awayfill": "F00",
-        "homefill": "00F",
-        "awaystroke": "F00",
-        "homestroke": "00F",
+        "awayfill": "900",
+        "homefill": "900",
+        "awaystroke": "FFF",
+        "homestroke": "FFF",
         "width" : 800,
         "height": 400,
         "midmargin": 150
@@ -511,10 +511,10 @@ function comparisonBar() {
     this.draw = function(divname, data, options){
 
         var	pref = {
-            "awayfill": "F00",
-            "homefill": "00F",
-            "awaystroke": "F00",
-            "homestroke": "00F",
+            "awayfill": "900",
+            "homefill": "900",
+            "awaystroke": "FFF",
+            "homestroke": "FFF",
             "width" : 800,
             "height": 400,
             "midmargin": 150

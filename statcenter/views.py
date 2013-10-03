@@ -145,3 +145,7 @@ def partial_teamsidestats(request):
 
     # return HttpResponse(simplejson.dumps(a), mimetype="application/json")
     return render_to_response('_sc_team_sidebar.html', {"slist": a})
+
+@csrf_exempt
+def sandbox(request):
+    return render_to_response('paperdemo.html')

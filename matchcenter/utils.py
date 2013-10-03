@@ -1,4 +1,4 @@
-
+# coding=utf-8
 """
 Utilities for Sentiolytics Frontend
 """
@@ -49,6 +49,6 @@ def calc_match_minute(stamp_str, status):
         tdelta = rl_time - db_time
         tdelta = str(tdelta.seconds//60 + 45 + 1)
     elif status == 10:
-        tdelta = "DA"
+        tdelta = "İY"
 
     return tdelta

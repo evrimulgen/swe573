@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^compare/$', 'statcenter.views.compare'),
     url(r'^compare/player/$', 'statcenter.views.compareplayer'),
     url(r'^player/$', 'statcenter.views.player_teamselect'),
-    url(r'^partial_teamstats/$', 'statcenter.views.partial_teamsidestats')
+    url(r'^partial_teamstats/$', 'statcenter.views.partial_teamsidestats'),
+    url(r'^sandbox/$', 'statcenter.views.sandbox')
 )
 

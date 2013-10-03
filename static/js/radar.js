@@ -54,6 +54,7 @@ function FootballPitch(div_id, scope){
         scope.view.draw();
     };
 
+
     drawField();
 };
 
@@ -76,6 +77,33 @@ function Radar(matchId){
     var len2px = function(mt){
         return mt * pitchScale;
     }
+
+    /**
+     * Pops up a friendly message in paper scope
+     * @param data type string
+     */
+    this.popMessage = function(data) {
+        var xpos = mt2px(30);
+        var ypos = mt2px(25);
+        var xlen = 270;
+        var ylen = 100;
+
+        var messageGroup = new scope.Group([
+            new scope.Path.Rectangle({
+                point: [xpos, ypos],
+                size: [xlen, ylen],
+                fillColor: "#222",
+                opacity: 0.6
+            }),
+            new scope.PointText({
+                point: [xpos + xlen/2 , ypos + ylen/2],
+                content: data,
+                justification: 'center',
+                fillColor: "white"
+            })
+        ]);
+        scope.view.draw();
+    };
 
     var modifyPlayerLocation = function(team_id, jersey_no, xpos, ypos){
         // create the players representation in the first frame
@@ -168,6 +196,7 @@ function Radar(matchId){
             else modifyPlayerLocation(coord[0], coord[1], coord[2], coord[3]);
         });
     }
+
 
     var minute = 0;
     var second = 0;

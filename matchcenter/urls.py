@@ -27,7 +27,7 @@ urlpatterns = patterns('',
 
     # url(r'^api/(?P<path>\w+)$', 'matchcenter.views.router'),
 
-    url(r'^d3/$', 'matchcenter.views.d3_try'),
+    url(r'^d3/$', 'matchcenter.views.ozan'),
     # url(r'^radar/$', 'dje.views.radar'),
 
     # url(r'^dje2/', include('dje2.foo.urls')),

@@ -214,3 +214,7 @@ def matchinfo(request,reqid):
 @ensure_csrf_cookie
 def d3_try(request):
     return render_to_response('_card_trial.html')
+
+@ensure_csrf_cookie
+def ozan(request):
+    return render_to_response('_video_holder.html')

@@ -106,9 +106,12 @@ def center(request, reqid):
     #data of all match(distance,pass,shot,cross,faul, etc..), used in all views
     #data for match narrations, used in "center" and "table" views
     narrationDict = get_match_narration(reqid)
+    gk_dict = get_team_gk_ids(reqid)
+
 
     context.update({
-        'narrations':narrationDict
+        'narrations':narrationDict,
+        'gks': gk_dict
     })
 
     return render_to_response('vs_radar.html', context)

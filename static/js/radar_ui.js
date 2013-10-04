@@ -87,8 +87,9 @@ $(function(){
 
                 var val0 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
                 var val1 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
-
-                $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
+                if(statName!=null){
+                    $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
+                }
             });
         });
     });

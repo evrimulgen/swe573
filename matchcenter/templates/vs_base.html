@@ -79,8 +79,7 @@ service_request = function(request,jsData,returnValue){
 };
 
 match_info = function(match_id,returnValue){
-    $.post("/matchinfo/" + match_id).done(function(response){
-        console.log(response);
+    $.post("/matchinfo/" + match_id + "/").done(function(response){
         returnValue(response);
     })
 }
@@ -236,16 +235,16 @@ var FixtureModel = function() {
         var desiredWeek = self.selectedWeek();
         return ko.utils.arrayFilter(this.weeks(), function(week) {
             // if first week return first 3 weeks
-            if(parseInt(desiredWeek) == 1 && week.week_id<4){
-                return week.week_id;
+            if(parseInt(desiredWeek) == 1 && parseInt(week.week_id)<4){
+                return week;
             }
             // if last week return last 3 weeks
-            if(parseInt(desiredWeek) == 34 && week.week_id>31){
-                return week.week_id;
+            if(parseInt(desiredWeek) == 34 && parseInt(wweek.week_id)>31){
+                return week;
             }
             // else return selected week with one before and one after
             if(week.week_id == parseInt(desiredWeek) + 1 | week.week_id == desiredWeek | week.week_id == parseInt(desiredWeek) - 1){
-                return week.week_id;
+                return week;
             }
         });
     }, this);
@@ -254,7 +253,7 @@ var FixtureModel = function() {
         var matchId = self.selectedMatch();
         return ko.utils.arrayFilter(this.matches(), function(match) {
             if(parseInt(matchId) == match.matchId){
-                return match.matchId;
+                return match;
             }
         });
     }, this);
@@ -263,11 +262,11 @@ var FixtureModel = function() {
         ko.utils.arrayForEach(self.matches(), function(match) {
             var currentMatch = self.selectedMatch();
             if(parseInt(match.weekStatus) == 0 || parseInt(match.matchId) == currentMatch){
-
-                match_info(match.matchId,function(response){
-                    match.homeScore(response["homescore"] | 0);
-                    match.awayScore(response["awayscore"] | 0);
-                    match.matchStatus(response["matchStatus"]);
+                match_info(match.matchId,function(resp){
+                    var response = JSON.parse(resp);
+                    match.homeScore(response["homeTeamScore"] | 0);
+                    match.awayScore(response["awayTeamScore"] | 0);
+                    match.matchStatus(response["status"]);
                     if(match.matchStatus() == 6 || match.matchStatus() == 11 || match.matchStatus() == 13){
                         match.liveTime("MS");
                     }
@@ -281,15 +280,6 @@ var FixtureModel = function() {
                         match.liveTime(response["liveTime"]+"'");
                     }
                     console.log(match.homeTeam + " - " + match.awayTeam + " match updated with; matchStatus:" + match.matchStatus() + " homeScore:" + match.homeScore() + " awayScore:" + match.awayScore() + " liveTime:" + match.liveTime());
-                });
-
-            }
-            if(parseInt(match.matchId) == currentMatch && parseInt(match.matchStatus()) != (6|11|13|1)){
-                console.log("this match is live: " + match.homeTeam + " - " + match.awayTeam);
-                service_request("GetMatchEvents",{"leagueId": {{ leagueId }}, "seasonId": {{seasonId}}, "matchId": match.matchId},function(events){
-                    console.log(self.matchEvents().length);
-                    self.matchEvents.removeAll();
-                    console.log(self.matchEvents().length);
                 });
             }
         });

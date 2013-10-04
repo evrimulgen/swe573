@@ -294,10 +294,10 @@ function Chalkboard(div_id, match_id){
                     currentData[method] = res.data;
                     callback(res.data);
                 } else {
-                    createAlert("Biseyler ters gitti");
+                    createAlert("Bir hata oluştu");
                 }
             }).fail(function(){
-                createAlert("Biseyler ters gitti");
+                createAlert("Bir hata oluştu");
             }).always(function(){
                 // hide the spinner gif whether the request succeeded or not
                 $(divSelector + " #spinner").hide();

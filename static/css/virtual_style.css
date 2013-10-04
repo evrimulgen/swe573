@@ -1636,3 +1636,20 @@ button.collapse:hover{
     bottom: -20px;
     top: auto;
 }
+
+/* Some changes to radar */
+
+
+#canvasOverlay {
+    position: absolute;
+    z-index: 1;
+    opacity: 0.5;
+    background-color: black;
+    color:white;
+    margin: 120px 0 0 130px;
+    width: 300px;
+    height: 50px;
+    text-align: center;
+    padding: 50px;
+    display: none;
+}

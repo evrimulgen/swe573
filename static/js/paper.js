@@ -11200,7 +11200,8 @@ paper.PaperScope.prototype.PaperScript = new function() {
 		{}
 	);
 	paper.Point.inject(fields);
-	paper.Size.inject(fields);
+	//noinspection JSUnresolvedVariable
+    paper.Size.inject(fields);
 	paper.Color.inject(fields);
 
 	function _$_(left, operator, right) {

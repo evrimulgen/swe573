@@ -44,8 +44,14 @@ $(function(){
     });
 
     $("#popMessage").click(function(){
-       radar.popMessage('caner');
+       popCanvasMessage('caner');
     });
+
+    function popCanvasMessage(data){
+        $(".canvas-message").text(data);
+        $("#canvasOverlay").show()
+                           .fadeOut(3000);
+    }
 
     $(document).on("radarPlayerClick", function(event){
         $.post("/api/GetPlayerCard", JSON.stringify({leagueId: 1, seasonId: 9064, weekId: event.week, playerId: event.player_id})).done(function(data){

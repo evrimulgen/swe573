@@ -72,6 +72,30 @@
         bindTimer();
     </script>
 
+    <script type="text/javascript">
+        $(function(){
+                    $.event.trigger({
+                        type: "radarPlayerClick",
+                        "team_id": {{ gks.0.team_id }},
+                        "jersey_no": {{ gks.0.jersey_no }},
+                        "player_id": {{ gks.0.player_id }},
+                        "homeOrAway": 0,
+                        "week": {{ currentWeek }}
+                    });
+
+                    $.event.trigger({
+                        type: "radarPlayerClick",
+                        "team_id": {{ gks.1.team_id }},
+                        "jersey_no": {{ gks.1.jersey_no }},
+                        "player_id": {{ gks.1.player_id }},
+                        "homeOrAway": 1,
+                        "week": {{ currentWeek }}
+                    });
+                }
+        );
+
+    </script>
+
 {% endblock %}
 
 
@@ -94,7 +118,13 @@
     <div class="row">
         <div id="radarContainer">
             <button class="btn" id="pauseMatch"><i class="icon-play"></i></button>
+            <button class="btn" id="popMessage"></button>
             <span id="timeDisplay" class="pull-right"></span></p>
+            <div id="canvasContainer" style="position: relative;">
+                <div id="canvasOverlay">
+                    <p class="canvas-message"></p>
+                </div>
+            </div>
         </div>
     </div>
 

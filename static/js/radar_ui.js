@@ -44,8 +44,14 @@ $(function(){
     });
 
     $("#popMessage").click(function(){
-       radar.popMessage('caner');
+       popCanvasMessage('caner');
     });
+
+    var popCanvasMessage = function(data){
+        $(".canvas-message").text(data);
+        $("#canvasOverlay").show()
+                           .fadeOut(3000);
+    };
 
     $(document).on("radarPlayerClick", function(event){
         $.post("/api/GetPlayerCard", JSON.stringify({leagueId: 1, seasonId: 9064, weekId: event.week, playerId: event.player_id})).done(function(data){
@@ -81,8 +87,9 @@ $(function(){
 
                 var val0 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
                 var val1 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
-
-                $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
+                if(statName!=null){
+                    $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
+                }
             });
         });
     });

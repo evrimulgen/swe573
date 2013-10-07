@@ -106,9 +106,12 @@ def center(request, reqid):
     #data of all match(distance,pass,shot,cross,faul, etc..), used in all views
     #data for match narrations, used in "center" and "table" views
     narrationDict = get_match_narration(reqid)
+    gk_dict = get_team_gk_ids(reqid)
+
 
     context.update({
-        'narrations':narrationDict
+        'narrations':narrationDict,
+        'gks': gk_dict
     })
 
     return render_to_response('vs_radar.html', context)
@@ -220,3 +223,7 @@ def playervote(request,matchid,teamid,playerid):
 @ensure_csrf_cookie
 def d3_try(request):
     return render_to_response('_card_trial.html')
+
+@ensure_csrf_cookie
+def ozan(request):
+    return render_to_response('_video_holder.html')

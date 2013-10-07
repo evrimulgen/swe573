@@ -395,6 +395,23 @@ def get_match_stats(match_id, homeTeamId, awayTeamId):
 
     return teamStatsDict, matchDataDict, homeDataDict, awayDataDict
 
+def get_team_gk_ids(match_id):
+    """
+    Return the player ids for a match's goalkeepers
+    """
+    homeid, awayid, all = get_match_info(match_id)
+    data = service_request("GetMatchSquad", {"matchId": match_id})
+    gks = {k: {"team_id": data.get(k).get("data")[3],
+               "jersey_no": data.get(k).get("data")[1],
+               "player_id": data.get(k).get("data")[5]}
+           for k in data if data.get(k).get("data")[4]==1 and data.get(k).get("data")[2]==1}
+
+    teams = {
+        int(homeid): 0,
+        int(awayid): 1
+    }
+
+    return {teams.get(gks.get(k).get("team_id")):gks.get(k) for k in gks}
 
 def get_team_colors(homeid, awayid):
     """

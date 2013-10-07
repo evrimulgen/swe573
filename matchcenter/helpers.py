@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 # -*- coding: utf-8 -*-
+
+import urllib2
+from django.utils import simplejson as json
+
 """
 Helper functions for match center views
 
@@ -136,12 +140,23 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
         return [], []
 
     homeSquadDict, awaySquadDict = [], [] #holds home team squad
+    playerRating = get_player_ratings(match_id)
+    ratingsActive = playerRating.get("VotingIsActive")
+    matchS = playerRating.get("PlayerRatings")
+
 
     for playerId in datalist:
         playerEvents = datalist.get(playerId).get("events") #holds player events
         playerData = datalist.get(playerId).get("data") #holds player data (name,number, etc..)
 
-        if playerEvents:
+        substitute = False
+        eventDict = []
+        if not playerEvents:
+            playerEvents = []
+
+        for event in playerEvents:
+            if event[0] == 7:
+                substitute = True
             eventDict = [{'eventType':event[0],
                           'matchTime':event[1],
                           'teamId':event[2],
@@ -150,9 +165,25 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
                           'jerseyNumber':event[5],
                           'jerseyNumberIn':event[6],
                           'playerName':event[7],
-                          'playerNameIn':event[8]} for event in playerEvents]
+                          'playerNameIn':event[8]} ]
+
+
+        played = False
+        votePercent = 0
+        voteCount = 0
+        for ligtvplayer in matchS:
+            if int(ligtvplayer.get("PlayerId")) == int(playerId):
+                votePercent =ligtvplayer.get("Percent")
+                voteCount = ligtvplayer.get("VoteCount")
+
+        if playerData[2] == 1:
+            played=True
         else:
-            eventDict = []
+            if substitute:
+                played=True
+
+        #if ratingsActive == False:
+            #played=False
 
         #add player into corresponding team squads
         playerTuple = {'playerId':int(playerId),
@@ -160,6 +191,9 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
                        'jerseyNumber':playerData[1],
                        'eleven':playerData[2],
                        'playPosition':playerData[4],
+                       'played':played,
+                       'votePercent':votePercent,
+                       'voteCount':voteCount,
                        'playerEvents':eventDict}
 
         if playerData[3] == homeTeamId:
@@ -377,3 +411,44 @@ def get_team_colors(homeid, awayid):
     colorDict = {'homeFill': colorList["homefill"], 'homeStroke': colorList["homestroke"], 'awayFill': colorList["awayfill"], 'awayStroke': colorList["awaystroke"]}
 
     return colorDict
+
+def get_player_ratings(matchid):
+    url = "http://www.ligtv.com.tr/services/dataservice.svc/json/GetPlayerRatings?matchId=%s" % matchid
+    print url;
+    values = {
+        'UserName': 'sentio',
+        'Password': 's3nt10'
+    }
+
+    data = json.dumps(values)
+    req = urllib2.Request(url, data)
+    req.add_header('Content-Type', 'application/json')
+
+    response = urllib2.urlopen(req)
+    assert response.code == 200
+    response_dict = json.loads(response.read())
+    print response_dict
+    return response_dict
+
+def vote_match_player(matchid,teamid,playerid):
+    url = "http://www.ligtv.com.tr/services/dataservice.svc/json/VoteMatchPlayer?matchId=%s&teamId=%s&playerId=%s" %matchid %teamid %playerid
+    values = {
+        'UserName': 'sentio',
+        'Password': 's3nt10'
+    }
+
+    data = json.dumps(values)
+    req = urllib2.Request(url, data)
+    req.add_header('Content-Type', 'application/json')
+
+    response = urllib2.urlopen(req)
+    assert response.code == 200
+
+    votingResult = json.loads(response.read())
+    print votingResult
+
+    message = votingResult.get('Message')
+    code = votingResult.get('StatusCode')
+    print message
+    print code
+    return message

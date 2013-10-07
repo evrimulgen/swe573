@@ -1,7 +1,19 @@
 {% load static %}
 {% get_static_prefix as STATIC_URL %}
 
+{% if team == "home" %}
+    <div class="vote-area">
+        <div id="percent">{{ player.votePercent }}</div>
+        <div id="vote-button">
+            {% if player.played %}
+                <button>Oyla</button>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
 <div class="{{ class }}">
+
     <p id="no" class="pos{{ player.playPosition }}">{{ player.jerseyNumber }}</p>
     <p id="name">{{ player.playerName }}</p>
     {% for event in player.playerEvents|dictsortreversed:"matchTime" %}
@@ -9,12 +21,12 @@
             {% if event.eventType == 7 %}
                 {% if player.eleven == 0 %}
                     {% if event.playerId == player.playerId %}
-                        <a title="sd" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                        <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
                     {% else %}
-                        <a title="sd" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                        <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
                     {% endif %}
                 {% else %}
-                    <a title="sd" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                    <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
                 {% endif %}
             {% endif %}
             {% if event.eventType == 0 %}
@@ -89,4 +101,16 @@
             });
         </script>
     {% endfor %}
+
 </div>
+
+{% if team == "away" %}
+    <div class="vote-area">
+        <div id="percent">{{ player.votePercent }}</div>
+        <div id="vote-button">
+            {% if player.played %}
+                <button>Oyla</button>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

@@ -83,6 +83,19 @@ match_info = function(match_id,returnValue){
         returnValue(response);
     })
 }
+
+player_ratings = function(match_id,returnValue){
+    $.post("/playerrating/" + match_id + "/").done(function(response){
+        returnValue(JSON.parse(response));
+    })
+}
+
+player_vote = function(match_id,team_id,player_id,returnValue){
+    $.post("/playervote/" + match_id + "/"+ team_id + "/"+ player_id + "/").done(function(response){
+        returnValue(JSON.parse(response));
+    })
+}
+
 function MatchObject(weekId,weekStatus,matchId,matchStatus,homeTeam,homeTeamCond,homeTeamInt,awayTeam,awayTeamCond,awayTeamInt,homeTeamId,awayTeamId,homeScore,awayScore,date,time,liveTime,referee,stadium,matchClass){
     var self = this;
     self.weekId = weekId;
@@ -152,11 +165,12 @@ var FixtureModel = function() {
     var self = this;
 
     //stores weeks of the fixture
-    self.weeks = ko.observableArray([
-        {% for week in weeks|dictsort:"weekId" %}
-            {week_id: "{{ week.weekId }}", week_status:"{{ week.status }}"},
-        {% endfor %}
-    ]);
+    self.weeks = ko.observableArray();
+
+    {% for week in weeks|dictsort:"weekId" %}
+        self.weeks.push({week_id: "{{ week.weekId }}", week_status:"{{ week.status }}"}) ;
+    {% endfor %}
+
 
     self.matchEvents = ko.observableArray();
 
@@ -232,18 +246,19 @@ var FixtureModel = function() {
     // Selects 3 weeks to show, depending on the selected week
     self.weeksToShow = ko.computed(function() {
         // Represents a filtered list of weeks
-        var desiredWeek = self.selectedWeek();
+        var desiredWeek = parseInt(self.selectedWeek());
         return ko.utils.arrayFilter(this.weeks(), function(week) {
             // if first week return first 3 weeks
-            if(parseInt(desiredWeek) == 1 && parseInt(week.week_id)<4){
+            var weekId = parseInt(week.week_id);
+            if(desiredWeek == 1 && weekId<4){
                 return week;
             }
             // if last week return last 3 weeks
-            if(parseInt(desiredWeek) == 34 && parseInt(wweek.week_id)>31){
+            if(desiredWeek == 34 && weekId>31){
                 return week;
             }
             // else return selected week with one before and one after
-            if(week.week_id == parseInt(desiredWeek) + 1 | week.week_id == desiredWeek | week.week_id == parseInt(desiredWeek) - 1){
+            if(weekId == desiredWeek + 1 | weekId == desiredWeek | weekId == desiredWeek - 1){
                 return week;
             }
         });
@@ -257,6 +272,51 @@ var FixtureModel = function() {
             }
         });
     }, this);
+
+    self.playerRatingDict = [];
+    player_ratings(self.selectedMatch(), function(response){
+        console.log("imhere");
+        self.playerRatingDict = response;
+        console.log(self.playerRatingDict);
+    });
+
+
+    self.votingEnable = function(elem){
+        if(stored){
+            return false;
+        }
+        else{
+            player_ratings(self.selectedMatch(), function(response){
+                console.log(response);
+                if(response.VotingIsActive){
+                    var homeSquad = response.Match.HomeTeamLineUps;
+                    var awaySquad = response.Match.AwayTeamLineUps;
+                    var matchSquad = homeSquad.concat(awaySquad);
+                    for(var i=0;i<matchSquad.length;i++){
+                        var player = matchSquad[i];
+                        if(player.PlayerId == elem.playerId){
+                            if(player.Status == 0){
+                                return true;
+                            }
+                            else{
+                                var events = player.Events;
+                                for(var y=0; y<events.length;i++){
+                                    var event = events[y];
+                                    if(event.Type == 7){
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            }
+                        }
+                    }
+                }
+                else{
+                    return false;
+                }
+            });
+        }
+    };
 
     self.autoRefresh = function(){
         ko.utils.arrayForEach(self.matches(), function(match) {
@@ -274,7 +334,7 @@ var FixtureModel = function() {
                         match.liveTime("");
                     }
                     else if(match.matchStatus() == 10){
-                        match.liveTime("DA");
+                        match.liveTime("İY");
                     }
                     else{
                         match.liveTime(response["liveTime"]+"'");
@@ -288,12 +348,12 @@ var FixtureModel = function() {
 
     setInterval(self.autoRefresh,30000);
 
-    // changes the selected week
+// changes the selected week
     self.changeWeek = function(elem) {
         self.selectedWeek(elem.week_id);
     };
 
-    // show and hide effects
+// show and hide effects
     this.showMatch = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideToggle() };
     this.hideMatch = function(elem) { if (elem.nodeType === 1) $(elem).slideToggle(function() { $(elem).remove(); }),1200 };
 };

@@ -1,18 +1,14 @@
 {% load match_center_tags %}
 {% if homeSquad|length != 0  and  awaySquad|length != 0%}
     <h1 class="main">Maç Kadrosu</h1>
-    <div id="home-suspended">
-    </div>
     <div id="homesquad">
         {% for player in homeSquad|dictsort:"playPosition"|dictsortreversed:"eleven" %}
-            {% sl_before_playerlistitem player %}
+            {% sl_before_playerlistitem player team="home" %}
         {% endfor %}
     </div>
     <div id="awaysquad">
         {% for player in awaySquad|dictsort:"playPosition"|dictsortreversed:"eleven" %}
-            {% sl_before_playerlistitem player %}
+            {% sl_before_playerlistitem player team="away" %}
         {% endfor %}
-    </div>
-    <div id="away-suspended">
     </div>
 {% endif %}

@@ -211,6 +211,12 @@ def matchinfo(request,reqid):
     homeTeamId, awayTeamId, infoDict = get_match_info(reqid)
     return HttpResponse(json.dumps(infoDict))
 
+def playerrate(request,matchid):
+    return HttpResponse(json.dumps(get_player_ratings(matchid)))
+
+def playervote(request,matchid,teamid,playerid):
+    return HttpResponse(json.dumps(vote_match_player(matchid,teamid,playerid)))
+
 @ensure_csrf_cookie
 def d3_try(request):
     return render_to_response('_card_trial.html')

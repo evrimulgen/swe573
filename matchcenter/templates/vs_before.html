@@ -22,9 +22,9 @@
         </div>
 
         <div id="matchinfo" data-bind="foreach: matchInfo">
-            <img src="{{ STATIC_URL }}images/saat.png"><p><span data-bind="text: date + ', ' + time"></span></p>
-            <img src="{{ STATIC_URL }}images/saha2.png"><p><span data-bind="text:stadium"></span></p>
-            <img src="{{ STATIC_URL }}images/duduk.png"><p><span data-bind="text:referee"></span></p>
+            <img src="{{ STATIC_URL }}images/saat.png"><p data-bind="text: date + ', ' + time"></p>
+            <img src="{{ STATIC_URL }}images/saha2.png"><p data-bind="text: stadium"></p>
+            <img src="{{ STATIC_URL }}images/duduk.png"><p data-bind="text: referee"></p>
         </div>
         <div id="away">
             <h2>{{ matchInfo.awayTeam }}</h2>

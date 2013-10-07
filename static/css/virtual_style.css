@@ -667,20 +667,28 @@ p.no-data{
     float: left;
 }
 .squad-area #homesquad, .squad-area #awaysquad{
-    width: 40%;
+    width: 48.5%;
     margin-left: 1%;
     float: left;
 }
-.squad-area #home-suspended, .squad-area #away-suspended{
+.vote-area{
+    width: 15%;
     margin-left: 1%;
-    width: 7.5%;
-    height: 100px;
     float: left;
 }
+.vote-area #percent, .vote-area #vote-button{
+    width: 50%;
+    height: 30px;
+    text-align: center;
+    float: left;
+    color: black;
+}
+
 .starting{
     height: 30px;
 
-    width: 100%;
+    margin-left: 1%;
+    width: 83%;
     float: left;
 
 
@@ -692,21 +700,16 @@ p.no-data{
 }
 
 .starting:hover{
-    height: 30px;
-
-    width: 100%;
-    float: left;
 
     background-color: #fbfbfb;
-
-
     text-decoration: none;
     color: #000000;
 }
 
 .sub{
     height: 30px;
-    width: 100%;
+    margin-left: 1%;
+    width: 83%;
     float: left;
 
     box-shadow: 0pt 1px 0pt rgba(100,100,100,0.5) inset;
@@ -719,8 +722,6 @@ p.no-data{
 }
 
 .sub:hover{
-    height: 30px;
-    width: 100%;
     float: left;
 
     background-color: #9da7d1;

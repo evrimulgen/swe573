@@ -243,8 +243,8 @@ function Radar(matchId){
         matchSquad = data.data;
     });
 
-    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
-    //var socket = io.connect('http://localhost:8080/');
+//    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
+    var socket = io.connect('http://localhost:8080/');
 
     socket.on("welcome", function(){
         connected = true;

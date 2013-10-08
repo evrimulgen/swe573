@@ -57,7 +57,7 @@ def get_match_narration(mid):
             narrationList.append({'min':minute_,'teamId':team_id,'type':type_,'text':text_, 'mod_date': mod_date_})
 
     getkeys =  lambda x: x['min']
-    return reversed(sorted(narrationList, key=getkeys))
+    return sorted(narrationList, key=getkeys)
 
 def get_match_week(match_id):
     """

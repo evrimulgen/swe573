@@ -248,6 +248,7 @@ function Radar(matchId){
 
     socket.on("welcome", function(){
         connected = true;
+        $("#canvasOverlay").show();
         console.log("connected");
     });
 

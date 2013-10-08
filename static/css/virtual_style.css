@@ -1644,13 +1644,38 @@ button.collapse:hover{
 #canvasOverlay {
     position: absolute;
     z-index: 1;
-    opacity: 0.5;
-    background-color: black;
-    color:white;
     margin: 120px 0 0 130px;
     width: 300px;
     height: 50px;
     text-align: center;
     padding: 50px;
     display: none;
+}
+
+#canvas-play-button {
+    position: absolute;
+    z-index: 1;
+    background-color: black;
+    color:white;
+    padding: 20px;
+    margin: 20px 0 0 121px;
+    text-align: center;
+    background-color: rgba(0,0,0,0.5);
+    /*display: none;*/
+}
+
+#canvas-play-button:hover{
+    background-color: rgba(0,0,0,0.7);
+    /*display: none;*/
+}
+
+#canvas-message {
+    background-color: black;
+    color:white;
+    opacity: 0.5;
+}
+
+#canvas-play-button i {
+    opacity: 1;
+    color: white;
 }

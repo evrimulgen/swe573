@@ -23,23 +23,24 @@ $(function(){
         radar.changeTime(event.time);
     });
 
-    $("#pauseMatch").click(function(){
+    $("#canvas-play-button").click(function(){
         if(!started){
             radar.startMatch();
-            $("#pauseMatch i").removeClass("icon-play");
-            $("#pauseMatch i").addClass("icon-pause");
+            $("#canvas-play-button").hide();
+//            $("#pauseMatch i").removeClass("icon-play");
+//            $("#pauseMatch i").addClass("icon-pause");
             started = true;
         } else {
-            radar.togglePause();
-            if(paused){
-                paused = false;
-                $("#pauseMatch i").removeClass("icon-play");
-                $("#pauseMatch i").addClass("icon-pause");
-            } else {
-                paused = true;
-                $("#pauseMatch i").removeClass("icon-pause");
-                $("#pauseMatch i").addClass("icon-play");
-            }
+//            radar.togglePause();
+//            if(paused){
+//                paused = false;
+//                $("#pauseMatch i").removeClass("icon-play");
+//                $("#pauseMatch i").addClass("icon-pause");
+//            } else {
+//                paused = true;
+//                $("#pauseMatch i").removeClass("icon-pause");
+//                $("#pauseMatch i").addClass("icon-play");
+//            }
         }
     });
 

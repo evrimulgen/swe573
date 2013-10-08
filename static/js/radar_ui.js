@@ -43,9 +43,6 @@ $(function(){
         }
     });
 
-    $("#popMessage").click(function(){
-       popCanvasMessage('caner');
-    });
 
     var popCanvasMessage = function(data){
         $(".canvas-message").text(data);

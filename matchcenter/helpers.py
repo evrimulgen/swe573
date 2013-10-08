@@ -51,11 +51,13 @@ def get_match_narration(mid):
         type_ = i.get("typeInt")
         text_ = i.get("text")
         minute_ = int(i.get("minute"))
+        mod_date_ = datetime.strptime(i.get("mod_date"), "%d.%m.%Y %H:%M:%S")
 
         if text_ is not None:
-            narrationList.append({'min':minute_,'teamId':team_id,'type':type_,'text':text_})
+            narrationList.append({'min':minute_,'teamId':team_id,'type':type_,'text':text_, 'mod_date': mod_date_})
 
-    return narrationList
+    getkeys =  lambda x: x['min']
+    return reversed(sorted(narrationList, key=getkeys))
 
 def get_match_week(match_id):
     """

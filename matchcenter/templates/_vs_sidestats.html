@@ -155,20 +155,22 @@
         var teamId = splitting[0];
         var playerId  = splitting[1];
         var matchId = {{ selectedMatch }};
-        player_vote(matchId,teamId,playerId,function(returnVal){
-            console.log(returnVal);
-        });
-        $(elem).removeClass("vote-button-selectable");
-        $(elem).addClass("vote-button-selected");
-        var rates = document.getElementsByClassName("vote-button-selectable")
-        for(var i= 0; i< rates.length; i++){
-            var item = rates[i];
-            $(item).hide();
+        var storedValue = amplify.store(matchId);
+        if(!storedValue){
+            player_vote(matchId,teamId,playerId,function(returnVal){
+                console.log(returnVal);
+            });
+            $(elem).removeClass("vote-button-selectable");
+            $(elem).addClass("vote-button-selected");
+            var rates = document.getElementsByClassName("vote-button-selectable")
+            for(var i= 0; i< rates.length; i++){
+                var item = rates[i];
+                $(item).hide();
+            }
+            amplify.store(matchId,teamId+"/"+playerId);
         }
-        amplify.store(matchId,teamId+"/"+playerId);
     }
     var storedValue = amplify.store("{{ selectedMatch }}")
-    console.log(storedValue);
     if(storedValue){
         var rates = document.getElementsByClassName("vote-button-selectable")
         for(var i= 0; i< rates.length; i++){

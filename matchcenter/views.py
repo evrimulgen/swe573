@@ -245,6 +245,13 @@ def playerrate(request,matchid):
 def playervote(request,matchid,teamid,playerid):
     return HttpResponse(json.dumps(vote_match_player(matchid,teamid,playerid)))
 
+def videos(request, match_id, videoId):
+    goalDict = get_goal_videos(match_id)
+    homeTeamId, awayTeamId, infoDict = get_match_info(match_id)
+    return render_to_response('_vs_videos.html', {'goals': goalDict,
+                                                  'videoId': int(videoId),
+                                                  'matchInfoDict':infoDict})
+
 @ensure_csrf_cookie
 def d3_try(request):
     return render_to_response('_card_trial.html')

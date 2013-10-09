@@ -1,0 +1,71 @@
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.10.1.js"></script>
+
+<script src="{{ STATIC_URL }}js/jquery-ui-1.10.3.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery-ui-1.10.3.custom.min.css" charset="utf-8" />
+
+
+<div style="width:780px; margin: 0; border: none; padding: 0;text-align: center;">
+
+    <div style="font-size: 24px;"><b>{{ matchInfoDict.homeTeam  }} : {{ matchInfoDict.homeTeamScore  }}
+        {{ matchInfoDict.awayTeam  }} : {{ matchInfoDict.awayTeamScore  }}</b></div>
+
+
+    {% if goals|length == 0 %}
+        <p class="no-data"> Bu maçla ilgili videolar henüz hazır değildir.</p>
+    {% else %}
+
+        {% for x in goals %}
+            {% if forloop.counter  != videoId %}
+
+                <a id="sortVideo{{ forloop.counter}}"  >
+
+                    <p style="background-color:greenyellow;  float:left; " >{{ x.playerName }} - {{ x.min }}'</p>
+                    <p style="background-color:black; width:2px; float:left; "></p>
+
+                </a>
+
+            {% else %}
+
+                <p style="background-color:red;  float:left;"  >{{ x.playerName }} - {{ x.min }}'</p>
+                <p style="background-color:black; width:2px; float:left; "></p>
+
+            {% endif %}
+        {% endfor %}
+
+        {% for x in goals %}
+            {% if forloop.counter  == videoId %}
+
+                <div style="float:left;">
+                    <img src="{{ STATIC_URL  }}img/space.png" style="height: 325px">
+                    <video id="my_video_{{ forloop.counter }}" class="video-js vjs-default-skin" controls autoplay preload="auto" width="580" height="325"  data-setup="{}">
+                        <source src="{{ x.goalLink }}" type='video/mp4'>
+                    </video><img src="{{ STATIC_URL  }}img/space.png" style="height: 325px">
+                </div>
+
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>
+<script type="text/javascript">
+
+    var counter = 0;
+    function getUrl(){
+        var url = document.URL ;
+        var urlComponentsArray = url.split('/');
+        var videoUrl = urlComponentsArray[0]+urlComponentsArray[1]+"//"+urlComponentsArray[2]+"/"+urlComponentsArray[3]+"/"+urlComponentsArray[4]+"/"+urlComponentsArray[5]+"/"+(++counter);
+        return videoUrl;
+    }
+
+    $(function(){
+        {% for x in goals %}
+            var divname = "#sortVideo" + {{ forloop.counter }};
+            $(divname).attr("href", getUrl());
+        {% endfor %}
+    });
+
+</script>

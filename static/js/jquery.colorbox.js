@@ -136,6 +136,8 @@
 	// ****************
 	// HELPER FUNCTIONS
 	// ****************
+
+
 	
 	// Convenience function for creating new jQuery objects
 	function $tag(tag, id, css) {
@@ -228,6 +230,7 @@
 		if ($.isFunction(callback)) {
 			callback.call(element);
 		}
+
 	}
 
 	// Slideshow functionality
@@ -463,6 +466,7 @@
 			$groupControls = $next.add($prev).add($current).add($slideshow);
 
 			$(document.body).append($overlay, $box.append($wrap, $loadingBay));
+
 		}
 	}
 
@@ -817,6 +821,8 @@
 			
 			if (settings.iframe) {
 				iframe = $tag('iframe')[0];
+
+
 				
 				if (frameBorder in iframe) {
 					iframe[frameBorder] = 0;
@@ -836,12 +842,14 @@
 						name: (new Date()).getTime(), // give the iframe a unique name to prevent caching
 						'class': prefix + 'Iframe',
 						allowFullScreen : true, // allow HTML5 video to go fullscreen
+
 						webkitAllowFullScreen : true,
 						mozallowfullscreen : true
 					})
 					.one('load', complete)
 					.appendTo($loaded);
-				
+
+
 				$events.one(event_purge, function () {
 					iframe.src = "//about:blank";
 				});

@@ -1750,3 +1750,138 @@ button.collapse:hover{
     color: white;
 }
 
+.playerDisplay
+{
+    width: 45px;
+    height: 75px;
+    background-color: transparent;
+    position: inherit;
+    min-width: 45px;
+
+}
+.firstPart
+{
+    width: auto;
+    height: 35px;
+    background-color: transparent;
+}
+.secondPart
+{
+    width: auto;
+    height: auto;
+    background-color: transparent;
+
+}
+.thirdPart
+{
+    width: auto;
+    height: auto;
+    background-color: transparent;
+}
+
+#likeCanvas
+{
+    background-image: url('../images/radar.png');
+    width: 662px;
+    height:545px;
+    margin-left: 50px;
+    position: absolute;
+}
+
+.eventImages
+{
+    max-height: 15px;
+    max-width: 15px;
+    min-width: 0;
+    min-height: 0;
+}
+
+.playerImage
+{
+    height: 35px;
+    width: auto;
+}
+
+.texts
+{
+
+}
+
+.homeTeamDiv{
+
+
+    background-image:url('../images/redBackground.png');
+    background-repeat:repeat;
+
+
+}
+
+.awayTeamDiv{
+
+
+    background-image:url('../images/blueBackground.png');
+    background-repeat:repeat;
+}
+
+.jerseyNumber
+{
+    text-align: center;
+    min-width: 30px;
+    font-weight: normal;
+
+}
+
+
+.formationTable td
+{
+    max-width: 45px;
+    max-height: 60px;
+    border:1px none red;
+    vertical-align: middle;
+    text-align: center;
+    margin: auto;
+    min-width: 15px;
+    min-height: 15px;
+}
+
+.formationTable
+{
+    border:1px none red;
+    margin-top: 20px;
+    margin-left: 72px;
+    padding-left: 0;
+    float: left;
+
+}
+.canvas-button{
+    height: 30px;
+    width: 80px;
+    background-image: -moz-linear-gradient(top, #f3f3f3 0%, #ddddd7 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f3f3f3),  color-stop(100%,#ddddd7)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #f3f3f3 0%,  #ddddd7 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, #f3f3f3 0%, #ddddd7 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top,  #f3f3f3 0%,  #ddddd7 100%); /* IE10+ */
+    background-image: linear-gradient(to bottom, #f3f3f3 0%,  #ddddd7 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#ddddd7',GradientType=0 ); /* IE6-9 */
+    color: #000000;
+    margin-right: 2px;
+    border: 2px solid #888888;
+     border-bottom: none;
+    text-align: center;
+    font-size: 12px;
+    line-height: 30px;
+    outline: none;
+}
+.canvas-button-active{
+    height: 30px;
+    width: 80px;
+    background: #316308;
+    color: #ffffff;
+    margin-right: 2px;
+    border: 2px solid #888888;
+    border-bottom: none;
+    text-align: center;
+    font-size: 12px;
+    line-height: 30px;
+    outline: none;
+}

@@ -63,7 +63,6 @@
                 console.log(activeTab);
                 $("#data-area").load(url);
             }
-            $("#sidestats-container").load("/new/partial/sidestats/{{ selectedMatch }}/")
         }
 
         function bindTimer(){
@@ -118,6 +117,8 @@
     <div class="row">
         <div id="radarContainer">
             <button class="btn" id="pauseMatch"><i class="icon-play"></i></button>
+            <button class="btn" id="showFormation">Formasyon</button>
+            <button class="btn" id="showRadar">Radar</button>
             <button class="btn" id="popMessage"></button>
             <span id="timeDisplay" class="pull-right"></span></p>
             <div id="canvasContainer" style="position: relative;">
@@ -183,5 +184,463 @@
 
 
 {% endblock %}
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/mustache.js"></script>
+
+<script type="text/javascript">
+
+
+
+$( document ).ready(function() {
+    //console.log( "ready!" );
+
+
+    function serviceRequest(method, data, callback){
+        $.post("/api/" + method, JSON.stringify(data)).done(function(data){
+            callback(JSON.parse(data).data);
+        });
+    }
+
+
+    function getRandomizer(bottom, top) {
+        return Math.floor( Math.random() * ( 1 + top - bottom ) ) + bottom;
+    }
+
+
+
+    var matchInfo = null;
+    var matchId = 11868966;
+    var homeTeamID = 0;
+    var awayTeamID = 0;
+    var imageServiceLink = "http://sentiong.cloudapp.net/static/images/players/";
+    var defaultPlayerImage = "http://sentiong.cloudapp.net/static/images/players/default.png";
+    var homeTeamSubs = [[188,430],[130,430],[72,430]]
+    var awayTeamSubs = [[552,430],[493,430],[434,430]];
+
+    //Gets Match Info
+    serviceRequest("GetMatchInfo",{"matchId": matchId},function(result){
+        matchInfo = result;
+        homeTeamID = matchInfo[0][5];
+        awayTeamID = matchInfo[0][6];
+        //console.log("home Team ID : " + homeTeamID + "Away team ID : " + awayTeamID);
+    });
+
+
+
+
+
+    //Gets match details
+    serviceRequest("GetMatchSquad", {"matchId": matchId }, function(teamData){
+
+        var teamCountFormation = 0;
+        var teamCountFormation2 = 0;
+
+        console.log(teamData);
+
+        _.each(teamData, function(value, i){
+
+
+
+            var playerName = value.data[0].split(" ");
+
+            var goalKeeperHome = [190,23];
+            var goalKeeperAway = [190,593];
+
+            var playerID = value.data[5];
+            var imgVal = null;
+            var jerseyNumber = value.data[1];
+            var playerTeamID = value.data[3];
+            var playerPosition = value.data[17];
+            var playerIsPlayed = value.data[16];
+
+            var imageLink = imageServiceLink + playerID + ".jpg";
+
+            if(getRandomizer(0,1))
+            {
+                imgVal = "img/playerChange.png";
+            }
+
+            if( playerName[1] == null)
+                playerName[1] = playerName[0];
+
+            if(playerName[1].length > 7)
+            {
+                playerName[1] = playerName[1].slice(0,7);
+                playerName[1] += '.';
+                //console.log("9 - > " + playerName[1]);
+            }
+
+
+            var leftM = 0;
+            var topM = 0;
+            if(playerPosition == "GK")
+            {
+                if(playerTeamID == homeTeamID)
+                {
+                    leftM = goalKeeperHome[1];
+                    topM = goalKeeperHome[0];
+                }
+
+                if(playerTeamID == awayTeamID)
+                {
+                    leftM = goalKeeperAway[1];
+                    topM = goalKeeperAway[0];
+                }
+            }
+
+
+            if(playerTeamID == homeTeamID && playerPosition == "" && playerIsPlayed)
+            {
+                var x = homeTeamSubs.pop();
+                leftM = x[0];
+                topM = x[1];
+            }
+
+
+            if(playerTeamID == awayTeamID && playerPosition == "" && playerIsPlayed)
+            {
+                var x = awayTeamSubs.pop();
+                leftM = x[0];
+                topM = x[1];
+            }
+
+            var template = $('#exampleTemplate').html();
+            var data = {
+
+                //playerName : jerseyNumber + "-" + playerName[0],
+                playerName : jerseyNumber,
+
+                playerLastName: playerName[1],
+
+
+
+
+                ID : i,
+                left: leftM, //getRandomizer(0,550),
+                top: topM,//getRandomizer(0,350),
+                teamID : playerTeamID,
+
+                imageUrl0 : imageLink,
+                errorLink: defaultPlayerImage
+
+            };
+
+
+
+            //adding new notes to data:
+
+            var eventImageCount = 1;
+
+            _.each(value.events, function(eventValue, j){
+                var eventType = eventValue[0];
+                var subData = eventValue[4];
+
+                var imageUrl = "imageUrl" + eventImageCount;
+                var imageData = "imageData" + eventImageCount;
+
+
+
+                if(eventType == 0)
+                {
+                    //console.log("Event  : Goal");
+                    data[imageUrl] = "img/goal.png";
+                    data[imageData] = eventValue;
+                    eventImageCount++;
+                }
+                else if(eventType == 1)
+                {
+                    //console.log("Event : Own Goal");
+                    data[imageUrl] = "img/own-goal.png";
+                    data[imageData] = eventValue;
+                    eventImageCount++;
+                }
+                else if(eventType == 2)
+                {
+                    //console.log("Event : Penalty");
+                    data[imageUrl] = "img/penalty.png";
+                    data[imageData] = eventValue;
+                    eventImageCount++;
+                }
+                else if(eventType == 3)
+                {
+                    //console.log("Event : Missed Penalty");
+                    data[imageUrl] = "img/missed-pen.png";
+                    data[imageData] = eventValue;
+                    eventImageCount++;
+                }
+                else if(eventType == 4)
+                {
+                    //console.log("Event : Yellow Cart");
+                    data[imageUrl] = "img/yellow.png";
+                    data[imageData] = eventValue;
+                    eventImageCount++;
+                }
+                else if(eventType == 5)
+                {
+                    //console.log("Event : Second Yellow");
+                    data[imageUrl] = "img/second-yellow.png";
+                    data[imageData] = eventValue;
+                    eventImageCount++;
+                }
+                else if(eventType == 6)
+                {
+
+                    data[imageUrl] = "img/red.png";
+                    data[imageData] = eventValue;
+                    eventImageCount++;
+                }
+                else if(eventType == 7)
+                {
+
+                    data[imageData] = eventValue;
+
+
+                    var subPlayerID = eventValue[3];
+
+                    if(playerID == subPlayerID )
+                        data[imageUrl] = "img/sub-out.png";
+                    else
+                        data[imageUrl] = "img/sub-in.png";
+
+                    eventImageCount++;
+                }
+            });
+
+
+
+
+            var htmlData = Mustache.to_html(template, data);
+
+            var playerDisplayPosition = "#";
+            //placeArray.splice(arrayIndex,1);
+
+
+
+            //$(playerDisplayPosition).append(htmlData);
+
+            if(playerPosition != "")
+            {
+
+                if(playerPosition == "GK")
+                {
+                    $("#likeCanvas").append(htmlData);
+                }
+
+                if((playerTeamID == homeTeamID) )
+                {
+                    playerDisplayPosition = playerDisplayPosition + "home_" + playerPosition.replace(/\s/g, "");
+
+
+                    if(playerName[1] == "Aissati")
+                        console.log("--->>>>>>" + playerPosition);
+
+                } else
+
+                if((playerTeamID == awayTeamID) )
+                {
+                    playerDisplayPosition = playerDisplayPosition + "away_" + playerPosition.replace(/\s/g, "");
+
+                }
+
+                if($(playerDisplayPosition).size != 0)
+                    $(playerDisplayPosition).append( htmlData );
+
+            }
+
+            else if(playerIsPlayed)
+            {
+                $("#likeCanvas").append( htmlData );
+            }
+
+
+        });
+
+
+        var sth = 0;
+        $('#formationTable td').each(function(index, value){
+            //console.log(index + " - " + value );
+
+            if(($( value ).has( ".playerDisplay" ).length ? "Yes" : "No" ) == "No" && ((sth % 5) != 0)  )
+            {
+                $(value).remove();
+            }
+
+            sth += 1;
+        });
+
+        $('.eventImages').each(function(){ $(this).mouseenter(function(){
+            $(this).css({"border-style":"solid",'border-width' : "1px"});
+            //$(this).imageInfo = "xxx";
+            console.log($(this).attr("imageInfo"));
+            //console.log(imageDataValue);
+        }); });
+
+        $('.eventImages').each(function(){ $(this).mouseleave(function(){
+            $(this).css({"border-style":"none"});
+
+        }); });
+
+        $('.texts').each(function(){ $(this).mouseenter(function(){
+        }); });
+
+
+        $.each($(".playerDisplay"),function( index, pd ) {
+            //console.log($(pd).attr("teamID"));
+
+
+            $(this).data("MyDataAttribute",index);
+
+            //console.log($(this).find(".jerseyNumber").val());
+            if($(this).attr("teamID") == homeTeamID){
+                //$(this).css({"background-color" : "#FF8909"});
+                $(this).find("#divJS").css({"background-image" : "url('img/blueBackground.png')"});
+            }
+            else{
+                //$(this).css({"background-color" : "#7078E8"});
+                $(this).find("#divJS").css({"background-image" : "url('img/redBackground.png')"});
+            }
+
+
+
+        });
+
+
+        $(".playerDisplay").draggable();
+    });
+
+
+
+    jQuery('#likeCanvas').click(function(e){
+        var x = e.pageX - e.target.offsetLeft ;
+        var y = e.pageY - e.target.offsetTop ;
+
+        console.log(x + "--" + y );
+
+
+
+    });
+
+    var i = 1;
+
+
+});
+
+
+
+
+
+</script>
+
+
+<style type="text/css">
+
+    .playerDisplay
+    {
+        width: 45;
+        height: 75;
+        background-color: transparent;
+        position: inherit;
+        min-width: 45;
+
+    }
+    .firstPart
+    {
+        width: auto;
+        height: 35;
+        background-color: transparent;
+    }
+    .secondPart
+    {
+        width: auto;
+        height: auto;
+        background-color: transparent;
+
+    }
+    .thirdPart
+    {
+        width: auto;
+        height: auto;
+        background-color: transparent;
+    }
+
+    #likeCanvas
+    {
+        background-image: url('{{ STATIC_URL }}images/radar.png');
+        width: 662;
+        height:545;
+        position: absolute;
+    }
+
+    .eventImages
+    {
+        max-height: 15;
+        max-width: 15;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    .playerImage
+    {
+        height: 35;
+        width: auto;
+    }
+
+    .texts
+    {
+
+    }
+
+    .homeTeamDiv{
+
+
+        background-image:url('{{ STATIC_URL }}images/redBackground.png');
+        background-repeat:repeat;
+
+
+    }
+
+    .awayTeamDiv{
+
+
+        background-image:url('{{ STATIC_URL }}images/blueBackground.png');
+        background-repeat:repeat;
+    }
+
+    .jerseyNumber
+    {
+        text-align: center;
+        min-width: 30;
+        font-weight: normal;
+
+    }
+
+
+    #formationTable, td
+    {
+        max-width: 45;
+        max-height: 60;
+        border:1px none red;
+        vertical-align: middle;
+        text-align: center;
+        margin: auto;
+        min-width: 15;
+        min-height: 15;
+    }
+
+    #formationTable, table
+    {
+        border:1px none red;
+        margin-top: 20;
+        margin-left: 72;
+        padding-left: 0;
+        float: left;
+
+    }
+
+
+
+
+
+</style>
 
 

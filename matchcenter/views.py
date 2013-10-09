@@ -49,7 +49,16 @@ def prep_common_context(reqid):
 
     # data for team squads, used in all views in match center
     # TODO: not good practice to pass in homeTeamId here
-    homeSquadDict, awaySquadDict = get_team_squads(reqid, homeTeamId, awayTeamId)
+    squad = get_team_squads(reqid, homeTeamId, awayTeamId)
+    homeSquadDict, awaySquadDict, matchSquadDict = [], [], []
+    isVotingActive = False
+    if len(squad)>3:
+        homeSquadDict = squad[0]
+        awaySquadDict = squad[1]
+        matchSquadDict = squad[2]
+        isVotingActive = squad[3]
+
+    homeManager, awayManager = get_team_manager(homeTeamId,awayTeamId)
 
     teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(reqid, homeTeamId, awayTeamId)
 
@@ -64,6 +73,8 @@ def prep_common_context(reqid):
                       'matchData':matchDataDict,
                       'homeTeamId':homeTeamId,
                       'awayTeamId':awayTeamId,
+                      'homeManager':homeManager,
+                      'awayManager':awayManager,
                       'homeSquad':homeSquadDict,
                       'awaySquad':awaySquadDict,
                       'weeklist': WEEK_LIST,
@@ -71,6 +82,8 @@ def prep_common_context(reqid):
                       'teamColors': colorDict,
                       'goals':goalDict,
                       'matchInfo':infoDict,
+                      'matchSquad':matchSquadDict,
+                      'votingActive':isVotingActive,
                       'selectedMatch':str(reqid)}
 
     return common_context
@@ -201,12 +214,24 @@ def partial_sidestats(request, match_id):
     homeid, awayid, all = get_match_info(match_id)
     teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(match_id, homeid, awayid)
     colorDict = get_team_colors(homeid,awayid)
+    homeSquadDict, awaySquadDict, matchSquadDict = [], [], []
+    isVotingActive = False
+    squad = get_team_squads(match_id, homeid, awayid)
+    if len(squad)>3:
+        homeSquadDict = squad[0]
+        awaySquadDict = squad[1]
+        matchSquadDict = squad[2]
+        isVotingActive = squad[3]
 
     context = {"matchData": matchDataDict,
                "teamColors" : colorDict,
                "homeTeamId" : homeid,
-               "awayTeamId" : awayid
-               }
+               "awayTeamId" : awayid,
+               'matchInfo':all,
+               'matchSquad':matchSquadDict,
+               'votingActive':isVotingActive,
+               'selectedMatch':match_id
+    }
 
     return render_to_response('_vs_sidestats.html', context)
 

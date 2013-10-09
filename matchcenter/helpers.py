@@ -139,7 +139,7 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
     if len(datalist) == 0:
         return [], []
 
-    homeSquadDict, awaySquadDict = [], [] #holds home team squad
+    homeSquadDict, awaySquadDict, matchSquadDict = [], [], [] #holds home team squad
     playerRating = get_player_ratings(match_id)
     ratingsActive = playerRating.get("VotingIsActive")
     matchS = playerRating.get("PlayerRatings")
@@ -157,7 +157,7 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
         for event in playerEvents:
             if event[0] == 7:
                 substitute = True
-            eventDict = [{'eventType':event[0],
+            eventDict.append({'eventType':event[0],
                           'matchTime':event[1],
                           'teamId':event[2],
                           'playerId':int(event[3]),
@@ -165,8 +165,7 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
                           'jerseyNumber':event[5],
                           'jerseyNumberIn':event[6],
                           'playerName':event[7],
-                          'playerNameIn':event[8]} ]
-
+                          'playerNameIn':event[8]})
 
         played = False
         votePercent = 0
@@ -182,11 +181,10 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
             if substitute:
                 played=True
 
-        #if ratingsActive == False:
-            #played=False
 
         #add player into corresponding team squads
         playerTuple = {'playerId':int(playerId),
+                       'teamId':int(playerData[3]),
                        'playerName':playerData[0],
                        'jerseyNumber':playerData[1],
                        'eleven':playerData[2],
@@ -196,12 +194,13 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
                        'voteCount':voteCount,
                        'playerEvents':eventDict}
 
+        matchSquadDict.append(playerTuple)
         if playerData[3] == homeTeamId:
             homeSquadDict.append(playerTuple)
         elif playerData[3] == awayTeamId:
             awaySquadDict.append(playerTuple)
 
-    return homeSquadDict, awaySquadDict
+    return homeSquadDict, awaySquadDict, matchSquadDict, ratingsActive
 
 def get_history(homeTeamId, awayTeamId):
     data = {"team1":homeTeamId,"team2":awayTeamId}
@@ -444,11 +443,10 @@ def get_player_ratings(matchid):
     response = urllib2.urlopen(req)
     assert response.code == 200
     response_dict = json.loads(response.read())
-    print response_dict
     return response_dict
 
 def vote_match_player(matchid,teamid,playerid):
-    url = "http://www.ligtv.com.tr/services/dataservice.svc/json/VoteMatchPlayer?matchId=%s&teamId=%s&playerId=%s" %matchid %teamid %playerid
+    url = "http://www.ligtv.com.tr/services/dataservice.svc/json/VoteMatchPlayer?matchId="+matchid+"&teamId="+teamid+"&playerId="+playerid
     values = {
         'UserName': 'sentio',
         'Password': 's3nt10'
@@ -466,6 +464,10 @@ def vote_match_player(matchid,teamid,playerid):
 
     message = votingResult.get('Message')
     code = votingResult.get('StatusCode')
-    print message
-    print code
     return message
+
+def get_team_manager(homeid,awayid):
+    homeDetails = service_request("GetTeamDetails", {"teamId":homeid})
+    awayDetails = service_request("GetTeamDetails", {"teamId":awayid})
+
+    return homeDetails[0][5], awayDetails[0][5]

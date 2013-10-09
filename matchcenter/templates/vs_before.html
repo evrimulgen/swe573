@@ -34,18 +34,18 @@
     <div class="history-area">
         <div id="comparison">
             <div class="holder">
-                <h3>Geçmiş Maçlar</h3>
+                <div class="tooltip-red"></div><h3>Geçmiş Maçlar</h3>
                 <p class="home-ratio" style="width:{{ history.homeWinRatio }}%">{{ history.homeWins }}</p>
                 <p class="draw-ratio" style="width:{{ history.drawRatio }}%">{{ history.draws}}</p>
                 <p class="away-ratio" style="width:{{ history.awayWinRatio }}%">{{ history.awayWins }}</p>
             </div>
             <div class="holder">
-                <h3>Karşılıklı Goller</h3>
+                <div class="tooltip-red"></div><h3>Karşılıklı Goller</h3>
                 <p class="home-ratio" style="width:{{ history.homeGoalRatio }}%">{{ history.homeGoals }}</p>
                 <p class="away-ratio" style="width:{{ history.awayGoalRatio }}%">{{ history.awayGoals }}</p>
             </div>
             <div class="holder">
-                <h3>Son 5 Maç</h3>
+                <div class="tooltip-red"></div><h3>Son 5 Maç</h3>
                 <div style="width: 50%;float: left;margin-top: 0px">
                     <div class="form">
                         {% include '_vs_before_form.html' with form=homeForm team=1 currentWeek=currentWeek only %}
@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="squad-area">
-        {% include '_vs_before_squads.html' with awaySquad=awaySquad homeSquad=homeSquad only %}
+        {% include '_vs_before_squads.html' with awaySquad=awaySquad homeSquad=homeSquad %}
     </div>
 
     <h1 class="main">Geçmiş Karşılaşmalar</h1>

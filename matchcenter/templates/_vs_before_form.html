@@ -1,4 +1,4 @@
-{% for f in form%}
+{% for f in form|dictsort:"weekId"%}
     {% if f.win == 1 %}
         <a href="../../{{ f.matchId }}" class="win" title="" id="{{ team }}{{ forloop.counter }}f"></a>
     {% endif %}

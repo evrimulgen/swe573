@@ -3,12 +3,6 @@
 
 {% if team == "home" %}
     <div class="vote-area">
-        <div id="percent">{{ player.votePercent }}</div>
-        <div id="vote-button">
-            {% if player.played %}
-                <button>Oyla</button>
-            {% endif %}
-        </div>
     </div>
 {% endif %}
 
@@ -106,11 +100,5 @@
 
 {% if team == "away" %}
     <div class="vote-area">
-        <div id="percent">{{ player.votePercent }}</div>
-        <div id="vote-button">
-            {% if player.played %}
-                <button>Oyla</button>
-            {% endif %}
-        </div>
     </div>
 {% endif %}

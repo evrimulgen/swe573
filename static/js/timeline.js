@@ -42,7 +42,7 @@ function Timeline(options){
         matchInfo.homeId = data.data[0][5];
         matchInfo.awayId = data.data[0][6];
 
-        if(matchInfo.status == 2 || matchInfo.status == 3) isLive = true;
+        if(matchInfo.status == 2 || matchInfo.status == 3 || matchInfo.status == 10) isLive = true;
 
         drawSlider();
         drawTeamLogos(matchInfo.homeId, matchInfo.awayId);

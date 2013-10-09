@@ -117,16 +117,17 @@
     <div class="row">
         <div id="radarContainer">
             <button class="btn" id="pauseMatch"><i class="icon-play"></i></button>
-            <button class="btn" id="showFormation">Formasyon</button>
-            <button class="btn" id="showRadar">Radar</button>
+            <!--<button class="btn" id="showFormation">Formasyon</button>
+            <button class="btn" id="showRadar">Radar</button>-->
             <button class="btn" id="popMessage"></button>
             <span id="timeDisplay" class="pull-right"></span></p>
             <div id="canvasContainer" style="position: relative;">
                 <div id="canvasOverlay">
-                    <p class="canvas-message"></p>
+                    <!--<p class="canvas-message"></p>-->
+                    <p id="canvas-play-button"><i class="icon-white icon-play"></i></p>
                 </div>
             </div>
-            <div id="likeCanvas" >
+            <!--<div id="likeCanvas" >
                 <table class ="formationTable" border="1" >
                     <tr>
                         <td id="home_LB" ></td>
@@ -212,7 +213,7 @@
                         <td id="away_LB" ></td>
                     </tr>
                 </table>
-            </div>
+            </div>-->
         </div>
     </div>
 
@@ -272,7 +273,7 @@
 
 {% endblock %}
 
-<script type="text/javascript" src="{{ STATIC_URL }}js/mustache.js"></script>
+<!--<script type="text/javascript" src="{{ STATIC_URL }}js/mustache.js"></script>
 
 <script type="text/javascript">
 $("#likeCanvas").hide();
@@ -527,7 +528,7 @@ $( document ).ready(function() {
 
 
                     if(playerName[1] == "Aissati")
-                        console.log("--->>>>>>" + playerPosition);
+                        console.log("->>>>>>" + playerPosition);
 
                 } else
 
@@ -736,6 +737,6 @@ $( document ).ready(function() {
 
 
 
-</style>
+</style>-->
 
 

@@ -227,7 +227,7 @@ def partial_sidestats(request, match_id):
                "teamColors" : colorDict,
                "homeTeamId" : homeid,
                "awayTeamId" : awayid,
-               'matchInfo':all,
+               'matchStatus': all.get("status"),
                'matchSquad':matchSquadDict,
                'votingActive':isVotingActive,
                'selectedMatch':match_id

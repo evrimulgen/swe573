@@ -1,4 +1,11 @@
 $(function () {
+    var csrftoken = $.cookie('csrftoken');
+    $.ajaxSetup({
+        crossDomain: false,
+        beforeSend: function(xhr, settings) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
     var timelineScope = new paper.PaperScope();
     var tl = new Timeline({divId: "slider", "matchId": window.matchId, sliderCount: 2, paperScope: timelineScope});
 
@@ -34,7 +41,7 @@ $(function () {
                     } else {
                         console.log("player belongs to neither home nor away team");
                         console.log(info);
-                    } 
+                    }
                 }
             });
 
@@ -64,7 +71,7 @@ $(function () {
                 }).appendTo(awayList);
             });
         });
-    }); 
+    });
 
     $("#shots").click(function () {
         if (!$(this).hasClass("active")) {

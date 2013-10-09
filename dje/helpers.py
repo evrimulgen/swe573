@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Helper functions for match center views
 
@@ -84,7 +85,7 @@ def get_goal_videos(match_id):
 
     if len(datalist) > 0 :
         for x in datalist:
-            goalDict.append({'awayTeamId':x[0],'text':"Maç Özeti",'awayTeamId':x[2],'min':x[3],'goalLink':x[4]})
+            goalDict.append({'awayTeamId':x[0],'text':'Maç Özeti','awayTeamId':x[2],'min':x[3],'goalLink':x[4]})
 
     datalist = service_request("GetGoalVideos", data) # returns "data" field in response
     if len(datalist) > 0 :

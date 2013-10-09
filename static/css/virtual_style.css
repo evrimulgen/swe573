@@ -242,6 +242,14 @@ p.no-data{
     width: 24%;
     height: 50px;
     float: left;
+
+}
+.logo{
+    margin-left: 30px;
+    height: 50px;
+    width: 180px;
+    background: url("../images/logo.png");
+    float: left;
 }
 
 #content{

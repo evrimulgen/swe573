@@ -62,7 +62,7 @@ $(function(){
             
             var $table = $card.find(".card-table");
             $table.empty();
-            $table.append("<tr><th>İstatistik</th><th>Bu Sezon</th><th>Bu Hafta</th></tr>");
+            $table.append("<tr><th>İstatistik</th><th>Sezon Ortalaması</th><th>Bu Hafta</th></tr>");
 
             var statNames = {"passes": "Toplam Pas",
                      "shotsOnTarget": "İsabetli Şut",
@@ -83,8 +83,8 @@ $(function(){
             _.each(info.statistics, function(value, key){
                 var statName = statNames[key];
 
-                var val0 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
-                var val1 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
+                var val0 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
+                var val1 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
                 if(statName!=null){
                     $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
                 }

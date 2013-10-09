@@ -22,12 +22,12 @@
             onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
         });
 
-         $(".iframe").colorbox({
-             onComplete:function(){
+        $(".iframe").colorbox({
+            onComplete:function(){
                 //$("#cboxLoadedContent").append("<div>here</div>");
-                 //$("iframe").append("<div>here</div>");
-             }
-         });
+                //$("iframe").append("<div>here</div>");
+            }
+        });
 
 
 
@@ -53,21 +53,29 @@
         {% for x in goals %}
 
             <a class="iframe" id="video{{ forloop.counter}}" >
-                <div class="teamColor">
+                {% if forloop.counter > 1 %}
+                    <div class="teamColor">
 
-                    {% if x.teamId == homeTeamId %}
+                        {% if x.teamId == homeTeamId %}
 
-                        <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
-                        <div id="box" style="background-color: #{{ teamColors.homeStroke }}"></div>
-                    {% else %}
+                            <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
+                            <div id="box" style="background-color: #{{ teamColors.homeStroke }}"></div>
+                        {% else %}
 
-                        <div id="box" style="background-color: #{{ teamColors.awayFill }}"></div>
-                        <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
-                    {% endif %}
-                </div>
-                <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                <p id="name">{{ x.playerName }}</p>
-                <p id="min">{{ x.min }}'</p>
+                            <div id="box" style="background-color: #{{ teamColors.awayFill }}"></div>
+                            <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
+                        {% endif %}
+                    </div>
+                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                {% endif %}
+                {% if forloop.counter == 1 %}
+                    <p id="name" style="width: 100%;text-align: center;font-weight: bold;font-size: 14px">{{ x.text }}</p>
+                {% else %}
+                    <p id="name">{{ x.playerName }}</p>
+                {% endif %}
+                {% if forloop.counter > 1 %}
+                    <p id="min">{{ x.min }}'</p>
+                {% endif %}
             </a>
         {% endfor %}
         <br style="clear:both"/>
@@ -75,20 +83,20 @@
 </div>
 <script type="text/javascript">
 
-            var counter = 0;
-            function getUrl(){
-                var url = document.URL ;
-                var urlComponentsArray = url.split('/');
-                var videoUrl = urlComponentsArray[0]+urlComponentsArray[1]+"//"+urlComponentsArray[2]+"/"+urlComponentsArray[3]+"/videos/"+urlComponentsArray[4]+"/"+(++counter);
-                return videoUrl;
-            }
+    var counter = 0;
+    function getUrl(){
+        var url = document.URL ;
+        var urlComponentsArray = url.split('/');
+        var videoUrl = urlComponentsArray[0]+urlComponentsArray[1]+"//"+urlComponentsArray[2]+"/"+urlComponentsArray[3]+"/videos/"+urlComponentsArray[4]+"/"+(++counter);
+        return videoUrl;
+    }
 
-            $(function(){
-                {% for x in goals %}
-                    var divname = "#video" + {{ forloop.counter }};
-                    $(divname).attr("href", getUrl());
-                {% endfor %}
-            });
+    $(function(){
+        {% for x in goals %}
+            var divname = "#video" + {{ forloop.counter }};
+            $(divname).attr("href", getUrl());
+        {% endfor %}
+    });
 
- </script>
+</script>
 

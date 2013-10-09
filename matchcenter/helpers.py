@@ -125,11 +125,18 @@ def get_match_info(match_id):
 def get_goal_videos(match_id):
 
     data = {"matchId":match_id}
-    datalist = service_request("GetGoalVideos", data) # returns "data" field in response
     goalDict = [] #holds goal video data
+    datalist = service_request("GetMatchVideos", data) # returns "data" field in response
+
+    if len(datalist) > 0 :
+        for x in datalist:
+            goalDict.append({'awayTeamId':x[0],'text':"Maç Özeti",'awayTeamId':x[2],'min':x[3],'goalLink':x[4]})
+
+    datalist = service_request("GetGoalVideos", data) # returns "data" field in response
     if len(datalist) > 0 :
         for x in datalist:
             goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
+
 
     return goalDict
 
@@ -219,6 +226,7 @@ def get_history(homeTeamId, awayTeamId):
                     'date':formatTime(match[4]),
                     'referee':match[5],
                     'stadium':match[6],
+                    'matchId':match[7],
                     'homeTeamId':match[8],
                     'awayTeamId':match[9]} for match in datalist.get("pastMatches")]
 

@@ -63,7 +63,7 @@ def prep_common_context(reqid):
     teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(reqid, homeTeamId, awayTeamId)
 
     infoDict['date'] = turkify_date(infoDict.get("date"))
-
+    print goalDict
     common_context = {'leagueId': LEAGUE_ID,
                       'seasonId': SEASON_ID,
                       'teamStats':teamStatsDict,

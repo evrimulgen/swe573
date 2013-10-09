@@ -15,8 +15,9 @@ function Timeline(options){
     var maxSecond = 90*60;
 
     var leftHandle = null;
-    var rightHandle = null; 
+    var rightHandle = null;
     var draggedHandle = null;
+    var handleText = null;
 
     var eventImages = [];
 
@@ -53,7 +54,8 @@ function Timeline(options){
     var drawSlider = function(){
         paper = scope;
         var bg = new scope.Path.Rectangle(0, 0, width, height);
-        bg.fillColor = "#ccccff";
+        bg.fillColor = "#dadada";
+
 
         var middleLine = new scope.Path.Line(new scope.Point(0, height/2), new scope.Point(width, height/2));
         middleLine.strokeColor = "#555599";
@@ -61,11 +63,30 @@ function Timeline(options){
 
         if(sliderCount > 0){
             leftHandle = new scope.Path.Rectangle(0, 0, handleWidth, height);
-            leftHandle.fillColor = "#9999ff";
+            //leftHandle.fillColor = "#7b030d";
+            leftHandle.fillColor = {
+                gradient: {
+                    stops: ['#828282', '#e3e3e3', '#828282']
+                },
+                origin: [0,height/2],
+                destination: [handleWidth,height/2]
+            }
         }
         if(sliderCount > 1){
             rightHandle = new scope.Path.Rectangle(width-handleWidth, 0, handleWidth, height);
-            rightHandle.fillColor = "#9999ff";
+            rightHandle.fillColor = {
+                gradient: {
+                    stops: ['#828282', '#e3e3e3', '#828282']
+                },
+                origin: [width-handleWidth,height/2],
+                destination: [width,height/2]
+            }
+        }
+        for(var i = 5; i<91; i=i+5){
+            var text1 = new scope.PointText(new scope.Point(-25+handleWidth+width/90*i,height-3));
+            text1.justification = 'center';
+            text1.fillColor = 'black';
+            text1.content = i;
         }
         scope.view.draw();
     }
@@ -79,7 +100,7 @@ function Timeline(options){
             }
 
             paper = scope;
-            
+
             if(momentumPath) momentumPath.remove();
 
             momentumPath = new scope.Path();
@@ -216,8 +237,8 @@ function Timeline(options){
         // Todo: differentiate between events, or highlight the entry below on hover/click
         paper = scope;
 
-        imageNames = ["goal.png", "own-goal.png", "penalty.png", "missed-pen.png", 
-                      "yellow.png", "second-yellow.png", "red.png", "substitution.png"];
+        imageNames = ["goal.png", "own-goal.png", "penalty.png", "missed-pen.png",
+            "yellow.png", "second-yellow.png", "red.png", "substitution.png"];
 
         var xoffset = timeToPixel(event[1], 0);
         var yoffset;

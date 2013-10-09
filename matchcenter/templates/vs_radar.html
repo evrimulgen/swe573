@@ -126,6 +126,93 @@
                     <p class="canvas-message"></p>
                 </div>
             </div>
+            <div id="likeCanvas" >
+                <table class ="formationTable" border="1" >
+                    <tr>
+                        <td id="home_LB" ></td>
+                        <td id="home_WBL" ></td>
+                        <td id="home_ML" ></td>
+                        <td id="home_AML" ></td>
+                        <td id="home_WL" ></td>
+
+                    </tr>
+                    <tr>
+                        <td id="home_CBL" ></td>
+                        <td id="home_DML" ></td>
+                        <td id="home_MCL" ></td>
+                        <td id="home_AMCL" ></td>
+                        <td id="home_FL" ></td>
+
+                    </tr>
+                    <tr>
+                        <td id="home_DC" ></td>
+                        <td id="home_DMC" ></td>
+                        <td id="home_MC" ></td>
+                        <td id="home_AMC" ></td>
+                        <td id="home_FC" ></td>
+
+                    </tr>
+                    <tr>
+                        <td id="home_CBR" ></td>
+                        <td id="home_DMR" ></td>
+                        <td id="home_MCR" ></td>
+                        <td id="home_AMCR" ></td>
+                        <td id="home_FR" ></td>
+
+                    </tr>
+                    <tr>
+                        <td id="home_RB" ></td>
+                        <td id="home_WBR" ></td>
+                        <td id="home_MR" ></td>
+                        <td id="home_AMR" ></td>
+                        <td id="home_WR" ></td>
+
+                    </tr>
+                </table>
+
+                <table  class ="formationTable secondTable" border="1" >
+                    <tr>
+
+                        <td id="away_WR"></td>
+                        <td id="away_AMR"></td>
+                        <td id="away_MR"></td>
+                        <td id="away_WBR"></td>
+                        <td id="away_RB"></td>
+                    </tr>
+                    <tr>
+
+                        <td id="away_FR" ></td>
+                        <td id="away_AMCR" ></td>
+                        <td id="away_MCR"  ></td>
+                        <td id="away_DMR"  ></td>
+                        <td id="away_CBR"  ></td>
+                    </tr>
+                    <tr>
+
+                        <td id="away_FC" ></td>
+                        <td id="away_AMC" ></td>
+                        <td id="away_MC" ></td>
+                        <td id="away_DMC" ></td>
+                        <td id="away_DC" ></td>
+                    </tr>
+                    <tr>
+
+                        <td id="away_FL" ></td>
+                        <td id="away_AMCL" ></td>
+                        <td id="away_MCL" ></td>
+                        <td id="away_DML" ></td>
+                        <td id="away_CBL" ></td>
+                    </tr>
+                    <tr>
+
+                        <td id="away_WL" ></td>
+                        <td id="away_AML" ></td>
+                        <td id="away_ML" ></td>
+                        <td id="away_WBL" ></td>
+                        <td id="away_LB" ></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -188,7 +275,15 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/mustache.js"></script>
 
 <script type="text/javascript">
-
+$("#likeCanvas").hide();
+$("#showFormation").onclick(function(){
+    $("#canvasContainer").hide();
+    $("#likeCanvas").show();
+});
+$("#showRadar").onclick(function(){
+    $("#likeCanvas").hide();
+    $("#canvasContainer").show();
+});
 
 
 $( document ).ready(function() {

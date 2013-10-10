@@ -47,8 +47,11 @@ function Timeline(options){
 
         drawSlider();
         drawTeamLogos(matchInfo.homeId, matchInfo.awayId);
-        loadEvents();
-        loadMomentum();
+        loadMomentum(function(what){
+            console.log(what);
+            loadEvents();
+            drawHandle();
+        });
     });
 
     var drawSlider = function(){
@@ -61,6 +64,17 @@ function Timeline(options){
         middleLine.strokeColor = "#555599";
         middleLine.strokeWidth = 2;
 
+
+        for(var i = 5; i<91; i=i+5){
+            var text1 = new scope.PointText(new scope.Point(-25+handleWidth+width/90*i,height-3));
+            text1.justification = 'center';
+            text1.fillColor = 'black';
+            text1.content = i;
+        }
+        scope.view.draw();
+    }
+    var drawHandle = function(){
+        paper = scope;
         if(sliderCount > 0){
             leftHandle = new scope.Path.Rectangle(0, 0, handleWidth, height);
             //leftHandle.fillColor = "#7b030d";
@@ -82,16 +96,10 @@ function Timeline(options){
                 destination: [width,height/2]
             }
         }
-        for(var i = 5; i<91; i=i+5){
-            var text1 = new scope.PointText(new scope.Point(-25+handleWidth+width/90*i,height-3));
-            text1.justification = 'center';
-            text1.fillColor = 'black';
-            text1.content = i;
-        }
         scope.view.draw();
     }
 
-    var loadMomentum = function(){
+    var loadMomentum = function(callback){
         $.post("/api/GetMatchMomentum", JSON.stringify({"matchId": match_id})).done(function(data){
             if(isLive){
                 maxSecond = 90*60;
@@ -121,6 +129,7 @@ function Timeline(options){
                 momentumPath.add(new scope.Point(x, y));
             });
             scope.view.draw();
+            callback("what");
         });
     }
 

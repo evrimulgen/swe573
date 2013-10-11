@@ -52,7 +52,7 @@
     {% else %}
         {% for x in goals %}
 
-            <a class="iframe" id="video{{ forloop.counter}}" >
+            <a id="video{{ forloop.counter}}" href="{{ x.goalLink }}" target="_blank" >
                 {% if forloop.counter > 1 %}
                     <div class="teamColor">
 
@@ -81,22 +81,5 @@
         <br style="clear:both"/>
     {% endif %}
 </div>
-<script type="text/javascript">
 
-    var counter = 0;
-    function getUrl(){
-        var url = document.URL ;
-        var urlComponentsArray = url.split('/');
-        var videoUrl = urlComponentsArray[0]+urlComponentsArray[1]+"//"+urlComponentsArray[2]+"/"+urlComponentsArray[3]+"/videos/"+urlComponentsArray[4]+"/"+(++counter);
-        return videoUrl;
-    }
-
-    $(function(){
-        {% for x in goals %}
-            var divname = "#video" + {{ forloop.counter }};
-            $(divname).attr("href", getUrl());
-        {% endfor %}
-    });
-
-</script>
 

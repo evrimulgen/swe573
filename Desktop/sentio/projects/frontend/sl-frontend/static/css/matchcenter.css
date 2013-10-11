@@ -1,0 +1,19 @@
+.row {
+    margin-bottom: 20px;
+}
+
+div.sidebox > div {
+    height: 40px;
+}
+
+#timeDisplay {
+    margin-right: 65px;
+    color: #333355;
+    font-size: 16pt;
+}
+
+canvas#slider {
+    margin-top: 20px;
+    margin-bottom: -15px;
+    margin-left: 50px;
+}

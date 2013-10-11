@@ -1,0 +1,121 @@
+ul.no-bullets, ol.no-bullets{
+	list-style-type: none;
+}
+
+.navbar .nav li:hover {
+	background-color: #fafafa;
+}
+
+p.centered {
+	text-align: center;
+}
+
+.large-text {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.teamlist-container{
+	margin-left: auto;
+	margin-right: auto;
+	float: none;
+}
+
+.teamlist-inner {
+	float: left;
+	margin-left: 30px;
+	margin-right: 30px;
+	padding: 0;
+}
+
+.teamlist-inner h5{
+	margin-left: 10px;
+	border-bottom: 1px solid black;
+}
+
+.teamlist {
+	display: inline-block;
+	margin: 0;
+	float: left;
+}
+
+.teamlist:last-child{
+	border-bottom: none;
+}
+
+.teamlist li {
+	font-size: 12px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-bottom: 1px dashed #666;
+}
+
+.teamlist li:hover {
+	background-color: rgba(0,255,255,0.1);
+	cursor: pointer;
+}
+
+.teamlist li.active {
+	background-color: rgba(0,0,255,0.1);
+}
+
+.offset-half {
+	margin-left: 90px;
+}
+
+.chalkboard-controls { 
+	font-size: 12px;
+	text-align: center;
+}
+
+.macskoru {
+	margin-top: 8px;
+}
+
+.game-banner {
+	margin-bottom: 0;
+}
+
+.game-info p {
+	font-size: 12px;
+}
+
+.pitch {
+	margin-top: 10px;
+	margin-left: 50px;
+	margin-bottom: 10px;
+	width: 662px;
+	height: 440px;
+}
+
+.chalkboard{
+	position: relative;
+}
+
+.chalkboard canvas{
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.chalkboard #spinner{
+	display: none; 
+	position: absolute;
+	top: 162px;
+	left: 254.5px;
+	z-index: 300;
+}
+
+.chalkboard #fgCanvas{
+	z-index: 200;
+}
+
+.chalkboard-controls {
+	text-align: center;
+}
+
+.teamlist li{
+	color: #333;
+}

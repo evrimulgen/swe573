@@ -1,0 +1,20 @@
+/*
+    Styling for Team Stats bar charts
+*/
+
+.text {
+    font-size: 15px;
+    stroke: none;
+    shape-rendering: crispEdges;
+    font-weight: bold;
+    font-family: sans-serif;
+
+}
+
+.label-text {
+    fill: white;
+}
+
+.mid-text {
+    fill: black;
+}

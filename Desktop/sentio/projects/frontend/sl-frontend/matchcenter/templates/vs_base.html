@@ -1,0 +1,314 @@
+{% load url from future %}
+{% load static %}
+{% load templateextras %}
+{% load match_center_tags %}
+{% get_static_prefix as STATIC_URL %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}</title>
+
+    {% include '_vs_headincludes.html' %}
+
+
+    {% block head-addition %}
+
+    {% endblock %}
+
+</head>
+
+<body>
+
+<div id="global-header">
+    {% include '_vs_scoreboard.html' with matchInfo=matchInfo only %}
+</div>
+
+<div id="content">
+    <div id="sidebar">
+        {% sl_fixture selectedMatch %}
+        {% include '_vs_goalvideo.html' with goals=goals teamColors=teamColors homeTeamId=homeTeamId awayTeamId=awayTeamId  only %}
+
+        <div id="sidestats-container">
+            {% include '_vs_sidestats.html' with matchData=matchData teamColors=teamColors homeTeamId=homeTeamId awayTeamId=awayTeamId matchSquad=matchSquad matchStatus=matchInfo.status votingActive=votingActive selectedMatch=selectedMatch %}
+        </div>
+    </div>
+    <div id="main">
+        <div id="menu">
+            {% block menu %}{% endblock %}
+        </div>
+        <div id="container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <br style="clear:both"/>
+
+</div>
+
+<div id="footer"></div>
+<script src="{{ STATIC_URL }}js/knockout-2.3.0.js"></script>
+<script>
+var csrftoken = $.cookie('csrftoken');
+$.ajaxSetup({
+    crossDomain: false,
+    beforeSend: function(xhr, settings) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+    }
+});
+
+// fades in or fades out the element depending on the value of the logical comparison
+ko.bindingHandlers.fadeVisible = {
+    init: function(element, valueAccessor) {
+        // Start visible/invisible according to initial value
+        var shouldDisplay = valueAccessor();
+        $(element).toggle(shouldDisplay);
+    },
+    update: function(element, valueAccessor) {
+        // On update, fade in/out
+        var shouldDisplay = valueAccessor();
+        shouldDisplay ? $(element).show() : $(element).hide();
+    }
+};
+
+service_request = function(request,jsData,returnValue){
+    $.post("/api/"+request, JSON.stringify(jsData)).done(function(rawData){
+        returnValue(rawData.data[0]);
+    })
+};
+
+match_info = function(match_id,returnValue){
+    $.post("/matchinfo/" + match_id + "/").done(function(response){
+        returnValue(response);
+    })
+}
+
+
+
+
+function MatchObject(weekId,weekStatus,matchId,matchStatus,homeTeam,homeTeamCond,homeTeamInt,awayTeam,awayTeamCond,awayTeamInt,homeTeamId,awayTeamId,homeScore,awayScore,date,time,liveTime,referee,stadium,matchClass){
+    var self = this;
+    self.weekId = weekId;
+    self.weekStatus = weekStatus;
+    self.matchId = matchId;
+    self.matchStatus = ko.observable(matchStatus);
+    if(matchStatus == 6 || matchStatus == 11 || matchStatus == 13){
+        self.liveTime = ko.observable("MS");
+        self.homeScore = ko.observable(homeScore);
+        self.awayScore = ko.observable(awayScore);
+    }
+    else if(matchStatus == 1){
+        self.liveTime = ko.observable("");
+        self.homeScore = ko.observable("0");
+        self.awayScore = ko.observable("0");
+    }
+    else if(matchStatus == 10){
+        self.liveTime = ko.observable("İY");
+        self.homeScore = ko.observable(homeScore);
+        self.awayScore = ko.observable(awayScore);
+    }
+    else{
+        {{ calc }}
+        self.liveTime = ko.observable(liveTime + "'");
+        self.homeScore = ko.observable(homeScore);
+        self.awayScore = ko.observable(awayScore);
+    }
+    self.homeTeam = homeTeam;
+    self.homeTeamCond = homeTeamCond;
+    self.homeTeamInt = homeTeamInt;
+    self.awayTeam = awayTeam;
+    self.awayTeamCond = awayTeamCond;
+    self.awayTeamInt = awayTeamInt;
+    self.homeTeamId = homeTeamId;
+    self.awayTeamId = awayTeamId;
+    self.date = date;
+    self.time = time;
+    if(referee == "None"){
+        self.referee = "Henüz belirli değil.";
+    }
+    else{
+        self.referee = referee;
+    }
+    if(stadium == "None"){
+        self.stadium = "Henüz belirli değil.";
+    }
+    else{
+        self.stadium = stadium;
+    }
+    self.matchClass = matchClass;
+};
+
+function MatchEvent(type,min,teamId,playerId,playerIdIn,jerseyNumber,jerseyNumberIn,playerName,playerNameIn){
+    var self = this;
+    self.type = type;
+    self.min = min;
+    self.teamId = teamId;
+    self.playerId = playerId;
+    self.playerIdIn = playerIdIn;
+    self.jerseyNumber = jerseyNumber;
+    self.jerseyNumberIn = jerseyNumberIn;
+    self.playerName = playerName;
+    self.playerNameIn = playerNameIn;
+};
+
+var FixtureModel = function() {
+    var self = this;
+
+    //stores weeks of the fixture
+    self.weeks = ko.observableArray();
+
+    {% for week in weeks|dictsort:"weekId" %}
+        self.weeks.push({week_id: "{{ week.weekId }}", week_status:"{{ week.status }}"}) ;
+    {% endfor %}
+
+
+    self.matchEvents = ko.observableArray();
+
+    {% for event in events|dictsortreversed:'min' %}
+        self.matchEvents.push(new MatchEvent("{{ event.type }}","{{ event.min }}","{{ event.teamId }}","{{ event.playerId }}","{{ event.playerIdIn }}","{{ event.jerseyNumber }}","{{ event.jerseyNumberIn }}","{{ event.playerName }}","{{ event.playerNameIn }}"));
+    {% endfor %}
+
+    //stores all matches in the fixture
+    self.matches = ko.observableArray();
+    {% for week in weeks|dictsort:"weekId" %}
+        {% for match in week.matches|dictsort:"time"|dictsort:"date" %}
+            {% if match.matchId == selectedMatch  %}
+                self.matches.push(new MatchObject("{{ week.weekId }}","{{ week.status }}","{{ match.matchId }}",{{ match.matchStatus }},"{{ match.homeTeam }}", "{{ match.homeTeamCond }}","{{ match.homeTeamInt }}","{{ match.awayTeam }}","{{ match.awayTeamCond}}", "{{ match.awayTeamInt }}","{{ match.homeTeamId }}","{{ match.awayTeamId }}","{{ match.homeScore }}","{{ match.awayScore }}","{{ match.date }}","{{ match.time }}","{{ match.liveTime}}","{{ match.referee }}","{{ match.stadium }}","match-selected"));
+            {% else %}
+                self.matches.push(new MatchObject("{{ week.weekId }}","{{ week.status }}","{{ match.matchId }}",{{ match.matchStatus }},"{{ match.homeTeam }}", "{{ match.homeTeamCond }}","{{ match.homeTeamInt }}","{{ match.awayTeam }}","{{ match.awayTeamCond}}", "{{ match.awayTeamInt }}","{{ match.homeTeamId }}","{{ match.awayTeamId }}","{{ match.homeScore }}","{{ match.awayScore }}","{{ match.date }}","{{ match.time }}","{{ match.liveTime}}","{{ match.referee }}","{{ match.stadium }}","match"));
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+
+
+    self.selectedWeek = ko.observable("{{ currentWeek }}");
+    self.selectedMatch = ko.observable("{{ selectedMatch }}");
+
+    //filters the matches for selected week
+    self.matchesToShow = ko.computed(function() {
+        // Represents a filtered list of matches
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            return match.weekId.toLowerCase() == desiredWeek.toLowerCase();
+        });
+    }, this);
+
+    self.playedMatches = ko.computed(function(){
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus() == 6 || match.matchStatus() == 11 || match.matchStatus() == 13)){
+                return match;
+            }
+        });
+    },this);
+
+    self.liveMatches = ko.computed(function(){
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus() != 6 && match.matchStatus() != 11 && match.matchStatus() != 13 && match.matchStatus() != 1 && match.matchStatus() != 5 && match.matchStatus() != 17)){
+                return match;
+            }
+        });
+    },this);
+
+    self.notPlayedMatches = ko.computed(function(){
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus() ==1)){
+                return match;
+            }
+        });
+    },this);
+
+    self.fixtureWidgetHeight = ko.computed(function(){
+        var baseHeight = 310;
+        if( self.playedMatches().length>0){
+            baseHeight += 20;
+        }
+        if( self.notPlayedMatches.length>0){
+            baseHeight += 20;
+        }
+        return baseHeight + "px";
+    },this);
+
+
+    // Selects 3 weeks to show, depending on the selected week
+    self.weeksToShow = ko.computed(function() {
+        // Represents a filtered list of weeks
+        var desiredWeek = parseInt(self.selectedWeek());
+        return ko.utils.arrayFilter(this.weeks(), function(week) {
+            // if first week return first 3 weeks
+            var weekId = parseInt(week.week_id);
+            if(desiredWeek == 1 && weekId<4){
+                return week;
+            }
+            // if last week return last 3 weeks
+            if(desiredWeek == 34 && weekId>31){
+                return week;
+            }
+            // else return selected week with one before and one after
+            if(weekId == desiredWeek + 1 | weekId == desiredWeek | weekId == desiredWeek - 1){
+                return week;
+            }
+        });
+    }, this);
+
+    self.matchInfo = ko.computed(function(){
+        var matchId = self.selectedMatch();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(parseInt(matchId) == match.matchId){
+                return match;
+            }
+        });
+    }, this);
+
+
+    self.autoRefresh = function(){
+        ko.utils.arrayForEach(self.matches(), function(match) {
+            var currentMatch = self.selectedMatch();
+            if(parseInt(match.weekStatus) == 0 || parseInt(match.matchId) == currentMatch){
+                match_info(match.matchId,function(resp){
+                    var response = JSON.parse(resp);
+                    match.homeScore(response["homeTeamScore"] | 0);
+                    match.awayScore(response["awayTeamScore"] | 0);
+                    match.matchStatus(response["status"]);
+                    if(match.matchStatus() == 6 || match.matchStatus() == 11 || match.matchStatus() == 13){
+                        match.liveTime("MS");
+                    }
+                    else if(match.matchStatus() == 1){
+                        match.liveTime("");
+                    }
+                    else if(match.matchStatus() == 10){
+                        match.liveTime("İY");
+                    }
+                    else{
+                        match.liveTime(response["liveTime"]+"'");
+                    }
+                    <!--console.log(match.homeTeam + " - " + match.awayTeam + " match updated with; matchStatus:" + match.matchStatus() + " homeScore:" + match.homeScore() + " awayScore:" + match.awayScore() + " liveTime:" + match.liveTime());-->
+                });
+            }
+        });
+        $("#sidestats-container").load("/new/partial/sidestats/{{ selectedMatch }}/");
+    };
+
+
+    setInterval(self.autoRefresh,30000);
+
+// changes the selected week
+    self.changeWeek = function(elem) {
+        self.selectedWeek(elem.week_id);
+    };
+
+// show and hide effects
+    this.showMatch = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideToggle() };
+    this.hideMatch = function(elem) { if (elem.nodeType === 1) $(elem).slideToggle(function() { $(elem).remove(); }),1200 };
+};
+
+ko.applyBindings(new FixtureModel());
+</script>
+
+</body>
+
+</html>

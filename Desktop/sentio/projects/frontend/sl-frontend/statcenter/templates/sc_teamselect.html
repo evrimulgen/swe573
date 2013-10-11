@@ -1,0 +1,49 @@
+{% extends "sc_base.html" %}
+
+{% block head-addition %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/teamstatselect.js"></script>
+{% endblock %}
+
+{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}
+
+{% block info %}
+    <div class="info">
+        <h1 style="margin:0px;width:100%;text-align:center;float: left;line-height: 50px; margin-left: 5px;font-family: CenturyGothic;font-size: 20px">Takım Seçiniz</h1>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="selection-area" style="height: 400px">
+        {% for i in try_list %}
+            <div class = "teamselect">
+                <a href="{{ i.teamId }}" class="wraptocenter"><span></span><img src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png"></a>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block menu-header %}
+
+    <ul id="nav">
+        <li>
+            <a href="../"><img src="{{ STATIC_URL }}images/home_disabled.png">Ana Sayfa</a>
+        </li>
+        <li><a class="active" href=""><img src="{{ STATIC_URL }}images/clubs.png">Takımlar</a>
+
+        </li>
+        <li>
+            <a href="../player"><img src="{{ STATIC_URL }}images/players_disabled.png">Oyuncular</a>
+        </li>
+        <li>
+            <a href="../compaer"><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+
+
+{% block sidebar %}
+   {% include '_sc_team_sidebase.html' %}
+{% endblock %}

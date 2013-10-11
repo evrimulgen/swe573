@@ -1,0 +1,250 @@
+{% extends "sc_base.html" %}
+
+{% block head-addition %}
+    <script type="text/javascript">
+        function handleSelect(elm)
+        {
+            console.log(elm.value);
+            $.ajax({
+                url: "http://sentios.cloudapp.net/api/GetTeamPlayers",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    "leagueId": 1,
+                    "seasonId": 9064,
+                    "teamId": elm.value
+                },
+                success: function( data ) {
+                    console.log(data);
+                    var players = data["data"];
+                }
+            });
+        }
+    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/d3.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/simpled3.js"></script>
+    <script>
+        $(function() {
+            var availableTags = [
+                {% for i in best_eleven_list %}
+                    "{{ i.playerName }}",
+                {% endfor %}
+            ];
+            $( "#tags" ).autocomplete({
+                source: availableTags
+            });
+
+            var objectChart = new d3BarChart();
+            objectChart.drawChart('player-chart-container',500,200,null);
+
+            var refreshChart = function(attr){
+                var data = {
+                    "leagueId": 1,
+                    "seasonId": 9064,
+                    "attributeId": attr,
+                    "playerId": "{{ p_id }}"
+                };
+
+                console.log(JSON.stringify(data));
+
+                $.ajax({
+                    url: "/api/GetPlayerLastNValue",
+                    type: "POST",
+                    dataType: "json",
+                    data: JSON.stringify(data),
+                    processData: false,
+                    success: function(d){
+                        var a = [];
+                        //console.log(d);
+
+                        $.each(d.data, function(ix, val){
+                            a.push(val[4]);
+                            //console.log(val);
+                        });
+                        //console.log(a);
+                        objectChart.updateChart(a);
+                    }
+                })
+            }
+
+            $("#player-chart-attr-select").change(function(){
+               refreshChart($(this).val());
+            });
+
+
+        });
+    </script>
+
+
+{% endblock %}
+
+{% block info %}
+    <div class="info">
+        <p style="margin-left:10px; color:#000000;line-height: 50px;float: left">Oyuncu Ara:</p>
+        <div class="ui-widget" style="float: left;margin: 12px">
+            <input id="tags" />
+        </div>
+        <select style="color:#000000;width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px" onchange="javascript:handleSelect(this)">
+            {% for i in try_list %}
+                {% if i.teamId == team_selected %}
+                    <option class="item" value="{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
+                {% endif %}
+            {% endfor %}
+            {% for i in try_list %}
+                {% if i.teamId != team_selected %}
+                    <option class="item" value="{{ i.teamId }}"> <a>{{ i.teamName }}</a> </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <div id="player-list">
+            <select style="color:#000000;width: 20%;margin: 10px;float: left;height: 30px; font-size: 12px ">
+                {% for i in players %}
+                    {% if i.playerId == p_id %}
+                        <option class="item" value="{{ i.playerId }}"> <a>{{ i.playerName }}</a> </option>
+                    {% endif %}
+                {% endfor %}
+                {% for i in players %}
+                    {% if i.playerId != p_id %}
+                        <option class="item" value="{{ i.playerId }}"> <a>{{ i.playerName }}</a> </option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <button style="float: left;margin-left: 0.5%;margin-top: 12px;font-size: 14px">Oyuncu Sayfası</button>
+        <button style="float: left;margin-left: 0.5%;margin-top: 12px;font-size: 14px">Karşılaştır</button>
+    </div>
+{% endblock %}
+
+
+{% block menu-header %}
+
+    <ul id="nav">
+        <li>
+            <a href="../../../../"><img src="{{ STATIC_URL }}images/home_disabled.png">Ana Sayfa</a>
+        </li>
+        <li><a href="../../../team"><img src="{{ STATIC_URL }}images/clubs_disabled.png">Takımlar</a>
+
+        </li>
+        <li>
+            <a class="active" href=""><img src="{{ STATIC_URL }}images/players.png">Oyuncular</a>
+        </li>
+        <li>
+            <a href="../../../compare"><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="insideleft">
+        {% for x in details %}
+            <div class="infobox">
+                <h1>{{ x.playerName }}</h1>
+                <img src="{{ STATIC_URL }}images/players/{{ p_id }}.jpg">
+                <div class="line-holder">
+                    <p class="first">Takım</p>
+                    <p class="second">{{ x.teamName }}</p>
+                </div>
+                <div class="line-holder">
+                    <p class="first">Doğum Tarihi</p>
+                    <p class="second">{{ x.date }}</p>
+                </div>
+                <div class="line-holder">
+                    <p class="first">Ülke</p>
+                    <p class="second">{{ x.nation }}</p>
+                </div>
+                <div class="line-holder">
+                    <p class="first">Boy</p>
+                    <p class="second">{{ x.height }}</p>
+                </div>
+                <div class="line-holder">
+                    <p class="first">Milli Olma Sayısı</p>
+                    <p class="second">{{ x.cap }}</p>
+                </div>
+                <div class="line-holder">
+                    <p class="first">Milli Gol</p>
+                    <p class="second">{{ x.goal }}</p>
+                </div>
+            </div>
+
+            <div class="box-container" style="width: 98%;margin-left: 1%">
+
+
+                <a class="content" href="#" style="width: 96%">
+                    <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Son Maçlar</p>
+                    <div id="image" style="width: 10%;margin-top: -2px">
+
+                    </div>
+                    <ul style="width: 70%; margin-top: -2px">
+                        {% for i in lastMatches %}
+                            <li><p class="first">{{ i.0 }}</p></li>
+                        {% endfor %}
+                    </ul>
+                </a>
+                <a class="content" href="#" style="width: 96%">
+                    <p style="width: 100%;text-align: center;font-size: 14px;height: 15px;line-height: 15px;margin-top: 6px;font-weight: bold">Goller</p>
+                    <div id="image" style="width: 10%;margin-top: -2px">
+
+                    </div>
+                    <ul style="width: 70%; margin-top: -2px">
+                        {% for i in lastGoals %}
+                            <li>
+                                <a href="{{ i.5 }}">{{ i.1 }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </a>
+
+            </div>
+
+
+
+
+        {% endfor %}
+    </div>
+    <div class="insideright">
+
+
+        <div class="box-container" style="width: 96%;margin-top: 0px">
+            <h3>Oyuncu Özeti</h3>
+            <table class="table-player-stats table-hover">
+                <tr>
+                    <th>İstatistik</th>
+                    <th>Bu Sezon</th>
+                    <th>Bu Hafta</th>
+                </tr>
+                {% for k,v in player_stats.items %}
+                    <tr>
+                        <td>{{ k }}</td>
+                        <td>{{ v.0|floatformat }}</td>
+                        <td>{{ v.1|floatformat }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div id="player-chart-container" class="box-container" style="width: 96%;">
+            <select name="player-chart-option" id="player-chart-attr-select">
+                <option value="25"> Toplam Mesafe (m) </option>
+                <option value="25"> Sprint Mesafesi (m) </option>
+                <option value="25"> İsabetli Pas </option>
+                <option value="25"> Pas </option>
+                <option value="25"> İsabetli Şut </option>
+                <option value="25"> Şut </option>
+            </select>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+{% block sidebar %}
+    <div id="content">
+
+        {% include '_sc_player_sidebar.html' %}
+
+    </div>
+{% endblock %}

@@ -1,0 +1,6 @@
+.idea/
+chalkboard/
+*.log
+*.pyc
+monitor.py
+venv/

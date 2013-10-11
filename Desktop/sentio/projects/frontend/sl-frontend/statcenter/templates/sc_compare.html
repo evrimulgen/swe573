@@ -1,0 +1,31 @@
+{% extends "sc_base.html" %}
+
+{% block head-addition %}
+
+{% endblock %}
+
+{% block menu-header %}
+
+    <ul id="nav">
+        <li>
+            <a href="../../"><img src="{{ STATIC_URL }}images/home_disabled.png">Ana Sayfa</a>
+        </li>
+        <li><a href="../../team"><img src="{{ STATIC_URL }}images/clubs_disabled.png">Takımlar</a>
+
+        </li>
+        <li>
+            <a href="../../player"><img src="{{ STATIC_URL }}images/players_disabled.png">Oyuncular</a>
+        </li>
+        <li>
+            <a class="active" href="../"><img src="{{ STATIC_URL }}images/compare.png">Karşılaştır!</a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+
+{% block content %}
+        <a href="team">Takım</a>
+        <a href="player">Oyuncu</a>
+{% endblock %}
+

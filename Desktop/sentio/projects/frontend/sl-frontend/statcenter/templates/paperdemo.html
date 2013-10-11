@@ -1,0 +1,43 @@
+{% load static %}
+{% get_static_prefix as STATIC_URL %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paper sandbox</title>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.10.1.js"></script>
+    <script src="{{ STATIC_URL }}js/underscore.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.cookie.js" type="text/javascript"></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js"></script>
+
+    <script type="text/javascript"> window.matchId = 11868966; </script>
+
+    <script src="{{ STATIC_URL }}js/paper.js" type="text/javascript"></script>
+
+    <script src="{{ STATIC_URL }}js/radar.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}/js/timeline.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/radar_ui.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/virtual_style.css">
+</head>
+<body>
+    <div class="row">
+
+        <canvas id="slider"></canvas>
+    </div>
+    <div class="row">
+        <div id="radarContainer">
+            <button class="btn" id="pauseMatch"><i class="icon-play"></i></button>
+            <button class="btn" id="popMessage">Pop Message</button>
+            <span id="timeDisplay" class="pull-right"></span></p>
+            <div id="canvasContainer" style="position: relative;">
+                <div id="canvasOverlay">
+                    <p class="canvas-message"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+{% extends "matchbase.html" %}
+
+{% block title %}Maç Merkezi | istatistik.ligtv.com.tr{% endblock %}
+
+{% block head-addition %}
+
+{% endblock %}
+
+
+{% block menu-header %}
+        <div id="navbar">
+                <div id="nav" style="padding-top: 5px">
+
+                    <div id="first">
+                        <a href="../before">MAÇ ÖNCESİ</a>
+                    </div>
+
+                    <div id="active">
+                            <a href="../center">MAÇ MERKEZİ</a>
+                    </div>
+
+                    <a href="../summary">MAÇ ÖZETİ</a>
+
+                    <a href="../player">OYUNCU İSTATİSTİKLERİ</a>
+
+                    <div id="last">
+                        <a href="../table">MAÇ TAHTASI</a>
+                    </div>
+
+                </div>
+        </div>
+
+{% endblock %}
+
+{% block scoreboard %}
+
+    <div style = "width: 100%; height: 40px; margin-right: auto; margin-left: auto; background: #f2f2f2">
+            <div style = "width: 100%; height: 40px; background: #f2f2f2;margin-right: auto; margin-left: auto">
+                <div style = "width: 500px; height: 40px; background: #f2f2f2;float: left">
+                    <div>
+                         <p style="color: #000000; margin-left:5px;line-height: 40px; font-family: AvalonB; text-align: center;float:right ">{{ homeTeam }}</p>
+                        <img style="background-size: cover; height: 40px;float:right" src={{ STATIC_URL }}{{ homeLogo }}>
+                    </div>
+                </div>
+                <div style = "width: 100px; height: 40px; background: #f2f2f2;float: left; margin-left: 20px; margin-right: 20px">
+                    <p style="height: 40px; line-height: 40px; text-align: left; color:#000000;float: left">:2</p>
+                    <p style="height: 40px; line-height: 40px; width: 70px; text-align: center; color:#000000;float: left">65:42</p>
+                    <p style="height: 40px; line-height: 40px; text-align: right; color:#000000;float: left">2:</p>
+                </div>
+                <div style = "width: 400px; height: 40px; background: #f2f2f2;float: left">
+                    <div>
+                        <p style="color: #000000;margin-right: 5px; line-height: 40px; font-family: AvalonB; text-align: center;float: left">{{ awayTeam }}</p>
+                        <img style="background-size: cover; height: 40px; float:left" src={{ STATIC_URL }}{{ awayLogo }}>
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}
+
+{% block timebar %}
+    <div style = "width: 100%; height: 40px; background: #bababa;-webkit-border-radius: 10px 10px 10px 10px;
+            -moz-border-radius: 10px 10px 10px 10px;
+            border-radius: 10px 10px 10px 10px; margin-right: auto; margin-left: auto">
+            <p style="height: 40px; line-height: 40px; text-align: center; color:#000000;">
+            TimeBar</p>
+    </div>
+{% endblock %}
+
+{% block radar-menu %}
+    <div id="navbar" style="margin-left: auto;margin-right: auto; height: 37px;">
+                <div id="nav">
+                    <div id="first">
+                        <a href="../before" style="width: 100px; height: 35px">FORMASYON</a>
+                    </div>
+                    <div id="active">
+                            <a href="../center" style="width: 100px; height: 35px">RADAR</a>
+                    </div>
+                    <a href="../summary" style="width: 100px; height: 35px">OLAYLAR</a>
+
+                   <div id="last">
+                         <a href="../player" style="width: 100px; height: 35px">PAS</a>
+                    </div>
+
+                </div>
+        </div>
+{% endblock %}
+{% block radar %}
+    <div id= "radar-pitch"style="margin-top: 3px">
+        <img style="background-size: cover; width: 750px; float:left " src={{ STATIC_URL }}images/pitch.png>
+    </div>
+    <div id="includedContent" style="float: left">{% include 'playercardbase.html' with image_link="images/emre.jpg" player_name="EMRE BELOZOGLU" player_info="Yaş 30/1.7 m/72 kg" %}</div>
+    <div id="includedContent" style="float: left">{% include 'playercardbase.html' with image_link="images/melo.jpg" player_name="FELIPE MELO" player_info="Yaş 30/1.7 m/72 kg" %}</div>
+{% endblock %}
+
+

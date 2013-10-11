@@ -1,0 +1,68 @@
+<div style="width: 100%;height: 35px">
+    <select id="teamsideselect" class="topmenuoption" data-bind="options: statsToShow, optionsText: 'text', value: selectedField"></select>
+</div>
+<div class="teamcomparison" id="teamsidedata" data-bind="foreach: dataArray().sort(function (l, r) { return l.width < r.width ? 1 : -1 })">
+    <div class="teamitem" data-bind="attr:{title: teamName}">
+        <img data-bind="attr:{src:'{{ STATIC_URL }}images/players/'+teamId+'.jpg'}">
+        <p data-bind="text: text, style: { width: width + '%'}"></p>
+    </div>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js"></script>
+<script>
+    service_request = function(request,jsData,returnValue){
+        $.post("/api/"+request, JSON.stringify(jsData)).done(function(rawData){
+            returnValue(rawData.data);
+        })
+    };
+
+    var SideTeamStatsModel = function() {
+        var self = this;
+        self.statsToShow = ko.observableArray();
+        self.statsToShow.push({"text":"Gol Krallığı","id":"5","req":"GetBestScorers"});
+        self.statsToShow.push({"text":"Asist Krallığı","id":"5","req":"GetBestAssisters"});
+        self.statsToShow.push({"text":"Koşu Mesafesi (Ortalama)","id":"5","req":"GetBestRunners"});
+        self.statsToShow.push({"text":"Pas Sayısı (Ortalama)","id":"6","req":"GetBestPassers"});
+        self.statsToShow.push({"text":"Şut Sayısı (Ortalama)","id":"7","req":"GetBestScorers"});
+        self.statsToShow.push({"text":"Orta Sayısı (Ortalama)","id":"8","req":"GetBestPassers"});
+        self.statsToShow.push({"text":"Sarı Kart","id":"7","req":"GetBestFoulers"});
+        self.statsToShow.push({"text":"Kırmızı Kart","id":"8","req":"GetBestFoulers"});
+        self.statsToShow.push({"text":"Yapılan Faul","id":"5","req":"GetBestFoulers"});
+        self.statsToShow.push({"text":"Alınan Faul","id":"6","req":"GetBestFoulers"});
+
+        self.selectedField = ko.observable({"text":"Gol Krallığı","id":"5","req":"GetBestScorers"});
+
+        self.getBest = function(id,dict){
+            var bestValue = 0;
+            for(var i=0;i<dict.length;i++){
+                if(dict[i][id] > bestValue){
+                    bestValue = dict[i][id];
+                }
+            };
+            return bestValue;
+        };
+
+        self.simpleArray = [];
+
+        self.dataToShow = ko.computed(function(){
+            var field = self.selectedField().id;
+            var request = self.selectedField().req;
+            service_request(request, {"league_id": 1, "season_id": 9064, "count": 15} , function(response){
+                var bestValue = self.getBest(field,response);
+                console.log("best " + bestValue);
+                self.simpleArray = [];
+                return ko.utils.arrayMap(response, function(item) {
+                    var ratio = parseInt(item[field]/bestValue*80);
+                    self.simpleArray.push({"teamName":item[1],"teamId":item[2],"text":parseInt(item[field]),"width":ratio});
+                });
+            });
+        });
+
+        self.dataArray = ko.computed(function(){
+            var field = self.selectedField().id;
+            return ko.utils.arrayMap(self.simpleArray, function(item) {
+                return item;
+            });
+        });
+    }
+    ko.applyBindings(new SideTeamStatsModel());
+</script>

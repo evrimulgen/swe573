@@ -1,0 +1,17 @@
+<div id="logo">
+    <div class="logo"></div>
+</div>
+<div id="scoreboard" data-bind='foreach: matchInfo'>
+    <div class="match-info">
+    </div>
+    <div class="score-area">
+        <p id="homeTeamName" class="header-team-name" style="text-align:right" data-bind='text: homeTeam'></p>
+        <p id="homeTeamScore" class="score" data-bind='text: homeScore()'></p>
+        <p class="score-seperator">-</p>
+        <p id="awayTeamScore" class="score" data-bind='text: awayScore()'></p>
+        <p id="awayTeamName" class="header-team-name" style="text-align:left" data-bind='text: awayTeam'></p>
+    </div>
+    <div class="match-time" data-bind="fadeVisible: matchStatus() != 1 ">
+        <p id="sb-match-time-p" data-bind="text: liveTime()"></p>
+    </div>
+</div>

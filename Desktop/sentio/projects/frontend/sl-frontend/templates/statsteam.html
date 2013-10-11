@@ -1,0 +1,386 @@
+{% extends "statsbase.html" %}
+
+{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}
+
+{% block head-addition %}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Hafta', 'Siralama' ],
+                {% for x in s_list %}
+                    [ {{ forloop.counter }}, {{ x }}],
+                {% endfor %}
+
+            ]);
+
+            var options = {
+                title: 'Performans Grafigi',
+                vAxis: {
+                    maxValue: 18,
+                    minValue: 1,
+                    textStyle: {
+                        color: 'black'
+                    },
+                    direction: -1,
+                    gridlines: {
+                        count: 18
+                    },
+                    baselineColor : 'black'
+                },
+                hAxis: {
+                    baselineColor : 'black',
+                    textStyle: {
+                        color: 'black'
+                    },
+                    gridlines: {
+                        count: 34
+                    }
+                },
+                backgroundColor: '#b7b7b7',
+                chartArea: {
+                    left:20,
+                    top:20,
+                    width:"95%",
+                    height:"80%"
+                },
+                legend: {
+                    position: 'none'
+                },
+                titlePosition: 'none',
+                axisTitlesPosition: 'none'
+
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+
+    <script>
+        function changeContent(num){
+            var htmltoSet = "";
+            if(num == 1){
+                htmltoSet = "<a> <button onclick='changeContent(3)'>Takım Özeti</button> </a><div class='active'><a> <button onclick='changeContent(1)'>Fikstür</button> </a></div><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a>";
+                $("#menu").html(htmltoSet);
+                htmltoSet = "";
+                htmltoSet += "<div style='width:48.5%;margin-left:1%;height:300px' class='infobox'><h1>Son Maç</h1></div>"
+                htmltoSet += "<div style='width:48.5%;margin-left:1%;height:300px' class='infobox'><h1>Gelecek Maç</h1></div>"
+                htmltoSet += "<div style='width:48.5%;margin-left:1%;margin-top:10px' class='infobox'><h1>Tüm Maçlar</h1><div style='height:400px;overflow-y:scroll'>";
+                htmltoSet += "{% include "teamfixture.html" %}";
+                htmltoSet += "</div></div>";
+                htmltoSet += "<div style='width:48.5%;margin-left:1%;height:400px;margin-top:10px' class='infobox'><h1>Puan Tablosu</h1></div>"
+                $("#insideright").html(htmltoSet);
+            }
+            else if(num==2){
+                htmltoSet = "<a> <button onclick='changeContent(3)'>Takım Özeti</button> </a><a> <button onclick='changeContent(1)'>Fikstür</button> </a><div class='active'><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a></div>";
+                $("#menu").html(htmltoSet);
+
+            }
+            else if(num==3){
+                htmltoSet = "<div class='active'><a> <button onclick='changeContent(3)'>Takım Özeti</button> </a></div><a> <button onclick='changeContent(1)'>Fikstür</button> </a><a> <button onclick='changeContent(2)'>Kadro Analizi</button> </a>";
+                $("#menu").html(htmltoSet);
+                htmltoSet = "";
+                htmltoSet += "{% include "teamsummary.html" %}";
+                $("#insideright").html(htmltoSet);
+
+            }
+
+        }
+    </script>
+    <script type="text/javascript">
+        function handleSelect(elm)
+        {
+            var htmltoSet = "";
+            if (elm.value == 1)
+            {
+                {% for i in players|dictsortreversed:"match" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.match }}</p></a>";
+                {% endfor %}
+            }
+            else if (elm.value == 2)
+            {
+                {% for i in players|dictsortreversed:"minutes" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.minutes }}</p></a>";
+                {% endfor %}
+            }
+            else if (elm.value == 3)
+            {
+                {% for i in players|dictsortreversed:"goals" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.goals }}</p></a>";
+                {% endfor %}
+            }
+            else if (elm.value == 4)
+            {
+                {% for i in players|dictsortreversed:"assists" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.assists }}</p></a>";
+                {% endfor %}
+            }
+            else if (elm.value == 5)
+            {
+                {% for i in players|dictsortreversed:"yellowCards" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.yellowCards }}</p></a>";
+                {% endfor %}
+            }
+            else if (elm.value == 6)
+            {
+                {% for i in players|dictsortreversed:"redCards" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.redCards }}</p></a>";
+                {% endfor %}
+            }
+
+            $("#player").html(htmltoSet);
+        }
+    </script>
+
+{% endblock %}
+
+{% block team-menu %}
+    <div class="team-menu">
+        <p style="width: 1.4%;float: left"></p>
+        {% for i in try_list %}
+            {% if i.teamId == team_selected %}
+                <div class="active">
+                    <a  href="../{{ i.teamId }}"> <img alt="{{ i.teamName }}" title="{{ i.teamName }}" src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png"></a>
+                </div>
+
+            {% else %}
+                <a  href="../{{ i.teamId }}"> <img alt="{{ i.teamName }}" title="{{ i.teamName }}" src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png"></a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block menu-header %}
+
+    <ul id="nav">
+        <li>
+            <a href="../../"><img src="{{ STATIC_URL }}images/home_disabled.png">Ana Sayfa</a>
+        </li>
+        <li><a class="active"  href="../"><img src="{{ STATIC_URL }}images/clubs.png">Takımlar</a>
+
+        </li>
+        <li>
+            <a href="../../player"><img src="{{ STATIC_URL }}images/players_disabled.png">Oyuncular</a>
+        </li>
+        <li>
+            <a href=""><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="line-menu" id="menu" style="margin-bottom: 5px">
+        <div class="active">
+            <a> <button onclick="changeContent(3)">Takım Özeti</button> </a>
+        </div>
+        <a> <button onclick="changeContent(1)">Fikstür</button> </a>
+        <a> <button onclick="changeContent(2)">Kadro Analizi</button> </a>
+    </div>
+    <div class="insideleft">
+        <div class="infobox">
+            {% for i in details %}
+
+                <h1>{{ i.teamName }}</h1>
+                <img src="{{ STATIC_URL }}images/logo{{ team_selected }}.png">
+                <div class="line-holder">
+                    <p class="first">Kuruluş Yılı</p>
+                    <p class="second">{{ i.foundation }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Stadyum</p>
+                    <p class="second">{{ i.stadium }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Kapasite</p>
+                    <p class="second">{{ i.capacity }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Başkan</p>
+                    <p class="second">{{ i.president }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Teknik Direktör</p>
+                    <p class="second">{{ i.manager }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Websitesi</p>
+                    <p class="second"><a href="http://{{ i.website }}" target="_blank">{{ i.website }}</a></p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Lig Şampiyonluğu</p>
+                    <p class="second">{{ i.leaguechamp }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Türkiye Kupası</p>
+                    <p class="second">{{ i.cupchamp }}</p>
+                </div>
+            {% endfor %}
+            <h2>Karşılaştır!</h2>
+            <select style="width: 60%;margin-left:5%;float: left">
+                <option class="item"> <a>Takım Seçiniz</a> </option>
+                {% for i in standing_list %}
+                    <option class="item"> <a>{{ i.teamName }}</a> </option>
+                {% endfor %}
+            </select>
+            <button style="float: left;width: 30%;font-size: 12px;padding-left: 2px;">Karşılaştır</button>
+        </div>
+        <div class="infobox" style="margin-top: 5px">
+            <div class="player-header">
+                <h1>Takım Kadrosu</h1>
+                <select class="player-filter" onchange="javascript:handleSelect(this)">
+                    <option class="item" style="float: right" value="1"> <a>Maç Sayısı</a> </option>
+                    <option class="item" value="2"> <a>Dakika</a> </option>
+                    <option class="item" value="3"> <a>Gol</a> </option>
+                    <option class="item" value="4"> <a>Asist</a> </option>
+                    <option class="item" value="5"> <a>Sarı Kart</a> </option>
+                    <option class="item" value="6"> <a>Kırmızı Kart</a> </option>
+                </select>
+            </div>
+            <div style="width:100%;height: 400px;overflow-y: scroll">
+                <div class="player" id="player" >
+                    {% for i in players %}
+                        <a  href="../../player/{{ team_selected }}/{{ i.playerId }}">
+                            <img src="{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                            <p class="first">{{ i.jerseyNumber }} - {{ i.playerName }}</p>
+                            <p class="second">{{ i.match }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="insideright" id = "insideright">
+
+        <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
+            <h1>Lig Pozisyonu</h1>
+            <div id="chart_div" style="width: 98%; height: 300px;margin: 1%;"></div>
+        </div>
+        <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
+            <h1>Son 5 Maç</h1>
+            <div class="form">
+                <p class="win">G</p>
+                <p class="seperator">-</p>
+                <p class="draw">B</p>
+                <p class="seperator">-</p>
+                <p class="lose">M</p>
+                <p class="seperator">-</p>
+                <p class="win">G</p>
+                <p class="seperator">-</p>
+                <p class="win">G</p>
+            </div>
+        </div>
+        <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
+            <h1>Takım Karşılaştırması</h1>
+            <table class="hovertable" style="width: 98%;margin: 1%">
+                <tr>
+                    <th class="first" style="width: 16%"> </th><th style="width: 14%">Sıralama</th><th style="width: 14%" title="Lig Ortalaması">Lig Ort.</th><th style="width: 20%">En İyi Takım</th><th class="last" style="width: 20%">En Kötü Takım</th>
+                </tr>
+
+                <tr>
+                    <td><p>Gol</p></td><td><p>3.</p><p>(25 Gol)</p></td><td><p>22.4 Gol</p></td><td><p>Galatasaray</p><p>(36 Gol)</p></td><td><p>SB Elazığspor</p><p>(14 Gol)</p></td>
+                </tr>
+                <tr >
+                    <td><p>Yenilen Gol</p></td><td><p>6.</p><p>(18 Gol)</p></td><td><p>22.4 Gol</p></td><td><p>Galatasaray</p><p>(12 Gol)</p></td><td><p>SB Elazığspor</p><p>(38 Gol)</p></td>
+                </tr>
+                <tr >
+                    <td><p>Takım Yaşı</p></td><td><p>5.</p><p>(24.4)</p></td><td><p>25.6</p></td><td><p>Beşiktaş</p><p>(22.11)</p></td><td><p>Gaziantepspor</p><p>(28.19)</p></td>
+                </tr>
+                <tr>
+                    <td><p>Milli olma</p></td><td><p>2.</p><p>(10.5)</p></td><td><p>4.4</p></td><td><p>Fenerbahçe</p><p>(10.7)</p></td><td><p>Akhisar Bel</p><p>(1.2)</p></td>
+                </tr>
+                <tr>
+                    <td><p>Milli Gol</p></td><td><p>12.</p><p>(1.1 Gol)</p></td><td><p>1.2 Gol</p></td><td><p>Galatasaray</p><p>(2.3 Gol)</p></td><td><p>SB Elazığspor</p><p>(0 Gol)</p></td>
+                </tr>
+                <tr >
+                    <td><p>Şut</p></td><td><p>8.</p><p>(4.4)</p></td><td><p>3.7</p></td><td><p>Galatasaray</p><p>(5.2)</p></td><td><p>SB Elazığspor</p><p>(1.3)</p></td>
+                </tr>
+                <tr>
+                    <td><p>Şut Yüzdesi</p></td><td><p>17.</p><p>(%22)</p></td><td><p>%35</p></td><td><p>Galatasaray</p><p>(%64)</p></td><td><p>SB Elazığspor</p><p>(%20)</p></td>
+                </tr>
+                <tr >
+                    <td><p>Pas</p></td><td><p>6.</p><p>(252)</p></td><td><p>221</p></td><td><p>Galatasaray</p><p>(298)</p></td><td><p>SB Elazığspor</p><p>(179)</p></td>
+                </tr>
+                <tr >
+                    <td><p>Pas Yüzdesi</p></td><td><p>5.</p><p>(%72)</p></td><td><p>%64</p></td><td><p>Galatasaray</p><p>(%81)</p></td><td><p>SB Elazığspor</p><p>(%52)</p></td>
+                </tr>
+                <tr >
+                    <td><p>Orta</p></td><td><p>9.</p><p>(6.4)</p></td><td><p>6.3</p></td><td><p>Galatasaray</p><p>(9.2)</p></td><td><p>SB Elazığspor</p><p>(3.1)</p></td>
+                </tr>
+                <tr >
+                    <td><p>Orta Yüzdesi</p></td><td><p>14.</p><p>(%25)</p></td><td><p>%30</p></td><td><p>Galatasaray</p><p>(%41)</p></td><td><p>SB Elazığspor</p><p>(%20)</p></td>
+                </tr>
+                <tr>
+                    <td><p>Takım Faulü</p></td><td><p>4.</p><p>(12.4)</p></td><td><p>8.9</p></td><td><p>Galatasaray</p><p>(14.6)</p></td><td><p>SB Elazığspor</p><p>(7.4)</p></td>
+                </tr>
+                <tr>
+                    <td><p>Yapılan Faul</p></td><td><p>10.</p><p>(8.5)</p></td><td><p>8.9</p></td><td><p>Galatasaray</p><p>(11.1)</p></td><td><p>SB Elazığspor</p><p>(4.5)</p></td>
+                </tr>
+                <tr>
+                    <td><p>Penaltı</p></td><td><p>4.</p><p>(6)</p></td><td><p>4.3</p></td><td><p>Galatasaray</p><p>(8)</p></td><td><p>SB Elazığspor</p><p>(1)</p></td>
+                </tr>
+                <tr>
+                    <td><p>Yapılan Penaltı</p></td><td><p>10.</p><p>(3)</p></td><td><p>4.3</p></td><td><p>Galatasaray</p><p>(11.1)</p></td><td><p>SB Elazığspor</p><p>(4.5)</p></td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block sidebar %}
+    <div id="content" style="min-height: 600px">
+        <div style="width: 100%;height: 35px">
+            <select class="topmenuoption">
+                {% for i in weeklist %}
+                    <option class="item"> <a>{{ i }}. Hafta</a> </option>
+                {% endfor %}
+            </select>
+            <select class="topmenuoption">
+                <option class="item" style="float: right"> <a>Gol</a> </option>
+                <option class="item"> <a>Yenilen Gol</a> </option>
+                <option class="item"> <a>Averaj</a> </option>
+                <option class="item"> <a>Koşu Mesafesi</a> </option>
+                <option class="item"> <a>Pas Yüzdesi</a> </option>
+                <option class="item"> <a>Şut Yüzdesi</a> </option>
+                <option class="item"> <a>Orta Yüzdesi</a> </option>
+                <option class="item"> <a>Korner</a> </option>
+                <option class="item"> <a>Faul</a> </option>
+                <option class="item"> <a>Yapılan Faul</a> </option>
+                <option class="item"> <a>Sarı Kart</a> </option>
+                <option class="item"> <a>Kırmızı Kart</a> </option>
+            </select>
+        </div>
+
+        <div class="teamcomparison">
+            {% for i in standing_list|dictsortreversed:"score" %}
+                <div class="teamitem">
+                    <img alt="{{ i.teamName }}" title="{{ i.teamName }}" src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png">
+                    <p style="width: {{ i.score}}%">{{ i.score }}</p>
+                    <div class="placeholder"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+

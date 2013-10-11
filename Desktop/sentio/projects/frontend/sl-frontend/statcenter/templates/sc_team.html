@@ -1,0 +1,270 @@
+{% extends "sc_base.html" %}
+
+{% block title %}İstatistik | istatistik.ligtv.com.tr{% endblock %}
+
+{% block head-addition %}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <script>
+        function changeContent(num){
+            var htmltoSet = "";
+            if(num == 1){
+                htmltoSet = "<a> <button onclick='changeContent(3)'>Takım Özeti</button> </a><div class='active'><a> <button onclick='changeContent(1)'>Fikstür</button> </a></div>";
+                $("#menu").html(htmltoSet);
+                htmltoSet = "";
+                htmltoSet += "<div style='width:48.5%;margin-left:1%;height:300px' class='infobox'><h1>Son Maç</h1></div>"
+                htmltoSet += "<div style='width:48.5%;margin-left:1%;height:300px' class='infobox'><h1>Gelecek Maç</h1></div>"
+                htmltoSet += "<div style='width:48.5%;margin-left:1%;margin-top:10px' class='infobox'><h1>Tüm Maçlar</h1><div style='height:400px;overflow-y:scroll'>";
+                htmltoSet += "{% include "_sc_team_fixture.html" %}";
+                htmltoSet += "</div></div>";
+                htmltoSet += "<div style='width:48.5%;margin-left:1%;height:400px;margin-top:10px' class='infobox'><h1>Puan Tablosu</h1></div>"
+                $("#insideright").html(htmltoSet);
+            }
+            else if(num==3){
+                htmltoSet = "<div class='active'><a> <button onclick='changeContent(3)'>Takım Özeti</button> </a></div><a> <button onclick='changeContent(1)'>Fikstür</button> </a>";
+                $("#menu").html(htmltoSet);
+                htmltoSet = "";
+                htmltoSet += "{% include "_sc_team_summary.html" %}";
+                $("#insideright").html(htmltoSet);
+
+            }
+
+        }
+    </script>
+    <script type="text/javascript">
+        function handleSelect(elm)
+        {
+            var htmltoSet = "";
+            if (elm.value == 1)
+            {
+                {% for i in players|dictsortreversed:"match" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.match }}</p></a>";
+                {% endfor %}
+            }
+            else if (elm.value == 3)
+            {
+                {% for i in players|dictsortreversed:"goals" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.goals }}</p></a>";
+                {% endfor %}
+            }
+            else if (elm.value == 4)
+            {
+                {% for i in players|dictsortreversed:"assists" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.assists }}</p></a>";
+                {% endfor %}
+            }
+            else if (elm.value == 5)
+            {
+                {% for i in players|dictsortreversed:"yellowCards" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.yellowCards }}</p></a>";
+                {% endfor %}
+            }
+            else if (elm.value == 6)
+            {
+                {% for i in players|dictsortreversed:"redCards" %}
+                    htmltoSet += "<a  href='../../player/{{ team_selected }}/{{ i.playerId }}'> <img src='{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg' onError='this.src=\"{{ STATIC_URL }}images/players/default.png\";'> <p class='first'>{{ i.jerseyNumber }} - {{ i.playerName }}</p> <p class='second'>{{ i.redCards }}</p></a>";
+                {% endfor %}
+            }
+
+            $("#player").html(htmltoSet);
+        }
+    </script>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/chartstyle.css" type="text/css"/>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/d3.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/simpled3.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            drawLineChart('chart-div',{{ s_list }}, {width: 510});
+        });
+    </script>
+{% endblock %}
+
+{% block team-menu %}
+    <div class="team-menu">
+        <p style="width: 1.4%;float: left"></p>
+        {% for i in try_list %}
+            {% if i.teamId == team_selected %}
+                <div class="active">
+                    <a  href="../{{ i.teamId }}"> <img alt="{{ i.teamName }}" title="{{ i.teamName }}" src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png"></a>
+                </div>
+
+            {% else %}
+                <a  href="../{{ i.teamId }}"> <img alt="{{ i.teamName }}" title="{{ i.teamName }}" src="{{ STATIC_URL }}images/logo{{ i.teamId }}.png"></a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block menu-header %}
+
+    <ul id="nav">
+        <li>
+            <a href="../../"><img src="{{ STATIC_URL }}images/home_disabled.png">Ana Sayfa</a>
+        </li>
+        <li><a class="active"  href="../"><img src="{{ STATIC_URL }}images/clubs.png">Takımlar</a>
+
+        </li>
+        <li>
+            <a href="../../player"><img src="{{ STATIC_URL }}images/players_disabled.png">Oyuncular</a>
+        </li>
+        <li>
+            <a href="../../compare"><img src="{{ STATIC_URL }}images/compare_disabled.png">Karşılaştır!</a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="insideleft">
+        <div class="infobox">
+            {% for i in details %}
+
+                <h1>{{ i.teamName }}</h1>
+                <img src="{{ STATIC_URL }}images/logo{{ team_selected }}.png">
+                <div class="line-holder">
+                    <p class="first">Kuruluş Yılı</p>
+                    <p class="second">{{ i.foundation }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Stadyum</p>
+                    <p class="second">{{ i.stadium }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Kapasite</p>
+                    <p class="second">{{ i.capacity }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Başkan</p>
+                    <p class="second">{{ i.president }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Teknik Direktör</p>
+                    <p class="second">{{ i.manager }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Websitesi</p>
+                    <p class="second"><a href="http://{{ i.website }}" target="_blank">{{ i.website }}</a></p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Lig Şampiyonluğu</p>
+                    <p class="second">{{ i.leaguechamp }}</p>
+                </div>
+
+                <div class="line-holder">
+                    <p class="first">Türkiye Kupası</p>
+                    <p class="second">{{ i.cupchamp }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="infobox" style="margin-top: 5px">
+            <div class="player-header">
+                <h1>Takım Kadrosu</h1>
+                <select class="player-filter" onchange="javascript:handleSelect(this)">
+                    <option class="item" style="float: right" value="1"> <a>Maç Sayısı</a> </option>
+                    <option class="item" value="3"> <a>Gol</a> </option>
+                    <option class="item" value="4"> <a>Asist</a> </option>
+                    <option class="item" value="5"> <a>Sarı Kart</a> </option>
+                    <option class="item" value="6"> <a>Kırmızı Kart</a> </option>
+                </select>
+            </div>
+            <div style="width:100%;height: 400px;overflow-y: scroll">
+                <div class="player" id="player" >
+                    {% for i in players|dictsortreversed:"match" %}
+                        <a  href="../../player/{{ team_selected }}/{{ i.playerId }}">
+                            <img src="{{ STATIC_URL }}images/players/{{ i.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                            <p class="first">{{ i.jerseyNumber }} - {{ i.playerName }}</p>
+                            <p class="second">{{ i.match }}</p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="insideright" id = "insideright">
+
+        <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
+            <h1>Lig Pozisyonu</h1>
+            <div id="chart-div" style="width: 98%; height: 300px;margin: 1%;"></div>
+        </div>
+        <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
+            <h1>Son 5 Maç</h1>
+            {% for f in form%}
+                {% if f.win == 1 %}
+                    <a href="../../{{ f.matchId }}" class="win" title="" id="{{ team }}{{ forloop.counter }}f"></a>
+                {% endif %}
+                {% if f.win == 0 %}
+                    <a href="../../{{ f.matchId }}" class="draw" title="" id="{{ team }}{{ forloop.counter }}f"></a>
+                {% endif %}
+                {% if f.win == 2 %}
+                    <a href="../../{{ f.matchId }}" class="lose" title="" id="{{ team }}{{ forloop.counter }}f"></a>
+                {% endif %}
+                <script>
+
+                    $(function() {
+                        var divname = "#" +"{{ team }}{{ forloop.counter }}" + "f";
+                        $( divname ).tooltip({
+                            content: function(){
+                                return "<div style='color:black'><p style='text-align:center'>{{ f.weekId }}. Hafta</p><br><p>{{ f.homeTeam }} {{ f.homeScore }} - {{ f.awayScore }} {{ f.awayTeam }}</p></div>"
+                            },
+                            show: {
+                                effect: "show",
+                                delay: 50
+                            },
+                            hide: {
+                                effect: "hide",
+                                delay: 100
+                            },
+                            position: {
+                                my: "center bottom-20",
+                                at: "center top",
+                                using: function( position, feedback ) {
+                                    $( this ).css( position );
+                                    $( "<div>" )
+                                            .addClass( "arrow" )
+                                            .addClass( feedback.vertical )
+                                            .addClass( feedback.horizontal )
+                                            .appendTo( this );
+                                }
+                            },
+                            close: function (event, ui) {
+                                $('div.ui-effects-wrapper').remove();
+                            }
+                        });
+                    });
+                </script>
+            {% endfor %}
+
+        </div>
+        <div class="infobox" style="margin-left: 1%;width: 99%; margin-bottom: 5px">
+            <h1>Takım Karşılaştırması</h1>
+            <table class="hovertable" style="width: 98%;margin: 1%">
+                <tr>
+                    <th class="first" style="width: 25%"> </th>
+                    <th style="width: 30%">Takım Toplamı</th>
+                    <th style="width: 30%" title="Lig Ortalaması">Lig Ortalaması</th>
+                </tr>
+                {% for i in card %}
+                    <tr>
+                        <td>{{i.0}}</td>
+                        <td style="text-align: center">{{i.2}}</td>
+                        <td style="text-align: center">{{i.3}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block sidebar %}
+    {% include '_sc_team_sidebase.html' %}
+{% endblock %}
+
+

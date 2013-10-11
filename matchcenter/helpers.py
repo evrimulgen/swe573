@@ -198,6 +198,7 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
                        'jerseyNumber':playerData[1],
                        'eleven':playerData[2],
                        'playPosition':playerData[4],
+                       'playerPosition':playerData[17],
                        'played':played,
                        'votePercent':votePercent,
                        'voteCount':voteCount,

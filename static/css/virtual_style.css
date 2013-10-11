@@ -1957,3 +1957,303 @@ button.collapse:hover{
     outline: none;
     float: left;
 }
+
+#stadium {
+    height: 400px;
+    background: #000 url("../images/stadium_bg.jpg") no-repeat left top;
+    position: relative;
+}
+.first-team-formation{
+    left: 54px;
+    top: 124px;
+    position: absolute;
+    width: 393px;
+    height: 148px;
+    list-style: none;
+}
+.second-team-formation{
+    right: 0px;
+    top: 124px;
+    position: absolute;
+    width: 393px;
+    height: 148px;
+    list-style: none;
+}
+
+
+.first-team-formation  li.GK span{
+    background: url("../images/stadium_menu_formations_players.png") no-repeat -39px 0;
+    color: #000;
+    display: block;
+    width: 39px;
+    height: 36px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 29px;
+}
+.first-team-formation li span{
+    background: url("../images/stadium_menu_formations_players.png") no-repeat 0 0;
+    color: #fff;
+    display: block;
+    width: 39px;
+    height: 36px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 29px;
+}
+.second-team-formation  li.GK span{
+    background: url("../images/stadium_menu_formations_players.png") no-repeat -78px 0;
+    color: #000;
+    display: block;
+    width: 39px;
+    height: 36px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 29px;
+}
+.second-team-formation li span{
+    background: url("../images/stadium_menu_formations_players.png") no-repeat -117px 0;
+    color: #fff;
+    display: block;
+    width: 39px;
+    height: 36px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 29px;
+}
+
+.first-team-formation li.GK {
+    left: 39px;
+    top: 15px;
+    position: absolute;
+    width: 24px;
+    height: 36px;
+}
+.first-team-formation li.LB {
+    left: 180px;
+    top: -16px;
+    position: absolute;
+    width: 24px;
+    height: 36px;
+}
+.first-team-formation li.CBL {
+    left: 129px;
+    top: 3px;
+    position: absolute;
+    width: 24px;
+    height: 36px;
+}
+.first-team-formation li.CBR {
+    left: 68px;
+    top: 43px;
+    position: absolute;
+    width: 24px;
+    height: 36px;
+}
+.first-team-formation li.RB{
+    left: 50px;
+    top: 92px;
+    position: absolute;
+    width: 24px;
+    height: 36px;
+}
+.first-team-formation li.DML {
+    left: 208px;
+    top: 12px;
+    position: absolute;
+    width: 24px;
+    height: 36px;
+}
+.first-team-formation li.DMR {
+    left: 171px;
+    top: 46px;
+    position: absolute;
+}
+.first-team-formation li.AML {
+    left: 288px;
+    top: -16px;
+    position: absolute;
+}
+.first-team-formation li.AMC {
+    left: 259px;
+    top: 26px;
+    position: absolute;
+}
+.first-team-formation li.AMR {
+    left: 216px;
+    top: 96px;
+    position: absolute;
+}
+.first-team-formation li.FC {
+    left: 345px;
+    top: 21px;
+    position: absolute;
+}
+.first-team-formation li.SWP {
+    display:none;
+}
+.first-team-formation li.MCR {
+    display:none;
+}
+.first-team-formation li.MCL {
+    display:none;
+}
+.first-team-formation li.SSC {
+    display:none;
+}
+.first-team-formation li.FL {
+    display:none;
+}
+.first-team-formation li.FR {
+    display:none;
+}
+.first-team-formation li.MC {
+    display:none;
+}
+.first-team-formation li.CB {
+    display:none;
+}
+.first-team-formation li.ML {
+    display:none;
+}
+.first-team-formation li.MR {
+    display:none;
+}
+.first-team-formation li.SSL {
+    display:none;
+}
+.first-team-formation li.SSR {
+    display:none;
+}
+.first-team-formation li.WL {
+    display:none;
+}
+.first-team-formation li.WC {
+    display:none;
+}
+.first-team-formation li.WR {
+    display:none;
+}
+.first-team-formation li.DMC {
+    display:none;
+}
+.first-team-formation li.WBL {
+    display:none;
+}
+.first-team-formation li.WBR {
+    display:none;
+}
+/* Second Team */
+.second-team-formation li.GK {
+    right: 39px;
+    top: 15px;
+    position: absolute;
+}
+.second-team-formation li.RB {
+    right: 180px;
+    top: -16px;
+    position: absolute;
+}
+.second-team-formation li.CBR {
+    right: 129px;
+    top: 3px;
+    position: absolute;
+}
+.second-team-formation li.CBL {
+    right: 68px;
+    top: 43px;
+    position: absolute;
+}
+.second-team-formation li.LB{
+    right: 50px;
+    top: 92px;
+    position: absolute;
+}
+.second-team-formation li.DMR {
+    right: 208px;
+    top: 12px;
+    position: absolute;
+}
+.second-team-formation li.DML {
+    right: 171px;
+    top: 46px;
+    position: absolute;
+}
+.second-team-formation li.AMR {
+    right: 288px;
+    top: -16px;
+    position: absolute;
+}
+.second-team-formation li.AMC {
+    right: 259px;
+    top: 26px;
+    position: absolute;
+}
+.second-team-formation li.AML {
+    right: 216px;
+    top: 96px;
+    position: absolute;
+}
+.second-team-formation li.FC {
+    right: 345px;
+    top: 21px;
+    position: absolute;
+}
+.second-team-formation li.SWP {
+    display:none;
+}
+.second-team-formation li.MCL {
+    display:none;
+}
+.second-team-formation li.MCR {
+    display:none;
+}
+.second-team-formation li.SSC {
+    display:none;
+}
+.second-team-formation li.FR {
+    display:none;
+}
+.second-team-formation li.FL {
+    display:none;
+}
+.second-team-formation li.MC {
+    display:none;
+}
+.second-team-formation li.CB {
+    display:none;
+}
+.second-team-formation li.MR {
+    display:none;
+}
+.second-team-formation li.ML {
+    display:none;
+}
+.second-team-formation li.SSR {
+    display:none;
+}
+.second-team-formation li.SSL {
+    display:none;
+}
+.second-team-formation li.WR {
+    display:none;
+}
+.second-team-formation li.WC {
+    display:none;
+}
+.second-team-formation li.WL {
+    display:none;
+}
+.second-team-formation li.DMC {
+    display:none;
+}
+.second-team-formation li.WBR {
+    display:none;
+}
+.second-team-formation li.WBL {
+    display:none;
+}

@@ -41,6 +41,7 @@
     $( document ).ready(function() {
         //console.log( "ready!" );
         $("#radarContainer").hide();
+        $("#stadium").hide();
 
         toggleCanvas = function(elem){
             var elemValue = elem.value;
@@ -673,6 +674,28 @@
                 </div>
             </div>
         </div>
+
+        <div id="stadium">
+            <ul class="first-team-formation">
+                {% for player in homeSquad %}
+                    {% if player.eleven == 1 %}
+                        <li class="{{ player.playerPosition }}">
+                            <span>{{ player.jerseyNumber }}</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <ul class="second-team-formation">
+                {% for player in awaySquad %}
+                    {% if player.eleven == 1 %}
+                        <li class="{{ player.playerPosition }}">
+                            <span>{{ player.jerseyNumber }}</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
         <div id="likeCanvas" >
             <table class ="formationTable" border="1" >
                 <tr>

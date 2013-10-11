@@ -227,7 +227,7 @@ def get_history(homeTeamId, awayTeamId):
                     'date':formatTime(match[4]),
                     'referee':match[5],
                     'stadium':match[6],
-                    'matchId':match[7],
+                    'link':match[7],
                     'homeTeamId':match[8],
                     'awayTeamId':match[9]} for match in datalist.get("pastMatches")]
 

@@ -139,6 +139,9 @@ body{
     color: #ffffff;
     background-color: #c3c3c3;
 }
+button,a{
+    outline: none;
+}
 
 
 /* holds stadium,refere,date info */
@@ -447,7 +450,7 @@ p.no-data{
     margin-left: 2%;
     height: 40px;
     text-decoration: none;
-    background-image: url(../images/matchselected.png);
+    background-image: url(../images/matchselected1.png);
     background-size: cover;
     text-decoration: none;
     color: #000000;
@@ -1082,33 +1085,44 @@ p.no-data{
 
 .past-match-area{
     width: 100%;
-    height: 270px;
+    height: 306px;
     overflow-y: scroll;
     margin-bottom: 5px;
 
 }
 
-.past-match{
-    margin-top: 3px;
+.past-match, .past-match-not-clickable{
+    margin-top: 4px;
     width: 82%;
     margin-left: 10%;
     text-decoration: none;
 
     box-shadow: 0pt 1px 0pt rgba(255,255,255,0.4) inset,0pt -1px 0pt rgba(0,0,0,0.3) inset,0pt 0pt 10px rgba(255,255,255,0.4) inset,0pt 2px 4px rgba(0,0,0,0.3);
     background-color: #ebebeb;
-    height: 65px;
+    height: 70px;
     float: left;
     color: #000000;
+    border: 1px solid #b8b8b8;
+}
+
+.past-match-not-clickable:hover{
+    color: #000000;
+    text-decoration: none;
 }
 
 .past-match:hover{
     text-decoration: none;
-    background-color: #fbfbfb;
-    height: 65px;
+    background-color: #fefefe;
+    height: 70px;
     color: #000000;
 }
-.past-match .upper-info{
-    height: 20px;
+.past-match #upper, .past-match-not-clickable #upper{
+    width: 100%;
+    height: 30px;
+    background-color: rgba(125,125,125,0.2);
+}
+.upper-info{
+    height: 25px;
     margin-top: 2px;
     margin-bottom: 8px;
     line-height: 22px;
@@ -1117,8 +1131,21 @@ p.no-data{
     font-size: 12px;
     text-align: center;
 }
+.upper-info img{
+    height: 25px;
+    display: block;
+    margin-left: 30px;
+    float: left;
+}
+.upper-info p{
+    float:left;
+    line-height: 25px;
+    text-align: left;
+    margin-left: 2px;
+    font-size: 12px;
+}
 
-.past-match #homename{
+.past-match  #homename, .past-match-not-clickable #homename{
     height: 30px;
     line-height: 30px;
     width: 22%;
@@ -1128,7 +1155,7 @@ p.no-data{
     text-align: right;
     margin-bottom: 2px;
 }
-.past-match #awayname{
+.past-match #awayname, .past-match-not-clickable #awayname{
     height: 30px;
     line-height: 30px;
     width: 22%;
@@ -1138,20 +1165,20 @@ p.no-data{
     text-align: left;
     margin-bottom: 2px;
 }
-.past-match #homelogo{
-    width: 4.1%;
-    margin-left: 15.4%;
+.past-match #homelogo, .past-match-not-clickable #homelogo{
+    width: 5%;
+    margin-left: 14.5%;
     float: left;
     display: block;
 }
-.past-match #awaylogo{
-    width: 4.1%;
-    margin-right: 15.4%;
+.past-match #awaylogo, .past-match-not-clickable #awaylogo{
+    width: 5%;
+    margin-right: 14.5%;
     float: left;
     display: block;
 }
 
-.past-match #homescore, .past-match #awayscore {
+.past-match #homescore, .past-match-not-clickable #homescore, .past-match #awayscore, .past-match-not-clickable #awayscore {
     background-image: url("../images/score_board_bg.png");
     background-repeat: repeat;
 
@@ -1177,7 +1204,7 @@ p.no-data{
     margin-bottom: 2px;
 
 }
-.past-match #separator{
+.past-match #separator, .past-match-not-clickable #separator{
     height: 30px;
     line-height: 30px;
     width: 5%;
@@ -2256,4 +2283,53 @@ button.collapse:hover{
 }
 .second-team-formation li.WBL {
     display:none;
+}
+.team-name-area{
+    width: 100%;
+    height: 50px;
+    float: left;
+}
+.team-name-area img{
+    margin-left: 5%;
+    width: 10%;
+    float: left;
+}
+.team-name-area p{
+    margin-right: 2.5%;
+    margin-left: 2.5%;
+    width: 30%;
+    text-align: center;
+    color: #000000;
+    font-size: 18px;
+    font-weight: bold;
+    float: left;
+    line-height: 70px;
+}
+.open-button{
+    margin-top: 5px;
+    margin-left: 49.5%;
+    width: 33px;
+    height: 33px;
+    border: none;
+    float: left;
+    background: url(../images/button_open.png);
+    background-size: cover;
+}
+.open-button:hover{
+    background: url(../images/button_open_hover.png);
+    background-size: cover;
+}
+.close-button{
+    margin-top: 5px;
+    margin-left: 49.5%;
+    float: left;
+    width: 33px;
+    height: 33px;
+    border: none;
+    background: url(../images/button-close.png);
+    background-size: cover;
+}
+.close-button:hover{
+    background: url(../images/button_close_hover.png);
+    background-size: cover;
 }

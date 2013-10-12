@@ -1,5 +1,5 @@
 .row {
-    margin-bottom: 20px;
+
 }
 
 div.sidebox > div {
@@ -10,10 +10,4 @@ div.sidebox > div {
     margin-right: 65px;
     color: #333355;
     font-size: 16pt;
-}
-
-canvas#slider {
-    margin-top: 20px;
-    margin-bottom: -15px;
-    margin-left: 50px;
 }

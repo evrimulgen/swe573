@@ -17,14 +17,26 @@ function Timeline(options){
     var leftHandle = null;
     var rightHandle = null;
     var draggedHandle = null;
-    var handleText = null;
+
+    var handleBar = null;
 
     var eventImages = [];
+    var matchEvents = [];
+    var eventGroups = [];
+
+    var boxOffset;
+    var boxHeight = 15;
+    var boxWidth = 100;
+    var topPadding = 9;
+    var boxPadding = 2;
+    var fontSize = 10;
+
+    var lastMin = 0;
 
     var momentumPath = null;
     var eventImagesGroup = null;
 
-    $("#"+div_id).width(width).height(height);
+    $("#"+div_id).width(width).height(height+20);
 
     scope.setup(div_id);
 
@@ -47,8 +59,7 @@ function Timeline(options){
 
         drawSlider();
         drawTeamLogos(matchInfo.homeId, matchInfo.awayId);
-        loadMomentum(function(what){
-            console.log(what);
+        loadMomentum(function(unused){
             loadEvents();
             drawHandle();
         });
@@ -57,45 +68,54 @@ function Timeline(options){
     var drawSlider = function(){
         paper = scope;
         var bg = new scope.Path.Rectangle(0, 0, width, height);
-        bg.fillColor = "#dadada";
+        bg.fillColor = {
+            gradient: {
+                stops: [["#dbdbdb",0.93],["#6d6d6d",1]]
+            },
+            origin: [width/2,0],
+            destination: [width/2,height]
+        }
 
+        var sliderbg = new scope.Path.Rectangle(0, height, width, height+20);
+        sliderbg.fillColor = "#ffffff";
+        var slider = new scope.Raster("/static/images/timebar.png", [width/2,height+10]);
+
+        handleBar = new scope.Path.Line(new scope.Point(timeToPixel(0,0), height), new scope.Point(timeToPixel(0,0), 0));
+        handleBar.strokeColor = new scope.Color(0,0,0,0);
+        handleBar.strokeWidth = 1;
 
         var middleLine = new scope.Path.Line(new scope.Point(0, height/2), new scope.Point(width, height/2));
-        middleLine.strokeColor = "#555599";
-        middleLine.strokeWidth = 2;
+        middleLine.strokeColor = "#000000";
+        middleLine.strokeWidth = 1;
 
 
-        for(var i = 5; i<91; i=i+5){
-            var text1 = new scope.PointText(new scope.Point(-25+handleWidth+width/90*i,height-3));
-            text1.justification = 'center';
-            text1.fillColor = 'black';
-            text1.content = i;
-        }
+
         scope.view.draw();
     }
     var drawHandle = function(){
         paper = scope;
+        for(var i = 5; i<91; i=i+5){
+
+            var text = new scope.PointText(new scope.Point(timeToPixel(i,0),height+14));
+            text.justification = 'center';
+            text.fontSize = 10;
+            text.fillColor = 'black';
+            text.content = i;
+
+            var line = new scope.Path.Line(new scope.Point(timeToPixel(i,0), 0), new scope.Point(timeToPixel(i,0), 4));
+            var line2 = new scope.Path.Line(new scope.Point(timeToPixel(i,0), height), new scope.Point(timeToPixel(i,0), height - 4));
+            line.strokeColor = "#000000";
+            line2.strokeColor = "#000000";
+            line.strokeWidth = 1;
+            line2.strokeWidth = 1;
+        }
         if(sliderCount > 0){
-            leftHandle = new scope.Path.Rectangle(0, 0, handleWidth, height);
-            //leftHandle.fillColor = "#7b030d";
-            leftHandle.fillColor = {
-                gradient: {
-                    stops: ['#828282', '#e3e3e3', '#828282']
-                },
-                origin: [0,height/2],
-                destination: [handleWidth,height/2]
-            }
+            leftHandle = new scope.Raster("/static/images/slide-button.png", [timeToPixel(0,0),height+10]);
         }
         if(sliderCount > 1){
-            rightHandle = new scope.Path.Rectangle(width-handleWidth, 0, handleWidth, height);
-            rightHandle.fillColor = {
-                gradient: {
-                    stops: ['#828282', '#e3e3e3', '#828282']
-                },
-                origin: [width-handleWidth,height/2],
-                destination: [width,height/2]
-            }
+            rightHandle = new scope.Raster("/static/images/slide-button.png", [width-10,height+10]);
         }
+
         scope.view.draw();
     }
 
@@ -112,7 +132,7 @@ function Timeline(options){
             if(momentumPath) momentumPath.remove();
 
             momentumPath = new scope.Path();
-            momentumPath.strokeColor = "black";
+            momentumPath.strokeColor = "#76050e";
             momentumPath.strokeWidth = 2;
 
             var maxAbs = 0;
@@ -129,7 +149,7 @@ function Timeline(options){
                 momentumPath.add(new scope.Point(x, y));
             });
             scope.view.draw();
-            callback("what");
+            callback("");
         });
     }
 
@@ -140,13 +160,13 @@ function Timeline(options){
 
         homeRaster.onLoad = function(){
             var scaleFactor = 20/homeRaster.height;
-            homeRaster.position = new scope.Point(30, 12);
+            homeRaster.position = new scope.Point(10, 12);
             homeRaster.scale(scaleFactor);
         };
 
         awayRaster.onLoad = function(){
             var scaleFactor = 20/awayRaster.height;
-            awayRaster.position = new scope.Point(30, 37);
+            awayRaster.position = new scope.Point(10, 37);
             awayRaster.scale(scaleFactor);
         };
     }
@@ -167,6 +187,7 @@ function Timeline(options){
                 } else if(event[2]===matchInfo.awayId){
                     event.push("away");
                 }
+                matchEvents.push(event);
                 drawEvent(event);
             });
             scope.view.draw();
@@ -176,11 +197,11 @@ function Timeline(options){
     var timeToPixel = function(minute, second){
         var totalSeconds = minute*60+second;
         var xratio = totalSeconds/maxSecond;
-        return xratio*(width-handleWidth)+handleWidth/2;
+        return xratio*(width-handleWidth*2)+handleWidth;
     }
 
     var pixelToTime = function(pos){
-        var xratio = pos/(width-handleWidth);
+        var xratio = (pos-handleWidth)/(width-handleWidth*2);
         var seconds = Math.round(maxSecond*xratio);
         return [Math.floor(seconds/60), seconds%60];
     }
@@ -197,8 +218,8 @@ function Timeline(options){
 
     scope.tool.onMouseDrag = function(event){
         if(draggedHandle){
-            if(event.point.x < handleWidth/2){
-                draggedHandle.position.x = handleWidth/2;
+            if(event.point.x < timeToPixel(0,0)){
+                draggedHandle.position.x = timeToPixel(0,0);
             }
             else if(event.point.x > width - handleWidth/2){
                 draggedHandle.position.x = width - handleWidth/2;
@@ -206,7 +227,75 @@ function Timeline(options){
             else{
                 draggedHandle.position.x = event.point.x;
             }
-            currentPoint = pixelToTime(draggedHandle.position.x-(handleWidth/2));
+
+            handleBar.remove();
+
+            handleBar = new scope.Path.Line(new scope.Point(draggedHandle.position.x, height), new scope.Point(draggedHandle.position.x, 0));
+            handleBar.strokeColor = "#5887ff";
+            handleBar.strokeWidth = 2;
+
+            var min = pixelToTime(draggedHandle.position.x)[0];
+            handleEventDrags(min);
+
+            currentPoint = pixelToTime(draggedHandle.position.x);
+        }
+    }
+
+    var handleEventDrags = function(min){
+        if(min>lastMin+1 || min < lastMin-1){
+            for(var i=0;i<eventGroups.length; i++){
+                eventGroups[i].removeChildren();
+            }
+        }
+        var imageNames = ["goal.png", "own-goal.png", "penalty.png", "missed-pen.png",
+            "yellow.png", "second-yellow.png", "red.png", "substitution.png"];
+        var count = 0;
+        for( var i=0; i<matchEvents.length; i++){
+            var evMin = parseInt(matchEvents[i][1]);
+            if(evMin == min){
+
+                lastMin = min;
+
+                if(min>45){
+                    boxOffset = -55;
+                }
+                else{
+                    boxOffset = 55;
+                }
+
+                var eventGroup = new scope.Group();
+                eventGroup.addChild(new scope.Path.Rectangle({
+                    rectangle: {
+                        size: [boxWidth, boxHeight],
+                        center: [timeToPixel(min,0)+boxOffset,topPadding+count*(boxHeight+boxPadding)]
+                    },
+                    radius: 3,
+                    fillColor: "#f8f8f8",
+                    strokeWidth: 1,
+                    strokeColor: "#888888"
+                })
+                );
+
+                eventGroup.addChild(new scope.Raster("/static/images/"+ imageNames[matchEvents[i][0]], [timeToPixel(min,0)+boxOffset-(boxWidth/2)+5,topPadding+count*(boxHeight+boxPadding)]).scale(0.6));
+                var text = "";
+                if(matchEvents[i][0] == 7){
+                    var sName1 = matchEvents[i][7].split(" ");
+                    var sName2 = matchEvents[i][8].split(" ");
+                    text = sName1[1] + " - " + sName2[1];
+                }
+                else{
+                    text = matchEvents[i][7];
+                }
+                eventGroup.addChild( new scope.PointText({
+                    point: [timeToPixel(min,0)+boxOffset-(boxWidth/2)+15,topPadding+count*(boxHeight+boxPadding)+fontSize/3],
+                    content: text,
+                    fillColor: 'black',
+                    fontSize: fontSize
+                })
+                );
+                eventGroups.push(eventGroup);
+                count++;
+            }
         }
     }
 
@@ -226,6 +315,12 @@ function Timeline(options){
                     timeData = [leftData, rightData];
                 }
             }
+            handleBar.strokeColor = new scope.Color(0,0,0,0);
+
+            for(var i=0;i<eventGroups.length; i++){
+                eventGroups[i].removeChildren();
+            }
+
             $("#"+div_id).trigger({type:"timeChanged", time: timeData});
         }
     }
@@ -246,7 +341,7 @@ function Timeline(options){
         // Todo: differentiate between events, or highlight the entry below on hover/click
         paper = scope;
 
-        imageNames = ["goal.png", "own-goal.png", "penalty.png", "missed-pen.png",
+        var imageNames = ["goal.png", "own-goal.png", "penalty.png", "missed-pen.png",
             "yellow.png", "second-yellow.png", "red.png", "substitution.png"];
 
         var xoffset = timeToPixel(event[1], 0);
@@ -260,6 +355,53 @@ function Timeline(options){
         var point = new scope.Point(xoffset, yoffset);
 
         var img = new scope.Raster("/static/images/"+ imageNames[event[0]], point);
+        img.scale(0.8);
+
+        var eventGroup = null;
+        img.onMouseEnter = function(){
+
+            eventGroup = new scope.Group();
+
+            if(event[1]>45){
+                boxOffset = -55;
+            }
+            else{
+                boxOffset = 55;
+            }
+
+            eventGroup.addChild(new scope.Path.Rectangle({
+                rectangle: {
+                    size: [boxWidth, boxHeight],
+                    center: [timeToPixel(event[1],0)+boxOffset,yoffset]
+                },
+                radius: 3,
+                fillColor: "#f8f8f8",
+                strokeWidth: 1,
+                strokeColor: "#888888"
+            })
+            );
+
+            eventGroup.addChild(new scope.Raster("/static/images/"+ imageNames[event[0]], [timeToPixel(event[1],0)+boxOffset-(boxWidth/2)+5,yoffset]).scale(0.6));
+            var text = "";
+            if(event[0] == 7){
+                var sName1 = event[7].split(" ");
+                var sName2 = event[8].split(" ");
+                text = sName1[1] + " - " + sName2[1];
+            }
+            else{
+                text = event[7];
+            }
+            eventGroup.addChild( new scope.PointText({
+                point: [timeToPixel(event[1],0)+boxOffset-(boxWidth/2)+15,yoffset+fontSize/3],
+                content: text,
+                fillColor: 'black',
+                fontSize: fontSize
+            })
+            );
+        }
+        img.onMouseLeave = function(){
+            eventGroup.removeChildren();
+        }
         eventImagesGroup.addChild(img);
         eventImages.push(img);
     }

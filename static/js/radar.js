@@ -97,7 +97,7 @@ function Radar(matchId){
             } else {
                 fillColor = "black";
                 strokeColor = "yellow";
-                text = "R";
+                text = "H";
             }
 
             // Creating a group so that the circle + text objects can be moved together

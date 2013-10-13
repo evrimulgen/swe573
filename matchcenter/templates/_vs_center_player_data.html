@@ -61,7 +61,7 @@
         </div>
     </div>
 
-    <button class='collapse' data-toggle='collapse' data-target=".player-data-pass-extra"></button>
+    <button class='open-button' onclick="changeClass(this)" data-toggle='collapse' data-target=".player-data-pass-extra"></button>
 
 </div>
 
@@ -115,7 +115,7 @@
             </div>
         </div>
     </div>
-    <button class='collapse' data-toggle='collapse' data-target=".player-data-run-extra"></button>
+    <button class='open-button' onclick="changeClass(this)" data-toggle='collapse' data-target=".player-data-run-extra"></button>
 </div>
 <div class='player-data'><p id='title'> İsabetli Şut / Toplam Şut </p>
 
@@ -167,5 +167,17 @@
             </div>
         </div>
     </div>
-    <button class='collapse' data-toggle='collapse' data-target=".player-data-shot-extra"></button>
+    <button class='open-button' onclick="changeClass(this)" data-toggle='collapse' data-target=".player-data-shot-extra"></button>
 </div>
+<script>
+    changeClass = function(elem){
+        var className = elem.className;
+        $(elem).removeClass(className);
+        if(className == "open-button" || className == "open-button collapsed"){
+            $(elem).addClass("close-button");
+        }
+        else if(className == "close-button" || className == "close-button collapsed"){
+            $(elem).addClass("open-button");
+        }
+    }
+</script>

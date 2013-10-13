@@ -108,28 +108,40 @@
     <h1 class="main">Geçmiş Karşılaşmalar</h1>
     <div class="past-match-area">
         {% for match in history.pastMatches %}
-            <a href="../../videos/{{ match.matchId }}/1" class="past-match iframe">
-                {% if match.referee %}
-                    <p class="upper-info"> {{ match.stadium }}</p>
-                {% else  %}
-                    <p class="upper-info"> </p>
+            {% if  match.link %}
+                <a href="{{ match.link }}" target="blank_" class="past-match">
+            {% else %}
+                <a class="past-match-not-clickable">
+            {% endif %}
+        <div id="upper">
+            <div class=upper-info>
+                {% if match.stadium %}
+                    <img src="{{ STATIC_URL }}images/saha2.png">
+                    <p> {{ match.stadium }}</p>
                 {% endif %}
-                <p class="upper-info">{{ match.date }}</p>
+            </div>
+            <div class="upper-info">
+                <img src="{{ STATIC_URL }}images/saat.png">
+                <p>{{ match.date }}</p>
+            </div>
+            <div class="upper-info">
                 {% if match.referee %}
-                    <p class="upper-info"> {{ match.referee }}</p>
-                {% else  %}
-                    <p class="upper-info"> </p>
+                    <img src="{{ STATIC_URL }}images/duduk.png">
+                    <p> {{ match.referee }}</p>
                 {% endif %}
-                <img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png" id="homelogo">
-                <p id="homename">{{ match.homeTeam }}</p>
-                <p id="homescore">{{ match.homeScore }}</p>
-                <p id="separator">-</p>
-                <p id="awayscore">{{ match.awayScore }}</p>
-                <p id="awayname">{{ match.awayTeam }}</p>
-                <img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png" id="awaylogo">
-            </a>
+            </div>
+        </div>
+        <img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png" id="homelogo">
+        <p id="homename">{{ match.homeTeam }}</p>
+        <p id="homescore">{{ match.homeScore }}</p>
+        <p id="separator">-</p>
+        <p id="awayscore">{{ match.awayScore }}</p>
+        <p id="awayname">{{ match.awayTeam }}</p>
+        <img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png" id="awaylogo">
+        </a>
         {% endfor %}
     </div>
+
 
 {% endblock %}
 

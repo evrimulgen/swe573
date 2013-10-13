@@ -41,6 +41,7 @@
     $( document ).ready(function() {
         //console.log( "ready!" );
         $("#radarContainer").hide();
+        $("#stadium").hide();
 
         toggleCanvas = function(elem){
             var elemValue = elem.value;
@@ -595,6 +596,7 @@
                         "width": $("#data-area").width()
                     };
                     $("#data-area").empty();
+                    $("#data-area").append("<div class='team-name-area'><img src='{{ STATIC_URL }}images/logo{{ matchInfo.homeTeamId }}.png'><p>{{ matchInfo.homeTeam }}</p><p>{{ matchInfo.awayTeam }}</p><img src='{{ STATIC_URL }}images/logo{{ matchInfo.awayTeamId }}.png'></div>");
                     simpleBar("#data-area", d.teamStats, pref);
                 }
             });
@@ -659,7 +661,9 @@
 
 {% block content %}
     <div class="row">
-        <canvas id="slider"></canvas>
+        <div class="slider-holder">
+            <canvas id="slider"></canvas>
+        </div>
     </div>
     <div class="row" id="canvas-row" style="height: 550px">
         <button class="canvas-button-active" id="showFormation" value="showFormation"  style="margin-left: 50px;" onclick="toggleCanvas(this)">Formasyon</button>
@@ -673,6 +677,28 @@
                 </div>
             </div>
         </div>
+
+        <div id="stadium">
+            <ul class="first-team-formation">
+                {% for player in homeSquad %}
+                    {% if player.eleven == 1 %}
+                        <li class="{{ player.playerPosition }}">
+                            <span>{{ player.jerseyNumber }}</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <ul class="second-team-formation">
+                {% for player in awaySquad %}
+                    {% if player.eleven == 1 %}
+                        <li class="{{ player.playerPosition }}">
+                            <span>{{ player.jerseyNumber }}</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
         <div id="likeCanvas" >
             <table class ="formationTable" border="1" >
                 <tr>
@@ -764,38 +790,45 @@
 
     <div class="row" id="playerCardsContainer">
         <div class="span4 card-container" id="leftPlayerCard">
-            <div class="card-header row-fluid">
-                <img class="playerImage" src="{{STATIC_URL}}images/players/default.png">
-                <div class="playerInfo">
-                    <p class="playerName">Oyuncu Karti</p>
+            <img src="{{ STATIC_URL }}images/card-hole.png">
+            <div class="card-inside">
+
+                <div class="card-header row-fluid">
+                    <img class="playerImage" src="{{STATIC_URL}}images/players/default.png">
+                    <div class="playerInfo">
+                        <p class="playerName">Oyuncu Karti</p>
+                    </div>
                 </div>
-            </div>
-            <div class="card-data row-fluid">
-                <table class="card-table">
-                    <tr>
-                        <th>İstatistik</th>
-                        <th>Bu Sezon</th>
-                        <th>Bu Hafta</th>
-                    </tr>
-                </table>
+                <div class="card-data row-fluid">
+                    <table class="card-table">
+                        <tr>
+                            <th>İstatistik</th>
+                            <th>Bu Sezon</th>
+                            <th>Bu Hafta</th>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
 
         <div class="span4 card-container" id="rightPlayerCard">
-            <div class="card-header row-fluid">
-                <img class="playerImage" src="{{STATIC_URL}}images/players/default.png">
-                <div class="playerInfo">
-                    <p class="playerName">Oyuncu Karti</p>
+            <img src="{{ STATIC_URL }}images/card-hole.png">
+            <div class="card-inside">
+                <div class="card-header row-fluid">
+                    <img class="playerImage" src="{{STATIC_URL}}images/players/default.png">
+                    <div class="playerInfo">
+                        <p class="playerName">Oyuncu Karti</p>
+                    </div>
                 </div>
-            </div>
-            <div class="card-data row-fluid">
-                <table class="card-table">
-                    <tr>
-                        <th>İstatistik</th>
-                        <th>Bu Sezon</th>
-                        <th>Bu Hafta</th>
-                    </tr>
-                </table>
+                <div class="card-data row-fluid">
+                    <table class="card-table">
+                        <tr>
+                            <th>İstatistik</th>
+                            <th>Bu Sezon</th>
+                            <th>Bu Hafta</th>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -645,11 +645,12 @@ p.no-data{
     line-height: 38px;
     margin: 0px;
     margin-left: 1%;
-    width: 62%;
+    width: 57%;
     text-align: left;
     text-decoration: none;
     font-size: 11px;
 }
+
 .sidebox a #min{
     margin: 0px;
     height: 38px;
@@ -1689,21 +1690,19 @@ button.collapse:hover{
     background: url(../images/vote.png);
     border: none;
     height: 30px;
-    margin-top: 5px;
     width: 30px;
-    float: left;
     background-size: cover;
 }
 
 .vote-button-selected, .vote-button-selectable:hover{
     background: url(../images/vote-selected.png);
     border: none;
-    margin-top: 5px;
     height: 30px;
     width: 30px;
-    float: left;
     background-size: cover;
 }
+
+
 
 .tooltip-white{
     background: url(../images/tool-tip-white.png);

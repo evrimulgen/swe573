@@ -1,0 +1,35 @@
+#rightButton{
+    float:right;
+}
+
+#leftButton{
+    float:left;
+}
+
+.sidebox a #mycanvas{
+    float: left;
+    margin-top: 7px;
+}
+
+canvas{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 2px 0px rgba(255,255,255,0.2) inset, 0 0px 2px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0 2px 0px rgba(255,255,255,0.2) inset, 0 0px 2px rgba(0,0,0,0.7);
+    box-shadow: 0 2px 0px rgba(255,255,255,0.2) inset, 0 0px 2px rgba(0,0,0,0.7);
+}
+
+#videopng{
+    margin-left:7px;
+}
+
+.manager-img{
+    height:25px;
+    margin-left:4px;
+    margin-right: 10px;
+}
+
+#right-img{
+    margin-left:1px;
+}

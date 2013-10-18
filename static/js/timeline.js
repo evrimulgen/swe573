@@ -316,27 +316,6 @@ function Timeline(options){
 
                 lastMin = min;
 
-                if(min>45){
-                    boxOffset = -75;
-                }
-                else{
-                    boxOffset = 75;
-                }
-
-                var eventGroup = new scope.Group();
-                eventGroup.addChild(new scope.Path.Rectangle({
-                    rectangle: {
-                        size: [boxWidth, boxHeight],
-                        center: [timeToPixel(min,0)+boxOffset,topPadding+count*(boxHeight+boxPadding)]
-                    },
-                    radius: 3,
-                    fillColor: "#f8f8f8",
-                    strokeWidth: 1,
-                    strokeColor: "#888888"
-                })
-                );
-
-                eventGroup.addChild(new scope.Raster("/static/images/"+ imageNames[matchEvents[i][0]], [timeToPixel(min,0)+boxOffset-(boxWidth/2)+5,topPadding+count*(boxHeight+boxPadding)]).scale(0.6));
                 var text = "";
                 if(matchEvents[i][0] == 7){
                     var sName1 = matchEvents[i][7].split(" ");
@@ -360,6 +339,31 @@ function Timeline(options){
                 else{
                     text = matchEvents[i][7];
                 }
+
+                boxWidth = text.length * 6 + 15;
+
+                if(min>45){
+                    boxOffset =  0 - (boxWidth/2+10);;
+                }
+                else{
+                    boxOffset = (boxWidth/2+10);
+                }
+
+                var eventGroup = new scope.Group();
+                eventGroup.addChild(new scope.Path.Rectangle({
+                    rectangle: {
+                        size: [boxWidth, boxHeight],
+                        center: [timeToPixel(min,0)+boxOffset,topPadding+count*(boxHeight+boxPadding)]
+                    },
+                    radius: 3,
+                    fillColor: "#f8f8f8",
+                    strokeWidth: 1,
+                    strokeColor: "#888888"
+                })
+                );
+
+                eventGroup.addChild(new scope.Raster("/static/images/"+ imageNames[matchEvents[i][0]], [timeToPixel(min,0)+boxOffset-(boxWidth/2)+5,topPadding+count*(boxHeight+boxPadding)]).scale(0.6));
+
                 eventGroup.addChild( new scope.PointText({
                     point: [timeToPixel(min,0)+boxOffset-(boxWidth/2)+15,topPadding+count*(boxHeight+boxPadding)+fontSize/3],
                     content: text,
@@ -438,26 +442,6 @@ function Timeline(options){
 
             eventGroup = new scope.Group();
 
-            if(event[1]>45){
-                boxOffset = -75;
-            }
-            else{
-                boxOffset = 75;
-            }
-
-            eventGroup.addChild(new scope.Path.Rectangle({
-                rectangle: {
-                    size: [boxWidth, boxHeight],
-                    center: [timeToPixel(event[1],0)+boxOffset,yoffset]
-                },
-                radius: 3,
-                fillColor: "#f8f8f8",
-                strokeWidth: 1,
-                strokeColor: "#888888"
-            })
-            );
-
-            eventGroup.addChild(new scope.Raster("/static/images/"+ imageNames[event[0]], [timeToPixel(event[1],0)+boxOffset-(boxWidth/2)+5,yoffset]).scale(0.6));
             var text = "";
             if(event[0] == 7){
                 var sName1 = event[7].split(" ");
@@ -481,6 +465,29 @@ function Timeline(options){
             else{
                 text = event[7];
             }
+            boxWidth = text.length * 6 + 15;
+
+            if(event[1]>45){
+                boxOffset = 0 - (boxWidth/2+10);
+            }
+            else{
+                boxOffset = (boxWidth/2+10);
+            }
+
+            eventGroup.addChild(new scope.Path.Rectangle({
+                rectangle: {
+                    size: [boxWidth, boxHeight],
+                    center: [timeToPixel(event[1],0)+boxOffset,yoffset]
+                },
+                radius: 3,
+                fillColor: "#f8f8f8",
+                strokeWidth: 1,
+                strokeColor: "#888888"
+            })
+            );
+
+            eventGroup.addChild(new scope.Raster("/static/images/"+ imageNames[event[0]], [timeToPixel(event[1],0)+boxOffset-(boxWidth/2)+5,yoffset]).scale(0.6));
+
             eventGroup.addChild( new scope.PointText({
                 point: [timeToPixel(event[1],0)+boxOffset-(boxWidth/2)+15,yoffset+fontSize/3],
                 content: text,

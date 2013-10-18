@@ -48,7 +48,7 @@
             if(elemValue == "showFormation"){
                 $("#radarContainer").hide();
                 $("#likeCanvas").show();
-                $("#canvas-row").height("550px");
+                $("#canvas-row").height("580px");
                 $("#showRadar").removeClass("canvas-button-active");
                 $("#showFormation").removeClass("canvas-button");
                 $("#showRadar").addClass("canvas-button");
@@ -57,7 +57,7 @@
             else if(elemValue == "showRadar"){
                 $("#likeCanvas").hide();
                 $("#radarContainer").show();
-                $("#canvas-row").height("460px");
+                $("#canvas-row").height("470px");
                 $("#showRadar").removeClass("canvas-button");
                 $("#showFormation").removeClass("canvas-button-active");
                 $("#showRadar").addClass("canvas-button-active");
@@ -665,7 +665,7 @@
             <canvas id="slider"></canvas>
         </div>
     </div>
-    <div class="row" id="canvas-row" style="height: 550px">
+    <div class="row" id="canvas-row" style="height: 580px">
         <button class="canvas-button-active" id="showFormation" value="showFormation"  style="margin-left: 50px;" onclick="toggleCanvas(this)">Formasyon</button>
         <button class="canvas-button" id="showRadar" value="showRadar" onclick="toggleCanvas(this)">Radar</button>
         <div id="radarContainer">
@@ -788,7 +788,7 @@
         </div>
     </div>
 
-    <div class="row" id="playerCardsContainer">
+    <div class="row" id="playerCardsContainer" style="margin-bottom: 10px">
         <div class="span4 card-container" id="leftPlayerCard">
             <img src="{{ STATIC_URL }}images/card-hole.png">
             <div class="card-inside">

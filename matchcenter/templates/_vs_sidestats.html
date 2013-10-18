@@ -8,7 +8,7 @@
             <p class="no-data"> Bu maçla ilgili veri bulunmamaktadır.</p>
         {% else %}
             {% for x in matchSquad|dictsortreversed:"votePercent" %}
-                {% if x.played %}
+
                     <a class="player-rate">
                         <div class="teamColor">
                             {% if x.teamId == homeTeamId %}
@@ -20,14 +20,11 @@
                             {% endif %}
                         </div>
                         <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
-                        <p id="name"> {{ x.playerName }} - <span style="font-weight: bold;">%{{ x.votePercent }} </span></p>
-                        <p id="value">
-                            {% if votingActive %}
-                                <button title="Oyla" class="vote-button-selectable" value="{{ x.teamId }}/{{ x.playerId }}" onclick="votePlayer(this)"></button>
-                            {% endif %}
-                        </p>
+                        <p id="name"> {{ x.playerName }}</p>
+                        <p id="mycanvas" ><canvas id="mycanvas{{ forloop.counter }}" height="25" width="55" ></canvas></p>
+
                     </a>
-                {% endif %}
+
             {% endfor %}
             <button id="rate-expander" class="rate-expander" onclick="showAll()">Tümünü göster</button>
             <br style="clear:both"/>
@@ -186,4 +183,18 @@
             $(item).hide();
         }
     }
+</script>
+<script type="text/javascript">
+    {% for x in matchSquad|dictsortreversed:"votePercent" %}
+        var canvas=document.getElementById('mycanvas{{ forloop.counter }}');
+        var ctx=canvas.getContext('2d');
+        ctx.fillStyle="red";
+        var number = {{ x.votePercent }}*(canvas.width/100);
+        var percentDifference = parseInt(number);
+
+        ctx.fillRect(0,0,percentDifference,canvas.height);
+
+        ctx.font="normal 12px Helvetica";
+        ctx.strokeText("%{{ x.votePercent }}", 0, canvas.height/2+4);
+    {% endfor %}
 </script>

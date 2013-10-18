@@ -26,7 +26,7 @@ function Timeline(options){
 
     var boxOffset;
     var boxHeight = 15;
-    var boxWidth = 100;
+    var boxWidth = 125;
     var topPadding = 9;
     var boxPadding = 2;
     var fontSize = 10;
@@ -257,10 +257,10 @@ function Timeline(options){
                 lastMin = min;
 
                 if(min>45){
-                    boxOffset = -55;
+                    boxOffset = -75;
                 }
                 else{
-                    boxOffset = 55;
+                    boxOffset = 75;
                 }
 
                 var eventGroup = new scope.Group();
@@ -281,7 +281,21 @@ function Timeline(options){
                 if(matchEvents[i][0] == 7){
                     var sName1 = matchEvents[i][7].split(" ");
                     var sName2 = matchEvents[i][8].split(" ");
-                    text = sName1[1] + " - " + sName2[1];
+                    var playerIn;
+                    var playerOut;
+                    if (sName1.length > 1){
+                        playerOut = sName1[0].charAt(0) + "." +sName1[1];
+                    }
+                    else{
+                        playerOut = sName1[0];
+                    }
+                    if (sName2.length > 1){
+                        playerIn = sName2[0].charAt(0) + "." +sName2[1];
+                    }
+                    else{
+                        playerIn = sName2[0];
+                    }
+                    text = playerOut + " - " + playerIn;
                 }
                 else{
                     text = matchEvents[i][7];
@@ -363,10 +377,10 @@ function Timeline(options){
             eventGroup = new scope.Group();
 
             if(event[1]>45){
-                boxOffset = -55;
+                boxOffset = -75;
             }
             else{
-                boxOffset = 55;
+                boxOffset = 75;
             }
 
             eventGroup.addChild(new scope.Path.Rectangle({
@@ -386,7 +400,21 @@ function Timeline(options){
             if(event[0] == 7){
                 var sName1 = event[7].split(" ");
                 var sName2 = event[8].split(" ");
-                text = sName1[1] + " - " + sName2[1];
+                var playerIn;
+                var playerOut;
+                if (sName1.length > 1){
+                    playerOut = sName1[0].charAt(0) + "." +sName1[1];
+                }
+                else{
+                    playerOut = sName1[0];
+                }
+                if (sName2.length > 1){
+                    playerIn = sName2[0].charAt(0) + "." +sName2[1];
+                }
+                else{
+                    playerIn = sName2[0];
+                }
+                text = playerOut + " - " + playerIn;
             }
             else{
                 text = event[7];

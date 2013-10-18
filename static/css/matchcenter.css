@@ -1,5 +1,13 @@
-.row {
-
+.slider-holder {
+    margin-left: 50px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    width: 662px;
+    height: 70px;
+    -webkit-border-radius: 4.3px;
+    -moz-border-radius: 4.3px;
+    border-radius: 4.3px;
+    border: 1px solid #545454;
 }
 
 div.sidebox > div {

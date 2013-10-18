@@ -18,7 +18,9 @@ function Timeline(options){
     var rightHandle = null;
     var draggedHandle = null;
 
-    var handleBar = null;
+    var handleBarLeft = null;
+    var handleBarRight = null;
+    var choosenAreaRect = null;
 
     var eventImages = [];
     var matchEvents = [];
@@ -80,15 +82,24 @@ function Timeline(options){
         sliderbg.fillColor = "#ffffff";
         var slider = new scope.Raster("/static/images/timebar.png", [width/2,height+10]);
 
-        handleBar = new scope.Path.Line(new scope.Point(timeToPixel(0,0), height), new scope.Point(timeToPixel(0,0), 0));
-        handleBar.strokeColor = new scope.Color(0,0,0,0);
-        handleBar.strokeWidth = 1;
+        handleBarLeft = new scope.Path.Line(new scope.Point(timeToPixel(0,0), height), new scope.Point(timeToPixel(0,0), 0));
+        handleBarLeft.strokeColor = new scope.Color(0,0,0,0);
+        handleBarLeft.strokeWidth = 1;
 
         var middleLine = new scope.Path.Line(new scope.Point(0, height/2), new scope.Point(width, height/2));
         middleLine.strokeColor = "#000000";
         middleLine.strokeWidth = 1;
 
-
+        if(sliderCount >1){
+            choosenAreaRect = new scope.Path.Rectangle(timeToPixel(0,0), 0, width-30, height);
+            choosenAreaRect.fillColor = {
+                gradient: {
+                    stops: [[new scope.Color(0,0,0,0.5),0],[new scope.Color(0,0,0,0),0.3],[new scope.Color(0,0,0,0),0.7],[new scope.Color(0,0,0,0.5),1]]
+                },
+                origin: [width/2,0],
+                destination: [width/2,height]
+            }
+        }
 
         scope.view.draw();
     }
@@ -114,6 +125,14 @@ function Timeline(options){
         }
         if(sliderCount > 1){
             rightHandle = new scope.Raster("/static/images/slide-button.png", [width-10,height+10]);
+
+            handleBarLeft = new scope.Path.Line(new scope.Point(timeToPixel(0,0), height), new scope.Point(timeToPixel(0,0), 0));
+            handleBarLeft.strokeColor = "#5887ff";
+            handleBarLeft.strokeWidth = 2;
+
+            handleBarRight = new scope.Path.Line(new scope.Point(width-10, height), new scope.Point(width-10, 0));
+            handleBarRight.strokeColor = "#5887ff";
+            handleBarRight.strokeWidth = 2;
         }
 
         scope.view.draw();
@@ -218,30 +237,71 @@ function Timeline(options){
 
     scope.tool.onMouseDrag = function(event){
         if(draggedHandle){
-            if(event.point.x < timeToPixel(0,0)){
-                draggedHandle.position.x = timeToPixel(0,0);
-            }
-            else if(event.point.x > width - handleWidth/2){
-                draggedHandle.position.x = width - handleWidth/2;
+
+            if(sliderCount > 1){
+                if( draggedHandle == leftHandle){
+                    if(event.point.x < timeToPixel(0,0)){
+                        draggedHandle.position.x = timeToPixel(0,0);
+                        handleBarLeft.position.x = timeToPixel(0,0);
+                    }
+                    else if(pixelToTime(event.point.x)[0]>=75 && pixelToTime(rightHandle.position.x)[0] > 75){
+                        draggedHandle.position.x = timeToPixel(75,0);
+                        handleBarLeft.position.x = timeToPixel(75,0);
+                    }
+                    else if(event.point.x > timeToPixel(pixelToTime(rightHandle.position.x)[0] - 15 ,0)){
+                        draggedHandle.position.x = timeToPixel(pixelToTime(rightHandle.position.x)[0] - 15 ,0);
+                        handleBarLeft.position.x = timeToPixel(pixelToTime(rightHandle.position.x)[0] - 15 ,0);
+                    }
+                    else{
+                        draggedHandle.position.x = event.point.x;
+                        var temp = ((pixelToTime(event.point.x)[0]) / 15).toFixed(0);
+                        handleBarLeft.position.x = timeToPixel(temp * 15 , 0);
+                    }
+                }
+                else if(draggedHandle == rightHandle){
+                    if(event.point.x > width - handleWidth/2){
+                        draggedHandle.position.x = width - handleWidth/2;
+                        handleBarRight.position.x = width - handleWidth/2;
+                    }
+                    else if(event.point.x > timeToPixel(82,0)){
+                        draggedHandle.position.x = event.point.x;
+                        handleBarRight.position.x = width - handleWidth/2;
+                    }
+                    else if(event.point.x < timeToPixel(pixelToTime(leftHandle.position.x)[0] + 15 ,0)){
+                        draggedHandle.position.x = timeToPixel(pixelToTime(leftHandle.position.x)[0] + 15 ,0);
+                        handleBarRight.position.x = timeToPixel(pixelToTime(leftHandle.position.x)[0] + 15 ,0);
+                    }
+                    else{
+                        draggedHandle.position.x = event.point.x;
+                        var temp = ((pixelToTime(event.point.x)[0]) / 15).toFixed(0);
+                        handleBarRight.position.x = timeToPixel(temp * 15 , 0);
+                    }
+                }
+                choosenAreaRect.bounds = { x: handleBarLeft.position.x, y: 0, width:handleBarRight.position.x - handleBarLeft.position.x, height:height };
+
             }
             else{
-                draggedHandle.position.x = event.point.x;
+                if(event.point.x < timeToPixel(0,0)){
+                    draggedHandle.position.x = timeToPixel(0,0);
+                }
+                else if(event.point.x > width - handleWidth/2){
+                    draggedHandle.position.x = width - handleWidth/2;
+                }
+                else{
+                    draggedHandle.position.x = event.point.x;
+                }
+                handleBarLeft.remove();
+                handleBarLeft = new scope.Path.Line(new scope.Point(draggedHandle.position.x, height), new scope.Point(draggedHandle.position.x, 0));
+                handleBarLeft.strokeColor = "#5887ff";
+                handleBarLeft.strokeWidth = 2;
+                var min = pixelToTime(draggedHandle.position.x)[0];
+                handleEventDragOns(min);
+                currentPoint = pixelToTime(draggedHandle.position.x);
             }
-
-            handleBar.remove();
-
-            handleBar = new scope.Path.Line(new scope.Point(draggedHandle.position.x, height), new scope.Point(draggedHandle.position.x, 0));
-            handleBar.strokeColor = "#5887ff";
-            handleBar.strokeWidth = 2;
-
-            var min = pixelToTime(draggedHandle.position.x)[0];
-            handleEventDrags(min);
-
-            currentPoint = pixelToTime(draggedHandle.position.x);
         }
     }
 
-    var handleEventDrags = function(min){
+    var handleEventDragOns = function(min){
         if(min>lastMin+1 || min < lastMin-1){
             for(var i=0;i<eventGroups.length; i++){
                 eventGroups[i].removeChildren();
@@ -319,7 +379,10 @@ function Timeline(options){
             var timeData = null;
             if(sliderCount==1){
                 timeData = pixelToTime(leftHandle.position.x-(handleWidth/2));
+                handleBarLeft.strokeColor = new scope.Color(0,0,0,0);
             } else if(sliderCount==2){
+                leftHandle.position.x = handleBarLeft.position.x;
+                rightHandle.position.x = handleBarRight.position.x;
                 var leftData = pixelToTime(leftHandle.position.x-(handleWidth/2));
                 var rightData = pixelToTime(rightHandle.position.x-(handleWidth/2));
 
@@ -329,7 +392,6 @@ function Timeline(options){
                     timeData = [leftData, rightData];
                 }
             }
-            handleBar.strokeColor = new scope.Color(0,0,0,0);
 
             for(var i=0;i<eventGroups.length; i++){
                 eventGroups[i].removeChildren();

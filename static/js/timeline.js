@@ -259,11 +259,11 @@ function Timeline(options){
                     }
                 }
                 else if(draggedHandle == rightHandle){
-                    if(event.point.x > width - handleWidth/2){
+                    if(event.point.x > width - handleWidth/2 || pixelToTime(handleBarLeft.position.x)[0] > 74){
                         draggedHandle.position.x = width - handleWidth/2;
                         handleBarRight.position.x = width - handleWidth/2;
                     }
-                    else if(event.point.x > timeToPixel(82,0)){
+                    else if(event.point.x > timeToPixel(82,0) ){
                         draggedHandle.position.x = event.point.x;
                         handleBarRight.position.x = width - handleWidth/2;
                     }

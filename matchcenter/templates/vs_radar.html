@@ -25,6 +25,7 @@
                 var elemValue = elem.value;
                 if(elemValue == "showFormation"){
                     $("#radarContainer").hide();
+                    $("#stadium").show();
                     $("#canvas-row").height("360px");
                     $("#showRadar").removeClass("canvas-button-active");
                     $("#showFormation").removeClass("canvas-button");
@@ -33,6 +34,7 @@
                 }
                 else if(elemValue == "showRadar"){
                     $("#radarContainer").show();
+                    $("#stadium").hide();
                     $("#canvas-row").height("470px");
                     $("#showRadar").removeClass("canvas-button");
                     $("#showFormation").removeClass("canvas-button-active");

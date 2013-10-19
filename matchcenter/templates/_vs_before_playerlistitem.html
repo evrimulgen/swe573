@@ -3,6 +3,7 @@
 
 {% if team == "home" %}
     <div class="vote-area">
+
         {% if votingActive %}
             <button title="Oyla" class="vote-button-selectable" id="rightButton" value="{{player.teamId }}/{{ player.playerId }}" onclick="votePlayer(this)"></button>
         {% endif %}

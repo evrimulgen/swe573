@@ -150,7 +150,10 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
 
     homeSquadDict, awaySquadDict, matchSquadDict = [], [], [] #holds home team squad
     playerRating = get_player_ratings(match_id)
+    homeFormation = playerRating.get("Match").get("HomeTeamFormation")
+    awayFormation = playerRating.get("Match").get("AwayTeamFormation")
     ratingsActive = playerRating.get("VotingIsActive")
+    print ratingsActive
     matchS = playerRating.get("PlayerRatings")
 
 
@@ -190,6 +193,18 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
             if substitute:
                 played=True
 
+        playerPosition = playerData[17]
+        if playerData[3] == homeTeamId and homeFormation == "4-3-3 B" and playerPosition == "MC":
+            playerPosition = "AMC"
+        if playerData[3] == awayTeamId and awayFormation == "4-3-3 B" and playerPosition == "MC":
+            playerPosition = "AMC"
+
+        splitted = playerData[0].split(" ")
+        playerNameShort = ""
+        if len(splitted) > 9:
+            playerNameShort = splitted[0][0] + "." + splitted[1]
+        else:
+            playerNameShort = splitted[0]
 
         #add player into corresponding team squads
         playerTuple = {'playerId':int(playerId),
@@ -198,7 +213,8 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
                        'jerseyNumber':playerData[1],
                        'eleven':playerData[2],
                        'playPosition':playerData[4],
-                       'playerPosition':playerData[17],
+                       'playerNameShort':playerNameShort,
+                       'playerPosition':playerPosition,
                        'played':played,
                        'votePercent':votePercent,
                        'voteCount':voteCount,

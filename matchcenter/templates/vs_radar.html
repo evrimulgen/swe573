@@ -12,557 +12,35 @@
 
     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/radar.css" />
     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/teambar-style.css" />
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/formations.css" />
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="{{ STATIC_URL }}js/simpled3.js"></script>
 
-    <script type="text/javascript" src="{{ STATIC_URL }}js/mustache.js"></script>
-
-    <script id="exampleTemplate" type="text/template">
-        <div class="playerDisplay" style="left:{% templatetag openvariable %}left{% templatetag closevariable %}px; top: {% templatetag openvariable %}top{% templatetag closevariable %}px;" id="playerDisplay{% templatetag openvariable %}ID{% templatetag closevariable %}" teamID = "{% templatetag openvariable %}teamID{% templatetag closevariable %}">
-            <div class="firstPart" align="center" id="div2">
-                <img class="playerImage" align="center" src="{% templatetag openvariable %}imageUrl0{% templatetag closevariable %}" onError=" this.src = '{% templatetag openvariable %}errorLink{% templatetag closevariable %}';" >
-            </div>
-            <div class="secondPart texts" id="div3" teamID = "{% templatetag openvariable %}teamID{% templatetag closevariable %}">
-                <div id="divJS" align="center"><span align="center" class="jerseyNumber"  style="font-size: 10px; font-family:helvetica; font-weight : bold; color: white; ">{% templatetag openvariable %}playerName{% templatetag closevariable %}</span></div>
-                <text  style="font-size: 10px; font-family:helvetica; font-weight : bold; color: white;"><center>{% templatetag openvariable %}playerLastName{% templatetag closevariable %}</center></text>
-            </div>
-            <div class="thirdPart" align="center" id="div4">
-                <img class="eventImages" align="center" src="{% templatetag openvariable %}imageUrl1{% templatetag closevariable %}" imageInfo="{% templatetag openvariable %}imageData1{% templatetag closevariable %}">
-                <img class="eventImages" align="center" src="{% templatetag openvariable %}imageUrl2{% templatetag closevariable %}" imageInfo="{% templatetag openvariable %}imageData2{% templatetag closevariable %}">
-                <img class="eventImages" align="center" src="{% templatetag openvariable %}imageUrl3{% templatetag closevariable %}" imageInfo="{% templatetag openvariable %}imageData3{% templatetag closevariable %}">
-                <img class="eventImages" align="center" src="{% templatetag openvariable %}imageUrl4{% templatetag closevariable %}" imageInfo="{% templatetag openvariable %}imageData4{% templatetag closevariable %}">
-                <img class="eventImages" align="center" src="{% templatetag openvariable %}imageUrl5{% templatetag closevariable %}" imageInfo="{% templatetag openvariable %}imageData5{% templatetag closevariable %}">
-            </div>
-        </div>
-    </script>
-
     <script type="text/javascript">
 
-    $( document ).ready(function() {
-        //console.log( "ready!" );
-        $("#radarContainer").hide();
-        $("#stadium").hide();
-
-        toggleCanvas = function(elem){
-            var elemValue = elem.value;
-            if(elemValue == "showFormation"){
-                $("#radarContainer").hide();
-                $("#likeCanvas").show();
-                $("#canvas-row").height("580px");
-                $("#showRadar").removeClass("canvas-button-active");
-                $("#showFormation").removeClass("canvas-button");
-                $("#showRadar").addClass("canvas-button");
-                $("#showFormation").addClass("canvas-button-active");
-            }
-            else if(elemValue == "showRadar"){
-                $("#likeCanvas").hide();
-                $("#radarContainer").show();
-                $("#canvas-row").height("470px");
-                $("#showRadar").removeClass("canvas-button");
-                $("#showFormation").removeClass("canvas-button-active");
-                $("#showRadar").addClass("canvas-button-active");
-                $("#showFormation").addClass("canvas-button");
-            }
-        }
-
-        function serviceRequest(method, data, callback){
-            $.post("/api/" + method, JSON.stringify(data)).done(function(data){
-                callback(data.data);
-            });
-        }
-
-        function getRandomizer(bottom, top) {
-            return Math.floor( Math.random() * ( 1 + top - bottom ) ) + bottom;
-        }
-
-
-
-        var matchInfo = null;
-        var matchId = {{ matchInfo.matchId }};
-        var homeTeamID = 0;
-        var awayTeamID = 0;
-        var imageServiceLink = "http://sentiong.cloudapp.net/static/images/players/";
-        var defaultPlayerImage = "http://sentiong.cloudapp.net/static/images/players/default.png";
-        var homeTeamSubs = [[188,430],[130,430],[72,430]]
-        var awayTeamSubs = [[552,430],[493,430],[434,430]];
-
-        //Gets Match Info
-        serviceRequest("GetMatchInfo",{"matchId": matchId},function(result){
-            matchInfo = result;
-            homeTeamID = matchInfo[0][5];
-            awayTeamID = matchInfo[0][6];
-            //console.log("home Team ID : " + homeTeamID + "Away team ID : " + awayTeamID);
-        });
-
-
-
-
-
-        //Gets match details
-        serviceRequest("GetMatchSquad", {"matchId": matchId }, function(teamData){
-
-            var teamCountFormation = 0;
-            var teamCountFormation2 = 0;
-
-
-            _.each(teamData, function(value, i){
-
-                var playerName = value.data[0].split(" ");
-
-                var goalKeeperHome = [190,23];
-                var goalKeeperAway = [190,593];
-
-                var playerID = value.data[5];
-                var imgVal = null;
-                var jerseyNumber = value.data[1];
-                var playerTeamID = value.data[3];
-                var playerPosition = value.data[17];
-                var playerIsPlayed = value.data[16];
-
-
-                var imageLink = imageServiceLink + playerID + ".jpg";
-
-                if(getRandomizer(0,1))
-                {
-                    imgVal = "{{ STATIC_URL }}images/playerChange.png";
+        $( document ).ready(function() {
+            //console.log( "ready!" );
+            $("#radarContainer").hide();
+            toggleCanvas = function(elem){
+                var elemValue = elem.value;
+                if(elemValue == "showFormation"){
+                    $("#radarContainer").hide();
+                    $("#canvas-row").height("360px");
+                    $("#showRadar").removeClass("canvas-button-active");
+                    $("#showFormation").removeClass("canvas-button");
+                    $("#showRadar").addClass("canvas-button");
+                    $("#showFormation").addClass("canvas-button-active");
                 }
-
-                if( playerName[1] == null)
-                    playerName[1] = playerName[0];
-
-                if(playerName[1].length > 7)
-                {
-                    playerName[1] = playerName[1].slice(0,7);
-                    playerName[1] += '.';
-                    //console.log("9 - > " + playerName[1]);
+                else if(elemValue == "showRadar"){
+                    $("#radarContainer").show();
+                    $("#canvas-row").height("470px");
+                    $("#showRadar").removeClass("canvas-button");
+                    $("#showFormation").removeClass("canvas-button-active");
+                    $("#showRadar").addClass("canvas-button-active");
+                    $("#showFormation").addClass("canvas-button");
                 }
-
-
-                var leftM = 0;
-                var topM = 0;
-                if(playerPosition == "GK")
-                {
-                    if(playerTeamID == homeTeamID)
-                    {
-                        leftM = goalKeeperHome[1];
-                        topM = goalKeeperHome[0];
-                    }
-
-                    if(playerTeamID == awayTeamID)
-                    {
-                        leftM = goalKeeperAway[1];
-                        topM = goalKeeperAway[0];
-                    }
-                }
-
-
-                if(playerTeamID == homeTeamID && !playerPosition && playerIsPlayed)
-                {
-                    var x = homeTeamSubs.pop();
-                    leftM = x[0];
-                    topM = x[1];
-                }
-
-
-                if(playerTeamID == awayTeamID && !playerPosition && playerIsPlayed)
-                {
-                    var x = awayTeamSubs.pop();
-                    leftM = x[0];
-                    topM = x[1];
-                }
-
-                var template = $('#exampleTemplate').html();
-                var data = {
-
-                    //playerName : jerseyNumber + "-" + playerName[0],
-                    playerName : jerseyNumber,
-
-                    playerLastName: playerName[1],
-
-
-                    ID : i,
-                    left: leftM, //getRandomizer(0,550),
-                    top: topM,//getRandomizer(0,350),
-                    teamID : playerTeamID,
-
-                    imageUrl0 : imageLink,
-                    errorLink: defaultPlayerImage
-
-                };
-
-
-
-
-                //adding new notes to data:
-
-                var eventImageCount = 1;
-
-                _.each(value.events, function(eventValue, j){
-                    var eventType = eventValue[0];
-                    var subData = eventValue[4];
-
-                    var imageUrl = "imageUrl" + eventImageCount;
-                    var imageData = "imageData" + eventImageCount;
-
-
-
-                    if(eventType == 0)
-                    {
-                        //console.log("Event  : Goal");
-                        data[imageUrl] = "{{ STATIC_URL }}images/goal.png";
-                        data[imageData] = eventValue;
-                        eventImageCount++;
-                    }
-                    else if(eventType == 1)
-                    {
-                        //console.log("Event : Own Goal");
-                        data[imageUrl] = "{{ STATIC_URL }}images/own-goal.png";
-                        data[imageData] = eventValue;
-                        eventImageCount++;
-                    }
-                    else if(eventType == 2)
-                    {
-                        //console.log("Event : Penalty");
-                        data[imageUrl] = "{{ STATIC_URL }}images/penalty.png";
-                        data[imageData] = eventValue;
-                        eventImageCount++;
-                    }
-                    else if(eventType == 3)
-                    {
-                        //console.log("Event : Missed Penalty");
-                        data[imageUrl] = "{{ STATIC_URL }}images/missed-pen.png";
-                        data[imageData] = eventValue;
-                        eventImageCount++;
-                    }
-                    else if(eventType == 4)
-                    {
-                        //console.log("Event : Yellow Cart");
-                        data[imageUrl] = "{{ STATIC_URL }}images/yellow.png";
-                        data[imageData] = eventValue;
-                        eventImageCount++;
-                    }
-                    else if(eventType == 5)
-                    {
-                        //console.log("Event : Second Yellow");
-                        data[imageUrl] = "{{ STATIC_URL }}images/second-yellow.png";
-                        data[imageData] = eventValue;
-                        eventImageCount++;
-                    }
-                    else if(eventType == 6)
-                    {
-
-                        data[imageUrl] = "{{ STATIC_URL }}images/red.png";
-                        data[imageData] = eventValue;
-                        eventImageCount++;
-                    }
-                    else if(eventType == 7)
-                    {
-
-                        data[imageData] = eventValue;
-
-
-                        var subPlayerID = eventValue[3];
-
-                        if(playerID == subPlayerID )
-                            data[imageUrl] = "{{ STATIC_URL }}images/sub-out.png";
-                        else
-                            data[imageUrl] = "{{ STATIC_URL }}images/sub-in.png";
-
-                        eventImageCount++;
-                    }
-                });
-
-
-
-
-                var htmlData = Mustache.to_html(template, data);
-
-                var playerDisplayPosition = "#";
-                //placeArray.splice(arrayIndex,1);
-
-                //$(playerDisplayPosition).append(htmlData);
-                if(playerPosition)
-                {
-                    if(playerPosition == "GK")
-                    {
-                        $("#likeCanvas").append(htmlData);
-                    }
-
-                    if((playerTeamID == homeTeamID) )
-                    {
-                        playerDisplayPosition = playerDisplayPosition + "home_" + playerPosition.replace(/\s/g, "");
-
-
-                    } else
-
-                    if((playerTeamID == awayTeamID) )
-                    {
-                        playerDisplayPosition = playerDisplayPosition + "away_" + playerPosition.replace(/\s/g, "");
-
-                    }
-
-                    if($(playerDisplayPosition).size != 0){
-                        var elem = $(playerDisplayPosition).append( htmlData );
-                    }
-
-
-                }
-
-                else if(playerIsPlayed)
-                {
-                    $("#likeCanvas").append( htmlData );
-                }
-
-                $("#playerDisplay" + playerID).click(function(){
-                    var homeaway;
-                    if(playerTeamID == homeTeamID){
-                        homeaway = 0;
-                    }
-                    else{
-                        homeaway = 1 ;
-                    }
-
-                    var event = {'player_id':playerID,'jersey_no':jerseyNumber,'homeOrAway':homeaway};
-                    setPlayerCard(event);
-
-                });
-
-            });
-
-
-            var sth = 0;
-            $('#formationTable td').each(function(index, value){
-                //console.log(index + " - " + value );
-
-                if(($( value ).has( ".playerDisplay" ).length ? "Yes" : "No" ) == "No" && ((sth % 5) != 0)  )
-                {
-                    $(value).remove();
-                }
-
-                sth += 1;
-            });
-
-            $('.eventImages').each(function(){ $(this).mouseenter(function(){
-                //$(this).imageInfo = "xxx";
-                //console.log(imageDataValue);
-            }); });
-
-            $('.eventImages').each(function(){ $(this).mouseleave(function(){
-                $(this).css({"border-style":"none"});
-
-            }); });
-
-            $('.texts').each(function(){ $(this).mouseenter(function(){
-            }); });
-
-
-            $.each($(".playerDisplay"),function( index, pd ) {
-                //console.log($(pd).attr("teamID"));
-
-
-                $(this).data("MyDataAttribute",index);
-
-                //console.log($(this).find(".jerseyNumber").val());
-                if($(this).attr("teamID") == homeTeamID){
-                    //$(this).css({"background-color" : "#FF8909"});
-                    $(this).find("#divJS").css({"background-image" : "url('{{ STATIC_URL }}images/blueBackground.png')"});
-                }
-                else{
-                    //$(this).css({"background-color" : "#7078E8"});
-                    $(this).find("#divJS").css({"background-image" : "url('{{ STATIC_URL }}images/redBackground.png')"});
-                }
-
-                $(this).click(function(){
-                    // var event = {'player_id':,'jersey_no':awda,'homeOrAway':}
-                    //setPlayerCard(event);
-                });
-
-            });
-
-
-            //$(".playerDisplay").draggable();
-
-            var images = document.getElementsByClassName("eventImages");
-            for(var i= 0; i< images.length; i++){
-                var item = images[i];
-                $(item).tooltip({
-                    content: function(){
-                        console.log($(this).attr("imageInfo"));
-                        var splitted = $(this).attr("imageInfo").split(",");
-                        var eventType = splitted[0];
-                        var matchTime  = splitted[1];
-                        var playerName = splitted[7];
-                        var playerNameIn = splitted[8];
-                        if(eventType == 7){
-                            return "<div style='color:black'><p style='text-align:center'>Oyuncu Değişikliği - Dakika: " + matchTime + "</p><br><p style='text-align:center'><span style='color:#ca1111'>" + playerName + "</span> - <span style='color:#139d04'>" + playerNameIn + "</span></p></div>"
-                        }
-                        else if(eventType == 0){
-                            return "<div style='color:black'><p style='text-align:center'>Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                        }
-                        else if(eventType == 1){
-                            return "<div style='color:black'><p style='text-align:center'>Kendi Kalesine Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                        }
-                        else if(eventType == 2){
-                            return "<div style='color:black'><p style='text-align:center'>Gol(Penaltı) - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                        }
-                        else if(eventType == 3){
-                            return "<div style='color:black'><p style='text-align:center'>Kaçan Penaltı - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                        }
-                        else if(eventType == 4){
-                            return "<div style='color:black'><p style='text-align:center'>Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                        }
-                        else if(eventType == 5){
-                            return "<div style='color:black'><p style='text-align:center'>İkinci Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                        }
-                        else if(eventType == 6){
-                            return "<div style='color:black'><p style='text-align:center'>Kırmızı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                        }
-                    },
-                    show: {
-                        effect: "show",
-                        delay: 100
-                    },
-                    hide: {
-                        effect: "hide",
-                        delay: 100
-                    },
-                    position: {
-                        my: "center bottom-20",
-                        at: "center top",
-                        using: function( position, feedback ) {
-                            $( this ).css( position );
-                            $( "<div>" )
-                                    .addClass( "arrow" )
-                                    .addClass( feedback.vertical )
-                                    .addClass( feedback.horizontal )
-                                    .appendTo( this );
-                        }
-                    },
-                    close: function (event, ui) {
-                        $('div.ui-effects-wrapper').remove();
-                    }
-                });
             }
         });
-
-
-
-        jQuery('#likeCanvas').click(function(e){
-            var x = e.pageX - e.target.offsetLeft ;
-            var y = e.pageY - e.target.offsetTop ;
-
-
-
-        });
-
-        var i = 1;
-
-        setPlayerCard = function(event){
-            $.post("/api/GetPlayerCard", JSON.stringify({leagueId: 1, seasonId: 9064, weekId: {{ currentWeek }}, playerId: event.player_id})).done(function(data){
-                var info = data.data;
-                var $card = (event.homeOrAway==0) ? $("#leftPlayerCard") : $("#rightPlayerCard");
-
-                var imageTag = "<img class='teamLogo' src='/static/images/logo"+info.teamId+".png' />";
-                $card.find(".playerName").html(imageTag + info.playerName + " (#"+event.jersey_no+")");
-                $card.find(".playerImage").attr("src", "/static/images/players/"+event.player_id+".jpg");
-
-                var $table = $card.find(".card-table");
-                $table.empty();
-                $table.append("<tr><th>İstatistik</th><th>Sezon Ortalaması</th><th>Bu Hafta</th></tr>");
-
-                var statNames = {
-                    "matchesPlayed": "Oynadığı Maç Sayısı",
-                    "goals": "Gol",
-                    "assists": "Asist",
-                    "totalDistance": "Kat Edilen Mesafe",
-                    "passes": "Toplam Pas",
-                    "successfulPass": "İsabetli Pas",
-                    "shots": "Şut",
-                    "shotsOnTarget": "İsabetli Şut",
-                    "crosses": "Toplam Orta",
-                    "successfulCross": "İsabetli Orta",
-                    "foulsCommitted": "Yapılan Faul",
-                    "foulsSuffered": "Maruz Kalınan Faul",
-                    "yellowCard": "Sarı Kart",
-                    "redCard": "Kırmızı Kart",
-                    "corners": "Korner",
-                    "penalty": "Penaltı"
-                };
-                _.each(info.statistics, function(value, key){
-                    var statName = statNames[key];
-
-                    var val0 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
-                    var val1 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
-                    if(statName!=null){
-                        $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
-                    }
-                });
-            });
-        }
-
-        $('.eventImages').each($(function() {
-            $( this ).tooltip({
-                content: function(){
-                    var splitted = $(this).attr("imageInfo").split(",");
-                    var eventType = splitted[0];
-                    var matchTime  = splitted[1];
-                    var playerName = splitted[7];
-                    var playerNameIn = splitted[8];
-                    if(eventType == 7){
-                        return "<div style='color:black'><p style='text-align:center'>Oyuncu Değişikliği - Dakika: " + matchTime + "</p><br><p style='text-align:center'><span style='color:#ca1111'>" + playerName + "</span> - <span style='color:#139d04'>" + playerNameIn + "</span></p></div>"
-                    }
-                    else if(eventType == 0){
-                        return "<div style='color:black'><p style='text-align:center'>Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                    }
-                    else if(eventType == 1){
-                        return "<div style='color:black'><p style='text-align:center'>Kendi Kalesine Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                    }
-                    else if(eventType == 2){
-                        return "<div style='color:black'><p style='text-align:center'>Gol(Penaltı) - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                    }
-                    else if(eventType == 3){
-                        return "<div style='color:black'><p style='text-align:center'>Kaçan Penaltı - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                    }
-                    else if(eventType == 4){
-                        return "<div style='color:black'><p style='text-align:center'>Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                    }
-                    else if(eventType == 5){
-                        return "<div style='color:black'><p style='text-align:center'>İkinci Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                    }
-                    else if(eventType == 6){
-                        return "<div style='color:black'><p style='text-align:center'>Kırmızı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
-                    }
-                },
-                show: {
-                    effect: "show",
-                    delay: 100
-                },
-                hide: {
-                    effect: "hide",
-                    delay: 100
-                },
-                position: {
-                    my: "center bottom-20",
-                    at: "center top",
-                    using: function( position, feedback ) {
-                        $( this ).css( position );
-                        $( "<div>" )
-                                .addClass( "arrow" )
-                                .addClass( feedback.vertical )
-                                .addClass( feedback.horizontal )
-                                .appendTo( this );
-                    }
-                },
-                close: function (event, ui) {
-                    $('div.ui-effects-wrapper').remove();
-                }
-            });
-        })
-        )
-
-
-
-    });
 
     </script>
 
@@ -665,7 +143,7 @@
             <canvas id="slider"></canvas>
         </div>
     </div>
-    <div class="row" id="canvas-row" style="height: 580px">
+    <div class="row" id="canvas-row" style="height: 360px">
         <button class="canvas-button-active" id="showFormation" value="showFormation"  style="margin-left: 50px;" onclick="toggleCanvas(this)">Formasyon</button>
         <button class="canvas-button" id="showRadar" value="showRadar" onclick="toggleCanvas(this)">Radar</button>
         <div id="radarContainer">
@@ -679,112 +157,26 @@
         </div>
 
         <div id="stadium">
-            <ul class="first-team-formation">
+            <ul class="home-team-formation">
                 {% for player in homeSquad %}
                     {% if player.eleven == 1 %}
                         <li class="{{ player.playerPosition }}">
-                            <span>{{ player.jerseyNumber }}</span>
+                            <p>{{ player.playerNameShort }}</p>
+                            <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')">{{ player.jerseyNumber }}</span>
                         </li>
                     {% endif %}
                 {% endfor %}
             </ul>
-            <ul class="second-team-formation">
+            <ul class="away-team-formation">
                 {% for player in awaySquad %}
                     {% if player.eleven == 1 %}
                         <li class="{{ player.playerPosition }}">
-                            <span>{{ player.jerseyNumber }}</span>
+                            <p>{{ player.playerNameShort }}</p>
+                            <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')">{{ player.jerseyNumber }}</span>
                         </li>
                     {% endif %}
                 {% endfor %}
             </ul>
-        </div>
-
-        <div id="likeCanvas" >
-            <table class ="formationTable" border="1" >
-                <tr>
-                    <td id="home_LB" ></td>
-                    <td id="home_WBL" ></td>
-                    <td id="home_ML" ></td>
-                    <td id="home_AML" ></td>
-                    <td id="home_WL" ></td>
-
-                </tr>
-                <tr>
-                    <td id="home_CBL" ></td>
-                    <td id="home_DML" ></td>
-                    <td id="home_MCL" ></td>
-                    <td id="home_AMCL" ></td>
-                    <td id="home_FL" ></td>
-
-                </tr>
-                <tr>
-                    <td id="home_DC" ></td>
-                    <td id="home_DMC" ></td>
-                    <td id="home_MC" ></td>
-                    <td id="home_AMC" ></td>
-                    <td id="home_FC" ></td>
-
-                </tr>
-                <tr>
-                    <td id="home_CBR" ></td>
-                    <td id="home_DMR" ></td>
-                    <td id="home_MCR" ></td>
-                    <td id="home_AMCR" ></td>
-                    <td id="home_FR" ></td>
-
-                </tr>
-                <tr>
-                    <td id="home_RB" ></td>
-                    <td id="home_WBR" ></td>
-                    <td id="home_MR" ></td>
-                    <td id="home_AMR" ></td>
-                    <td id="home_WR" ></td>
-
-                </tr>
-            </table>
-
-            <table  class ="formationTable secondTable" border="1" >
-                <tr>
-
-                    <td id="away_WR"></td>
-                    <td id="away_AMR"></td>
-                    <td id="away_MR"></td>
-                    <td id="away_WBR"></td>
-                    <td id="away_RB"></td>
-                </tr>
-                <tr>
-
-                    <td id="away_FR" ></td>
-                    <td id="away_AMCR" ></td>
-                    <td id="away_MCR"  ></td>
-                    <td id="away_DMR"  ></td>
-                    <td id="away_CBR"  ></td>
-                </tr>
-                <tr>
-
-                    <td id="away_FC" ></td>
-                    <td id="away_AMC" ></td>
-                    <td id="away_MC" ></td>
-                    <td id="away_DMC" ></td>
-                    <td id="away_DC" ></td>
-                </tr>
-                <tr>
-
-                    <td id="away_FL" ></td>
-                    <td id="away_AMCL" ></td>
-                    <td id="away_MCL" ></td>
-                    <td id="away_DML" ></td>
-                    <td id="away_CBL" ></td>
-                </tr>
-                <tr>
-
-                    <td id="away_WL" ></td>
-                    <td id="away_AML" ></td>
-                    <td id="away_ML" ></td>
-                    <td id="away_WBL" ></td>
-                    <td id="away_LB" ></td>
-                </tr>
-            </table>
         </div>
     </div>
 
@@ -861,8 +253,6 @@
             });
         });
     </script>
-
-
 
 {% endblock %}
 

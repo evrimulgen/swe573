@@ -57,7 +57,7 @@ def prep_common_context(reqid):
         awaySquadDict = squad[1]
         matchSquadDict = squad[2]
         isVotingActive = squad[3]
-
+    print isVotingActive
     homeManager, awayManager = get_team_manager(homeTeamId,awayTeamId)
 
     teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(reqid, homeTeamId, awayTeamId)

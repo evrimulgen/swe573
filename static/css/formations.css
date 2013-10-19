@@ -1,0 +1,489 @@
+#stadium {
+    margin-left: 50px;
+    height: 300px;
+    width: 662px;
+    background: #000 url("../images/formation_bg.png") no-repeat left top;
+    position: relative;
+}
+.home-team-formation{
+    margin: 0px;
+    left: 0px;
+    top: 70px;
+    position: absolute;
+    width: 336px;
+    height: 191px;
+    list-style: none;
+}
+.away-team-formation{
+    margin: 0px;
+    right: 0px;
+    top: 70px;
+    position: absolute;
+    width: 336px;
+    height: 191px;
+    list-style: none;
+}
+
+.home-team-formation li p, .away-team-formation li p{
+    position: absolute;
+    top: 31px;
+    left: -12px;
+    color: #ffffff;
+    font-size: 10px;
+    width: 60px;
+    height: 12px;
+    line-height: 12px;
+    text-align: center;
+}
+.home-team-formation  li.GK span{
+    background: url("../images/stadium_menu_formations_players.png") no-repeat -39px 0;
+    display: block;
+    width: 36px;
+    height: 32px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 36px;
+}
+.home-team-formation li span{
+    background: url("../images/stadium_menu_formations_players.png") no-repeat 0 0;
+    display: block;
+    width: 36px;
+    height: 32px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 36px;
+}
+.away-team-formation  li.GK span{
+    background: url("../images/stadium_menu_formations_players.png") no-repeat -78px 0;
+    display: block;
+    width: 36px;
+    height: 32px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 36px;
+}
+.away-team-formation li span{
+    background: url("../images/stadium_menu_formations_players.png") no-repeat -117px 0;
+    display: block;
+    width: 36px;
+    height: 32px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 36px;
+}
+
+.home-team-formation li.GK {
+    left: 16px;
+    top: 45px;
+    position: absolute;
+}
+
+.home-team-formation li.LB {
+    left: 135px;
+    top: -24px;
+    position: absolute;
+}
+
+.home-team-formation li.CBL {
+    left: 88px;
+    top: 18px;
+    position: absolute;
+}
+
+.home-team-formation li.CBR {
+    left: 55px;
+    top: 78px;
+    position: absolute;
+}
+
+.home-team-formation li.RB{
+    left: 50px;
+    top: 144px;
+    position: absolute;
+}
+
+.home-team-formation li.DML {
+    left: 166.4px;
+    top: 18px;
+    position: absolute;
+}
+
+.home-team-formation li.DMR {
+    left: 136.8px;
+    top: 78px;
+    position: absolute;
+}
+
+.home-team-formation li.AML {
+    left: 242px;
+    top: -24px;
+    position: absolute;
+}
+
+.home-team-formation li.AMC {
+    left: 218px;
+    top: 48px;
+    position: absolute;
+}
+
+.home-team-formation li.AMR {
+    left: 208px;
+    top: 144px;
+    position: absolute;
+}
+
+.home-team-formation li.FC {
+    left: 282px;
+    top: 48px;
+    position: absolute;
+}
+
+.home-team-formation li.SWP {
+    left: 80.8px;
+    top: 27px;
+    position: absolute;
+}
+
+.home-team-formation li.MCR {
+    left: 164.8px;
+    top: 78px;
+    position: absolute;
+}
+
+.home-team-formation li.MCL {
+    left: 184px;
+    top: 18px;
+    position: absolute;
+}
+
+.home-team-formation li.SSC {
+    left: 218px;
+    top: 48px;
+    position: absolute;
+}
+
+.home-team-formation li.FL {
+    left: 283.2px;
+    top: 18px;
+    position: absolute;
+}
+
+.home-team-formation li.FR {
+    left: 278.4px;
+    top: 78px;
+    position: absolute;
+}
+
+.home-team-formation li.MC {
+    left: 120px;
+    top: 48px;
+    position: absolute;
+}
+
+.home-team-formation li.CB {
+    left: 104px;
+    top: 27px;
+    position: absolute;
+}
+
+.home-team-formation li.ML {
+    left: 224px;
+    top: -25.5px;
+    position: absolute;
+}
+
+.home-team-formation li.MR {
+    left: 178px;
+    top: 141px;
+    position: absolute;
+}
+
+.home-team-formation li.SSL {
+    left: 241.6px;
+    top: 9px;
+    position: absolute;
+}
+
+.home-team-formation li.SSR {
+    left: 224px;
+    top: 70.5px;
+    position: absolute;
+}
+
+.home-team-formation li.WL {
+    left: 256px;
+    top: -22.5px;
+    position: absolute;
+}
+
+.home-team-formation li.WR {
+    left: 232px;
+    top: 145.5px;
+    position: absolute;
+}
+
+.home-team-formation li.DMC {
+    left: 125px;
+    top: 46px;
+    position: absolute;
+}
+
+.home-team-formation li.WBL {
+    left: 180.8px;
+    top: -31.5px;
+    position: absolute;
+}
+
+.home-team-formation li.WBR {
+    left: 71.2px;
+    top: 129px;
+    position: absolute;
+}
+
+.away-team-formation li.GK {
+    right: 16px;
+    top: 45px;
+    position: absolute;
+}
+
+.away-team-formation li.LB {
+    right: 135px;
+    top: -24px;
+    position: absolute;
+}
+
+.away-team-formation li.CBL {
+    right: 88px;
+    top: 18px;
+    position: absolute;
+}
+
+.away-team-formation li.CBR {
+    right: 55px;
+    top: 78px;
+    position: absolute;
+}
+
+.away-team-formation li.RB{
+    right: 50px;
+    top: 144px;
+    position: absolute;
+}
+
+.away-team-formation li.DML {
+    right: 166.4px;
+    top: 18px;
+    position: absolute;
+}
+
+.away-team-formation li.DMR {
+    right: 136.8px;
+    top: 78px;
+    position: absolute;
+}
+
+.away-team-formation li.AML {
+    right: 242px;
+    top: -24px;
+    position: absolute;
+}
+
+.away-team-formation li.AMC {
+    right: 218px;
+    top: 48px;
+    position: absolute;
+}
+
+.away-team-formation li.AMR {
+    right: 208px;
+    top: 144px;
+    position: absolute;
+}
+
+.away-team-formation li.FC {
+    right: 282px;
+    top: 48px;
+    position: absolute;
+}
+
+.away-team-formation li.SWP {
+    right: 80.8px;
+    top: 27px;
+    position: absolute;
+}
+
+.away-team-formation li.MCR {
+    right: 164.8px;
+    top: 78px;
+    position: absolute;
+}
+
+.away-team-formation li.MCL {
+    right: 184px;
+    top: 18px;
+    position: absolute;
+}
+
+.away-team-formation li.SSC {
+    right: 218px;
+    top: 48px;
+    position: absolute;
+}
+
+.away-team-formation li.FL {
+    right: 283.2px;
+    top: 18px;
+    position: absolute;
+}
+
+.away-team-formation li.FR {
+    right: 278.4px;
+    top: 78px;
+    position: absolute;
+}
+
+.away-team-formation li.MC {
+    right: 120px;
+    top: 48px;
+    position: absolute;
+}
+
+.away-team-formation li.CB {
+    right: 104px;
+    top: 27px;
+    position: absolute;
+}
+
+.away-team-formation li.ML {
+    right: 224px;
+    top: -25.5px;
+    position: absolute;
+}
+
+.away-team-formation li.MR {
+    right: 178px;
+    top: 141px;
+    position: absolute;
+}
+
+.away-team-formation li.SSL {
+    right: 241.6px;
+    top: 9px;
+    position: absolute;
+}
+
+.away-team-formation li.SSR {
+    right: 224px;
+    top: 70.5px;
+    position: absolute;
+}
+
+.away-team-formation li.WL {
+    right: 256px;
+    top: -22.5px;
+    position: absolute;
+}
+
+.away-team-formation li.WR {
+    right: 232px;
+    top: 145.5px;
+    position: absolute;
+}
+
+.away-team-formation li.DMC {
+    right: 125px;
+    top: 46px;
+    position: absolute;
+}
+
+.away-team-formation li.WBL {
+    right: 180.8px;
+    top: -31.5px;
+    position: absolute;
+}
+
+.away-team-formation li.WBR {
+    right: 71.2px;
+    top: 129px;
+    position: absolute;
+}
+
+.teamcolor-1{
+    color:black;
+}
+.teamcolor-2{
+    color:white;
+}
+.teamcolor-3{
+    color:black;
+}
+.teamcolor-11{
+    color:black;
+}
+.teamcolor-14{
+    color:black;
+}
+.teamcolor-16{
+    color:#ffffff;
+}
+.teamcolor-21{
+    color:#ffffff;
+}
+.teamcolor-29{
+    color:#ffffff;
+}
+.teamcolor-37{
+    color:#ffffff;
+}
+.teamcolor-42{
+    color:#ffffff;
+}
+.teamcolor-46{
+    color:black;
+}
+.teamcolor-57{
+    color:black;
+}
+.teamcolor-68{
+    color:#ffffff;
+}
+.teamcolor-71{
+    color:#ffffff;
+}
+.teamcolor-82{
+    color:#ffffff;
+}
+.teamcolor-86{
+    color:#ffffff;
+}
+.teamcolor-90{
+    color:#ffffff;
+}
+.teamcolor-92{
+    color:#ffffff;
+}
+.teamcolor-93{
+    color:black;
+}
+.teamcolor-101{
+    color:black;
+}
+.teamcolor-103{
+    color:black;
+}
+.teamcolor-117{
+    color:black;
+}
+.teamcolor-129{
+    color:#ffffff;
+}
+.teamcolor-139{
+    color:#ffffff;
+}
+.teamcolor-9409{
+    color:#ffffff;
+}

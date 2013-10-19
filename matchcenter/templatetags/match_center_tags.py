@@ -12,11 +12,12 @@ def sl_fixture(match_id):
     return {"weeks": weeks, "currentWeek": currentWeek}
 
 @register.inclusion_tag('_vs_before_playerlistitem.html')
-def sl_before_playerlistitem(player, team):
+def sl_before_playerlistitem(player, team, votingActive):
     return {
         "class": ('starting' if player.get('eleven')==1 else 'sub'),
         "player": player,
-        "team" : team
+        "team" : team,
+        "votingActive": votingActive
     }
 
 @register.inclusion_tag('_vs_center_eventitem.html', takes_context=True)

@@ -164,7 +164,26 @@
                     {% if player.eleven == 1 %}
                         <li class="{{ player.playerPosition }}">
                             <p>{{ player.playerNameShort }}</p>
-                            <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')">{{ player.jerseyNumber }}</span>
+                            <div class="event-area">
+                                {% for event in player.playerEvents %}
+                                    {% if event.eventType == 7 %}
+                                        {% if player.eleven == 0 %}
+                                            {% if event.playerId == player.playerId %}
+                                                <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            {% else %}
+                                                <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% if player.playerPosition == "GK" %}
+                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                            {% else %}
+                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                            {% endif %}
                         </li>
                     {% endif %}
                 {% endfor %}
@@ -174,7 +193,86 @@
                     {% if player.eleven == 1 %}
                         <li class="{{ player.playerPosition }}">
                             <p>{{ player.playerNameShort }}</p>
-                            <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')">{{ player.jerseyNumber }}</span>
+                            <div class="event-area">
+                                {% for event in player.playerEvents %}
+                                    {% if event.eventType == 7 %}
+                                        {% if player.eleven == 0 %}
+                                            {% if event.playerId == player.playerId %}
+                                                <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            {% else %}
+                                                <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% if player.playerPosition == "GK" %}
+                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                            {% else %}
+                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <ul class="home-team-subs">
+                {% for player in homeSquad %}
+                    {% if player.eleven == 0 %}
+                        <li class="S{{ forloop.counter }}">
+
+                            <div class="event-area">
+                                {% for event in player.playerEvents %}
+                                    {% if event.eventType == 7 %}
+                                        {% if player.eleven == 0 %}
+                                            {% if event.playerId == player.playerId %}
+                                                <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            {% else %}
+                                                <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% if player.playPosition == 1 %}
+                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                            {% else %}
+                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                            {% endif %}
+
+                            <p>{{ player.playerNameShort }}</p>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <ul class="away-team-subs">
+                {% for player in awaySquad %}
+                    {% if player.eleven == 0 %}
+                        <li class="S{{ forloop.counter }}">
+                            <div class="event-area">
+                                {% for event in player.playerEvents %}
+                                    {% if event.eventType == 7 %}
+                                        {% if player.eleven == 0 %}
+                                            {% if event.playerId == player.playerId %}
+                                                <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            {% else %}
+                                                <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            {% endif %}
+                                        {% else %}
+                                            <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            {% if player.playPosition == 1 %}
+                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                            {% else %}
+                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                            {% endif %}
+                            <p>{{ player.playerNameShort }}</p>
                         </li>
                     {% endif %}
                 {% endfor %}
@@ -254,6 +352,48 @@
                 }
             });
         });
+    </script>
+    <script>
+        changePlayerCard =  function(weekid,homeOrAway,playerid,jerseyno){
+            $.post("/api/GetPlayerCard", JSON.stringify({leagueId: 1, seasonId: 9064, weekId: weekid, playerId: playerid})).done(function(data){
+                var info = data.data;
+                var $card = (homeOrAway==0) ? $("#leftPlayerCard") : $("#rightPlayerCard");
+
+                var imageTag = "<img class='teamLogo' src='/static/images/logo"+info.teamId+".png' />";
+                $card.find(".playerName").html(imageTag + info.playerName + " (#"+jerseyno+")");
+                $card.find(".playerImage").attr("src", "/static/images/players/"+playerid+".jpg");
+
+                var $table = $card.find(".card-table");
+                $table.empty();
+                $table.append("<tr><th>İstatistik</th><th>Sezon Ortalaması</th><th>Bu Hafta</th></tr>");
+
+                var statNames = {"passes": "Toplam Pas",
+                    "shotsOnTarget": "İsabetli Şut",
+                    "crosses": "Toplam Orta",
+                    "foulsSuffered": "Maruz Kalınan Faul",
+                    "totalDistance": "Kat Edilen Mesafe",
+                    "yellowCard": "Sarı Kart",
+                    "corners": "Korner",
+                    "redCard": "Kırmızı Kart",
+                    "successfulCross": "İsabetli Orta",
+                    "penalty": "Penaltı",
+                    "assists": "Asist",
+                    "goals": "Gol",
+                    "shots": "Şut",
+                    "foulsCommitted": "Yapılan Faul",
+                    "matchesPlayed": "Oynadığı Maç Sayısı",
+                    "successfulPass": "İsabetli Pas"};
+                _.each(info.statistics, function(value, key){
+                    var statName = statNames[key];
+
+                    var val0 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
+                    var val1 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
+                    if(statName!=null){
+                        $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
+                    }
+                });
+            });
+        }
     </script>
 
 {% endblock %}

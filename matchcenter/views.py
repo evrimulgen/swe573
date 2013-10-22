@@ -181,7 +181,7 @@ def partial_teamstats_dump(request, match_id):
     dump the team stats in JSON format
     """
     homeid, awayid, all = get_match_info(match_id)
-    teamStats, a, b, c = get_match_stats(match_id, homeid, awayid)
+    teamStats = get_match_team_stats(match_id, homeid, awayid)
     colors = get_team_colors(homeid, awayid)
 
     data = json.dumps({"teamStats": teamStats, "colors": colors})

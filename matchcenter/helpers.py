@@ -421,6 +421,58 @@ def get_match_stats(match_id, homeTeamId, awayTeamId):
 
     return teamStatsDict, matchDataDict, homeDataDict, awayDataDict
 
+def get_match_team_stats(match_id, homeid, awayid):
+    """
+    Fetches the team stats graph data from web services
+    """
+    data = {"matchId":match_id}
+    datalist = service_request("GetMatchTeamStats", data)
+
+    home = [a for a in datalist if a["team_id"] == homeid][0]
+    away = [a for a in datalist if a["team_id"] == awayid][0]
+
+    lookup = lambda x: {
+        u'possession': (1, "Topa Sahip Olma", " %"),
+        u'distance': (2, "Kat Edilen Mesafe", " m"),
+        u'shot': (4, "Şut", ""),
+        u'shoton': (5, "İsabetli Şut", ""),
+        u'fouls': (12, "Yaptığı Faul", ""),
+        u'passon': (7, "İsabetli Pas", ""),
+        u'crosson': (9, "İsabetli Orta", ""),
+        u'cross': (8, "Orta", ""),
+        u'yellow': (13, "Sarı Kart", ""),
+        u'hir_distance': (3, "Sprint", " m"),
+        u'team_id': (None, "TeamId", ""),
+        u'pass': (6, "Pas", ""),
+        u'corner': (10, "Korner", ""),
+        u'offside': (11, "Ofsayt", ""),
+        u'red': (14, "Kırmızı Kart", "")
+    }.get(x)
+
+    home.pop("team_id")
+    away.pop("team_id")
+
+    result = []
+    for k in home:
+        homepct, awaypct = calculate_percentage(home.get(k), away.get(k))
+
+        result.append(
+            {
+                'name': lookup(k)[1],
+                'homeValue': home.get(k),
+                'awayValue': away.get(k),
+                'order': lookup(k)[0],
+                'addition': lookup(k)[2],
+                'homePercent': homepct,
+                'awayPercent': awaypct
+            }
+        )
+#        except IndexError:
+#            print k, home[k], lookup(k)
+
+    return sorted(result, key=lambda x: x.get('order'))
+
+
 def get_team_gk_ids(match_id):
     """
     Return the player ids for a match's goalkeepers

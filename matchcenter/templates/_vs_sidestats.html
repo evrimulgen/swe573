@@ -191,10 +191,9 @@
         ctx.fillStyle="red";
         var number = {{ x.votePercent }}*(canvas.width/100);
         var percentDifference = parseInt(number);
-
         ctx.fillRect(0,0,percentDifference,canvas.height);
-
-        ctx.font="normal 12px Helvetica";
-        ctx.strokeText("%{{ x.votePercent }}", 25, canvas.height/2+4);
+        ctx.font="normal 12px Arial";
+        ctx.fillStyle="black";
+        ctx.fillText("%{{ x.votePercent }}", 25, canvas.height/2+4);
     {% endfor %}
 </script>

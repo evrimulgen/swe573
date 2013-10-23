@@ -50,7 +50,7 @@
                     </div>
                     <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
                     <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
-                    <p id="value">{{ x.totalDistance }} m</p>
+                    <p id="value">{{ x.totalDistance }} </p>
                 </a>
             {% endif %}
         {% endfor %}

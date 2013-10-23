@@ -15,7 +15,20 @@ div.sidebox > div {
 }
 
 #timeDisplay {
-    margin-right: 65px;
-    color: #333355;
-    font-size: 16pt;
+
+    background-image: url("../images/score_board_bg.png");
+    background-repeat: repeat;
+    border: 1px solid #e0e0e0;
+    height: 26px;
+    line-height: 26px;
+    font-family: Digital;
+    font-size: 22px;
+    text-align: center;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-top: -30px;
+    margin-right: 40px;
+    color: #ffffff;
+    width: 60px;
 }

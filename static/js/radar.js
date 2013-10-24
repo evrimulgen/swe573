@@ -97,7 +97,7 @@ function Radar(matchId){
             } else {
                 fillColor = "black";
                 strokeColor = "yellow";
-                text = "R";
+                text = "H";
             }
 
             // Creating a group so that the circle + text objects can be moved together
@@ -244,10 +244,11 @@ function Radar(matchId){
     });
 
     var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
-    //var socket = io.connect('http://localhost:8080/');
+//    var socket = io.connect('http://localhost:8080/');
 
     socket.on("welcome", function(){
         connected = true;
+        $("#canvasOverlay").show();
         console.log("connected");
     });
 

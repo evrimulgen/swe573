@@ -11,12 +11,6 @@
 
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/chalkboard.css" />
     <link rel="stylesheet"  type="text/css" href="{{ STATIC_URL }}css/slider.css" />
-
-    <style type="text/css">
-        canvas#slider {
-            margin-left: 50px;
-        }
-    </style>
 {% endblock %}
 {% block menu %}
     <div id="navbar">
@@ -32,7 +26,9 @@
 {% block content %}
 
     <div class="row">
-        <canvas id="slider"></canvas>
+        <div class="slider-holder">
+            <canvas id="slider"></canvas>
+        </div>
     </div>
     <div class="row">
         <div class="row chalkboard-controls">

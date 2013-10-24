@@ -3,12 +3,10 @@
 
 {% if team == "home" %}
     <div class="vote-area">
-        <div id="percent">{{ player.votePercent }}</div>
-        <div id="vote-button">
-            {% if player.played %}
-                <button>Oyla</button>
-            {% endif %}
-        </div>
+
+        {% if votingActive %}
+            <button title="Oyla" class="vote-button-selectable" id="rightButton" value="{{player.teamId }}/{{ player.playerId }}" onclick="votePlayer(this)"></button>
+        {% endif %}
     </div>
 {% endif %}
 
@@ -104,13 +102,14 @@
 
 </div>
 
+
 {% if team == "away" %}
+
     <div class="vote-area">
-        <div id="percent">{{ player.votePercent }}</div>
-        <div id="vote-button">
-            {% if player.played %}
-                <button>Oyla</button>
-            {% endif %}
-        </div>
+        {% if votingActive %}
+            <button title="Oyla" class="vote-button-selectable" id="leftButton" value="{{player.teamId }}/{{ player.playerId }}" onclick="votePlayer(this)"></button>
+        {% endif %}
     </div>
+
 {% endif %}
+

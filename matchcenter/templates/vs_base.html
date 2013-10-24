@@ -32,7 +32,7 @@
         {% include '_vs_goalvideo.html' with goals=goals teamColors=teamColors homeTeamId=homeTeamId awayTeamId=awayTeamId  only %}
 
         <div id="sidestats-container">
-            {% include '_vs_sidestats.html' with matchData=matchData teamColors=teamColors homeTeamId=homeTeamId awayTeamId=awayTeamId only %}
+            {% include '_vs_sidestats.html' with matchData=matchData teamColors=teamColors homeTeamId=homeTeamId awayTeamId=awayTeamId matchSquad=matchSquad matchStatus=matchInfo.status votingActive=votingActive selectedMatch=selectedMatch %}
         </div>
     </div>
     <div id="main">
@@ -84,17 +84,8 @@ match_info = function(match_id,returnValue){
     })
 }
 
-player_ratings = function(match_id,returnValue){
-    $.post("/playerrating/" + match_id + "/").done(function(response){
-        returnValue(JSON.parse(response));
-    })
-}
 
-player_vote = function(match_id,team_id,player_id,returnValue){
-    $.post("/playervote/" + match_id + "/"+ team_id + "/"+ player_id + "/").done(function(response){
-        returnValue(JSON.parse(response));
-    })
-}
+
 
 function MatchObject(weekId,weekStatus,matchId,matchStatus,homeTeam,homeTeamCond,homeTeamInt,awayTeam,awayTeamCond,awayTeamInt,homeTeamId,awayTeamId,homeScore,awayScore,date,time,liveTime,referee,stadium,matchClass){
     var self = this;
@@ -181,7 +172,7 @@ var FixtureModel = function() {
     //stores all matches in the fixture
     self.matches = ko.observableArray();
     {% for week in weeks|dictsort:"weekId" %}
-        {% for match in week.matches|dictsort:"date" %}
+        {% for match in week.matches|dictsort:"time"|dictsort:"date" %}
             {% if match.matchId == selectedMatch  %}
                 self.matches.push(new MatchObject("{{ week.weekId }}","{{ week.status }}","{{ match.matchId }}",{{ match.matchStatus }},"{{ match.homeTeam }}", "{{ match.homeTeamCond }}","{{ match.homeTeamInt }}","{{ match.awayTeam }}","{{ match.awayTeamCond}}", "{{ match.awayTeamInt }}","{{ match.homeTeamId }}","{{ match.awayTeamId }}","{{ match.homeScore }}","{{ match.awayScore }}","{{ match.date }}","{{ match.time }}","{{ match.liveTime}}","{{ match.referee }}","{{ match.stadium }}","match-selected"));
             {% else %}
@@ -231,6 +222,15 @@ var FixtureModel = function() {
         });
     },this);
 
+    self.postponedMatches = ko.computed(function(){
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus() ==5)){
+                return match;
+            }
+        });
+    },this);
+
     self.fixtureWidgetHeight = ko.computed(function(){
         var baseHeight = 310;
         if( self.playedMatches().length>0){
@@ -273,50 +273,6 @@ var FixtureModel = function() {
         });
     }, this);
 
-    self.playerRatingDict = [];
-    player_ratings(self.selectedMatch(), function(response){
-        console.log("imhere");
-        self.playerRatingDict = response;
-        console.log(self.playerRatingDict);
-    });
-
-
-    self.votingEnable = function(elem){
-        if(stored){
-            return false;
-        }
-        else{
-            player_ratings(self.selectedMatch(), function(response){
-                console.log(response);
-                if(response.VotingIsActive){
-                    var homeSquad = response.Match.HomeTeamLineUps;
-                    var awaySquad = response.Match.AwayTeamLineUps;
-                    var matchSquad = homeSquad.concat(awaySquad);
-                    for(var i=0;i<matchSquad.length;i++){
-                        var player = matchSquad[i];
-                        if(player.PlayerId == elem.playerId){
-                            if(player.Status == 0){
-                                return true;
-                            }
-                            else{
-                                var events = player.Events;
-                                for(var y=0; y<events.length;i++){
-                                    var event = events[y];
-                                    if(event.Type == 7){
-                                        return true;
-                                    }
-                                }
-                                return false;
-                            }
-                        }
-                    }
-                }
-                else{
-                    return false;
-                }
-            });
-        }
-    };
 
     self.autoRefresh = function(){
         ko.utils.arrayForEach(self.matches(), function(match) {
@@ -339,10 +295,11 @@ var FixtureModel = function() {
                     else{
                         match.liveTime(response["liveTime"]+"'");
                     }
-                    console.log(match.homeTeam + " - " + match.awayTeam + " match updated with; matchStatus:" + match.matchStatus() + " homeScore:" + match.homeScore() + " awayScore:" + match.awayScore() + " liveTime:" + match.liveTime());
+                    <!--console.log(match.homeTeam + " - " + match.awayTeam + " match updated with; matchStatus:" + match.matchStatus() + " homeScore:" + match.homeScore() + " awayScore:" + match.awayScore() + " liveTime:" + match.liveTime());-->
                 });
             }
         });
+        $("#sidestats-container").load("/new/partial/sidestats/{{ selectedMatch }}/");
     };
 
 

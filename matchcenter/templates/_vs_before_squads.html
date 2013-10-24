@@ -1,14 +1,64 @@
 {% load match_center_tags %}
 {% if homeSquad|length != 0  and  awaySquad|length != 0%}
     <h1 class="main">Maç Kadrosu</h1>
+
+    <p class="manager-name"><img class="manager-img" src="{{ STATIC_URL }}img/teknik_direktor_2.png">{{ homeManager }}</p>
+    <p class="manager-name"><img class="manager-img" id="right-img" src="{{ STATIC_URL }}img/teknik_direktor_2.png">{{ awayManager }}</p>
     <div id="homesquad">
         {% for player in homeSquad|dictsort:"playPosition"|dictsortreversed:"eleven" %}
-            {% sl_before_playerlistitem player "home" %}
+            {% sl_before_playerlistitem player "home" votingActive %}
         {% endfor %}
     </div>
     <div id="awaysquad">
         {% for player in awaySquad|dictsort:"playPosition"|dictsortreversed:"eleven" %}
-            {% sl_before_playerlistitem player "away" %}
+            {% sl_before_playerlistitem player "away" votingActive %}
         {% endfor %}
     </div>
 {% endif %}
+
+<script>
+    player_vote = function(match_id,team_id,player_id,returnValue){
+        $.post("/playervote/" + match_id + "/"+ team_id + "/"+ player_id + "/").done(function(response){
+            returnValue(JSON.parse(response));
+        });
+    }
+
+    votePlayer = function(elem){
+        var splitting = elem.value.split("/");
+        var teamId = splitting[0];
+        var playerId  = splitting[1];
+        var matchId = {{ selectedMatch }};
+        var storedValue = amplify.store(matchId);
+        if(!storedValue){
+            player_vote(matchId,teamId,playerId,function(returnVal){
+                console.log(returnVal);
+            });
+            $(elem).removeClass("vote-button-selectable");
+            $(elem).addClass("vote-button-selected");
+            var rates = document.getElementsByClassName("vote-button-selectable");
+            for(var i= 0; i< rates.length; i++){
+                var item = rates[i];
+                $(item).hide();
+            }
+            amplify.store(matchId,teamId+"/"+playerId);
+        }
+
+
+    }
+    var storedValue = amplify.store("{{ selectedMatch }}")
+    if(storedValue){
+        var rates = document.getElementsByClassName("vote-button-selectable");
+        for(var i= 0; i< rates.length; i++){
+            var item = rates[i];
+            if(item.value == storedValue){
+                $(item).removeClass("vote-button-selectable");
+                $(item).addClass("vote-button-selected");
+            }
+        }
+        var rates = document.getElementsByClassName("vote-button-selectable");
+        for(var i= 0; i< rates.length; i++){
+            var item = rates[i];
+            $(item).hide();
+        }
+    }
+</script>

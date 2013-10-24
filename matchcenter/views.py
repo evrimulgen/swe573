@@ -49,12 +49,21 @@ def prep_common_context(reqid):
 
     # data for team squads, used in all views in match center
     # TODO: not good practice to pass in homeTeamId here
-    homeSquadDict, awaySquadDict = get_team_squads(reqid, homeTeamId, awayTeamId)
+    squad = get_team_squads(reqid, homeTeamId, awayTeamId)
+    homeSquadDict, awaySquadDict, matchSquadDict = [], [], []
+    isVotingActive = False
+    if len(squad)>3:
+        homeSquadDict = squad[0]
+        awaySquadDict = squad[1]
+        matchSquadDict = squad[2]
+        isVotingActive = squad[3]
+    print isVotingActive
+    homeManager, awayManager = get_team_manager(homeTeamId,awayTeamId)
 
     teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(reqid, homeTeamId, awayTeamId)
 
     infoDict['date'] = turkify_date(infoDict.get("date"))
-
+    print goalDict
     common_context = {'leagueId': LEAGUE_ID,
                       'seasonId': SEASON_ID,
                       'teamStats':teamStatsDict,
@@ -64,6 +73,8 @@ def prep_common_context(reqid):
                       'matchData':matchDataDict,
                       'homeTeamId':homeTeamId,
                       'awayTeamId':awayTeamId,
+                      'homeManager':homeManager,
+                      'awayManager':awayManager,
                       'homeSquad':homeSquadDict,
                       'awaySquad':awaySquadDict,
                       'weeklist': WEEK_LIST,
@@ -71,6 +82,8 @@ def prep_common_context(reqid):
                       'teamColors': colorDict,
                       'goals':goalDict,
                       'matchInfo':infoDict,
+                      'matchSquad':matchSquadDict,
+                      'votingActive':isVotingActive,
                       'selectedMatch':str(reqid)}
 
     return common_context
@@ -168,7 +181,7 @@ def partial_teamstats_dump(request, match_id):
     dump the team stats in JSON format
     """
     homeid, awayid, all = get_match_info(match_id)
-    teamStats, a, b, c = get_match_stats(match_id, homeid, awayid)
+    teamStats = get_match_team_stats(match_id, homeid, awayid)
     colors = get_team_colors(homeid, awayid)
 
     data = json.dumps({"teamStats": teamStats, "colors": colors})
@@ -201,12 +214,24 @@ def partial_sidestats(request, match_id):
     homeid, awayid, all = get_match_info(match_id)
     teamStatsDict, matchDataDict, homeDataDict, awayDataDict = get_match_stats(match_id, homeid, awayid)
     colorDict = get_team_colors(homeid,awayid)
+    homeSquadDict, awaySquadDict, matchSquadDict = [], [], []
+    isVotingActive = False
+    squad = get_team_squads(match_id, homeid, awayid)
+    if len(squad)>3:
+        homeSquadDict = squad[0]
+        awaySquadDict = squad[1]
+        matchSquadDict = squad[2]
+        isVotingActive = squad[3]
 
     context = {"matchData": matchDataDict,
                "teamColors" : colorDict,
                "homeTeamId" : homeid,
-               "awayTeamId" : awayid
-               }
+               "awayTeamId" : awayid,
+               'matchStatus': all.get("status"),
+               'matchSquad':matchSquadDict,
+               'votingActive':isVotingActive,
+               'selectedMatch':match_id
+    }
 
     return render_to_response('_vs_sidestats.html', context)
 
@@ -219,6 +244,13 @@ def playerrate(request,matchid):
 
 def playervote(request,matchid,teamid,playerid):
     return HttpResponse(json.dumps(vote_match_player(matchid,teamid,playerid)))
+
+def videos(request, match_id, videoId):
+    goalDict = get_goal_videos(match_id)
+    homeTeamId, awayTeamId, infoDict = get_match_info(match_id)
+    return render_to_response('_vs_videos.html', {'goals': goalDict,
+                                                  'videoId': int(videoId),
+                                                  'matchInfoDict':infoDict})
 
 @ensure_csrf_cookie
 def d3_try(request):

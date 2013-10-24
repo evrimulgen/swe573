@@ -23,29 +23,27 @@ $(function(){
         radar.changeTime(event.time);
     });
 
-    $("#pauseMatch").click(function(){
+    $("#canvas-play-button").click(function(){
         if(!started){
             radar.startMatch();
-            $("#pauseMatch i").removeClass("icon-play");
-            $("#pauseMatch i").addClass("icon-pause");
+            $("#canvas-play-button").hide();
+//            $("#pauseMatch i").removeClass("icon-play");
+//            $("#pauseMatch i").addClass("icon-pause");
             started = true;
         } else {
-            radar.togglePause();
-            if(paused){
-                paused = false;
-                $("#pauseMatch i").removeClass("icon-play");
-                $("#pauseMatch i").addClass("icon-pause");
-            } else {
-                paused = true;
-                $("#pauseMatch i").removeClass("icon-pause");
-                $("#pauseMatch i").addClass("icon-play");
-            }
+//            radar.togglePause();
+//            if(paused){
+//                paused = false;
+//                $("#pauseMatch i").removeClass("icon-play");
+//                $("#pauseMatch i").addClass("icon-pause");
+//            } else {
+//                paused = true;
+//                $("#pauseMatch i").removeClass("icon-pause");
+//                $("#pauseMatch i").addClass("icon-play");
+//            }
         }
     });
 
-    $("#popMessage").click(function(){
-       popCanvasMessage('caner');
-    });
 
     var popCanvasMessage = function(data){
         $(".canvas-message").text(data);
@@ -64,32 +62,62 @@ $(function(){
             
             var $table = $card.find(".card-table");
             $table.empty();
-            $table.append("<tr><th>İstatistik</th><th>Bu Sezon</th><th>Bu Hafta</th></tr>");
+            $table.append("<tr><th>İstatistik</th><th>Sezon Ortalaması</th><th>Bu Hafta</th></tr>");
 
             var statNames = {"passes": "Toplam Pas",
-                     "shotsOnTarget": "İsabetli Şut",
+                     "shotsOnTarget": "İsabetli",
                      "crosses": "Toplam Orta",
                      "foulsSuffered": "Maruz Kalınan Faul",
                      "totalDistance": "Kat Edilen Mesafe",
                      "yellowCard": "Sarı Kart",
                      "corners": "Korner",
                      "redCard": "Kırmızı Kart",
-                     "successfulCross": "İsabetli Orta",
+                     "successfulCross": "İsabetli",
                      "penalty": "Penaltı",
                      "assists": "Asist",
                      "goals": "Gol",
                      "shots": "Şut",
                      "foulsCommitted": "Yapılan Faul",
                      "matchesPlayed": "Oynadığı Maç Sayısı",
-                     "successfulPass": "İsabetli Pas"};
-            _.each(info.statistics, function(value, key){
-                var statName = statNames[key];
+                     "successfulPass": "İsabetli",
+                     "goalsConceded": "Yediği Gol"}
 
-                var val0 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
-                var val1 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
+            console.log(info.statistics);
+
+            var goalkeeperStatistics = new Object();
+            goalkeeperStatistics.matchesPlayed = info.statistics.matchesPlayed;
+            goalkeeperStatistics.goalsConceded = info.statistics.goalsConceded;
+            goalkeeperStatistics.successfulPass = info.statistics.successfulPass;
+            goalkeeperStatistics.passes = info.statistics.passes;
+            goalkeeperStatistics.yellowCard = info.statistics.yellowCard;
+            goalkeeperStatistics.redCard = info.statistics.redCard;
+
+            var flag = 0;
+            var statNameHolder;
+            var val0Holder;
+            var var1Holder;
+
+            _.each(goalkeeperStatistics, function(value, key){
+
+                var statName = statNames[key];
+                var val0 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
+                var val1 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
                 if(statName!=null){
-                    $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
+                    if(flag == 1){
+                        $table.append("<tr><td>"+statNameHolder+" / "+statName+"</td><td>"+val0Holder+" / "+val0+"</td><td>"+var1Holder+" / "+val1+"</td></tr>");
+                        flag = 0;
+                    }
+                    else if(statName === "İsabetli"){
+                        statNameHolder = statName;
+                        val0Holder = val0;
+                        var1Holder = val1;
+                        flag = 1;
+                    }
+                    else{
+                        $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
+                    }
                 }
+
             });
         });
     });

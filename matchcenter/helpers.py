@@ -125,11 +125,18 @@ def get_match_info(match_id):
 def get_goal_videos(match_id):
 
     data = {"matchId":match_id}
-    datalist = service_request("GetGoalVideos", data) # returns "data" field in response
     goalDict = [] #holds goal video data
+    datalist = service_request("GetMatchVideos", data) # returns "data" field in response
+
+    if len(datalist) > 0 :
+        for x in datalist:
+            goalDict.append({'awayTeamId':x[0],'text':"Maç Özeti",'awayTeamId':x[2],'min':x[3],'goalLink':x[4]})
+
+    datalist = service_request("GetGoalVideos", data) # returns "data" field in response
     if len(datalist) > 0 :
         for x in datalist:
             goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
+
 
     return goalDict
 
@@ -141,9 +148,12 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
     if len(datalist) == 0:
         return [], []
 
-    homeSquadDict, awaySquadDict = [], [] #holds home team squad
+    homeSquadDict, awaySquadDict, matchSquadDict = [], [], [] #holds home team squad
     playerRating = get_player_ratings(match_id)
+    homeFormation = playerRating.get("Match").get("HomeTeamFormation")
+    awayFormation = playerRating.get("Match").get("AwayTeamFormation")
     ratingsActive = playerRating.get("VotingIsActive")
+    print ratingsActive
     matchS = playerRating.get("PlayerRatings")
 
 
@@ -159,7 +169,7 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
         for event in playerEvents:
             if event[0] == 7:
                 substitute = True
-            eventDict = [{'eventType':event[0],
+            eventDict.append({'eventType':event[0],
                           'matchTime':event[1],
                           'teamId':event[2],
                           'playerId':int(event[3]),
@@ -167,8 +177,7 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
                           'jerseyNumber':event[5],
                           'jerseyNumberIn':event[6],
                           'playerName':event[7],
-                          'playerNameIn':event[8]} ]
-
+                          'playerNameIn':event[8]})
 
         played = False
         votePercent = 0
@@ -184,26 +193,40 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
             if substitute:
                 played=True
 
-        #if ratingsActive == False:
-            #played=False
+        playerPosition = playerData[17]
+        if playerData[3] == homeTeamId and (homeFormation == "4-3-3 B" or homeFormation == "4-1-3-2 A") and playerPosition == "MC":
+            playerPosition = "AMC"
+        if playerData[3] == awayTeamId and (awayFormation == "4-3-3 B" or awayFormation == "4-1-3-2 A") and playerPosition == "MC":
+            playerPosition = "AMC"
+
+        splitted = playerData[0].split(" ")
+        playerNameShort = ""
+        if len(splitted) > 9:
+            playerNameShort = splitted[0][0] + "." + splitted[1]
+        else:
+            playerNameShort = splitted[0]
 
         #add player into corresponding team squads
         playerTuple = {'playerId':int(playerId),
+                       'teamId':int(playerData[3]),
                        'playerName':playerData[0],
                        'jerseyNumber':playerData[1],
                        'eleven':playerData[2],
                        'playPosition':playerData[4],
+                       'playerNameShort':playerNameShort,
+                       'playerPosition':playerPosition,
                        'played':played,
                        'votePercent':votePercent,
                        'voteCount':voteCount,
                        'playerEvents':eventDict}
 
+        matchSquadDict.append(playerTuple)
         if playerData[3] == homeTeamId:
             homeSquadDict.append(playerTuple)
         elif playerData[3] == awayTeamId:
             awaySquadDict.append(playerTuple)
 
-    return homeSquadDict, awaySquadDict
+    return homeSquadDict, awaySquadDict, matchSquadDict, ratingsActive
 
 def get_history(homeTeamId, awayTeamId):
     data = {"team1":homeTeamId,"team2":awayTeamId}
@@ -220,6 +243,7 @@ def get_history(homeTeamId, awayTeamId):
                     'date':formatTime(match[4]),
                     'referee':match[5],
                     'stadium':match[6],
+                    'link':match[7],
                     'homeTeamId':match[8],
                     'awayTeamId':match[9]} for match in datalist.get("pastMatches")]
 
@@ -397,6 +421,58 @@ def get_match_stats(match_id, homeTeamId, awayTeamId):
 
     return teamStatsDict, matchDataDict, homeDataDict, awayDataDict
 
+def get_match_team_stats(match_id, homeid, awayid):
+    """
+    Fetches the team stats graph data from web services
+    """
+    data = {"matchId":match_id}
+    datalist = service_request("GetMatchTeamStats", data)
+
+    home = [a for a in datalist if a["team_id"] == homeid][0]
+    away = [a for a in datalist if a["team_id"] == awayid][0]
+
+    lookup = lambda x: {
+        u'possession': (1, "Topa Sahip Olma", " %"),
+        u'distance': (2, "Kat Edilen Mesafe", " m"),
+        u'shot': (4, "Şut", ""),
+        u'shoton': (5, "İsabetli Şut", ""),
+        u'fouls': (12, "Yaptığı Faul", ""),
+        u'passon': (7, "İsabetli Pas", ""),
+        u'crosson': (9, "İsabetli Orta", ""),
+        u'cross': (8, "Orta", ""),
+        u'yellow': (13, "Sarı Kart", ""),
+        u'hir_distance': (3, "Sprint", " m"),
+        u'team_id': (None, "TeamId", ""),
+        u'pass': (6, "Pas", ""),
+        u'corner': (10, "Korner", ""),
+        u'offside': (11, "Ofsayt", ""),
+        u'red': (14, "Kırmızı Kart", "")
+    }.get(x)
+
+    home.pop("team_id")
+    away.pop("team_id")
+
+    result = []
+    for k in home:
+        homepct, awaypct = calculate_percentage(home.get(k), away.get(k))
+
+        result.append(
+            {
+                'name': lookup(k)[1],
+                'homeValue': home.get(k),
+                'awayValue': away.get(k),
+                'order': lookup(k)[0],
+                'addition': lookup(k)[2],
+                'homePercent': homepct,
+                'awayPercent': awaypct
+            }
+        )
+#        except IndexError:
+#            print k, home[k], lookup(k)
+
+    return sorted(result, key=lambda x: x.get('order'))
+
+
 def get_team_gk_ids(match_id):
     """
     Return the player ids for a match's goalkeepers
@@ -446,11 +522,10 @@ def get_player_ratings(matchid):
     response = urllib2.urlopen(req)
     assert response.code == 200
     response_dict = json.loads(response.read())
-    print response_dict
     return response_dict
 
 def vote_match_player(matchid,teamid,playerid):
-    url = "http://www.ligtv.com.tr/services/dataservice.svc/json/VoteMatchPlayer?matchId=%s&teamId=%s&playerId=%s" %matchid %teamid %playerid
+    url = "http://www.ligtv.com.tr/services/dataservice.svc/json/VoteMatchPlayer?matchId="+matchid+"&teamId="+teamid+"&playerId="+playerid
     values = {
         'UserName': 'sentio',
         'Password': 's3nt10'
@@ -468,6 +543,10 @@ def vote_match_player(matchid,teamid,playerid):
 
     message = votingResult.get('Message')
     code = votingResult.get('StatusCode')
-    print message
-    print code
     return message
+
+def get_team_manager(homeid,awayid):
+    homeDetails = service_request("GetTeamDetails", {"teamId":homeid})
+    awayDetails = service_request("GetTeamDetails", {"teamId":awayid})
+
+    return homeDetails[0][5], awayDetails[0][5]

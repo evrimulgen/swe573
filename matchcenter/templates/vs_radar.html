@@ -417,7 +417,7 @@
 
                 var imageTag = "<img class='teamLogo' src='/static/images/logo"+info.teamId+".png' />";
                 $card.find(".playerName").html(imageTag + info.playerName + " (#"+jerseyno+")");
-                $card.find(".playerImage").attr("src", "/static/images/players/"+playerid+".jpg");
+                $card.find(".playerImage").attr("src", "http://sentiotab.blob.core.windows.net/player/"+playerid+".png");
 
                 var $table = $card.find(".card-table");
                 $table.empty();

@@ -58,7 +58,7 @@ $(function(){
 
             var imageTag = "<img class='teamLogo' src='/static/images/logo"+info.teamId+".png' />";
             $card.find(".playerName").html(imageTag + info.playerName + " (#"+event.jersey_no+")");
-            $card.find(".playerImage").attr("src", "/static/images/players/"+event.player_id+".jpg");
+            $card.find(".playerImage").attr("src", "http://sentiotab.blob.core.windows.net/player/"+event.player_id+".png");
             
             var $table = $card.find(".card-table");
             $table.empty();

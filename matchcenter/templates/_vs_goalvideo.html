@@ -23,7 +23,7 @@
                             <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
                         {% endif %}
                     </div>
-                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                    <img src="http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png" onError="this.src='http://sentiotab.blob.core.windows.net/player/default.png';">
                 {% endif %}
                 {% if x.type == 0 %}
                     <img id="videopng" src="{{ STATIC_URL }}img/mac_ozeti_3.png" >

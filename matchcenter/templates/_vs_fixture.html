@@ -70,5 +70,26 @@
             </div>
         </a>
     </div>
+
+    <p class="line-info" data-bind="fadeVisible: postponedMatches().length > 0"> Ertelenmiş Maçlar</p>
+    <div data-bind='foreach: postponedMatches'>
+        <a data-bind='attr:{href:"../../" + matchId , class : matchClass }'>
+            <div id="scorearea">
+                <div id="home">
+                    <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + homeTeamId + ".png"}'><p data-bind='text: homeTeamCond'></p></div>
+                    <div id="score"><p data-bind="text: ':' + homeScore(),
+                                                                fadeVisible: matchStatus() != 1"></p></div>
+                </div>
+                <div id="away">
+                    <div id="name"><img data-bind='attr:{src:"{{ STATIC_URL }}images/logo" + awayTeamId + ".png"}'><p data-bind='text: awayTeamCond'></p></div>
+                    <div id="score"><p data-bind="text: ':' + awayScore(),
+                                                                fadeVisible: matchStatus() != 1"></p></div>
+                </div>
+            </div>
+            <div id="datearea">
+                <p id="postponed-match">ERTELENDİ</p>
+            </div>
+        </a>
+    </div>
     <br style="clear:both"/>
 </div>

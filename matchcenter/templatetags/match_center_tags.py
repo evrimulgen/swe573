@@ -1,4 +1,8 @@
 from django import template
+from django.core.serializers import serialize
+from django.db.models.query import QuerySet
+from django.utils import simplejson
+from django.utils.safestring import mark_safe
 from matchcenter.helpers import get_fixture
 
 register = template.Library()
@@ -64,3 +68,11 @@ def sl_center_narration(narrations):
 def sl_center_team_data(match_id):
     # currently stubbed, will handle thru view
     pass
+
+def jsonify(object):
+    if isinstance(object, QuerySet):
+        return mark_safe(serialize('json', object))
+    return mark_safe(simplejson.dumps(object))
+
+register.filter('jsonify', jsonify)
+jsonify.is_safe = True

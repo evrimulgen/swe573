@@ -180,16 +180,16 @@
                                 {% endfor %}
                             </div>
                             {% if player.playerPosition == "GK" %}
-                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
                         </li>
                     {% endif %}
                 {% endfor %}
             </ul>
             <ul class="away-team-formation">
-                {% for player in awaySquad %}
+                {% for player in awaySquad|dictsort:"playPosition"%}
                     {% if player.eleven == 1 %}
                         <li class="{{ player.playerPosition }}">
                             <p>{{ player.playerNameShort }}</p>
@@ -209,16 +209,16 @@
                                 {% endfor %}
                             </div>
                             {% if player.playerPosition == "GK" %}
-                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
                         </li>
                     {% endif %}
                 {% endfor %}
             </ul>
             <ul class="home-team-subs">
-                {% for player in homeSquad %}
+                {% for player in homeSquad|dictsort:"playPosition" %}
                     {% if player.eleven == 0 %}
                         <li class="S{{ forloop.counter }}">
 
@@ -238,9 +238,9 @@
                                 {% endfor %}
                             </div>
                             {% if player.playPosition == 1 %}
-                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
 
                             <p>{{ player.playerNameShort }}</p>
@@ -249,7 +249,7 @@
                 {% endfor %}
             </ul>
             <ul class="away-team-subs">
-                {% for player in awaySquad %}
+                {% for player in awaySquad|dictsort:"playPosition"%}
                     {% if player.eleven == 0 %}
                         <li class="S{{ forloop.counter }}">
                             <div class="event-area">
@@ -268,9 +268,9 @@
                                 {% endfor %}
                             </div>
                             {% if player.playPosition == 1 %}
-                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
                             <p>{{ player.playerNameShort }}</p>
                         </li>
@@ -340,20 +340,77 @@
         $("#data-area").load(url);
     </script>
     <script>
+        var squad = jQuery.parseJSON('{{ matchSquad|jsonify }}');
         $(function() {
             $( document ).tooltip({
-                items: "[imageInfo]",
+                items: "[player-data]",
                 content: function() {
                     var element = $( this );
-                    if ( element.is( "[imageInfo]" ) ) {
-                        var text = element.attr("imageInfo");
-                        return "something";
+                    if ( element.is( "[player-data]" ) ) {
+                        var text = element.attr("player-data");
+                        for(var i=0;i<squad.length;i++){
+                            var returnVal = "";
+                            if(parseInt(squad[i]["playerId"]) == parseInt(text)){
+                                var events = squad[i]["playerEvents"];
+                                console.log(events);
+                                if(events.length == 0){
+                                    return
+                                }
+                                for(var j=0; j<events.length; j++){
+                                    var eventType = events[j]["eventType"];
+                                    var matchTime  = events[j]["matchTime"];
+                                    var playerName = events[j]["playerName"];
+                                    var playerNameIn = events[j]["playerNameIn"];
+                                    if(eventType == 7){;
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Oyuncu Değişikliği - Dakika: " + matchTime + "</p><br><p style='text-align:center'><span style='color:#ca1111'>" + playerName + "</span> - <span style='color:#139d04'>" + playerNameIn + "</span></p></div>"
+                                    }
+                                    else if(eventType == 0){
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                    }
+                                    else if(eventType == 1){
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Kendi Kalesine Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                    }
+                                    else if(eventType == 2){
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Gol(Penaltı) - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                    }
+                                    else if(eventType == 3){
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Kaçan Penaltı - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                    }
+                                    else if(eventType == 4){
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                    }
+                                    else if(eventType == 5){
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>İkinci Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                    }
+                                    else if(eventType == 6){
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Kırmızı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                    }
+                                }
+                                return returnVal;
+                            }
+                        }
                     }
+                },
+                show: {
+                    effect: "show",
+                    delay: 100
+                },
+                hide: {
+                    effect: "hide",
+                    delay: 100
+                },
+                position: {
+                    my: "center bottom",
+                    at: "center top"
+                },
+                close: function (event, ui) {
+                    $('div.ui-effects-wrapper').remove();
                 }
             });
         });
     </script>
     <script>
+
         changePlayerCard =  function(weekid,homeOrAway,playerid,jerseyno){
             $.post("/api/GetPlayerCard", JSON.stringify({leagueId: 1, seasonId: 9064, weekId: weekid, playerId: playerid})).done(function(data){
                 var info = data.data;
@@ -394,6 +451,7 @@
                 });
             });
         }
+
     </script>
 
 {% endblock %}

@@ -1636,9 +1636,7 @@ button.collapse:hover{
     border: 2px solid #5c5c58;
 }
 .ui-tooltip {
-    padding: 2px 5px;
     color: #000000;
-    border-radius: 20px;
     font: 12px "Helvetica Neue", Sans-Serif;
     box-shadow: 0 0 7px black;
 }

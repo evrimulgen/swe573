@@ -359,28 +359,28 @@
                                     var playerName = events[j]["playerName"];
                                     var playerNameIn = events[j]["playerNameIn"];
                                     if(eventType == 7){;
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Oyuncu Değişikliği - Dakika: " + matchTime + "</p><br><p style='text-align:center'><span style='color:#ca1111'>" + playerName + "</span> - <span style='color:#139d04'>" + playerNameIn + "</span></p></div>"
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' <span style='color:#ca1111'>" + playerName + "</span> - <span style='color:#139d04'>" + playerNameIn + "</span></p></div>"
                                     }
                                     else if(eventType == 0){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Gol</p></div>"
                                     }
                                     else if(eventType == 1){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Kendi Kalesine Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Kendi Kalesine Gol</p></div>"
                                     }
                                     else if(eventType == 2){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Gol(Penaltı) - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Gol(Penaltı)</p> </div>"
                                     }
                                     else if(eventType == 3){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Kaçan Penaltı - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Kaçan Penaltı</p> </div>"
                                     }
                                     else if(eventType == 4){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Sarı Kart</p> </div>"
                                     }
                                     else if(eventType == 5){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>İkinci Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' İkinci Sarı Kart</p> </div>"
                                     }
                                     else if(eventType == 6){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>Kırmızı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Kırmızı Kart</p> </div>"
                                     }
                                 }
                                 return returnVal;

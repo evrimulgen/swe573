@@ -48,7 +48,7 @@ $(function () {
             $(".teamlist-container .awayTeamName").html(awayTeam.name);
             var homeList = $("#homeTeamJersey");
             _.each(homeTeam.players, function(player){
-                $("<li>"+player.jersey_number+" "+player.name+"</li>").click(function(){
+                $("<li><input type='radio' id='player.name' name='player.name' value='player.jersey_number'/>"+"&nbsp "+player.jersey_number+" "+player.name+"</li>").click(function(){
                     $(".teamlist li.active").removeClass("active");
                     $(this).addClass("active");
                     cb.changePlayer(player);
@@ -57,7 +57,7 @@ $(function () {
 
             var awayList = $("#awayTeamJersey");
             _.each(awayTeam.players, function(player){
-                $("<li>"+player.jersey_number+" "+player.name+"</li>").click(function(){
+                $("<li><input type='radio' name='player.name' value='player.jersey_number'/>"+"&nbsp "+player.jersey_number+" "+player.name+"</li>").click(function(){
                     $(".teamlist li.active").removeClass("active");
                     $(this).addClass("active");
                     cb.changePlayer(player);
@@ -67,32 +67,59 @@ $(function () {
     }); 
 
     $("#shots").click(function () {
-        if (!$(this).hasClass("active")) {
+        if (this.checked) {
             cb.activateLayer("shots");
+            $("input[id=runpaths]:checked").removeAttr("checked");
+            $("input[id=passes]:checked").removeAttr("checked");
+            $("input[id=heatmap]:checked").removeAttr("checked");
+            cb.deactivateLayer("heatmap");
+            cb.deactivateLayer("runpaths");
+            cb.deactivateLayer("passes");
         } else {
             cb.deactivateLayer("shots")
         }
     });
 
     $("#passes").click(function () {
-        if (!$(this).hasClass("active")) {
+        if (this.checked) {
             cb.activateLayer("passes");
+            cb.activateLayer("shots");
+            $("input[id=runpaths]:checked").removeAttr("checked");
+            $("input[id=shots]:checked").removeAttr("checked");
+            $("input[id=heatmap]:checked").removeAttr("checked");
+            cb.deactivateLayer("heatmap");
+            cb.deactivateLayer("shots");
+            cb.deactivateLayer("runpaths");
         } else {
             cb.deactivateLayer("passes");
         }
     });
 
     $("#heatmap").click(function () {
-        if (!$(this).hasClass("active")) {
+        if (this.checked) {
             cb.activateLayer("heatmap");
-        } else {
+            cb.activateLayer("shots");
+            $("input[id=runpaths]:checked").removeAttr("checked");
+            $("input[id=shots]:checked").removeAttr("checked");
+            $("input[id=passes]:checked").removeAttr("checked");
+            cb.deactivateLayer("runpaths");
+            cb.deactivateLayer("shots");
+            cb.deactivateLayer("passes");
+        }else {
+            $(this).attr("checked", "");
             cb.deactivateLayer("heatmap");
         }
     });
 
     $("#runpaths").click(function () {
-        if (!$(this).hasClass("active")) {
+        if (this.checked) {
             cb.activateLayer("runpaths");
+            $("input[id=passes]:checked").removeAttr("checked");
+            $("input[id=shots]:checked").removeAttr("checked");
+            $("input[id=heatmap]:checked").removeAttr("checked");
+            cb.deactivateLayer("heatmap");
+            cb.deactivateLayer("shots");
+            cb.deactivateLayer("passes");
         } else {
             cb.deactivateLayer("runpaths");
         }

@@ -318,6 +318,43 @@ var FixtureModel = function() {
 ko.applyBindings(new FixtureModel());
 </script>
 
+
+<script>
+     $(function() {
+        $( ".before-form" ).tooltip({
+            items: "[form-data]",
+            content: function() {
+                var element = $( this );
+                if ( element.is( "[form-data]" ) ) {
+                    var text = element.attr("form-data");
+                    var splitted=text.split(",");
+                    var weekId  = splitted[0];
+                    var homeTeam = splitted[1];
+                    var homeScore = splitted[2];
+                    var awayScore =splitted[3];
+                    var awayTeam =splitted[4];
+                    return "<div style='color:black'><p style='text-align:center'>"+weekId+". Hafta</p><br><p>"+homeTeam+" "+homeScore+" - "+awayScore+" "+awayTeam+"</p></div>"
+                }
+            },
+            show: {
+                effect: "show",
+                delay: 50
+            },
+            hide: {
+                effect: "hide",
+                delay: 100
+            },
+            position: {
+                my: "center bottom-20",
+                at: "center top"
+            },
+            close: function (event, ui) {
+                $('div.ui-effects-wrapper').remove();
+            }
+        });
+    });
+</script>
+
 </body>
 
 </html>

@@ -26,7 +26,7 @@
                     <img src="http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png" onError="this.src='http://sentiotab.blob.core.windows.net/player/default.png';">
                 {% endif %}
                 {% if x.type == 0 %}
-                    <img id="videopng" src="{{ STATIC_URL }}img/mac_ozeti_3.png" >
+                    <img id="videopng" src="http://sentiotab.blob.core.windows.net/static/mac_ozeti_3.png" >
                     <p id="name">{{ x.text }}</p>
                 {% else %}
                     <p id="name">{{ x.playerName }}</p>

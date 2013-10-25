@@ -62,7 +62,7 @@ changePlayerCard =  function(weekid,homeOrAway,playerid,jerseyno){
         var info = data.data;
         var $card = (homeOrAway==0) ? $("#leftPlayerCard") : $("#rightPlayerCard");
 
-        var imageTag = "<img class='teamLogo' src='/static/images/logo"+info.teamId+".png' />";
+        var imageTag = "<img class='teamLogo' src='http://sentiotab.blob.core.windows.net/team/logo"+info.teamId+"_30.png' />";
         $card.find(".playerName").html(imageTag + info.playerName + " (#"+jerseyno+")");
         $card.find(".playerImage").attr("src", "http://sentiotab.blob.core.windows.net/player/"+playerid+".png");
 

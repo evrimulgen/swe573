@@ -79,7 +79,7 @@
                         "width": $("#data-area").width()
                     };
                     $("#data-area").empty();
-                    $("#data-area").append("<div class='team-name-area'><img src='{{ STATIC_URL }}images/logo{{ matchInfo.homeTeamId }}.png'><p>{{ matchInfo.homeTeam }}</p><p>{{ matchInfo.awayTeam }}</p><img src='{{ STATIC_URL }}images/logo{{ matchInfo.awayTeamId }}.png'></div>");
+                    $("#data-area").append("<div class='team-name-area'><img src='http://sentiotab.blob.core.windows.net/team/logo{{ matchInfo.homeTeamId }}_90.png'><p>{{ matchInfo.homeTeam }}</p><p>{{ matchInfo.awayTeam }}</p><img src='http://sentiotab.blob.core.windows.net/team/logo{{ matchInfo.awayTeamId }}_90.png'></div>");
                     simpleBar("#data-area", d.teamStats, pref);
                 }
             });
@@ -182,9 +182,9 @@
                                 {% endfor %}
                             </div>
                             {% if player.playerPosition == "GK" %}
-                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('http://sentiotab.blob.core.windows.net/team/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('http://sentiotab.blob.core.windows.net/team/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
                         </li>
                     {% endif %}
@@ -211,9 +211,9 @@
                                 {% endfor %}
                             </div>
                             {% if player.playerPosition == "GK" %}
-                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('http://sentiotab.blob.core.windows.net/team/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('http://sentiotab.blob.core.windows.net/team/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
                         </li>
                     {% endif %}
@@ -240,9 +240,9 @@
                                 {% endfor %}
                             </div>
                             {% if player.playPosition == 1 %}
-                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('http://sentiotab.blob.core.windows.net/team/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('http://sentiotab.blob.core.windows.net/team/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
 
                             <p>{{ player.playerNameShort }}</p>
@@ -270,9 +270,9 @@
                                 {% endfor %}
                             </div>
                             {% if player.playPosition == 1 %}
-                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('http://sentiotab.blob.core.windows.net/team/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('http://sentiotab.blob.core.windows.net/team/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
                             <p>{{ player.playerNameShort }}</p>
                         </li>
@@ -284,11 +284,11 @@
 
     <div class="row" id="playerCardsContainer" style="margin-bottom: 10px">
         <div class="span4 card-container" id="leftPlayerCard">
-            <img src="{{ STATIC_URL }}images/card-hole.png">
+            <img src="http://sentiotab.blob.core.windows.net/static/card-hole.png">
             <div class="card-inside">
 
                 <div class="card-header row-fluid">
-                    <img class="playerImage" src="{{STATIC_URL}}images/players/default.png">
+                    <img class="playerImage" src="http://sentiotab.blob.core.windows.net/player/default.png">
                     <div class="playerInfo">
                         <p class="playerName">Oyuncu Karti</p>
                     </div>
@@ -306,10 +306,10 @@
         </div>
 
         <div class="span4 card-container" id="rightPlayerCard">
-            <img src="{{ STATIC_URL }}images/card-hole.png">
+            <img src="http://sentiotab.blob.core.windows.net/static/card-hole.png">
             <div class="card-inside">
                 <div class="card-header row-fluid">
-                    <img class="playerImage" src="{{STATIC_URL}}images/players/default.png">
+                    <img class="playerImage" src="http://sentiotab.blob.core.windows.net/player/default.png">
                     <div class="playerInfo">
                         <p class="playerName">Oyuncu Karti</p>
                     </div>

@@ -1,9 +1,9 @@
 {% load match_center_tags %}
 {% if homeSquad|length != 0  and  awaySquad|length != 0%}
-    <h1 class="main">Maç Kadrosu</h1>
+    <h1 class="main">Maç Kadrosu<span class="tooltip-white"></span></h1>
 
-    <p class="manager-name"><img class="manager-img" src="{{ STATIC_URL }}img/teknik_direktor_2.png">{{ homeManager }}</p>
-    <p class="manager-name"><img class="manager-img" id="right-img" src="{{ STATIC_URL }}img/teknik_direktor_2.png">{{ awayManager }}</p>
+    <p class="manager-name"><img class="manager-img" src="http://sentiotab.blob.core.windows.net/static/teknik_direktor_2.png">{{ homeManager }}</p>
+    <p class="manager-name"><img class="manager-img" id="right-img" src="http://sentiotab.blob.core.windows.net/static/teknik_direktor_2.png">{{ awayManager }}</p>
     <div id="homesquad">
         {% for player in homeSquad|dictsort:"playPosition"|dictsortreversed:"eleven" %}
             {% sl_before_playerlistitem player "home" votingActive %}

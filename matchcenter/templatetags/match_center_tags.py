@@ -27,14 +27,14 @@ def sl_before_playerlistitem(player, team, votingActive):
 @register.inclusion_tag('_vs_center_eventitem.html', takes_context=True)
 def sl_center_eventitem(context, event, homeid, awayid):
     img_lookup = lambda x: {
-        0: "images/goal.png",
-        1: "images/own-goal.png",
-        2: "images/penalty.png",
-        3: "images/missed-pen.png",
-        4: "images/yellow.png",
-        5: "images/second-yellow.png",
-        6: "images/red.png",
-        7: "images/substitution.png"
+        0: "goal.png",
+        1: "own-goal.png",
+        2: "penalty.png",
+        3: "missed-pen.png",
+        4: "yellow.png",
+        5: "second-yellow.png",
+        6: "red.png",
+        7: "substitution.png"
     }.get(x)
 
     ctx = {
@@ -49,14 +49,14 @@ def sl_center_eventitem(context, event, homeid, awayid):
 @register.inclusion_tag('_vs_radar_tabs_narration.html')
 def sl_center_narration(narrations):
     img_lookup = lambda x: {
-        0: "images/goal.png",
-        1: "images/own-goal.png",
-        2: "images/penalty.png",
-        3: "images/missed-pen.png",
-        4: "images/yellow.png",
-        5: "images/second-yellow.png",
-        6: "images/red.png",
-        7: "images/substitution.png"
+        0: "goal.png",
+        1: "own-goal.png",
+        2: "penalty.png",
+        3: "missed-pen.png",
+        4: "yellow.png",
+        5: "second-yellow.png",
+        6: "red.png",
+        7: "substitution.png"
     }.get(x)
 
     for narration in narrations:

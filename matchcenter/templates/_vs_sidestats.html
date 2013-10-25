@@ -38,7 +38,7 @@
     {% else %}
         {% for x in matchData|dictsortreversed:'totalDistance' %}
             {% if forloop.counter < 6 %}
-                <a href="">
+                <a>
                     <div class="teamColor">
                         {% if x.teamId == homeTeamId %}
                             <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
@@ -64,7 +64,7 @@
     {% else %}
         {% for x in matchData|dictsortreversed:'totalPass'|dictsort:'passRatio'|dictsortreversed:'successfulPass' %}
             {% if forloop.counter < 6 %}
-                <a href="">
+                <a>
                     <div class="teamColor">
                         {% if x.teamId == homeTeamId %}
                             <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
@@ -91,7 +91,7 @@
     {% else %}
         {% for x in matchData|dictsort:'shotRatio'|dictsortreversed:'totalShot'|dictsortreversed:'successfulShot' %}
             {% if forloop.counter < 6 %}
-                <a href="">
+                <a>
                     <div class="teamColor">
                         {% if x.teamId == homeTeamId %}
                             <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>

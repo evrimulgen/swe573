@@ -35,7 +35,7 @@ p{
 
 /* used for match scores, has an digital bilboard efect */
 p.score{
-    background-image: url("../images/score_board_bg.png");
+    background-image: url("http://sentiotab.blob.core.windows.net/static/score_board_bg.png");
     background-repeat: repeat;
 
     border: 1px solid #e0e0e0;
@@ -74,7 +74,7 @@ h1.main{
     height: 30px;
     overflow: hidden;
 
-    background-image: url("../images/header.png");
+    background-image: url("http://sentiotab.blob.core.windows.net/static/header.png");
     background-size: cover;
 
     -webkit-border-radius: 3px;
@@ -98,7 +98,7 @@ p.teamName{
     float: left;
     color: #2a2a28;
     text-align: center;
-    font-size: 24px;
+    font-size: 18px;
     line-height: 30px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -109,7 +109,7 @@ h1.sidebox{
     height: 30px;
     margin-bottom: 2px;
 
-    background-image: url("../images/header.png");
+    background-image: url("http://sentiotab.blob.core.windows.net/static/header.png");
     background-size: cover;
 
     -webkit-border-radius: 2px;
@@ -220,7 +220,7 @@ p.no-data{
 
 #global-header{
 
-    background-image: url("../images/header.png");
+    background-image: url("http://sentiotab.blob.core.windows.net/static/header.png");
     background-size: cover;
 
     width: 1000px;
@@ -251,7 +251,7 @@ p.no-data{
     margin-left: 30px;
     height: 50px;
     width: 180px;
-    background: url("../images/logo.png");
+    background: url("http://sentiotab.blob.core.windows.net/static/logo.png");
     float: left;
 }
 
@@ -438,7 +438,7 @@ p.no-data{
     margin-left: 2%;
     height: 40px;
     text-decoration: none;
-    background-image: url(../images/matchbg.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/matchbg.png);
     text-decoration: none;
     color: #000000;
     float: left;
@@ -450,7 +450,7 @@ p.no-data{
     margin-left: 2%;
     height: 40px;
     text-decoration: none;
-    background-image: url(../images/matchselected.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/matchselected.png);
     background-size: cover;
     text-decoration: none;
     color: #000000;
@@ -459,13 +459,13 @@ p.no-data{
 
 
 .match-selected:hover{
-    background-image: url(../images/matchselected.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/matchselected.png);
     background-size: cover;
     color: #000000;
 }
 
 .match:hover{
-    background-image: url(../images/matchover.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/matchover.png);
     background-size: cover;
     text-decoration: none;
     color: #000000;
@@ -592,7 +592,7 @@ p.no-data{
     margin-top: 2px;
     height: 20px;
     line-height: 20px;
-    background-image: url("../images/header.png");
+    background-image: url("http://sentiotab.blob.core.windows.net/static/header.png");
     background-size: cover;
     font-size: 14px;
     font-weight: bold;
@@ -622,13 +622,13 @@ p.no-data{
     height: 40px;
 
     text-decoration: none;
-    background: url(../images/matchbg.png) repeat-x;
+    background: url(http://sentiotab.blob.core.windows.net/static/matchbg.png) repeat-x;
     background-size: cover;
     color: #000000;
     float: left;
 }
 .sidebox a:hover{
-    background: url(../images/matchover.png);
+    background: url(http://sentiotab.blob.core.windows.net/static/matchover.png);
     background-size: cover;
 
     text-decoration: none;
@@ -803,31 +803,31 @@ p.no-data{
     width: 18px;
 }
 .sub-out{
-    background-image: url(../images/sub-out.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/sub-out.png);
 }
 .sub-in{
-    background-image: url(../images/sub-in.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/sub-in.png);
 }
 .goal{
-    background-image: url(../images/goal.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/goal.png);
 }
 .own-goal{
-    background-image: url(../images/own-goal.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/own-goal.png);
 }
 .penalty{
-    background-image: url(../images/penalty.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/penalty.png);
 }
 .missed-pen{
-    background-image: url(../images/missed-pen.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/missed-pen.png);
 }
 .yellow{
-    background-image: url(../images/yellow.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/yellow.png);
 }
 .second-yellow{
-    background-image: url(../images/second-yellow.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/second-yellow.png);
 }
 .red{
-    background-image: url(../images/red.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/red.png);
 }
 
 .history-area{
@@ -928,10 +928,9 @@ p.no-data{
     height: 60px;
 }
 .holder h3{
-    width: 62%;
-    text-align: left;
+    width: 100%;
+    text-align: center;
     margin: 0px;
-    margin-left: 1%;
     height: 30px;
     float: left;
     font-size: 14px;
@@ -1042,7 +1041,7 @@ p.no-data{
 
 .win{
     float: left;
-    background-image: url(../images/win.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/win.png);
     background-size: cover;
     height: 24px;
     width: 24px;
@@ -1052,7 +1051,7 @@ p.no-data{
 }
 .draw{
     float: left;
-    background-image: url(../images/draw.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/draw.png);
     background-size: cover;
     height: 24px;
     width: 24px;
@@ -1062,7 +1061,7 @@ p.no-data{
 }
 .lose{
     float: left;
-    background-image: url(../images/lose.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/lose.png);
     background-size: cover;
     height: 24px;
     width: 24px;
@@ -1181,7 +1180,7 @@ p.no-data{
 }
 
 .past-match #homescore, .past-match-not-clickable #homescore, .past-match #awayscore, .past-match-not-clickable #awayscore {
-    background-image: url("../images/score_board_bg.png");
+    background-image: url("http://sentiotab.blob.core.windows.net/static/score_board_bg.png");
     background-repeat: repeat;
 
     height:30px;
@@ -1269,7 +1268,7 @@ p.no-data{
     float: left;
     font-size: 22px;
     color: #ffffff;
-    background-image: url(../images/score_board_bg.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/score_board_bg.png);
     background-repeat: repeat;
     text-align: center;
 }
@@ -1438,7 +1437,7 @@ p.no-data{
     height: 30px;
     margin-bottom: 2px;
 
-    background-image: url("../images/header.png");
+    background-image: url("http://sentiotab.blob.core.windows.net/static/header.png");
     background-size: cover;
 
     -webkit-border-radius: 3px;
@@ -1464,7 +1463,7 @@ button.collapse{
     width: 100%;
     height: 25px;
     margin-top: 5px;
-    background-image: url(../images/collapse-bar.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/collapse-bar.png);
     background-size: cover;
     border: 1px solid #b1b1b1;
     -webkit-border-radius: 3px;
@@ -1472,7 +1471,7 @@ button.collapse{
     border-radius: 3px;
 }
 button.collapse:hover{
-    background-image: url(../images/collapse-bar-hover.png);
+    background-image: url(http://sentiotab.blob.core.windows.net/static/collapse-bar-hover.png);
     background-size: cover;
     border: 1px solid #b1b1b1;
 }
@@ -1713,7 +1712,7 @@ button.collapse:hover{
     text-decoration: underline;
 }
 .vote-button-selectable{
-    background: url(../images/vote.png);
+    background: url(http://sentiotab.blob.core.windows.net/static/vote.png);
     border: none;
     height: 30px;
     width: 30px;
@@ -1721,7 +1720,7 @@ button.collapse:hover{
 }
 
 .vote-button-selected, .vote-button-selectable:hover{
-    background: url(../images/vote-selected.png);
+    background: url(http://sentiotab.blob.core.windows.net/static/vote-selected.png);
     border: none;
     height: 30px;
     width: 30px;
@@ -1731,28 +1730,34 @@ button.collapse:hover{
 
 
 .tooltip-white{
-    background: url(../images/tool-tip-white.png);
-    height: 30px;
-    width: 30px;
-    float: left;
-    background-size: cover;
-}
-.tooltip-white:hover{
-    background: url(../images/tool-tip-white-hover.png);
-}
-
-.tooltip-red{
-    background: url(../images/tool-tip-red.png);
-    height: 20px;
-    width: 20px;
-    margin-top: 5px;
-    margin-left: 30%;
+    background: url(http://sentiotab.blob.core.windows.net/static/tool-tip-white.png);
+    height: 16px;
+    width: 16px;
+    margin-top: 7px;
+    margin-left: 5px;
     float: left;
     background-size: cover;
     cursor: pointer;
+    position: absolute;
+}
+.tooltip-white:hover{
+    background: url(http://sentiotab.blob.core.windows.net/static/tool-tip-white-hover.png);
+    background-size: cover;
+}
+
+.tooltip-red{
+    background: url(http://sentiotab.blob.core.windows.net/static/tool-tip-red.png);
+    height: 16px;
+    width: 16px;
+    margin-top: 7px;
+    margin-left: 5px;
+    float: left;
+    background-size: cover;
+    cursor: pointer;
+    position: absolute;
 }
 .tooltip-red:hover{
-    background: url(../images/tool-tip-red-hover.png);
+    background: url(http://sentiotab.blob.core.windows.net/static/tool-tip-red-hover.png);
     background-size: cover;
 }
 #canvas-play-button {
@@ -1814,7 +1819,7 @@ button.collapse:hover{
 
 #likeCanvas
 {
-    background-image: url('../images/radar.png');
+    background-image: url('http://sentiotab.blob.core.windows.net/static/radar.png');
     width: 662px;
     height:545px;
     margin-left: 50px;
@@ -1843,7 +1848,7 @@ button.collapse:hover{
 .homeTeamDiv{
 
 
-    background-image:url('../images/redBackground.png');
+    background-image:url('http://sentiotab.blob.core.windows.net/static/redBackground.png');
     background-repeat:repeat;
 
 
@@ -1852,7 +1857,7 @@ button.collapse:hover{
 .awayTeamDiv{
 
 
-    background-image:url('../images/blueBackground.png');
+    background-image:url('http://sentiotab.blob.core.windows.net/static/blueBackground.png');
     background-repeat:repeat;
 }
 
@@ -1990,7 +1995,8 @@ button.collapse:hover{
     float: left;
 }
 .team-name-area img{
-    margin-left: 5%;
+    margin-right: 2.5%;
+    margin-left: 2.5%;
     width: 10%;
     float: left;
 }
@@ -2012,11 +2018,11 @@ button.collapse:hover{
     height: 33px;
     border: none;
     float: left;
-    background: url(../images/button_open.png);
+    background: url(http://sentiotab.blob.core.windows.net/static/button_open.png);
     background-size: cover;
 }
 .open-button:hover{
-    background: url(../images/button_open_hover.png);
+    background: url(http://sentiotab.blob.core.windows.net/static/button_open_hover.png);
     background-size: cover;
 }
 .close-button{
@@ -2026,10 +2032,10 @@ button.collapse:hover{
     width: 33px;
     height: 33px;
     border: none;
-    background: url(../images/button-close.png);
+    background: url(http://sentiotab.blob.core.windows.net/static/button-close.png);
     background-size: cover;
 }
 .close-button:hover{
-    background: url(../images/button_close_hover.png);
+    background: url(http://sentiotab.blob.core.windows.net/static/button_close_hover.png);
     background-size: cover;
 }

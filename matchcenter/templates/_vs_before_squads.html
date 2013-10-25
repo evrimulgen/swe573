@@ -66,11 +66,11 @@
  <script>
     $(function() {
         $( document ).tooltip({
-            items: "[player-data]",
+            items: "[event-data]",
             content: function() {
                 var element = $( this );
-                if ( element.is( "[player-data]" ) ) {
-                    var text = element.attr("player-data");
+                if ( element.is( "[event-data]" ) ) {
+                    var text = element.attr("event-data");
                     var splitted=text.split(",");
                     var matchTime  = splitted[0];
                     var playerNameIn = splitted[1];

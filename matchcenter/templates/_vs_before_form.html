@@ -3,7 +3,7 @@
         <a href="../../{{ f.matchId }}" class="win" title="" id="{{ team }}{{ forloop.counter }}f" form-data="{{ f.weekId }},{{ f.homeTeam }},{{ f.homeScore }},{{ f.awayScore }},{{ f.awayTeam }}" ></a>
     {% endif %}
     {% if f.win == 0 %}
-        <a href="../../{{ f.matchId }}" class="draw" title="" id="{{ team }}{{ forloop.counter }}f" form-data="{{ f.weekId }},{{ f.homeTeam }},{{ f.homeScore }},{{ f.awayScore }},{{ f.awayTeam }}" ></a><
+        <a href="../../{{ f.matchId }}" class="draw" title="" id="{{ team }}{{ forloop.counter }}f" form-data="{{ f.weekId }},{{ f.homeTeam }},{{ f.homeScore }},{{ f.awayScore }},{{ f.awayTeam }}" ></a>
     {% endif %}
     {% if f.win == 2 %}
         <a href="../../{{ f.matchId }}" class="lose" title="" id="{{ team }}{{ forloop.counter }}f" form-data="{{ f.weekId }},{{ f.homeTeam }},{{ f.homeScore }},{{ f.awayScore }},{{ f.awayTeam }}" ></a>

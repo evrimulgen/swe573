@@ -62,3 +62,119 @@
         }
     }
 </script>
+
+ <script>
+        $(function() {
+            $( document ).tooltip({
+                items: "[player-data]",
+                content: function() {
+                    var element = $( this );
+                    if ( element.is( "[player-data]" ) ) {
+                        var text = element.attr("player-data");
+                        var splitted=text.split(",");
+                        var matchTime  = splitted[0];
+                        var playerNameIn = splitted[1];
+                        var playerName = splitted[2];
+                        var eventType =splitted[3];
+
+                        if(eventType == 7){
+                            return "<div class='ttip-formation'><p style='text-align:center'>Oyuncu Değişikliği - Dakika: " + matchTime + "</p><br><p style='text-align:center'><span style='color:#ca1111'>" + playerName + "</span> - <span style='color:#139d04'>" + playerNameIn + "</span></p></div>"
+                        }
+                        else if(eventType == 0){
+                            return "<div class='ttip-formation'><p style='text-align:center'>Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                        }
+                        else if(eventType == 1){
+                            return "<div class='ttip-formation'><p style='text-align:center'>Kendi Kalesine Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                        }
+                        else if(eventType == 2){
+                            return "<div class='ttip-formation'><p style='text-align:center'>Gol(Penaltı) - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                        }
+                        else if(eventType == 3){
+                            return "<div class='ttip-formation'><p style='text-align:center'>Kaçan Penaltı - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                        }
+                        else if(eventType == 4){
+                            return "<div class='ttip-formation'><p style='text-align:center'>Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                        }
+                        else if(eventType == 5){
+                            return "<div class='ttip-formation'><p style='text-align:center'>İkinci Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                        }
+                        else if(eventType == 6){
+                            return "<div class='ttip-formation'><p style='text-align:center'>Kırmızı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                        }
+                    }
+                },
+                show: {
+                    effect: "show",
+                    delay: 100
+                },
+                hide: {
+                    effect: "hide",
+                    delay: 100
+                },
+                position: {
+                    my: "center bottom",
+                    at: "center top"
+                },
+                close: function (event, ui) {
+                    $('div.ui-effects-wrapper').remove();
+                }
+            });
+        });
+
+    </script>
+
+<script>
+    $(function() {
+        $( document ).tooltip({
+            items: "[event-data]",
+            content: function(){
+                console.log($(this).attr("eventInfo"));
+                var splitted = $(this).attr("eventInfo").split(",");
+                var eventType = splitted[0];
+                var matchTime  = splitted[1];
+                var playerName = splitted[7];
+                var playerNameIn = splitted[8];
+                if(eventType == 7){
+                    return "<div style='color:black'><p style='text-align:center'>Oyuncu Değişikliği - Dakika: " + matchTime + "</p><br><p style='text-align:center'><span style='color:#ca1111'>" + playerName + "</span> - <span style='color:#139d04'>" + playerNameIn + "</span></p></div>"
+                }
+                else if(eventType == 0){
+                    return "<div style='color:black'><p style='text-align:center'>Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                }
+                else if(eventType == 1){
+                    return "<div style='color:black'><p style='text-align:center'>Kendi Kalesine Gol - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                }
+                else if(eventType == 2){
+                    return "<div style='color:black'><p style='text-align:center'>Gol(Penaltı) - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                }
+                else if(eventType == 3){
+                    return "<div style='color:black'><p style='text-align:center'>Kaçan Penaltı - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                }
+                else if(eventType == 4){
+                    return "<div style='color:black'><p style='text-align:center'>Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                }
+                else if(eventType == 5){
+                    return "<div style='color:black'><p style='text-align:center'>İkinci Sarı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                }
+                else if(eventType == 6){
+                    return "<div style='color:black'><p style='text-align:center'>Kırmızı Kart - Dakika: " + matchTime + "</p><br><p style='text-align:center'>" + playerName + "</p></div>"
+                }
+            },
+            show: {
+                effect: "show",
+                delay: 100
+            },
+            hide: {
+                effect: "hide",
+                delay: 100
+            },
+            position: {
+                my: "center bottom-20",
+                at: "center top"
+            },
+            close: function (event, ui) {
+                $('div.ui-effects-wrapper').remove();
+            }
+        });
+    }
+
+</script>

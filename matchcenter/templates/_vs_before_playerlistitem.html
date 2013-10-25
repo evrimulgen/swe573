@@ -15,89 +15,41 @@
     <p id="no" class="pos{{ player.playPosition }}">{{ player.jerseyNumber }}</p>
     <p id="name">{{ player.playerName }}</p>
     {% for event in player.playerEvents|dictsortreversed:"matchTime" %}
-        <div class="event">
+        <div class="event" >
             {% if event.eventType == 7 %}
                 {% if player.eleven == 0 %}
                     {% if event.playerId == player.playerId %}
-                        <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                        <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }} " player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
                     {% else %}
-                        <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                        <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}" player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
                     {% endif %}
                 {% else %}
-                    <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                    <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}" player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
                 {% endif %}
             {% endif %}
             {% if event.eventType == 0 %}
-                <a title="" class="goal" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                <a title=""  class="goal" id="{{ player.playerId }}-{{ forloop.counter }}" player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
             {% endif %}
             {% if event.eventType == 1 %}
-                <a title="" class="own-goal" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                <a title="" class="own-goal" id="{{ player.playerId }}-{{ forloop.counter }}" player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
             {% endif %}
             {% if event.eventType == 2 %}
-                <a title="" class="penalty" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                <a title="" class="penalty" id="{{ player.playerId }}-{{ forloop.counter }}" player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
             {% endif %}
             {% if event.eventType == 3 %}
-                <a title="" class="missed-pen" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                <a title="" class="missed-pen" id="{{ player.playerId }}-{{ forloop.counter }}" player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
             {% endif %}
             {% if event.eventType == 4 %}
-                <a title="" class="yellow" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                <a title="" class="yellow" id="{{ player.playerId }}-{{ forloop.counter }}" player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
             {% endif %}
             {% if event.eventType == 5 %}
-                <a title="" class="second-yellow" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                <a title="" class="second-yellow" id="{{ player.playerId }}-{{ forloop.counter }}" player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
             {% endif %}
             {% if event.eventType == 6 %}
-                <a title="" class="red" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                <a title="" class="red" id="{{ player.playerId }}-{{ forloop.counter }}" player-data="{{ event.matchTime}},{{ event.playerNameIn }},{{ event.playerName }},{{ event.eventType }}"></a>
             {% endif %}
         </div>
-        <script>
-            $(function() {
-                var divname = "#" +"{{ player.playerId }}-{{ forloop.counter }}";
-                $( divname ).tooltip({
-                    content: function(){
-                        {% if event.eventType == 7 %}
-                            return "<div style='color:black'><p style='text-align:center'>Oyuncu Değişikliği - Dakika: {{ event.matchTime }}'</p><br><p style='text-align:center'><span style='color:#ca1111'>{{ event.playerName }}</span> - <span style='color:#139d04'>{{ event.playerNameIn }}</span></p></div>"
-                        {% elif event.eventType == 0 %}
-                            return "<div style='color:black'><p style='text-align:center'>Gol - Dakika: {{ event.matchTime }}'</p><br><p style='text-align:center'>{{ player.playerName }}</p></div>"
-                        {% elif event.eventType == 1 %}
-                            return "<div style='color:black'><p style='text-align:center'>Kendi Kalesine Gol - Dakika: {{ event.matchTime }}'</p><br><p style='text-align:center'>{{ player.playerName }}</p></div>"
-                        {% elif event.eventType == 2 %}
-                            return "<div style='color:black'><p style='text-align:center'>Gol(Penaltı) - Dakika: {{ event.matchTime }}'</p><br><p style='text-align:center'>{{ player.playerName }}</p></div>"
-                        {% elif event.eventType == 3 %}
-                            return "<div style='color:black'><p style='text-align:center'>Kaçan Penaltı - Dakika: {{ event.matchTime }}'</p><br><p style='text-align:center'>{{ player.playerName }}</p></div>"
-                        {% elif event.eventType == 4 %}
-                            return "<div style='color:black'><p style='text-align:center'>Sarı Kart - Dakika: {{ event.matchTime }}'</p><br><p style='text-align:center'>{{ player.playerName }}</p></div>"
-                        {% elif event.eventType == 5 %}
-                            return "<div style='color:black'><p style='text-align:center'>İkinci Sarı Kart - Dakika: {{ event.matchTime }}'</p><br><p style='text-align:center'>{{ player.playerName }}</p></div>"
-                        {% elif event.eventType == 6 %}
-                            return "<div style='color:black'><p style='text-align:center'>Kırmızı Kart - Dakika: {{ event.matchTime }}'</p><br><p style='text-align:center'>{{ player.playerName }}</p></div>"
-                        {% endif %}
-                    },
-                    show: {
-                        effect: "show",
-                        delay: 100
-                    },
-                    hide: {
-                        effect: "hide",
-                        delay: 100
-                    },
-                    position: {
-                        my: "center bottom-20",
-                        at: "center top",
-                        using: function( position, feedback ) {
-                            $( this ).css( position );
-                            $( "<div>" )
-                                    .addClass( "arrow" )
-                                    .addClass( feedback.vertical )
-                                    .addClass( feedback.horizontal )
-                                    .appendTo( this );
-                        }
-                    },
-                    close: function (event, ui) {
-                        $('div.ui-effects-wrapper').remove();
-                    }
-                });
-            });
-        </script>
+
     {% endfor %}
 
 </div>
@@ -112,4 +64,6 @@
     </div>
 
 {% endif %}
+
+
 

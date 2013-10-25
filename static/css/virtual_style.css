@@ -333,15 +333,15 @@ p.no-data{
     height: 35px;
     width: 100%;
 
-    Margin-left:auto;
-    Margin-right:auto;
+    margin-left:auto;
+    margin-right:auto;
 }
 #navbar #nav{
     height: 100%;
     width: 100%;
 
-    Margin-left:auto;
-    Margin-right:auto;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 #navbar #nav > a, #navbar #nav > button{
@@ -1607,7 +1607,7 @@ button.collapse:hover{
 
     font-family: "Helvetica Neue", Helvetica, sans-serif;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 12px;
     text-shadow: none;
     text-align: center;
     text-spacing: space-adjacent;
@@ -1727,8 +1727,6 @@ button.collapse:hover{
     background-size: cover;
 }
 
-
-
 .tooltip-white{
     background: url(http://sentiotab.blob.core.windows.net/static/tool-tip-white.png);
     height: 16px;
@@ -1817,80 +1815,6 @@ button.collapse:hover{
     background-color: transparent;
 }
 
-#likeCanvas
-{
-    background-image: url('http://sentiotab.blob.core.windows.net/static/radar.png');
-    width: 662px;
-    height:545px;
-    margin-left: 50px;
-    position: absolute;
-}
-
-.eventImages
-{
-    max-height: 15px;
-    max-width: 15px;
-    min-width: 0;
-    min-height: 0;
-}
-
-.playerImage
-{
-    height: 35px;
-    width: auto;
-}
-
-.texts
-{
-
-}
-
-.homeTeamDiv{
-
-
-    background-image:url('http://sentiotab.blob.core.windows.net/static/redBackground.png');
-    background-repeat:repeat;
-
-
-}
-
-.awayTeamDiv{
-
-
-    background-image:url('http://sentiotab.blob.core.windows.net/static/blueBackground.png');
-    background-repeat:repeat;
-}
-
-.jerseyNumber
-{
-    text-align: center;
-    min-width: 30px;
-    font-weight: normal;
-
-}
-
-
-.formationTable td
-{
-    max-width: 45px;
-    max-height: 60px;
-    border:1px none red;
-    vertical-align: middle;
-    text-align: center;
-    margin: auto;
-    min-width: 15px;
-    min-height: 15px;
-}
-
-.formationTable
-{
-    border:1px none red;
-    margin-top: 20px;
-    margin-left: 72px;
-    padding-left: 0;
-    float: left;
-
-}
 .canvas-button{
     height: 30px;
     width: 80px;

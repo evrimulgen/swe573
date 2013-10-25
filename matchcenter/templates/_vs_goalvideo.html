@@ -1,47 +1,6 @@
 {% load static %}
 {% get_static_prefix as STATIC_URL %}
 
-<script>
-
-    $(document).ready(function(){
-        //Examples of how to assign the Colorbox event to elements
-        $(".group1").colorbox({rel:'group1'});
-        $(".group2").colorbox({rel:'group2', transition:"fade"});
-        $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
-        $(".group4").colorbox({rel:'group4', slideshow:true});
-        $(".ajax").colorbox();
-        $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
-        $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
-        $(".iframe").colorbox({iframe:true, width:"67%", height:"74%" });
-        $(".inline").colorbox({inline:true, width:"50%"});
-        $(".callbacks").colorbox({
-            onOpen:function(){ alert('onOpen: colorbox is about to open'); },
-            onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
-            onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
-            onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
-            onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
-        });
-
-        $(".iframe").colorbox({
-            onComplete:function(){
-                //$("#cboxLoadedContent").append("<div>here</div>");
-                //$("iframe").append("<div>here</div>");
-            }
-        });
-
-
-
-        $('.non-retina').colorbox({rel:'group5', transition:'none'});
-        $('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
-
-        //Example of preserving a JavaScript event for inline calls.
-        $("#click").click(function(){
-            $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
-            return false;
-        });
-    });
-
-</script>
 
 
 
@@ -51,16 +10,9 @@
         <p class="no-data"> Bu maçla ilgili videolar henüz hazır değildir.</p>
     {% else %}
         {% for x in goals %}
-
             <a id="video{{ forloop.counter}}" href="{{ x.goalLink }}" target="_blank" >
-                {% if forloop.counter == 1 %}
-
-
-
-                {% endif %}
-                {% if forloop.counter > 1 %}
+                {% if x.type == 1 %}
                     <div class="teamColor">
-
                         {% if x.teamId == homeTeamId %}
 
                             <div id="box" style="background-color: #{{ teamColors.homeFill }}"></div>
@@ -71,13 +23,11 @@
                             <div id="box" style="background-color: #{{ teamColors.awayStroke }}"></div>
                         {% endif %}
                     </div>
-                    <img src="{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg" onError="this.src='{{ STATIC_URL }}images/players/default.png';">
+                    <img src="http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png" onError="this.src='http://sentiotab.blob.core.windows.net/player/default.png';">
                 {% endif %}
-                {% if forloop.counter == 1 %}
-
+                {% if x.type == 0 %}
                     <img id="videopng" src="{{ STATIC_URL }}img/mac_ozeti_3.png" >
                     <p id="name">{{ x.text }}</p>
-
                 {% else %}
                     <p id="name">{{ x.playerName }}</p>
                 {% endif %}

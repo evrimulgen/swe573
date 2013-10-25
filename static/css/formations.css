@@ -316,49 +316,49 @@
     z-index: 3;
 }
 
-.away-team-formation li.LB {
+.away-team-formation li.RB {
     right: 135px;
     top: -24px;
     position: absolute;
     z-index: 1;
 }
 
-.away-team-formation li.CBL {
+.away-team-formation li.CBR {
     right: 88px;
     top: 18px;
     position: absolute;
     z-index: 2;
 }
 
-.away-team-formation li.CBR {
+.away-team-formation li.CBL {
     right: 55px;
     top: 78px;
     position: absolute;
     z-index: 4;
 }
 
-.away-team-formation li.RB{
+.away-team-formation li.LB{
     right: 50px;
     top: 144px;
     position: absolute;
     z-index: 5;
 }
 
-.away-team-formation li.DML {
+.away-team-formation li.DMR {
     right: 166.4px;
     top: 18px;
     position: absolute;
     z-index: 2;
 }
 
-.away-team-formation li.DMR {
+.away-team-formation li.DML {
     right: 136.8px;
     top: 78px;
     position: absolute;
     z-index: 4;
 }
 
-.away-team-formation li.AML {
+.away-team-formation li.AMR {
     right: 242px;
     top: -24px;
     position: absolute;
@@ -372,7 +372,7 @@
     z-index: 3;
 }
 
-.away-team-formation li.AMR {
+.away-team-formation li.AML {
     right: 208px;
     top: 144px;
     position: absolute;
@@ -393,14 +393,14 @@
     z-index: 3;
 }
 
-.away-team-formation li.MCR {
+.away-team-formation li.MCL {
     right: 164.8px;
     top: 78px;
     position: absolute;
     z-index: 4;
 }
 
-.away-team-formation li.MCL {
+.away-team-formation li.MCR {
     right: 184px;
     top: 18px;
     position: absolute;
@@ -414,14 +414,14 @@
     z-index: 3;
 }
 
-.away-team-formation li.FL {
+.away-team-formation li.FR {
     right: 283.2px;
     top: 18px;
     position: absolute;
     z-index: 2;
 }
 
-.away-team-formation li.FR {
+.away-team-formation li.FL {
     right: 278.4px;
     top: 78px;
     position: absolute;
@@ -442,14 +442,14 @@
     z-index: 3;
 }
 
-.away-team-formation li.ML {
+.away-team-formation li.MR {
     right: 224px;
     top: -25.5px;
     position: absolute;
     z-index: 1;
 }
 
-.away-team-formation li.MR {
+.away-team-formation li.ML {
     right: 178px;
     top: 141px;
     position: absolute;
@@ -457,31 +457,31 @@
 }
 
 .away-team-formation li.SSL {
-    right: 241.6px;
-    top: 9px;
-    position: absolute;
-    z-index: 2;
-}
-
-.away-team-formation li.SSR {
     right: 224px;
     top: 70.5px;
     position: absolute;
     z-index: 4;
 }
 
-.away-team-formation li.WL {
-    right: 256px;
-    top: -22.5px;
+.away-team-formation li.SSR {
+    right: 241.6px;
+    top: 9px;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
 }
 
-.away-team-formation li.WR {
+.away-team-formation li.WL {
     right: 232px;
     top: 145.5px;
     position: absolute;
     z-index: 5;
+}
+
+.away-team-formation li.WR {
+    right: 256px;
+    top: -22.5px;
+    position: absolute;
+    z-index: 1;
 }
 
 .away-team-formation li.DMC {
@@ -492,17 +492,17 @@
 }
 
 .away-team-formation li.WBL {
-    right: 180.8px;
-    top: -31.5px;
-    position: absolute;
-    z-index: 1;
-}
-
-.away-team-formation li.WBR {
     right: 71.2px;
     top: 129px;
     position: absolute;
     z-index: 5;
+}
+
+.away-team-formation li.WBR {
+    right: 180.8px;
+    top: -31.5px;
+    position: absolute;
+    z-index: 1;
 }
 
 .teamcolor-1{
@@ -643,17 +643,4 @@
     width: 10px;
     height: 12px;
     background-size: cover;
-}
-.ttip-formation{
-    height: 22px;
-    margin: 0;
-    padding: 0;
-}
-.ttip-formation p{
-    font-size: 10px;
-    line-height: 0;
-    height: 0;
-    margin: 0;
-    padding: 0;
-    color: black;
 }

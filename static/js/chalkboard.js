@@ -7,11 +7,11 @@ function Chalkboard(div_id, match_id){
     var divSelector = "#" + div_id;
 
     // scaling stuff
-    var pitchScale = 6;
-    var pitchOffset = 16;
+    var pitchScale = 4.8;
+    var pitchOffset = 12.8;
 
-    var canvasWidth = 105*pitchScale + 2*pitchOffset;
-    var canvasHeight = 68*pitchScale + 2*pitchOffset;
+    var canvasWidth = 68*pitchScale +2* pitchOffset;
+    var canvasHeight = 105*pitchScale +2*pitchOffset;
 
     // setting up the canvas and the loading animation
     // and setting up the slider for time range
@@ -71,7 +71,7 @@ function Chalkboard(div_id, match_id){
     // meter -> pixel conversion with offset (for points on screen)
     // change the scale and offset as needed
     var mt2px = function (mt) {
-        return mt * pitchScale + pitchOffset;
+        return mt *pitchScale + pitchOffset;
     };
 
     // meter -> pixel conversion without offset
@@ -86,7 +86,7 @@ function Chalkboard(div_id, match_id){
 
         var canvas = $(divSelector + " #bgCanvas");
 
-        var img = new paper.Raster("/static/images/pitch_radar.png", paper.view.center);
+        var img = new paper.Raster("/static/images/pitchradar2.png", paper.view.center);
 
         paper.view.draw();
     };
@@ -159,7 +159,7 @@ function Chalkboard(div_id, match_id){
 
         // convert the items coordinates from meters to pixels with correct order
         _.each(heatData, function (item) {
-            heatmap.store.addDataPoint(mt2px(item[0]), mt2px(item[1]), item[2]);
+            heatmap.store.addDataPoint(canvasWidth-mt2px(item[1]),mt2px(item[0]), item[2]);
         });
     };
 
@@ -191,8 +191,8 @@ function Chalkboard(div_id, match_id){
                [2, 49, 17, 2.76, 34.1, 6.7, 34.3, 1]
                [First/Second Half, Minute, Second, FromY, FromX, ToY, ToX, Successful] */
 
-            var to = new paper.Point(mt2px(pass[5]), mt2px(pass[6]));
-            var from = new paper.Point(mt2px(pass[3]), mt2px(pass[4]));
+            var to = new paper.Point(canvasWidth-mt2px(pass[6]), mt2px(pass[5]));
+            var from = new paper.Point(canvasWidth-mt2px(pass[4]), mt2px(pass[3]));
 
             drawArrow([from, to], pass[1]);
         });
@@ -253,7 +253,7 @@ function Chalkboard(div_id, match_id){
             pathToDraw.strokeColor = "white";
 
             var pts = _.map(path, function (pt) {
-                return new paper.Point(mt2px(pt[2]), mt2px(pt[3]));
+                return new paper.Point(canvasWidth-mt2px(pt[3]), mt2px(pt[2]));
             });
 
             drawArrow(pts);

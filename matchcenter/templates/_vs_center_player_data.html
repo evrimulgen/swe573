@@ -4,7 +4,6 @@
 <p class='teamName'> {{ matchInfo.homeTeam }}</p>
 <p class='teamName'> {{ matchInfo.awayTeam }}</p>
 
-
 <div class='player-data'>
     <p id='title'> İsabetli Pas / Toplam Pas </p>
 
@@ -18,9 +17,9 @@
                     {% endif %}
                     {% if x.totalPass > 0 %}
                         <div style='height: 40px'>
-                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
-                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'/>
+                            <a>
+                                <img src='http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png'
+                                     onError='this.src="http://sentiotab.blob.core.windows.net/player/default.png";'/>
 
                                 <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
@@ -43,9 +42,9 @@
                     {% endif %}
                     {% if x.totalPass > 0 %}
                         <div style='height: 40px'>
-                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
-                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
+                            <a>
+                                <img src='http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png'
+                                     onError='this.src="http://sentiotab.blob.core.windows.net/player/default.png";'>
 
                                 <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
@@ -78,9 +77,9 @@
                     {% endif %}
                     {% if x.totalDistance > 0 %}
                         <div style='height: 40px'>
-                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
-                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
+                            <a>
+                                <img src='http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png'
+                                     onError='this.src="http://sentiotab.blob.core.windows.net/player/default.png";'>
 
                                 <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
@@ -100,9 +99,9 @@
                     {% endif %}
                     {% if x.totalDistance > 0 %}
                         <div style='height: 40px'>
-                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
-                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
+                            <a>
+                                <img src='http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png'
+                                     onError='this.src="http://sentiotab.blob.core.windows.net/player/default.png";'>
 
                                 <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
@@ -128,9 +127,9 @@
                     {% endif %}
                     {% if x.totalDistance > 0 %}
                         <div style='height: 40px'>
-                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
-                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
+                            <a>
+                                <img src='http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png'
+                                     onError='this.src="http://sentiotab.blob.core.windows.net/player/default.png";'>
 
                                 <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 
@@ -152,9 +151,9 @@
                     {% endif %}
                     {% if x.totalDistance > 0 %}
                         <div style='height: 40px'>
-                            <a href='../../player/{{ x.teamId }}/{{ x.playerId }}' target='_blank'>
-                                <img src='{{ STATIC_URL }}images/players/{{ x.playerId }}.jpg'
-                                     onError='this.src="{{ STATIC_URL }}images/players/default.png";'>
+                            <a>
+                                <img src='http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png'
+                                     onError='this.src="http://sentiotab.blob.core.windows.net/player/default.png";'>
 
                                 <p id='name'>{{ x.jerseyNumber }} - {{ x.playerName }}</p>
 

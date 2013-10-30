@@ -15,11 +15,14 @@
     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/formations.css" />
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="{{ STATIC_URL }}js/simpled3.js"></script>
+    <script>setSquad({{ matchSquad|jsonify }});</script>
 
     <script type="text/javascript">
 
         $( document ).ready(function() {
             //console.log( "ready!" );
+            var url = '/new/partial/' + valueMap[1] + "/{{ selectedMatch }}/";
+            $("#data-area").load(url);
             $("#radarContainer").hide();
             toggleCanvas = function(elem){
                 var elemValue = elem.value;
@@ -76,7 +79,7 @@
                         "width": $("#data-area").width()
                     };
                     $("#data-area").empty();
-                    $("#data-area").append("<div class='team-name-area'><img src='{{ STATIC_URL }}images/logo{{ matchInfo.homeTeamId }}.png'><p>{{ matchInfo.homeTeam }}</p><p>{{ matchInfo.awayTeam }}</p><img src='{{ STATIC_URL }}images/logo{{ matchInfo.awayTeamId }}.png'></div>");
+                    $("#data-area").append("<div class='team-name-area'><img src='http://sentiotab.blob.core.windows.net/team/logo{{ matchInfo.homeTeamId }}_90.png'><p>{{ matchInfo.homeTeam }}</p><p>{{ matchInfo.awayTeam }}</p><img src='http://sentiotab.blob.core.windows.net/team/logo{{ matchInfo.awayTeamId }}_90.png'></div>");
                     simpleBar("#data-area", d.teamStats, pref);
                 }
             });
@@ -121,7 +124,6 @@
                     });
                 }
         );
-
     </script>
 
 {% endblock %}
@@ -140,6 +142,7 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="row">
         <div class="slider-holder">
             <canvas id="slider"></canvas>
@@ -152,8 +155,10 @@
             <span id="timeDisplay" class="pull-right"></span></p>
             <div id="canvasContainer" style="position: relative;">
                 <div id="canvasOverlay">
-                    <!--<p class="canvas-message"></p>-->
                     <p id="canvas-play-button"><i class="icon-white icon-play"></i></p>
+                </div>
+                <div id="canvas-message-overlay" display="none">
+                    <p id="canvas-message">None</p>
                 </div>
             </div>
         </div>
@@ -169,20 +174,20 @@
                                     {% if event.eventType == 7 %}
                                         {% if player.eleven == 0 %}
                                             {% if event.playerId == player.playerId %}
-                                                <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                                <a class="sub-out"></a>
                                             {% else %}
-                                                <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                                <a class="sub-in"></a>
                                             {% endif %}
                                         {% else %}
-                                            <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            <a class="sub-out"></a>
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             </div>
                             {% if player.playerPosition == "GK" %}
-                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('http://sentiotab.blob.core.windows.net/team/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('http://sentiotab.blob.core.windows.net/team/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
                         </li>
                     {% endif %}
@@ -198,20 +203,20 @@
                                     {% if event.eventType == 7 %}
                                         {% if player.eleven == 0 %}
                                             {% if event.playerId == player.playerId %}
-                                                <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                                <a class="sub-out"></a>
                                             {% else %}
-                                                <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                                <a class="sub-in"></a>
                                             {% endif %}
                                         {% else %}
-                                            <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            <a class="sub-out"></a>
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             </div>
                             {% if player.playerPosition == "GK" %}
-                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('http://sentiotab.blob.core.windows.net/team/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('http://sentiotab.blob.core.windows.net/team/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
                         </li>
                     {% endif %}
@@ -227,20 +232,20 @@
                                     {% if event.eventType == 7 %}
                                         {% if player.eleven == 0 %}
                                             {% if event.playerId == player.playerId %}
-                                                <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                                <a class="sub-out"></a>
                                             {% else %}
-                                                <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                                <a class="sub-in"></a>
                                             {% endif %}
                                         {% else %}
-                                            <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            <a class="sub-out"></a>
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             </div>
                             {% if player.playPosition == 1 %}
-                                <span style="background: url('{{ STATIC_URL }}images/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('http://sentiotab.blob.core.windows.net/team/home_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.homeTeamId }}" style="background: url('http://sentiotab.blob.core.windows.net/team/jersey{{ matchInfo.homeTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},0,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
 
                             <p>{{ player.playerNameShort }}</p>
@@ -257,20 +262,20 @@
                                     {% if event.eventType == 7 %}
                                         {% if player.eleven == 0 %}
                                             {% if event.playerId == player.playerId %}
-                                                <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                                <a class="sub-out"></a>
                                             {% else %}
-                                                <a title="" class="sub-in" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                                <a class="sub-in"></a>
                                             {% endif %}
                                         {% else %}
-                                            <a title="" class="sub-out" id="{{ player.playerId }}-{{ forloop.counter }}"></a>
+                                            <a class="sub-out"></a>
                                         {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             </div>
                             {% if player.playPosition == 1 %}
-                                <span style="background: url('{{ STATIC_URL }}images/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span style="background: url('http://sentiotab.blob.core.windows.net/team/away_gk_jersey.png'); color: #ffffff" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% else %}
-                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('{{ STATIC_URL }}images/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
+                                <span class="teamcolor-{{ matchInfo.awayTeamId }}" style="background: url('http://sentiotab.blob.core.windows.net/team/jersey{{ matchInfo.awayTeamId }}.png')" onclick="changePlayerCard({{ currentWeek }},1,{{ player.playerId }},{{ player.jerseyNumber }})" player-data="{{ player.playerId }}">{{ player.jerseyNumber }}</span>
                             {% endif %}
                             <p>{{ player.playerNameShort }}</p>
                         </li>
@@ -282,11 +287,11 @@
 
     <div class="row" id="playerCardsContainer" style="margin-bottom: 10px">
         <div class="span4 card-container" id="leftPlayerCard">
-            <img src="{{ STATIC_URL }}images/card-hole.png">
+            <img src="http://sentiotab.blob.core.windows.net/static/card-hole.png">
             <div class="card-inside">
 
                 <div class="card-header row-fluid">
-                    <img class="playerImage" src="{{STATIC_URL}}images/players/default.png">
+                    <img class="playerImage" src="http://sentiotab.blob.core.windows.net/player/default.png">
                     <div class="playerInfo">
                         <p class="playerName">Oyuncu Karti</p>
                     </div>
@@ -304,10 +309,10 @@
         </div>
 
         <div class="span4 card-container" id="rightPlayerCard">
-            <img src="{{ STATIC_URL }}images/card-hole.png">
+            <img src="http://sentiotab.blob.core.windows.net/static/card-hole.png">
             <div class="card-inside">
                 <div class="card-header row-fluid">
-                    <img class="playerImage" src="{{STATIC_URL}}images/players/default.png">
+                    <img class="playerImage" src="http://sentiotab.blob.core.windows.net/player/default.png">
                     <div class="playerInfo">
                         <p class="playerName">Oyuncu Karti</p>
                     </div>
@@ -335,205 +340,6 @@
     <div class="data-area" id="data-area">
 
     </div>
-
-    <script>
-        var squad = jQuery.parseJSON('{{ matchSquad|jsonify }}');
-        $(function() {
-            $( document ).tooltip({
-                items: "[player-data]",
-                content: function() {
-                    var element = $( this );
-                    if ( element.is( "[player-data]" ) ) {
-                        var text = element.attr("player-data");
-                        for(var i=0;i<squad.length;i++){
-                            var returnVal = "";
-                            if(parseInt(squad[i]["playerId"]) == parseInt(text)){
-                                var events = squad[i]["playerEvents"];
-                                console.log(events);
-                                if(events.length == 0){
-                                    return
-                                }
-                                for(var j=0; j<events.length; j++){
-                                    var eventType = events[j]["eventType"];
-                                    var matchTime  = events[j]["matchTime"];
-                                    var playerName = events[j]["playerName"];
-                                    var playerNameIn = events[j]["playerNameIn"];
-                                    if(eventType == 7){;
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' <span style='color:#ca1111'>" + playerName + "</span> - <span style='color:#139d04'>" + playerNameIn + "</span></p></div>"
-                                    }
-                                    else if(eventType == 0){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Gol</p></div>"
-                                    }
-                                    else if(eventType == 1){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Kendi Kalesine Gol</p></div>"
-                                    }
-                                    else if(eventType == 2){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Gol(Penaltı)</p> </div>"
-                                    }
-                                    else if(eventType == 3){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Kaçan Penaltı</p> </div>"
-                                    }
-                                    else if(eventType == 4){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Sarı Kart</p> </div>"
-                                    }
-                                    else if(eventType == 5){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' İkinci Sarı Kart</p> </div>"
-                                    }
-                                    else if(eventType == 6){
-                                        returnVal += "<div class='ttip-formation'><p style='text-align:center'>" + matchTime + "' Kırmızı Kart</p> </div>"
-                                    }
-                                }
-                                return returnVal;
-                            }
-                        }
-                    }
-                },
-                show: {
-                    effect: "show",
-                    delay: 100
-                },
-                hide: {
-                    effect: "hide",
-                    delay: 100
-                },
-                position: {
-                    my: "center bottom",
-                    at: "center top"
-                },
-                close: function (event, ui) {
-                    $('div.ui-effects-wrapper').remove();
-                }
-            });
-        });
-        var url = '/new/partial/' + valueMap[1] + "/{{ selectedMatch }}/";
-        $("#data-area").load(url);
-
-    </script>
-    <script>
-        changePlayerCard =  function(weekid,homeOrAway,playerid,jerseyno){
-            $.post("/api/GetPlayerCard", JSON.stringify({leagueId: 1, seasonId: 9064, weekId: weekid, playerId: playerid})).done(function(data){
-                var info = data.data;
-                var $card = (homeOrAway==0) ? $("#leftPlayerCard") : $("#rightPlayerCard");
-
-                var imageTag = "<img class='teamLogo' src='/static/images/logo"+info.teamId+".png' />";
-                $card.find(".playerName").html(imageTag + info.playerName + " (#"+jerseyno+")");
-                $card.find(".playerImage").attr("src", "/static/images/players/"+playerid+".jpg");
-
-                var $table = $card.find(".card-table");
-                $table.empty();
-                $table.append("<tr><th>İstatistik</th><th>Sezon Ortalaması</th><th>Bu Hafta</th></tr>");
-
-                var statNames = {"passes": "Toplam Pas",
-                    "shotsOnTarget": "İsabetli",
-                    "crosses": "Toplam Orta",
-                    "foulsSuffered": "Maruz Kalınan Faul",
-                    "totalDistance": "Kat Edilen Mesafe",
-                    "yellowCard": "Sarı Kart",
-                    "corners": "Korner",
-                    "redCard": "Kırmızı Kart",
-                    "successfulCross": "İsabetli",
-                    "penalty": "Penaltı",
-                    "assists": "Asist",
-                    "goals": "Gol",
-                    "shots": "Toplam Şut",
-                    "foulsCommitted": "Yapılan Faul",
-                    "matchesPlayed": "Oynadığı Maç Sayısı",
-                    "successfulPass": "İsabetli",
-                    "goalsConceded": "Yediği Gol",
-                    "offside": "Ofsayt"}
-
-
-                /*kaleci mi, oyuncu mu ayrımı
-                 * serviste goals hiç tanımlanmamışsa kalecidir*/
-
-                if(typeof info.statistics.goals === "undefined"){
-                    var goalkeeperStatistics = new Object();
-                    goalkeeperStatistics.matchesPlayed = info.statistics.matchesPlayed;
-                    goalkeeperStatistics.goalsConceded = info.statistics.goalsConceded;
-                    goalkeeperStatistics.successfulPass = info.statistics.successfulPass;
-                    goalkeeperStatistics.passes = info.statistics.passes;
-                    goalkeeperStatistics.yellowCard = info.statistics.yellowCard;
-                    goalkeeperStatistics.redCard = info.statistics.redCard;
-
-                    var flag = 0;
-                    var statNameHolder;
-                    var val0Holder;
-                    var var1Holder;
-
-                    _.each(goalkeeperStatistics, function(value, key){
-
-                        var statName = statNames[key];
-                        var val0 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
-                        var val1 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
-                        if(statName!=null){
-                            if(flag == 1){
-                                $table.append("<tr><td>"+statNameHolder+" / "+statName+"</td><td>"+val0Holder+" / "+val0+"</td><td>"+var1Holder+" / "+val1+"</td></tr>");
-                                flag = 0;
-                            }
-                            else if(statName === "İsabetli"){
-                                statNameHolder = statName;
-                                val0Holder = val0;
-                                var1Holder = val1;
-                                flag = 1;
-                            }
-                            else{
-                                $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
-                            }
-                        }
-
-                    });
-                }
-                else{
-
-                    var playerStatistics = new Object();
-                    playerStatistics.matchesPlayed = info.statistics.matchesPlayed;
-                    playerStatistics.goals = info.statistics.goals;
-                    playerStatistics.assists = info.statistics.assists;
-                    playerStatistics.successfulPass = info.statistics.successfulPass;
-                    playerStatistics.passes = info.statistics.passes;
-                    playerStatistics.shotsOnTarget = info.statistics.shotsOnTarget;
-                    playerStatistics.shots = info.statistics.shots;
-                    playerStatistics.successfulCross = info.statistics.successfulCross;
-                    playerStatistics.crosses = info.statistics.crosses;
-                    playerStatistics.totalDistance = info.statistics.totalDistance;
-                    playerStatistics.offside = [0,0];
-                    playerStatistics.foulsSuffered = info.statistics.foulsSuffered;
-                    playerStatistics.foulsCommitted = info.statistics.foulsCommitted;
-                    playerStatistics.yellowCard = info.statistics.yellowCard;
-                    playerStatistics.redCard = info.statistics.redCard;
-
-                    var flag = 0;
-                    var statNameHolder;
-                    var val0Holder;
-                    var var1Holder;
-
-                    _.each(playerStatistics, function(value, key){
-
-                        var statName = statNames[key];
-                        var val0 = (value[1]%1==0) ? value[1] : value[1].toFixed(2);
-                        var val1 = (value[0]%1==0) ? value[0] : value[0].toFixed(2);
-                        if(statName!=null){
-                            if(flag == 1){
-                                $table.append("<tr><td>"+statNameHolder+" / "+statName+"</td><td>"+val0Holder+" / "+val0+"</td><td>"+var1Holder+" / "+val1+"</td></tr>");
-                                flag = 0;
-                            }
-                            else if(statName === "İsabetli"){
-                                statNameHolder = statName;
-                                val0Holder = val0;
-                                var1Holder = val1;
-                                flag = 1;
-                            }
-                            else{
-                                $table.append("<tr><td>"+statName+"</td><td>"+val0+"</td><td>"+val1+"</td></tr>");
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
-    </script>
-
 {% endblock %}
 
 

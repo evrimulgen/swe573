@@ -1,47 +1,6 @@
 {% extends "vs_base.html" %}
 
 {% block head-addition %}
-    <script>
-
-        $(document).ready(function(){
-            //Examples of how to assign the Colorbox event to elements
-            $(".group1").colorbox({rel:'group1'});
-            $(".group2").colorbox({rel:'group2', transition:"fade"});
-            $(".group3").colorbox({rel:'group3', transition:"none", width:"75%", height:"75%"});
-            $(".group4").colorbox({rel:'group4', slideshow:true});
-            $(".ajax").colorbox();
-            $(".youtube").colorbox({iframe:true, innerWidth:640, innerHeight:390});
-            $(".vimeo").colorbox({iframe:true, innerWidth:500, innerHeight:409});
-            $(".iframe").colorbox({iframe:true, width:"67%", height:"74%" });
-            $(".inline").colorbox({inline:true, width:"50%"});
-            $(".callbacks").colorbox({
-                onOpen:function(){ alert('onOpen: colorbox is about to open'); },
-                onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
-                onComplete:function(){ alert('onComplete: colorbox has displayed the loaded content'); },
-                onCleanup:function(){ alert('onCleanup: colorbox has begun the close process'); },
-                onClosed:function(){ alert('onClosed: colorbox has completely closed'); }
-            });
-
-            $(".iframe").colorbox({
-                onComplete:function(){
-                    //$("#cboxLoadedContent").append("<div>here</div>");
-                    //$("iframe").append("<div>here</div>");
-                }
-            });
-
-
-
-            $('.non-retina').colorbox({rel:'group5', transition:'none'});
-            $('.retina').colorbox({rel:'group5', transition:'none', retinaImage:true, retinaUrl:true});
-
-            //Example of preserving a JavaScript event for inline calls.
-            $("#click").click(function(){
-                $('#click').css({"background-color":"#f00", "color":"#fff", "cursor":"inherit"}).text("Open this window again and this message will still be here.");
-                return false;
-            });
-        });
-
-    </script>
 {% endblock %}
 {% block menu %}
     <div id="navbar">
@@ -57,37 +16,37 @@
 
 {% block content %}
     <div class="info-area">
-        <h1 class="main">Maç Bilgisi</h1>
+        <h1 class="main">Maç Bilgisi<span class="tooltip-white"></span></h1>
         <div id="home">
             <h2>{{ matchInfo.homeTeam }}</h2>
-            <img src="{{ STATIC_URL }}images/logo{{ matchInfo.homeTeamId }}.png">
+            <img src="http://sentiotab.blob.core.windows.net/team/logo{{ matchInfo.homeTeamId }}_90.png">
         </div>
 
         <div id="matchinfo" data-bind="foreach: matchInfo">
-            <img src="{{ STATIC_URL }}images/saat.png"><p data-bind="text: date + ', ' + time"></p>
-            <img src="{{ STATIC_URL }}images/saha2.png"><p data-bind="text: stadium"></p>
-            <img src="{{ STATIC_URL }}images/duduk.png"><p data-bind="text: referee"></p>
+            <img src="http://sentiotab.blob.core.windows.net/static/saat.png"><p data-bind="text: date + ', ' + time"></p>
+            <img src="http://sentiotab.blob.core.windows.net/static/saha2.png"><p data-bind="text: stadium"></p>
+            <img src="http://sentiotab.blob.core.windows.net/static/duduk.png"><p data-bind="text: referee"></p>
         </div>
         <div id="away">
             <h2>{{ matchInfo.awayTeam }}</h2>
-            <img src="{{ STATIC_URL }}images/logo{{ matchInfo.awayTeamId }}.png">
+            <img src="http://sentiotab.blob.core.windows.net/team/logo{{ matchInfo.awayTeamId }}.png">
         </div>
     </div>
     <div class="history-area">
         <div id="comparison">
             <div class="holder">
-                <div class="tooltip-red"></div><h3>Geçmiş Maçlar</h3>
+                <h3>Geçmiş Maçlar<span class="tooltip-red"></span></h3>
                 <p class="home-ratio" style="width:{{ history.homeWinRatio }}%">{{ history.homeWins }}</p>
                 <p class="draw-ratio" style="width:{{ history.drawRatio }}%">{{ history.draws}}</p>
                 <p class="away-ratio" style="width:{{ history.awayWinRatio }}%">{{ history.awayWins }}</p>
             </div>
             <div class="holder">
-                <div class="tooltip-red"></div><h3>Karşılıklı Goller</h3>
+                <h3>Karşılıklı Goller<span class="tooltip-red"></span></h3>
                 <p class="home-ratio" style="width:{{ history.homeGoalRatio }}%">{{ history.homeGoals }}</p>
                 <p class="away-ratio" style="width:{{ history.awayGoalRatio }}%">{{ history.awayGoals }}</p>
             </div>
             <div class="holder">
-                <div class="tooltip-red"></div><h3>Son 5 Maç</h3>
+                <h3>Son 5 Maç<span class="tooltip-red"></span></h3>
                 <div style="width: 50%;float: left;margin-top: 0px">
                     <div class="form">
                         {% include '_vs_before_form.html' with form=homeForm team=1 currentWeek=currentWeek only %}
@@ -105,7 +64,7 @@
         {% include '_vs_before_squads.html' with awaySquad=awaySquad homeSquad=homeSquad %}
     </div>
 
-    <h1 class="main">Geçmiş Karşılaşmalar</h1>
+    <h1 class="main">Geçmiş Karşılaşmalar<span class="tooltip-white"></span></h1>
     <div class="past-match-area">
         {% for match in history.pastMatches %}
             {% if  match.link %}
@@ -116,28 +75,28 @@
         <div id="upper">
             <div class=upper-info>
                 {% if match.stadium %}
-                    <img src="{{ STATIC_URL }}images/saha2.png">
+                    <img src="http://sentiotab.blob.core.windows.net/static/saha2.png">
                     <p> {{ match.stadium }}</p>
                 {% endif %}
             </div>
             <div class="upper-info">
-                <img src="{{ STATIC_URL }}images/saat.png">
+                <img src="http://sentiotab.blob.core.windows.net/static/saat.png">
                 <p>{{ match.date }}</p>
             </div>
             <div class="upper-info">
                 {% if match.referee %}
-                    <img src="{{ STATIC_URL }}images/duduk.png">
+                    <img src="http://sentiotab.blob.core.windows.net/static/duduk.png">
                     <p> {{ match.referee }}</p>
                 {% endif %}
             </div>
         </div>
-        <img src="{{ STATIC_URL }}images/logo{{ match.homeTeamId }}.png" id="homelogo">
+        <img src="http://sentiotab.blob.core.windows.net/team/logo{{ match.homeTeamId }}_30.png" id="homelogo">
         <p id="homename">{{ match.homeTeam }}</p>
         <p id="homescore">{{ match.homeScore }}</p>
         <p id="separator">-</p>
         <p id="awayscore">{{ match.awayScore }}</p>
         <p id="awayname">{{ match.awayTeam }}</p>
-        <img src="{{ STATIC_URL }}images/logo{{ match.awayTeamId }}.png" id="awaylogo">
+        <img src="http://sentiotab.blob.core.windows.net/team/logo{{ match.awayTeamId }}_30.png" id="awaylogo">
         </a>
         {% endfor %}
     </div>

@@ -45,7 +45,6 @@ function FootballPitch(div_id, scope){
         return mt * pitchScale;
     }
 
-    // draws the football field
     var drawField = function () {
         var canvas = $(divSelector + " #bgCanvas");
 
@@ -81,7 +80,9 @@ function Radar(matchId){
     var modifyPlayerLocation = function(team_id, jersey_no, xpos, ypos){
         // create the players representation in the first frame
         paper = scope;
-        if(teams[team_id]===undefined) teams[team_id] = {};
+        if(teams[team_id]===undefined)
+            teams[team_id] = {};
+
         if(teams[team_id][jersey_no]===undefined){
             var fillColor;
             var strokeColor;
@@ -184,7 +185,10 @@ function Radar(matchId){
     var currTime = -1;
 
     var processEvent = function processEvent(){
+        events.shift();
+
         var data = events.shift();
+
         currTime = data.gametime;
 
         modifyPlayerLocations(data.coor);
@@ -243,9 +247,9 @@ function Radar(matchId){
         matchSquad = data.data;
     });
 
-    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
-//    var socket = io.connect('http://localhost:8080/');
-
+//    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
+    var socket = io.connect('http://localhost:8080/');
+    var self = this;
     socket.on("welcome", function(){
         connected = true;
         $("#canvasOverlay").show();
@@ -260,13 +264,14 @@ function Radar(matchId){
 
     socket.on("match", function(data){
         events.push(data);
-        if(events.length===1){
+        if(events.length===10){
             processEvent();
         }
     });
 
+
     socket.on("disconnect", function(){
-        // TODO: error message on page instead of console.log
+
         console.log("disconnected");
         connected = false;
     });
@@ -276,7 +281,7 @@ function Radar(matchId){
         //               3 => Second half is being played
         //               6 => Played
         if(!connected){
-            // TODO: error message
+            self.throw("Sunucuyla bağlantı kesildi!");
             return;
         }
         if(!started){
@@ -287,7 +292,7 @@ function Radar(matchId){
             } else if(matchInfo.status === 6){
                 socket.emit('getmatch', matchId);
             } else {
-                // TODO: error message or something
+                self.throw("Beklenmeyen bir hata oluştu!");
             }
         }
     };
@@ -308,5 +313,9 @@ function Radar(matchId){
             paused = true;
             socket.emit('pause');
         }
+    }
+
+    this.throw = function(message){
+        $.event.trigger({type: "radarMessage", "message": message});
     }
 }

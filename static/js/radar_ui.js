@@ -27,8 +27,6 @@ $(function(){
         if(!started){
             radar.startMatch();
             $("#canvas-play-button").hide();
-//            $("#pauseMatch i").removeClass("icon-play");
-//            $("#pauseMatch i").addClass("icon-pause");
             started = true;
         } else {
 //            radar.togglePause();
@@ -44,12 +42,11 @@ $(function(){
         }
     });
 
-
-    var popCanvasMessage = function(data){
-        $(".canvas-message").text(data);
-        $("#canvasOverlay").show()
-                           .fadeOut(3000);
-    };
+    $(document).on("radarMessage", function(event){
+        $("#canvas-message").text(event.message);
+        $("#canvas-message-overlay").show()
+            .fadeOut(3000);
+    });
 
     $(document).on("radarPlayerClick", function(event){
         $.post("/api/GetPlayerCard", JSON.stringify({leagueId: 1, seasonId: 9064, weekId: event.week, playerId: event.player_id})).done(function(data){

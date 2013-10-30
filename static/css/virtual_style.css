@@ -1690,6 +1690,17 @@ button.collapse:hover{
     padding: 50px;
     display: none;
 }
+
+#canvas-message-overlay {
+    position: absolute;
+    z-index: 1;
+    margin: 80px 0 0 130px;
+    width: 300px;
+    height: 50px;
+    text-align: center;
+    padding: 50px;
+    display: none;
+}
 .manager-name{
     width: 45%;
     margin-left: 9%;
@@ -1777,6 +1788,8 @@ button.collapse:hover{
     background-color: black;
     color:white;
     opacity: 0.5;
+    padding: 5px;
+    font-size: 11px;
 }
 
 #canvas-play-button i {

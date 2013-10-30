@@ -242,7 +242,6 @@ function Radar(matchId){
     $.post("/api/GetMatchSquad", JSON.stringify({"matchId": window.matchId})).done(function(data){
         matchSquad = data.data;
     });
-
     var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
 //    var socket = io.connect('http://localhost:8080/');
 

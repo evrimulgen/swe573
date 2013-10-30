@@ -80,7 +80,7 @@ function Timeline(options){
 
         var sliderbg = new scope.Path.Rectangle(0, height, width, height+20);
         sliderbg.fillColor = "#ffffff";
-        var slider = new scope.Raster("/static/images/timebar.png", [width/2,height+10]);
+        var slider = new scope.Raster("http://sentiotab.blob.core.windows.net/static/timebar.png", [width/2,height+10]);
 
         handleBarLeft = new scope.Path.Line(new scope.Point(timeToPixel(0,0), height), new scope.Point(timeToPixel(0,0), 0));
         handleBarLeft.strokeColor = new scope.Color(0,0,0,0);
@@ -121,10 +121,10 @@ function Timeline(options){
             line2.strokeWidth = 1;
         }
         if(sliderCount > 0){
-            leftHandle = new scope.Raster("/static/images/slide-button.png", [timeToPixel(0,0),height+10]);
+            leftHandle = new scope.Raster("http://sentiotab.blob.core.windows.net/static/slide-button.png", [timeToPixel(0,0),height+10]);
         }
         if(sliderCount > 1){
-            rightHandle = new scope.Raster("/static/images/slide-button.png", [width-10,height+10]);
+            rightHandle = new scope.Raster("http://sentiotab.blob.core.windows.net/static/slide-button.png", [width-10,height+10]);
 
             handleBarLeft = new scope.Path.Line(new scope.Point(timeToPixel(0,0), height), new scope.Point(timeToPixel(0,0), 0));
             handleBarLeft.strokeColor = "#5887ff";
@@ -174,19 +174,15 @@ function Timeline(options){
 
     var drawTeamLogos = function(home, away){
         paper = scope;
-        var homeRaster = new scope.Raster("/static/images/logo"+home+".png");
-        var awayRaster = new scope.Raster("/static/images/logo"+away+".png");
+        var homeRaster = new scope.Raster("http://sentiotab.blob.core.windows.net/team/logo"+home+"_15.png");
+        var awayRaster = new scope.Raster("http://sentiotab.blob.core.windows.net/team/logo"+away+"_15.png");
 
         homeRaster.onLoad = function(){
-            var scaleFactor = 20/homeRaster.height;
             homeRaster.position = new scope.Point(10, 12);
-            homeRaster.scale(scaleFactor);
         };
 
         awayRaster.onLoad = function(){
-            var scaleFactor = 20/awayRaster.height;
             awayRaster.position = new scope.Point(10, 37);
-            awayRaster.scale(scaleFactor);
         };
     }
 
@@ -362,7 +358,7 @@ function Timeline(options){
                 })
                 );
 
-                eventGroup.addChild(new scope.Raster("/static/images/"+ imageNames[matchEvents[i][0]], [timeToPixel(min,0)+boxOffset-(boxWidth/2)+5,topPadding+count*(boxHeight+boxPadding)]).scale(0.6));
+                eventGroup.addChild(new scope.Raster("http://sentiotab.blob.core.windows.net/static/"+ imageNames[matchEvents[i][0]], [timeToPixel(min,0)+boxOffset-(boxWidth/2)+5,topPadding+count*(boxHeight+boxPadding)]).scale(0.6));
 
                 eventGroup.addChild( new scope.PointText({
                     point: [timeToPixel(min,0)+boxOffset-(boxWidth/2)+15,topPadding+count*(boxHeight+boxPadding)+fontSize/3],
@@ -434,7 +430,7 @@ function Timeline(options){
 
         var point = new scope.Point(xoffset, yoffset);
 
-        var img = new scope.Raster("/static/images/"+ imageNames[event[0]], point);
+        var img = new scope.Raster("http://sentiotab.blob.core.windows.net/static/"+ imageNames[event[0]], point);
         img.scale(0.8);
 
         var eventGroup = null;
@@ -486,7 +482,7 @@ function Timeline(options){
             })
             );
 
-            eventGroup.addChild(new scope.Raster("/static/images/"+ imageNames[event[0]], [timeToPixel(event[1],0)+boxOffset-(boxWidth/2)+5,yoffset]).scale(0.6));
+            eventGroup.addChild(new scope.Raster("http://sentiotab.blob.core.windows.net/static/"+ imageNames[event[0]], [timeToPixel(event[1],0)+boxOffset-(boxWidth/2)+5,yoffset]).scale(0.6));
 
             eventGroup.addChild( new scope.PointText({
                 point: [timeToPixel(event[1],0)+boxOffset-(boxWidth/2)+15,yoffset+fontSize/3],

@@ -222,6 +222,15 @@ var FixtureModel = function() {
         });
     },this);
 
+    self.postponedMatches = ko.computed(function(){
+        var desiredWeek = this.selectedWeek();
+        return ko.utils.arrayFilter(this.matches(), function(match) {
+            if(match.weekId.toLowerCase() == desiredWeek.toLowerCase() && (match.matchStatus() ==5)){
+                return match;
+            }
+        });
+    },this);
+
     self.fixtureWidgetHeight = ko.computed(function(){
         var baseHeight = 310;
         if( self.playedMatches().length>0){
@@ -308,7 +317,6 @@ var FixtureModel = function() {
 
 ko.applyBindings(new FixtureModel());
 </script>
-
 </body>
 
 </html>

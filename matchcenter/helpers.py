@@ -130,12 +130,12 @@ def get_goal_videos(match_id):
 
     if len(datalist) > 0 :
         for x in datalist:
-            goalDict.append({'awayTeamId':x[0],'text':"Maç Özeti",'awayTeamId':x[2],'min':x[3],'goalLink':x[4]})
+            goalDict.append({'awayTeamId':x[0],'text':"Maç Özeti",'awayTeamId':x[2],'min':x[3],'goalLink':x[4],'type':0})
 
     datalist = service_request("GetGoalVideos", data) # returns "data" field in response
     if len(datalist) > 0 :
         for x in datalist:
-            goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4]})
+            goalDict.append({'teamId':x[0],'playerId':x[1],'playerName':x[2],'min':x[3],'goalLink':x[4],'type':1})
 
 
     return goalDict
@@ -194,9 +194,9 @@ def get_team_squads(match_id, homeTeamId, awayTeamId):
                 played=True
 
         playerPosition = playerData[17]
-        if playerData[3] == homeTeamId and homeFormation == "4-3-3 B" and playerPosition == "MC":
+        if playerData[3] == homeTeamId and (homeFormation == "4-3-3 B" or homeFormation == "4-1-3-2 A") and playerPosition == "MC":
             playerPosition = "AMC"
-        if playerData[3] == awayTeamId and awayFormation == "4-3-3 B" and playerPosition == "MC":
+        if playerData[3] == awayTeamId and (awayFormation == "4-3-3 B" or awayFormation == "4-1-3-2 A") and playerPosition == "MC":
             playerPosition = "AMC"
 
         splitted = playerData[0].split(" ")

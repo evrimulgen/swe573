@@ -8,7 +8,7 @@ $(function(){
         timeline.moveSlider("left", event.minute, event.second);
         timeline.changeTime(event.minute, event.second);
 
-        var timeString = ''
+        var timeString = '';
         if(event.minute < 10){
             timeString += '0';
         }

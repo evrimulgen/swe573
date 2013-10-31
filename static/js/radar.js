@@ -55,6 +55,35 @@ function FootballPitch(div_id, scope){
 
 
     drawField();
+}
+
+function Interpolator(coor1, coor2){
+    this.coor1 = coor1;
+    this.coor2 = coor2;
+    this.delta = [];
+
+    var self = this;
+    this.coor1.forEach(function(d1){
+        self.coor2.forEach(function(d2){
+            if(d1[0]==d2[0] && d1[1]==d2[1]){
+                var x = (d2[2]+d1[2])/2;
+                var y = (d2[3]+d1[3])/2;
+                self.delta.push([d1[0], d1[1], x, y]);
+            }
+        });
+    });
+}
+
+Interpolator.prototype = {
+    constructor: Interpolator,
+    get: function(x){
+        if(x == 0){
+            return this.coor1;
+        }
+        else {
+            return this.delta;
+        }
+    }
 };
 
 function Radar(matchId){
@@ -169,7 +198,7 @@ function Radar(matchId){
             } 
             else modifyPlayerLocation(coord[0], coord[1], coord[2], coord[3]);
         });
-    }
+    };
 
 
     var minute = 0;
@@ -184,28 +213,37 @@ function Radar(matchId){
     var events = [];
     var currTime = -1;
 
+    //    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
+    var socket = io.connect('http://localhost:8080/');
+    var self = this;
+
+    var processCounter = 0;
+    var processData = null;
+    var processInterpolator = null;
+
     var processEvent = function processEvent(){
-        events.shift();
+        if(processCounter == 0) {
 
-        var data = events.shift();
+            processData = events.shift();
+            processInterpolator = new Interpolator(processData.coor, events[0].coor);
+            currTime = processData.gametime;
 
-        currTime = data.gametime;
+            if(processData.minute!=minute || processData.second!=second){
+                minute = processData.minute;
+                second = processData.second;
 
-        modifyPlayerLocations(data.coor);
+                $.event.trigger({type: "radarTimeChange", "minute": minute, "second":second});
+            }
+        }
+        modifyPlayerLocations(processInterpolator.get(processCounter));
         scope.view.draw();
 
-        // updating the time display
-        if(data.minute!=minute || data.second!=second){
-            minute = data.minute;
-            second = data.second;
-
-            $.event.trigger({type: "radarTimeChange", "minute": minute, "second":second});
+        if (processCounter==1){
+            processCounter = 0;
         }
+        else processCounter++;
 
-        if(events[0]!==undefined){
-            // wait until the next event's time
-            setTimeout(processEvent, events[0].gametime-currTime);
-        }
+        setTimeout(processEvent, (events[0].gametime-currTime) / 2);
     };
 
     scope.tool.onMouseDown = function(event){
@@ -247,13 +285,12 @@ function Radar(matchId){
         matchSquad = data.data;
     });
 
-//    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
-    var socket = io.connect('http://localhost:8080/');
-    var self = this;
+
     socket.on("welcome", function(){
         connected = true;
         $("#canvasOverlay").show();
         console.log("connected");
+        self.throw("Bağlantı kuruldu");
     });
 
     socket.on("matchinfo", function(data){
@@ -264,14 +301,14 @@ function Radar(matchId){
 
     socket.on("match", function(data){
         events.push(data);
-        if(events.length===10){
+        if (events.length == 10 && !started){
             processEvent();
+            started = true;
         }
     });
 
 
     socket.on("disconnect", function(){
-
         console.log("disconnected");
         connected = false;
     });
@@ -285,8 +322,7 @@ function Radar(matchId){
             return;
         }
         if(!started){
-            started = true;
-
+//            started = true;
             if(matchInfo.status === 2 || matchInfo.status === 3){
                 socket.emit('getlivematch', matchId);
             } else if(matchInfo.status === 6){
@@ -313,7 +349,7 @@ function Radar(matchId){
             paused = true;
             socket.emit('pause');
         }
-    }
+    };
 
     this.throw = function(message){
         $.event.trigger({type: "radarMessage", "message": message});

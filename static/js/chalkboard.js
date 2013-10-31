@@ -2,6 +2,9 @@
 /*global $: true, _: true, paper: true, h337: true */
 
 function Chalkboard(div_id, match_id){
+    var drawCircleWithInfo;
+    var teamColors={};
+    var matchInfo={};
     "use strict";
 
     var divSelector = "#" + div_id;
@@ -90,23 +93,55 @@ function Chalkboard(div_id, match_id){
 
         paper.view.draw();
     };
+    var matchSquad={};
 
-    var drawCircleWithInfo = function (center, info) {
+
+
+    $.post("/api/GetMatchInfo", JSON.stringify({"matchId": matchId})).done(function(data){
+        matchInfo.homeId = data.data[0][5];
+        matchInfo.awayId = data.data[0][6];
+
+        $.post("/api/GetTeamColors", JSON.stringify({"homeid": matchInfo.homeId, "awayid": matchInfo.awayId})).done(function(data){
+            teamColors = data.data;
+        });
+    });
+    drawCircleWithInfo = function (center, info) {
         var circ = new paper.Path.Circle(center, 10);
 
-        // TODO: use the team's colors that'll be fetched from the backend
-        circ.fillColor = "#FFED3F";
-        circ.strokeColor = "#E82A20";
-        circ.strokeWidth = 2;
+        if(matchInfo.homeId==currentPlayer.team_id){
+            circ.fillColor = teamColors.homefill;
+            circ.strokeColor = teamColors.homestroke;
+            circ.strokeWidth = 2;
+            var textpt = center.add(new paper.Point(0, 4));
+            var txt = new paper.PointText(textpt);
+            txt.content = info+"'";
+            txt.justification = "center";
+            txt.fillColor = teamColors.homestroke;
+        }
+        else if(matchInfo.awayId==currentPlayer.team_id){
+            circ.fillColor = teamColors.awayfill;
+            circ.strokeColor = teamColors.awaystroke;
+            circ.strokeWidth = 2;
+            var textpt = center.add(new paper.Point(0, 4));
+            var txt = new paper.PointText(textpt);
+            txt.content = info+"'";
+            txt.justification = "center";
+            txt.fillColor = teamColors.awaystroke;
+        }
+        else{
+            circ.fillColor = "white"
+            circ.strokeColor = "black";
+            circ.strokeWidth = 2;
+            var textpt = center.add(new paper.Point(0, 4));
+            var txt = new paper.PointText(textpt);
+            txt.content = info+"'";
+            txt.justification = "center";
+            txt.fillColor = "black";
+        }
 
         // moving 4pixels down to center the text vertically
         // not sure if this approach will work as intended in mobile browsers
-        var textpt = center.add(new paper.Point(0, 4));
 
-        var txt = new paper.PointText(textpt);
-        txt.content = info;
-        txt.justification = "center";
-        txt.fillColor = "black";
     };
 
     var drawArrow = function (pts, info) {

@@ -9,8 +9,6 @@
         var ctx=canvas.getContext('2d');
         ctx.fillStyle="red";
         var votePercent = parseInt(votePercent);
-        console.log("votepercent: ");
-        console.log(votePercent);
         var number = votePercent*(canvas.width/100);
         var percentDifference = parseInt(number);
         ctx.fillRect(0,0,percentDifference,canvas.height);

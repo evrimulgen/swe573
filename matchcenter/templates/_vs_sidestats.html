@@ -1,6 +1,24 @@
 {% load static %}
 {% get_static_prefix as STATIC_URL %}
 
+<script type="text/javascript">
+
+    function drawBarGraph(idNumber, votePercent){
+        var idNumber = parseInt(idNumber);
+        var canvas=document.getElementById('bar-graph'+idNumber);
+        var ctx=canvas.getContext('2d');
+        ctx.fillStyle="#9f0000";
+        var votePercent = parseInt(votePercent);
+        var number = votePercent*(canvas.width/100);
+        var percentDifference = parseInt(number);
+        ctx.fillRect(0,0,percentDifference,canvas.height);
+        ctx.font="normal 12px Arial";
+        ctx.fillStyle="black";
+        ctx.fillText("%"+votePercent, 25, canvas.height/2+4);
+    }
+
+</script>
+
 {% if matchStatus != 1 and matchStatus != 2 %}
     <div class="sidebox">
         <h1 class="sidebox">Maçın Adamı Oylaması <span class="tooltip-white"></span></h1>
@@ -22,8 +40,8 @@
                         </div>
                         <img src="http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png" onError="this.src='http://sentiotab.blob.core.windows.net/player/default.png';">
                         <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
-                        <p id="mycanvas" ><canvas id="mycanvas{{ forloop.counter }}" height="25" width="55" ></canvas></p>
-
+                        <p id="bar-graph" ><canvas id="bar-graph{{ forloop.counter }}" height="25" width="55" ></canvas></p>
+                        <script>drawBarGraph("{{ forloop.counter }}","{{ x.votePercent }}");</script>
                     </a>
 
                 {% endif %}
@@ -187,16 +205,4 @@
         }
     }
 </script>
-<script type="text/javascript">
-    {% for x in matchSquad|dictsortreversed:"votePercent" %}
-        var canvas=document.getElementById('mycanvas{{ forloop.counter }}');
-        var ctx=canvas.getContext('2d');
-        ctx.fillStyle="#9f0000";
-        var number = {{ x.votePercent }}*(canvas.width/100);
-        var percentDifference = parseInt(number);
-        ctx.fillRect(0,0,percentDifference,canvas.height);
-        ctx.font="normal 12px Arial";
-        ctx.fillStyle="black";
-        ctx.fillText("%{{ x.votePercent }}", 25, canvas.height/2+4);
-    {% endfor %}
-</script>
+

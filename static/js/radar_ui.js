@@ -8,7 +8,7 @@ $(function(){
         timeline.moveSlider("left", event.minute, event.second);
         timeline.changeTime(event.minute, event.second);
 
-        var timeString = ''
+        var timeString = '';
         if(event.minute < 10){
             timeString += '0';
         }
@@ -27,8 +27,6 @@ $(function(){
         if(!started){
             radar.startMatch();
             $("#canvas-play-button").hide();
-//            $("#pauseMatch i").removeClass("icon-play");
-//            $("#pauseMatch i").addClass("icon-pause");
             started = true;
         } else {
 //            radar.togglePause();
@@ -45,11 +43,11 @@ $(function(){
     });
 
 
-    var popCanvasMessage = function(data){
-        $(".canvas-message").text(data);
-        $("#canvasOverlay").show()
+    $(document).on("radarMessage", function(event){
+        $("#canvas-message").text(event.message);
+        $("#canvas-message-overlay").show()
             .fadeOut(3000);
-    };
+    });
 
     $(document).on("radarPlayerClick", function(event){
         changePlayerCard(event.week,event.homeOrAway,event.player_id,event.jersey_no);

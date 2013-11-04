@@ -1,20 +1,20 @@
 
 
 ul.no-bullets, ol.no-bullets{
-	list-style-type: none;
+    list-style-type: none;
 }
 
 .navbar .nav li:hover {
-	background-color: #fafafa;
+    background-color: #fafafa;
 }
 
 p.centered {
-	text-align: center;
+    text-align: center;
 }
 
 .large-text {
-	font-size: 18px;
-	font-weight: bold;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .teamlist-container{
@@ -30,7 +30,7 @@ p.centered {
 
 
 .teamlist-inner {
-	float: left;
+    float: left;
     box-shadow: 0pt 1px 0pt rgba(100,100,100,0.5) inset;
     background-color: #d8d8d8;
     width: 180px;
@@ -49,78 +49,74 @@ p.centered {
 
     color: #000000;
 }
-.teamlist-inner h5{
-	margin-left: 7px;
-    margin-right: 7px;
-	border-bottom: 1px solid black;
-    text-align: center;
-}
-
-.teamlist-inner1 h5{
+.teamlist-inner h5, .teamlist-inner1 h5{
     margin-left: 7px;
     margin-right: 7px;
     text-align: center;
-    border-bottom: 1px solid black;
 }
 
 .teamlist{
     position: relative;
-	margin: 0;
-	float: left;
+    margin: 0;
+    float: left;
+    width: 100%;
 }
 
 .teamlist:last-child{
-	border-bottom: none;
+    border-bottom: none;
 }
 
 .teamlist li {
     cursor: auto;
     position: relative;
-	font-size: 12px;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 5px;
-	padding-bottom: 5px;
-
-
+    font-size: 12px;
+    line-height: 28px;
+    padding-left: 2px;
+    padding-top: 3px;
+    padding-bottom: 1px;
+    border-top: 1px dotted #888888;
+}
+.teamlist li img{
+    height: 30px;
+    margin-right: 3px;
+    margin-left: 3px;
 }
 
 .teamlist li:hover {
-	background-color: rgba(0,255,255,0.1);
-	cursor: pointer;
+    background-color: rgba(0,255,255,0.1);
+    cursor: pointer;
 }
 
 .teamlist li.active {
-	background-color: rgba(0,0,255,0.1);
+    background-color: rgba(0,0,255,0.1);
 }
 
 .offset-half {
-	margin-left: 90px;
+    margin-left: 90px;
 }
 
 .chalkboard-controls {
-	font-size: 12px;
-	text-align: center;
-    margin-top: 10px;
+    font-size: 12px;
+    text-align: center;
     width: 100%;
     float: left;
 }
 
 .macskoru {
-	margin-top: 8px;
+    margin-top: 8px;
 }
 
 .game-banner {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .game-info p {
-	font-size: 12px;
+    font-size: 12px;
 }
 
 .pitch{
-	width: 662px;
-	height: 440px;
+    width: 662px;
+    height: 440px;
 }
 
 .chalkboard{
@@ -134,26 +130,25 @@ p.centered {
 }
 
 .chalkboard #spinner{
-	display: none;
-	position: relative;
-	top: 240px;
-	left: 155px;
+    display: none;
+    position: relative;
+    top: 240px;
+    left: 155px;
 
 }
 
 .chalkboard #fgCanvas{
-	z-index: 200;
+    z-index: 200;
 }
 
 .chalkboard-controls {
     position: relative;
-    top: -15px;
-	text-align: center;
+    text-align: center;
 }
 
 .teamlist li{
 
-	color: #333;
+    color: #333;
 }
 
 label {
@@ -163,7 +158,47 @@ label {
     position: relative;
     padding-left: 10px;
     margin-right: 40px;
-    font-size: 17px;
+    font-size: 14px;
+}
+
+.pos1{
+    background-color: #ffdc00;
+    -webkit-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+}
+.pos2{
+    background-color: #5d77eb;
+    -webkit-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+}
+
+.pos3{
+    background-color: #53b25c;
+    -webkit-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+}
+.pos4{
+
+    background-color: #eb493a;
+    -webkit-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    -moz-box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+    box-shadow: 0 1px 0px rgba(255,255,255,0.2) inset, 0 0px 1px rgba(0,0,0,0.7);
+}
+.pos1, .pos2, .pos3, .pos4{
+    text-shadow: 1px 1px 1px #2a2a28;
+    text-align: center;
+    margin-top: 5px;
+    margin-left: 2px;
+    font-size: 14px;
+    font-weight: bold;
+    float: left;
+    width: 22px;
+    line-height: 20px;
+    color: #ffffff;
+    cursor: default;
 }
 
 

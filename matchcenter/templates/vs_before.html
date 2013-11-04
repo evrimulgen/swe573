@@ -65,7 +65,11 @@
     </div>
 
     <h1 class="main">Geçmiş Karşılaşmalar<span class="tooltip-white"></span></h1>
-    <div class="past-match-area">
+    {% if history.pastMatches|length > 4 %}
+        <div class="past-match-area" style="height: 306px">
+    {% else %}
+        <div class="past-match-area">
+    {% endif %}
         {% for match in history.pastMatches %}
             {% if  match.link %}
                 <a href="{{ match.link }}" target="blank_" class="past-match">

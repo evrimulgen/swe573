@@ -25,30 +25,25 @@
 {% endblock %}
 {% block content %}
 
-    <div class="row">
-        <div class="slider-holder">
-            <canvas id="slider"></canvas>
+    <div class="slider-holder">
+        <canvas id="slider"></canvas>
+    </div>
+
+    <div class="chalkboard-controls">
+        <div class="checkbox">
+
+            <label><input type="checkbox" class="btn"  data-toggle="checkbox" value="shots" id="shots">Şutlar</label>
+
+            <label><input type="checkbox" class="btn" data-toggle="checkbox" value="passes" id="passes">Paslar</label>
+
+            <label><input type="checkbox" class="btn" data-toggle="checkbox" value="heatmap" id="heatmap">Yoğunluk Haritası</label>
+
+            <label><input type="checkbox" class="btn" data-toggle="checkbox" value="runpaths" id="runpaths">Koşu Yolları</label>
+
         </div>
     </div>
-    <div class="row" style="margin-bottom: 40px">
-        <div class="row chalkboard-controls">
-            <div class="checkbox">
 
-                <label><input type="checkbox" name="myCheckbox" class="btn"  data-toggle="checkbox" value="shots" id="shots">Şutlar</label>
-
-                <label><input type="checkbox" name="myCheckbox" class="btn" data-toggle="checkbox" value="passes" id="passes">Paslar</label>
-
-                <label><input type="checkbox" name="myCheckbox" class="btn" data-toggle="checkbox" value="heatmap" id="heatmap">Yoğunluk Haritası</label>
-
-                <label><input type="checkbox" name="myCheckbox" class="btn" data-toggle="checkbox" value="runpaths" id="runpaths">Koşu Yolları</label>
-
-            </div>
-        </div>
-    </div>
-    <div class="row" style="margin-bottom: 40px">
-
-        <div id="chalkboardContainer" style="margin-top: 40px"> </div>
-
+    <div>
         <div class="teamlist-container">
             <div class="teamlist-inner">
                 <h5 class="homeTeamName"></h5>
@@ -56,13 +51,15 @@
                 </ul>
             </div>
         </div>
+        <div id="chalkboardContainer">
 
+        </div>
         <div class="teamlist-container">
             <div class="teamlist-inner1">
                 <h5 class="awayTeamName" ></h5>
                 <ul class="no-bullets teamlist" id="awayTeamJersey">
 
-                 </ul>
+                </ul>
             </div>
         </div>
     </div>

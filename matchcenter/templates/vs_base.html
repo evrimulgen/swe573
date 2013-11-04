@@ -25,7 +25,6 @@
 <div id="global-header">
     {% include '_vs_scoreboard.html' with matchInfo=matchInfo only %}
 </div>
-
 <div id="content">
     <div id="sidebar">
         {% sl_fixture selectedMatch %}
@@ -44,10 +43,11 @@
         </div>
     </div>
     <br style="clear:both"/>
-
 </div>
 
 <div id="footer"></div>
+
+
 <script src="{{ STATIC_URL }}js/knockout-2.3.0.js"></script>
 <script>
 var csrftoken = $.cookie('csrftoken');
@@ -283,7 +283,7 @@ var FixtureModel = function() {
                     match.homeScore(response["homeTeamScore"] | 0);
                     match.awayScore(response["awayTeamScore"] | 0);
                     match.matchStatus(response["status"]);
-                    if(match.matchStatus() == 6 || match.matchStatus() == 11 || match.matchStatus() == 13){
+                    if(match.matchStatus() == 6 || match.matchStatus() == 11 || match.matchStatus() == 13 || match.matchStatus() == 5){
                         match.liveTime("MS");
                     }
                     else if(match.matchStatus() == 1){
@@ -309,6 +309,20 @@ var FixtureModel = function() {
     self.changeWeek = function(elem) {
         self.selectedWeek(elem.week_id);
     };
+    self.previousWeek = function() {
+        var week = self.selectedWeek();
+        if(week>1){
+            week = parseInt(week) -1;
+        }
+        self.selectedWeek(week.toString());
+    };
+    self.nextWeek = function() {
+        var week = self.selectedWeek();
+        if(week<34){
+            week = parseInt(week) +1;
+        }
+        self.selectedWeek(week.toString());
+    };
 
 // show and hide effects
     this.showMatch = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideToggle() };
@@ -318,5 +332,7 @@ var FixtureModel = function() {
 ko.applyBindings(new FixtureModel());
 </script>
 </body>
+
+
 
 </html>

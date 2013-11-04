@@ -126,10 +126,10 @@ def get_goal_videos(match_id):
 
     data = {"matchId":match_id}
     goalDict = [] #holds goal video data
-    datalist = service_request("GetMatchVideos", data) # returns "data" field in response
+    matchSummary = service_request("GetMatchVideos", data) # returns "data" field in response
 
-    if len(datalist) > 0 :
-        for x in datalist:
+    if len(matchSummary) > 0 :
+        for x in matchSummary:
             goalDict.append({'awayTeamId':x[0],'text':"Maç Özeti",'awayTeamId':x[2],'min':x[3],'goalLink':x[4],'type':0})
 
     datalist = service_request("GetGoalVideos", data) # returns "data" field in response
@@ -509,7 +509,7 @@ def get_team_colors(homeid, awayid):
 
 def get_player_ratings(matchid):
     url = "http://www.ligtv.com.tr/services/dataservice.svc/json/GetPlayerRatings?matchId=%s" % matchid
-    print url;
+    print url
     values = {
         'UserName': 'sentio',
         'Password': 's3nt10'

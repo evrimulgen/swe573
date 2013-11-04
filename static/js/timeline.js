@@ -6,7 +6,7 @@ function Timeline(options){
     var isLive = null;
     var matchInfo = {};
 
-    var width = 662;
+    var width = 730;
     var height = 50;
 
     var handleWidth = 20;

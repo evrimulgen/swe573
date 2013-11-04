@@ -142,13 +142,12 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="slider-holder">
-            <canvas id="slider"></canvas>
-        </div>
+
+    <div class="slider-holder">
+        <canvas id="slider"></canvas>
     </div>
-    <div class="row" id="canvas-row" style="height: 360px">
-        <button class="canvas-button-active" id="showFormation" value="showFormation"  style="margin-left: 50px;" onclick="toggleCanvas(this)">Formasyon</button>
+    <div  id="canvas-row" style="height: 360px">
+        <button class="canvas-button-active" id="showFormation" value="showFormation" onclick="toggleCanvas(this)">Formasyon</button>
         <button class="canvas-button" id="showRadar" value="showRadar" onclick="toggleCanvas(this)">Radar</button>
         <div id="radarContainer">
             <span id="timeDisplay" class="pull-right"></span></p>
@@ -282,9 +281,9 @@
         </div>
     </div>
 
-    <div class="row" id="playerCardsContainer" style="margin-bottom: 10px">
-        <div class="span4 card-container" id="leftPlayerCard">
-            <img src="http://sentiotab.blob.core.windows.net/static/card-hole.png">
+    <div id="playerCardsContainer" style="margin-bottom: 10px">
+        <div class="span4 card-container" id="leftPlayerCard" style="margin-right: 5px">
+            <img src="http://sentiotab.blob.core.windows.net/static/card-hole.png" style="width: 350px">
             <div class="card-inside">
 
                 <div class="card-header row-fluid">
@@ -306,7 +305,7 @@
         </div>
 
         <div class="span4 card-container" id="rightPlayerCard">
-            <img src="http://sentiotab.blob.core.windows.net/static/card-hole.png">
+            <img src="http://sentiotab.blob.core.windows.net/static/card-hole.png" style="width: 350px">
             <div class="card-inside">
                 <div class="card-header row-fluid">
                     <img class="playerImage" src="http://sentiotab.blob.core.windows.net/player/default.png">
@@ -325,6 +324,7 @@
                 </div>
             </div>
         </div>
+        <br style="clear: both">
     </div>
 
     <div class="inside-menu">

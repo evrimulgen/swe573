@@ -15,7 +15,7 @@ function Chalkboard(div_id, match_id){
 
     // setting up the canvas and the loading animation
     // and setting up the slider for time range
-    $(divSelector).append('<div class="alerts"></div><div class="chalkboard pitch"></div>');
+    $(divSelector).append('<div class="chalkboard pitch"></div>');
     $('<canvas id="bgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .chalkboard");
     $('<canvas id="fgCanvas">').width(canvasWidth).height(canvasHeight).appendTo(divSelector + " .chalkboard");
     $(divSelector+" .chalkboard").append('<img id="spinner" src="/static/images/spinner.gif" />');
@@ -294,10 +294,10 @@ function Chalkboard(div_id, match_id){
                     currentData[method] = res.data;
                     callback(res.data);
                 } else {
-                    createAlert("Bir hata oluştu");
+                    //createAlert("Bir hata oluştu");
                 }
             }).fail(function(){
-                createAlert("Bir hata oluştu");
+                //createAlert("Bir hata oluştu");
             }).always(function(){
                 // hide the spinner gif whether the request succeeded or not
                 $(divSelector + " #spinner").hide();

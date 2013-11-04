@@ -38,7 +38,7 @@ window.onload = function() {
         var mapDict = {"GK":0,"LB":1,"CBL":2,"CB":3,"CBR":3,"RB":4,"DML":7,"DMC":8,"DMR":9,"ML":5,"MCL":5,"MC":6,"MCR":7,"MR":8,"AML":16,"AMC":18,"AMR":20,"WL":10,"FL":22,"FC":11,"FR":24,"WR":8,"SSC":18};
 
         var posPlay = parseInt(mapDict[play_]);
-        console.log(posPlay);
+
         if (posPlay == 0) {
             this.position = [width / 7.5, midPoint[1]];
         }
@@ -200,7 +200,6 @@ window.onload = function() {
 
         for(var i=0; i<players.length; i++){
             if(event.point.getDistance(players[i].position)<35){
-                console.log(event.point.getDistance(players[i].position));
                 players[i].select();
                 setPlayer(players[i].playerid,players);
             }

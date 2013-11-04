@@ -1,13 +1,12 @@
 #stadium {
-    margin-left: 50px;
     height: 320px;
-    width: 662px;
-    background: #000 url("../images/formation_bg.png") no-repeat left top;
+    width: 730px;
+    background: #000 url("http://sentiotab.blob.core.windows.net/static/formation_bg.png") no-repeat left top;
     position: relative;
 }
 .home-team-formation{
     margin: 0px;
-    left: 0px;
+    left: 30px;
     top: 70px;
     position: absolute;
     width: 336px;
@@ -16,7 +15,7 @@
 }
 .away-team-formation{
     margin: 0px;
-    right: 0px;
+    right: 30px;
     top: 70px;
     position: absolute;
     width: 336px;

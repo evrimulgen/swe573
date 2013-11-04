@@ -3,11 +3,12 @@
 
 {% if matchStatus != 1 and matchStatus != 2 %}
     <div class="sidebox">
-        <h1 class="sidebox">Maçın Adamı Oylaması</h1>
+        <h1 class="sidebox">Maçın Adamı Oylaması <span class="tooltip-white"></span></h1>
         {% if matchData|length == 0 %}
             <p class="no-data"> Bu maçla ilgili veri bulunmamaktadır.</p>
         {% else %}
             {% for x in matchSquad|dictsortreversed:"votePercent" %}
+                {% if forloop.counter < 6 %}
 
                     <a class="player-rate">
                         <div class="teamColor">
@@ -20,13 +21,15 @@
                             {% endif %}
                         </div>
                         <img src="http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png" onError="this.src='http://sentiotab.blob.core.windows.net/player/default.png';">
-                        <p id="name"> {{ x.playerName }}</p>
+                        <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
                         <p id="mycanvas" ><canvas id="mycanvas{{ forloop.counter }}" height="25" width="55" ></canvas></p>
 
                     </a>
 
+                {% endif %}
+
             {% endfor %}
-            <button id="rate-expander" class="rate-expander" onclick="showAll()">Tümünü göster</button>
+            <!--<button id="rate-expander" class="rate-expander" onclick="showAll()">Tümünü göster</button>-->
             <br style="clear:both"/>
         {% endif %}
     </div>
@@ -50,7 +53,7 @@
                     </div>
                     <img src="http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png" onError="this.src='http://sentiotab.blob.core.windows.net/player/default.png';">
                     <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
-                    <p id="value">{{ x.totalDistance }} </p>
+                    <p id="value">{{ x.totalDistance }} m</p>
                 </a>
             {% endif %}
         {% endfor %}
@@ -188,7 +191,7 @@
     {% for x in matchSquad|dictsortreversed:"votePercent" %}
         var canvas=document.getElementById('mycanvas{{ forloop.counter }}');
         var ctx=canvas.getContext('2d');
-        ctx.fillStyle="red";
+        ctx.fillStyle="#9f0000";
         var number = {{ x.votePercent }}*(canvas.width/100);
         var percentDifference = parseInt(number);
         ctx.fillRect(0,0,percentDifference,canvas.height);

@@ -55,7 +55,7 @@ $(function () {
             $(".teamlist-container .awayTeamName").html(awayTeam.name);
             var homeList = $("#homeTeamJersey");
             _.each(homeTeam.players, function(player){
-                $("<li><input type='radio' id='player.name' name='player.name' value='player.jersey_number'/>"+"&nbsp "+player.jersey_number+" "+player.name+"</li>").click(function(){
+                $("<li><img src='http://sentiotab.blob.core.windows.net/player/" + player.id + ".png'><p class='pos" + player.position_id + "'>" + player.jersey_number + "</p>" + player.name + "</li>").click(function(){
                     $(".teamlist li.active").removeClass("active");
                     $(this).addClass("active");
                     cb.changePlayer(player);
@@ -64,7 +64,7 @@ $(function () {
 
             var awayList = $("#awayTeamJersey");
             _.each(awayTeam.players, function(player){
-                $("<li><input type='radio' name='player.name' value='player.jersey_number'/>"+"&nbsp "+player.jersey_number+" "+player.name+"</li>").click(function(){
+                $("<li><img src='http://sentiotab.blob.core.windows.net/player/" + player.id + ".png'><p class='pos" + player.position_id + "'>" + player.jersey_number + "</p>" + player.name + "</li>").click(function(){
                     $(".teamlist li.active").removeClass("active");
                     $(this).addClass("active");
                     cb.changePlayer(player);

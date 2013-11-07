@@ -2,6 +2,7 @@
 {% get_static_prefix as STATIC_URL %}
 
 <div class="fixture">
+    <p class="fixture-prev" data-bind="click: $root.previousWeek"> < </p>
     <ul class="date" id="week-holder" data-bind='foreach: weeksToShow' >
         <li>
             <a href="#" data-bind="css: { selected: week_id == $root.selectedWeek() }, click: $root.changeWeek">
@@ -9,6 +10,7 @@
             </a>
         </li>
     </ul>
+     <p class="fixture-next" data-bind="click: $root.nextWeek"> > </p>
     <div data-bind='foreach: liveMatches'>
         <a data-bind='attr:{href:"../../" + matchId , class : matchClass }'>
             <div id="scorearea">
@@ -87,7 +89,7 @@
                 </div>
             </div>
             <div id="datearea">
-                <p id="postponed-match">ERTELENDİ</p>
+                <p id="postponed-match">Ertelendi</p>
             </div>
         </a>
     </div>

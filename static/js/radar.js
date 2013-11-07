@@ -213,8 +213,8 @@ function Radar(matchId){
     var events = [];
     var currTime = -1;
 
-    //    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
-    var socket = io.connect('http://localhost:8080/');
+    var socket = io.connect('http://sentiomessi.cloudapp.net:8080/');
+//    var socket = io.connect('http://localhost:8080/');
     var self = this;
 
     var processCounter = 0;

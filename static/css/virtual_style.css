@@ -1786,12 +1786,23 @@ button.collapse:hover{
     /*display: none;*/
 }
 
-#canvas-message {
+#canvas-message, #canvas-commentary{
     background-color: black;
     color:white;
     opacity: 0.5;
     padding: 5px;
     font-size: 11px;
+}
+
+#canvas-commentary-overlay {
+    position: absolute;
+    z-index: 1;
+    margin: 350px 0 0 40px;
+    width: 500px;
+    height: 50px;
+    text-align: center;
+    padding: 50px;
+    display: none;
 }
 
 #canvas-play-button i {

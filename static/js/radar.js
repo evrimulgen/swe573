@@ -220,6 +220,7 @@ function Radar(matchId){
     var processCounter = 0;
     var processData = null;
     var processInterpolator = null;
+    var processTimeout = false;
 
     var processEvent = function processEvent(){
         if(processCounter == 0) {
@@ -243,7 +244,7 @@ function Radar(matchId){
         }
         else processCounter++;
 
-        setTimeout(processEvent, (events[0].gametime-currTime) / 2);
+        processTimeout = setTimeout(processEvent, (events[0].gametime-currTime) / 2);
     };
 
     scope.tool.onMouseDown = function(event){
@@ -308,6 +309,9 @@ function Radar(matchId){
             processEvent();
             started = true;
         }
+        if (data.comm != undefined){
+            $.event.trigger({type: "radarCommentary", message:data.comm});
+        }
     });
 
 
@@ -337,7 +341,13 @@ function Radar(matchId){
     };
 
     this.changeTime = function(time){
+        processTimeout = false;
+
         events = [];
+
+        processData = null;
+        processInterpolator = null;
+        processCounter = 0;
         socket.emit('setmatchtime', time);
     };
 

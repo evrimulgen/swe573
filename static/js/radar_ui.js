@@ -49,9 +49,17 @@ $(function(){
             .fadeOut(3000);
     });
 
+    $(document).on("radarCommentary", function(event){
+        $("#canvas-commentary-overlay").hide();
+        $("#canvas-commentary").text(event.message);
+        $("#canvas-commentary-overlay").show()
+            .fadeOut(5000);
+    });
+
     $(document).on("radarPlayerClick", function(event){
         changePlayerCard(event.week,event.homeOrAway,event.player_id,event.jersey_no);
     });
+
 
 });
 

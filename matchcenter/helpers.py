@@ -472,7 +472,6 @@ def get_match_team_stats(match_id, homeid, awayid):
 
     return sorted(result, key=lambda x: x.get('order'))
 
-
 def get_team_gk_ids(match_id):
     """
     Return the player ids for a match's goalkeepers
@@ -481,7 +480,7 @@ def get_team_gk_ids(match_id):
     data = service_request("GetMatchSquad", {"matchId": match_id})
     gks = {k: {"team_id": data.get(k).get("data")[3],
                "jersey_no": data.get(k).get("data")[1],
-               "player_id": data.get(k).get("data")[5]}
+               "player_id": k}
            for k in data if data.get(k).get("data")[4]==1 and data.get(k).get("data")[2]==1}
 
     teams = {

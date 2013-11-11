@@ -544,8 +544,8 @@ def vote_match_player(matchid,teamid,playerid):
     code = votingResult.get('StatusCode')
     return message
 
-def get_team_manager(homeid,awayid):
-    homeDetails = service_request("GetTeamDetails", {"teamId":homeid})
-    awayDetails = service_request("GetTeamDetails", {"teamId":awayid})
+def get_team_manager(homeid,awayid, matchId):
+    homeDetails = service_request("GetCoachInMatch", {"teamId":homeid, "matchId": matchId})
+    awayDetails = service_request("GetCoachInMatch", {"teamId":awayid, "matchId": matchId})
 
-    return homeDetails[0][5], awayDetails[0][5]
+    return homeDetails[0][0], awayDetails[0][0]

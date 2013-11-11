@@ -223,6 +223,8 @@ function Radar(matchId){
     var processTimeout = false;
 
     var processEvent = function processEvent(){
+        var d = new Date();
+        var start = d.getTime();
         if(processCounter == 0) {
 
             processData = events.shift();
@@ -244,7 +246,11 @@ function Radar(matchId){
         }
         else processCounter++;
 
-        processTimeout = setTimeout(processEvent, (events[0].gametime-currTime) / 2);
+        d = new Date();
+        var lag = d.getTime() - start;
+        processTimeout = setTimeout(processEvent, ((events[0].gametime-currTime) / 2) - lag);
+//        console.log((events[0].gametime-currTime) / 2);
+
     };
 
     scope.tool.onMouseDown = function(event){
@@ -305,7 +311,7 @@ function Radar(matchId){
 
     socket.on("match", function(data){
         events.push(data);
-        if (events.length == 10 && !started){
+        if (events.length == 25 && !started){
             processEvent();
             started = true;
         }

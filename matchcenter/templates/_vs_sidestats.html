@@ -40,7 +40,8 @@
                         </div>
                         <img src="http://sentiotab.blob.core.windows.net/player/{{ x.playerId }}.png" onError="this.src='http://sentiotab.blob.core.windows.net/player/default.png';">
                         <p id="name">{{ x.jerseyNumber }} - {{ x.playerName }}</p>
-                        <p id="bar-graph" ><canvas id="bar-graph{{ forloop.counter }}" height="25" width="55" ></canvas></p>
+                        <!--width belli bir değerden büyük olursa canvas aşağıya kayıp görünmez oluyor.widthi küçültüp tekrar ayarlayınız. -->
+                        <p id="bar-graph" ><canvas id="bar-graph{{ forloop.counter }}" height="25" width="54" ></canvas></p>
                         <script>drawBarGraph("{{ forloop.counter }}","{{ x.votePercent }}");</script>
                     </a>
 

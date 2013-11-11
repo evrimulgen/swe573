@@ -15,11 +15,9 @@
 
 canvas{
     border:1px solid #b8b8b8;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-
-
+     -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+     border-radius: 5px;
 }
 
 #videopng{

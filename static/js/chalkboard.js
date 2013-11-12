@@ -114,6 +114,7 @@ function Chalkboard(div_id, match_id){
             circ.strokeWidth = 2;
             var textpt = center.add(new paper.Point(0, 4));
             var txt = new paper.PointText(textpt);
+            txt.style.fontSize="11px";
             txt.content = info+"'";
             txt.justification = "center";
             txt.fillColor = teamColors.homestroke;
@@ -125,6 +126,7 @@ function Chalkboard(div_id, match_id){
             var textpt = center.add(new paper.Point(0, 4));
             var txt = new paper.PointText(textpt);
             txt.content = info+"'";
+            txt.style.fontSize="11px";
             txt.justification = "center";
             txt.fillColor = teamColors.awaystroke;
         }
@@ -135,6 +137,7 @@ function Chalkboard(div_id, match_id){
             var textpt = center.add(new paper.Point(0, 4));
             var txt = new paper.PointText(textpt);
             txt.content = info+"'";
+            txt.style.fontSize="11px";
             txt.justification = "center";
             txt.fillColor = "black";
         }
@@ -144,7 +147,7 @@ function Chalkboard(div_id, match_id){
 
     };
 
-    var drawArrow = function (pts, info) {
+    var drawArrow = function (pts, info, info1) {
         var length = pts.length;
         if(length<2){
             return;
@@ -156,7 +159,13 @@ function Chalkboard(div_id, match_id){
         _.each(pts, function (pt) {
             line.add(pt);
         });
-        line.strokeColor = "#eeeeee";
+        if(info1==1){
+            line.strokeColor = "#eeeeee";
+        }else if(info1==0){
+            line.strokeColor = "red";
+        }else{
+            line.strokeColor = "#eeeeee";
+        }
         line.strokeWidth = 2;
 
         // drawing the info circle
@@ -184,8 +193,14 @@ function Chalkboard(div_id, match_id){
         var arrow = new paper.Path();
         arrow.add(leftpt);
         arrow.add(pts[length - 1]);
-        arrow.add(rightpt);
-        arrow.strokeColor = "#eeeeee";
+        arrow.add(rightpt)
+        if(info1==1){
+            arrow.strokeColor = "#eeeeee";
+        }else if(info1==0){
+            arrow.strokeColor = "red";
+        }else{
+            arrow.strokeColor = "#eeeeee";
+        }
         arrow.strokeWidth = 2;
     };
 
@@ -229,7 +244,8 @@ function Chalkboard(div_id, match_id){
             var to = new paper.Point(canvasWidth-mt2px(pass[6]), mt2px(pass[5]));
             var from = new paper.Point(canvasWidth-mt2px(pass[4]), mt2px(pass[3]));
 
-            drawArrow([from, to], pass[1]);
+                drawArrow([from, to], pass[1],pass[7]);
+
         });
 
         paper.view.draw();

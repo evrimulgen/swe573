@@ -23,11 +23,15 @@ $(function () {
         homeTeam.id = res[5];
         awayTeam.id = res[6];
 
+
+        //var image=$("#homeTeamLogo");
+        //$("<div><img src='http://sentiotab.blob.core.windows.net/team/logo" + homeTeam.id + "_90.png'></div>").appendTo(image);
         $.post("/api/GetMatchSquad", JSON.stringify({"matchId": window.matchId})).done(function(data){
             homeTeam.players = [];
             awayTeam.players = [];
 
             var res = data.data;
+
 
             _.each(res, function(x){
                 var info = x.data;
@@ -51,8 +55,12 @@ $(function () {
             // for dynamically creating elements and binding events to them:
             // $("<p>xdxd</p>").click(function(){ alert("xd"); }).appendTo("#header");
 
-            $(".teamlist-container .homeTeamName").html(homeTeam.name);
-            $(".teamlist-container .awayTeamName").html(awayTeam.name);
+            var homeArrow=$("#homeArrow");
+            $("<div><img src='/static/images/Arrow.png'</div>").appendTo(homeArrow);
+            var awayArrow=$("#awayArrow");
+            $("<div><img src='/static/images/ArrowUp.png'</div>").appendTo(awayArrow);
+            $(".teamlist-container .homeTeamName").html("<img src='http://sentiotab.blob.core.windows.net/team/logo" + homeTeam.id + "_30.png'>"+" "+homeTeam.name+ "</div>");
+            $(".teamlist-container .awayTeamName").html("<div><img src='http://sentiotab.blob.core.windows.net/team/logo" + awayTeam.id + "_30.png'>"+" "+awayTeam.name+ "</div>");
             var homeList = $("#homeTeamJersey");
             _.each(homeTeam.players, function(player){
                 $("<li><img src='http://sentiotab.blob.core.windows.net/player/" + player.id + ".png'><p class='pos" + player.position_id + "'>" + player.jersey_number + "</p>" + player.name + "</li>").click(function(){

@@ -136,28 +136,44 @@ INSTALLED_APPS = (
 # more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] [%(filename)s:%(funcName)s] %(message)s !",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+        'logfile': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': ROOT_PATH + "/app.log",
+            'maxBytes': 50000,
+            'backupCount': 4,
+            'formatter': 'standard',
+            },
+        'errlog': {
+            'level':'WARNING',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': ROOT_PATH + "/error.log",
+            'maxBytes': 50000,
+            'backupCount': 4,
+            'formatter': 'standard',
+            }
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+        'django': {
+            'handlers':['logfile', 'errlog'],
             'propagate': True,
-        },
+            'level':'DEBUG',
+            },
+        'django.request': {
+            'handlers': ['logfile', 'errlog'],
+            'level': 'DEBUG',
+            'propagate': True,
+            },
     }
 }
-
 # Match Center, Stats Center settings
 LEAGUE_ID = 1
 SEASON_ID = 9064

@@ -213,8 +213,8 @@ label {
 .put-arrowUp div{
     position: absolute;
     text-align: center;
-    left: 139px;
-    top:22.5px;
+    left: 149px;
+    top:28px;
 }
 
 .put-arrowUp div:hover{
@@ -235,13 +235,13 @@ label {
     position: absolute;
     text-align: center;
     right: 2px;
-    top:22.5px;
+    top:28px;
 }
 
 .put-arrowDown div:hover{
     background-color: rgba(0,255,255,0.1);
     cursor: pointer;
-    opacity: 0.4;
+    opacity: 0.6;
 
 }
 

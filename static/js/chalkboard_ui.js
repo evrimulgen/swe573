@@ -56,9 +56,9 @@ $(function () {
             // $("<p>xdxd</p>").click(function(){ alert("xd"); }).appendTo("#header");
 
             var homeArrow=$("#homeArrow");
-            $("<div><img src='/static/images/Arrow.png'</div>").appendTo(homeArrow);
+            $("<div><img src='/static/images/okk.png'</div>").appendTo(homeArrow);
             var awayArrow=$("#awayArrow");
-            $("<div><img src='/static/images/ArrowUp.png'</div>").appendTo(awayArrow);
+            $("<div><img src='/static/images/ook.png'</div>").appendTo(awayArrow);
             $(".teamlist-container .homeTeamName").html("<img src='http://sentiotab.blob.core.windows.net/team/logo" + homeTeam.id + "_30.png'>"+" "+homeTeam.name+ "</div>");
             $(".teamlist-container .awayTeamName").html("<div><img src='http://sentiotab.blob.core.windows.net/team/logo" + awayTeam.id + "_30.png'>"+" "+awayTeam.name+ "</div>");
             var homeList = $("#homeTeamJersey");
